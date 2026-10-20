@@ -1,0 +1,39 @@
+{
+  "forgeBuild": {
+    "exitCode": 0
+  },
+  "forgeTest": {
+    "exitCode": 0,
+    "passed": 91,
+    "failed": 0,
+    "skipped": 0
+  },
+  "nodeTest": {
+    "exitCode": 0,
+    "passed": 20,
+    "failed": 0
+  },
+  "forgeFmt": {
+    "exitCode": 0
+  },
+  "localSDKContractFlow": {
+    "exitCode": 0,
+    "boundRounds": 7,
+    "fundedMockAttempts": 8,
+    "recordedReceipts": 33
+  },
+  "independentReview": "PASS_WITH_REPAIRS",
+  "unresolvedCriticalHigh": 0,
+  "ABIAndFixedConfig": "MATCH",
+  "productionContractSizeCheck": {
+    "exitCode": 0
+  },
+  "allContractsIncludingTestHarnessSizeDiagnostic": {
+    "exitCode": 1,
+    "reason": "SpecStateHandler is test-only, 25040 runtime bytes; normal build/tests and release size check pass."
+  },
+  "liveCompatibility": "NOT_RUN",
+  "realIMDConsumption": "NOT_RUN",
+  "publicDeployment": "NOT_RUN",
+  "productionReady": false
+}

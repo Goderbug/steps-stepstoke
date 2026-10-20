@@ -2,7 +2,7 @@
 
 A public project has a fixed goal, immutable execution policy, an independent Intake payer, and a permanent history of accepted asset checkpoints. Anyone can propose work, explicitly fund a current proposal, bind its authenticated result, or fork an accepted historical checkpoint.
 
-This delivery implements the Solidity core and initial Node ESM SDK/CLI foundation. Local deployments and tests use mocks at the supplied Intake and IMD addresses. **Live compatibility is `NOT_RUN`; public deployment and paid execution have not been performed.** A separate contributor security review remains required before production readiness.
+This delivery integrates the Solidity core, Node ESM SDK/CLI, adversarial tests and an actual SDK-to-contract local chain flow. Local deployments and tests use mocks at the supplied Intake and IMD addresses. **Live compatibility is `NOT_RUN`; public deployment and paid execution have not been performed.** An independent agent review and replay are recorded in [final validation](docs/validation/README.md); this is not an external audit or production readiness claim.
 
 ## Build and check offline
 
@@ -11,6 +11,8 @@ forge build
 FOUNDRY_FUZZ_SEED=0x146644c630d7548a74d043e2779607ab2def960ac3890b548af84b4eb4db9118 forge test
 forge fmt --check
 node --test test-sdk/*.test.mjs
+node tools/local-integration.mjs
+node tools/measure-release.mjs
 node cli/relay.mjs help
 ```
 
@@ -83,7 +85,7 @@ Anyone calls `bind(exactRawManifest, oldAssetWitness)` after a success callback.
 
 The parser decodes keys and strings, rejects duplicate decoded keys at every depth, invalid UTF-8 and escapes, unpaired surrogates, noncharacters, invalid paths, trailing data, and resource excess. Unknown metadata is parsed under the same bounds. `source[]`, Git commits and later metadata cannot replace `files[]`.
 
-File **SHA-256** and manifest **keccak256** are different commitments. The contracts authenticate the writer's descriptors, not remote file availability, file quality, HTML behavior, or actual input consumption. The writer/runtime must truthfully expose the accepted bytes and honor the fixed profile. The SDK checks actual downloaded-or-operator-supplied bytes for SHA-256, length and MIME signatures without executing them. No file fetcher or browser preview is included.
+File **SHA-256** and manifest **keccak256** are different commitments. The contracts authenticate the writer's descriptors, not remote file availability, file quality, HTML behavior, or actual input consumption. The writer/runtime must truthfully expose the accepted bytes and honor the fixed profile. The SDK checks actual downloaded-or-operator-supplied bytes for SHA-256, length and MIME signatures without executing them. The optional `fetch-check` command downloads only explicit public HTTPS artifacts with checked, pinned DNS addresses; private, mapped and transition addresses are rejected. No browser preview is included.
 
 A bad binding reverts without erasing the result or changing the prior checkpoint. Anyone may submit the correct raw bytes and witness again without purchasing. If the writer's actual hashed manifest violates the fixed policy, there is no alternative rewritten JSON or repair authority; that Branch remains at `ResultRecorded`. Its earlier accepted history can still be forked.
 
@@ -103,4 +105,4 @@ Every selected input appears explicitly in `steps[].inputs` with its complete de
 
 HTML instructions require restoring the selected HTML, inline CSS/JS, exact selected image bytes as data URIs, no symlinks, and `dist` containing only `index.html`. Before payment the encoder rejects known image-size/aggregate excess and includes Base64/data-URI overhead in its conservative HTML input budget. The integration fixture demonstrates HTML → image → HTML: the third execution parent is job two, while inputs are HTML from job one and PNG from job two.
 
-See [measured limits](docs/LIMITS.md), [operating procedure](docs/OPERATIONS.md), [review record](docs/REVIEW.md), and [evidence](evidence/README.md).
+See [measured limits](docs/LIMITS.md), [operating procedure](docs/OPERATIONS.md), [review record](docs/REVIEW.md), and [final integrated evidence](docs/validation/README.md). Earlier contributor evidence remains in [evidence/](evidence/README.md).

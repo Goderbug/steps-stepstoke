@@ -1,0 +1,836 @@
+Compiling 37 files with Solc 0.8.26
+Solc 0.8.26 finished in 93.56s
+Compiler run successful with warnings:
+Warning (2519): This declaration shadows an existing declaration.
+   --> test/RelayProfiles.t.sol:324:13:
+    |
+324 |             bytes memory raw = _manifest(Text.hex32(keccak256(abi.encode(i))), Policy.kind(profile), 32);
+    |             ^^^^^^^^^^^^^^^^
+Note: The shadowed declaration is here:
+   --> test/RelayProfiles.t.sol:332:9:
+    |
+332 |         bytes memory raw = _manifest(Text.hex32(keccak256("new job")), T.Kind.Markdown, 42);
+    |         ^^^^^^^^^^^^^^^^
+
+warning[divide-before-multiply]: division before multiplication may lose precision
+    ╭▸ src/RelayEncoder.sol:128:34
+    │
+128 │                 embeddedBytes += 4 * ((uint256(a.size) + 2) / 3) + 32;
+    │                                  ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+    │
+    ╰ help: https://getfoundry.sh/forge/linting/divide-before-multiply
+
+warning[uninitialized-local]: local variable is read before being initialized
+    ╭▸ src/RelayEncoder.sol:130:40
+    │
+130 │             if (a.kind == T.Kind.HTML) htmlBytes += a.size;
+    │                                        ━━━━━━━━━
+    │
+    ╰ help: https://getfoundry.sh/forge/linting/uninitialized-local
+
+warning[uninitialized-local]: local variable is read before being initialized
+    ╭▸ src/RelayEncoder.sol:132:26
+    │
+132 │         if (updating && !selectedTarget) revert Policy.Invalid();
+    │                          ━━━━━━━━━━━━━━
+    │
+    ╰ help: https://getfoundry.sh/forge/linting/uninitialized-local
+
+warning[uninitialized-local]: local variable is read before being initialized
+    ╭▸ src/RelayEncoder.sol:106:34
+    │
+106 │                 if (!kinds[i]) ++missing;
+    │                                  ━━━━━━━
+    │
+    ╰ help: https://getfoundry.sh/forge/linting/uninitialized-local
+
+warning[uninitialized-local]: local variable is read before being initialized
+    ╭▸ src/RelayEncoder.sol:127:17
+    │
+127 │                 imageBytes += a.size;
+    │                 ━━━━━━━━━━
+    │
+    ╰ help: https://getfoundry.sh/forge/linting/uninitialized-local
+
+warning[uninitialized-local]: local variable is read before being initialized
+    ╭▸ src/RelayEncoder.sol:118:24
+    │
+118 │             if (key <= last) revert Policy.Invalid();
+    │                        ━━━━
+    │
+    ╰ help: https://getfoundry.sh/forge/linting/uninitialized-local
+
+warning[uninitialized-local]: local variable is read before being initialized
+    ╭▸ src/RelayEncoder.sol:128:17
+    │
+128 │                 embeddedBytes += 4 * ((uint256(a.size) + 2) / 3) + 32;
+    │                 ━━━━━━━━━━━━━
+    │
+    ╰ help: https://getfoundry.sh/forge/linting/uninitialized-local
+
+warning[require-revert-in-loop]: `require` or `revert` inside a loop
+    ╭▸ src/RelayEncoder.sol:118:30
+    │
+118 │             if (key <= last) revert Policy.Invalid();
+    │                              ━━━━━━━━━━━━━━━━━━━━━━━━
+    │
+    ╰ help: https://getfoundry.sh/forge/linting/require-revert-in-loop
+
+warning[require-revert-in-loop]: `require` or `revert` inside a loop
+    ╭▸ src/RelayEncoder.sol:121:45
+    │
+121 │             if (index == type(uint256).max) revert Policy.Invalid();
+    │                                             ━━━━━━━━━━━━━━━━━━━━━━━━
+    │
+    ╰ help: https://getfoundry.sh/forge/linting/require-revert-in-loop
+
+warning[require-revert-in-loop]: `require` or `revert` inside a loop
+    ╭▸ src/RelayEncoder.sol:124:71
+    │
+124 │             if (kind == T.Kind.Markdown && a.kind != T.Kind.Markdown) revert Policy.Invalid();
+    │                                                                       ━━━━━━━━━━━━━━━━━━━━━━━━
+    │
+    ╰ help: https://getfoundry.sh/forge/linting/require-revert-in-loop
+
+warning[require-revert-in-loop]: `require` or `revert` inside a loop
+    ╭▸ src/RelayEncoder.sol:126:48
+    │
+126 │                 if (a.size > Policy.MAX_IMAGE) revert Policy.Limit();
+    │                                                ━━━━━━━━━━━━━━━━━━━━━━
+    │
+    ╰ help: https://getfoundry.sh/forge/linting/require-revert-in-loop
+
+warning[unsafe-typecast]: typecast can truncate values
+   ╭▸ src/RelayVerifier.sol:48:18
+   │
+48 │         a.size = uint32(size);
+   │                  ━━━━━━━━━━━━
+   │
+   ├ note: consider disabling this lint if you're certain the cast is safe
+   │       
+   │       // casting to 'uint32' is safe because [explain why]
+   │       // forge-lint: disable-next-line(unsafe-typecast)
+   │       
+   │       
+   ╰ help: https://getfoundry.sh/forge/linting/unsafe-typecast
+
+warning[unsafe-typecast]: typecast can truncate values
+   ╭▸ src/libraries/Policy.sol:10:38
+   │
+10 │     bytes32 internal constant OPEN = bytes32("job.open@job-1");
+   │                                      ━━━━━━━━━━━━━━━━━━━━━━━━━
+   │
+   ├ note: consider disabling this lint if you're certain the cast is safe
+   │       
+   │       // casting to 'bytes32' is safe because [explain why]
+   │       // forge-lint: disable-next-line(unsafe-typecast)
+   │       
+   │       
+   ╰ help: https://getfoundry.sh/forge/linting/unsafe-typecast
+
+warning[unsafe-typecast]: typecast can truncate values
+   ╭▸ src/libraries/Policy.sol:11:42
+   │
+11 │     bytes32 internal constant CONTINUE = bytes32("job.continue@job-1");
+   │                                          ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+   │
+   ├ note: consider disabling this lint if you're certain the cast is safe
+   │       
+   │       // casting to 'bytes32' is safe because [explain why]
+   │       // forge-lint: disable-next-line(unsafe-typecast)
+   │       
+   │       
+   ╰ help: https://getfoundry.sh/forge/linting/unsafe-typecast
+
+warning[uninitialized-local]: local variable is read before being initialized
+   ╭▸ src/libraries/Assets.sol:24:30
+   │
+24 │             if (!kinds[i]) ++missing;
+   │                              ━━━━━━━
+   │
+   ╰ help: https://getfoundry.sh/forge/linting/uninitialized-local
+
+warning[uninitialized-local]: local variable is read before being initialized
+   ╭▸ src/libraries/Assets.sol:15:26
+   │
+15 │             if (a.key <= last) revert Policy.Invalid();
+   │                          ━━━━
+   │
+   ╰ help: https://getfoundry.sh/forge/linting/uninitialized-local
+
+warning[require-revert-in-loop]: `require` or `revert` inside a loop
+   ╭▸ src/libraries/Assets.sol:15:32
+   │
+15 │             if (a.key <= last) revert Policy.Invalid();
+   │                                ━━━━━━━━━━━━━━━━━━━━━━━━
+   │
+   ╰ help: https://getfoundry.sh/forge/linting/require-revert-in-loop
+
+warning[require-revert-in-loop]: `require` or `revert` inside a loop
+   ╭▸ src/libraries/Text.sol:62:46
+   │
+62 │         if (b.length == 0 || b.length > max) revert Policy.Limit();
+   │                                              ━━━━━━━━━━━━━━━━━━━━━━
+   │
+   ╰ help: https://getfoundry.sh/forge/linting/require-revert-in-loop
+
+warning[require-revert-in-loop]: `require` or `revert` inside a loop
+   ╭▸ src/libraries/Text.sol:68:15
+   │
+68 │             ) revert Policy.Invalid();
+   │               ━━━━━━━━━━━━━━━━━━━━━━━━
+   │
+   ╰ help: https://getfoundry.sh/forge/linting/require-revert-in-loop
+
+warning[require-revert-in-loop]: `require` or `revert` inside a loop
+   ╭▸ src/libraries/Text.sol:75:46
+   │
+75 │         if (b.length == 0 || b.length > 128) revert Policy.Limit();
+   │                                              ━━━━━━━━━━━━━━━━━━━━━━
+   │
+   ╰ help: https://getfoundry.sh/forge/linting/require-revert-in-loop
+
+warning[require-revert-in-loop]: `require` or `revert` inside a loop
+   ╭▸ src/libraries/Text.sol:80:28
+   │
+80 │                 if (start) revert Policy.Invalid();
+   │                            ━━━━━━━━━━━━━━━━━━━━━━━━
+   │
+   ╰ help: https://getfoundry.sh/forge/linting/require-revert-in-loop
+
+warning[require-revert-in-loop]: `require` or `revert` inside a loop
+   ╭▸ src/libraries/Text.sol:83:40
+   │
+83 │                 if (start && c == ".") revert Policy.Invalid();
+   │                                        ━━━━━━━━━━━━━━━━━━━━━━━━
+   │
+   ╰ help: https://getfoundry.sh/forge/linting/require-revert-in-loop
+
+warning[require-revert-in-loop]: `require` or `revert` inside a loop
+   ╭▸ src/libraries/Text.sol:87:19
+   │
+87 │                 ) revert Policy.Invalid();
+   │                   ━━━━━━━━━━━━━━━━━━━━━━━━
+   │
+   ╰ help: https://getfoundry.sh/forge/linting/require-revert-in-loop
+
+warning[require-revert-in-loop]: `require` or `revert` inside a loop
+   ╭▸ src/libraries/Text.sol:91:46
+   │
+91 │         if (start || b[b.length - 1] == ".") revert Policy.Invalid();
+   │                                              ━━━━━━━━━━━━━━━━━━━━━━━━
+   │
+   ╰ help: https://getfoundry.sh/forge/linting/require-revert-in-loop
+
+warning[require-revert-in-loop]: `require` or `revert` inside a loop
+   ╭▸ src/libraries/Assets.sol:33:60
+   │
+33 │         if (!Text.equal(a.mediaType, Policy.mime(a.kind))) revert Policy.Invalid();
+   │                                                            ━━━━━━━━━━━━━━━━━━━━━━━━
+   │
+   ╰ help: https://getfoundry.sh/forge/linting/require-revert-in-loop
+
+warning[require-revert-in-loop]: `require` or `revert` inside a loop
+   ╭▸ src/libraries/Assets.sol:35:13
+   │
+35 │             revert Policy.Invalid();
+   │             ━━━━━━━━━━━━━━━━━━━━━━━━
+   │
+   ╰ help: https://getfoundry.sh/forge/linting/require-revert-in-loop
+
+warning[require-revert-in-loop]: `require` or `revert` inside a loop
+   ╭▸ src/libraries/Assets.sol:42:67
+   │
+42 │         if (kind == T.Kind.Markdown && !Text.suffix(path, ".md")) revert Policy.Invalid();
+   │                                                                   ━━━━━━━━━━━━━━━━━━━━━━━━
+   │
+   ╰ help: https://getfoundry.sh/forge/linting/require-revert-in-loop
+
+warning[require-revert-in-loop]: `require` or `revert` inside a loop
+   ╭▸ src/libraries/Assets.sol:43:74
+   │
+43 │         if (kind == T.Kind.HTML && !Text.equal(path, "dist/index.html")) revert Policy.Invalid();
+   │                                                                          ━━━━━━━━━━━━━━━━━━━━━━━━
+   │
+   ╰ help: https://getfoundry.sh/forge/linting/require-revert-in-loop
+
+warning[require-revert-in-loop]: `require` or `revert` inside a loop
+   ╭▸ src/libraries/Assets.sol:44:65
+   │
+44 │         if (kind == T.Kind.Image && !Text.suffix(path, ".png")) revert Policy.Invalid();
+   │                                                                 ━━━━━━━━━━━━━━━━━━━━━━━━
+   │
+   ╰ help: https://getfoundry.sh/forge/linting/require-revert-in-loop
+
+warning[require-revert-in-loop]: `require` or `revert` inside a loop
+   ╭▸ src/libraries/Assets.sol:19:83
+   │
+19 │             if (a.producer == address(0) || a.resultHash == 0 || a.revision == 0) revert Policy.Invalid();
+   │                                                                                   ━━━━━━━━━━━━━━━━━━━━━━━━
+   │
+   ╰ help: https://getfoundry.sh/forge/linting/require-revert-in-loop
+
+warning[require-revert-in-loop]: `require` or `revert` inside a loop
+   ╭▸ src/libraries/Assets.sol:61:15
+   │
+61 │             ) revert Policy.Limit();
+   │               ━━━━━━━━━━━━━━━━━━━━━━
+   │
+   ╰ help: https://getfoundry.sh/forge/linting/require-revert-in-loop
+
+warning[uninitialized-local]: local variable is read before being initialized
+   ╭▸ src/libraries/Assets.sol:82:18
+   │
+82 │             if (!inserted && next.key <= old[i].key) {
+   │                  ━━━━━━━━
+   │
+   ╰ help: https://getfoundry.sh/forge/linting/uninitialized-local
+
+warning[uninitialized-local]: local variable is read before being initialized
+   ╭▸ src/libraries/Assets.sol:83:21
+   │
+83 │                 out[j++] = next;
+   │                     ━
+   │
+   ╰ help: https://getfoundry.sh/forge/linting/uninitialized-local
+
+warning[require-revert-in-loop]: `require` or `revert` inside a loop
+   ╭▸ src/libraries/StrictJSON.sol:71:32
+   │
+71 │             if (!_digit(b[j])) revert Policy.Invalid();
+   │                                ━━━━━━━━━━━━━━━━━━━━━━━━
+   │
+   ╰ help: https://getfoundry.sh/forge/linting/require-revert-in-loop
+
+warning[require-revert-in-loop]: `require` or `revert` inside a loop
+   ╭▸ src/libraries/StrictJSON.sol:96:48
+   │
+96 │                 if (p.raw[p.pos++] != word[j]) revert Policy.Invalid();
+   │                                                ━━━━━━━━━━━━━━━━━━━━━━━━
+   │
+   ╰ help: https://getfoundry.sh/forge/linting/require-revert-in-loop
+
+warning[uninitialized-local]: local variable is read before being initialized
+    ╭▸ src/libraries/StrictJSON.sol:113:17
+    │
+113 │             if (members == MAX_MEMBERS || p.count >= MAX_TOKENS) revert Policy.Limit();
+    │                 ━━━━━━━
+    │
+    ╰ help: https://getfoundry.sh/forge/linting/uninitialized-local
+
+warning[require-revert-in-loop]: `require` or `revert` inside a loop
+    ╭▸ src/libraries/StrictJSON.sol:113:66
+    │
+113 │             if (members == MAX_MEMBERS || p.count >= MAX_TOKENS) revert Policy.Limit();
+    │                                                                  ━━━━━━━━━━━━━━━━━━━━━━
+    │
+    ╰ help: https://getfoundry.sh/forge/linting/require-revert-in-loop
+
+warning[require-revert-in-loop]: `require` or `revert` inside a loop
+    ╭▸ src/libraries/StrictJSON.sol:147:29
+    │
+147 │         if (!_take(p, '"')) revert Policy.Invalid();
+    │                             ━━━━━━━━━━━━━━━━━━━━━━━━
+    │
+    ╰ help: https://getfoundry.sh/forge/linting/require-revert-in-loop
+
+warning[require-revert-in-loop]: `require` or `revert` inside a loop
+   ╭▸ src/libraries/Text.sol:34:17
+   │
+34 │                 revert Policy.Invalid();
+   │                 ━━━━━━━━━━━━━━━━━━━━━━━━
+   │
+   ╰ help: https://getfoundry.sh/forge/linting/require-revert-in-loop
+
+warning[require-revert-in-loop]: `require` or `revert` inside a loop
+   ╭▸ src/libraries/Text.sol:36:35
+   │
+36 │             if (i + n > s.length) revert Policy.Invalid();
+   │                                   ━━━━━━━━━━━━━━━━━━━━━━━━
+   │
+   ╰ help: https://getfoundry.sh/forge/linting/require-revert-in-loop
+
+warning[require-revert-in-loop]: `require` or `revert` inside a loop
+   ╭▸ src/libraries/Text.sol:39:43
+   │
+39 │                 if (d < 0x80 || d > 0xbf) revert Policy.Invalid();
+   │                                           ━━━━━━━━━━━━━━━━━━━━━━━━
+   │
+   ╰ help: https://getfoundry.sh/forge/linting/require-revert-in-loop
+
+warning[require-revert-in-loop]: `require` or `revert` inside a loop
+   ╭▸ src/libraries/Text.sol:45:15
+   │
+45 │             ) revert Policy.Invalid();
+   │               ━━━━━━━━━━━━━━━━━━━━━━━━
+   │
+   ╰ help: https://getfoundry.sh/forge/linting/require-revert-in-loop
+
+warning[require-revert-in-loop]: `require` or `revert` inside a loop
+    ╭▸ src/libraries/StrictJSON.sol:159:32
+    │
+159 │             if (uint8(c) < 32) revert Policy.Invalid();
+    │                                ━━━━━━━━━━━━━━━━━━━━━━━━
+    │
+    ╰ help: https://getfoundry.sh/forge/linting/require-revert-in-loop
+
+warning[require-revert-in-loop]: `require` or `revert` inside a loop
+    ╭▸ src/libraries/StrictJSON.sol:161:44
+    │
+161 │                 if (p.pos == p.raw.length) revert Policy.Invalid();
+    │                                            ━━━━━━━━━━━━━━━━━━━━━━━━
+    │
+    ╰ help: https://getfoundry.sh/forge/linting/require-revert-in-loop
+
+warning[require-revert-in-loop]: `require` or `revert` inside a loop
+    ╭▸ src/libraries/StrictJSON.sol:206:39
+    │
+206 │         if (p.pos + 4 > p.raw.length) revert Policy.Invalid();
+    │                                       ━━━━━━━━━━━━━━━━━━━━━━━━
+    │
+    ╰ help: https://getfoundry.sh/forge/linting/require-revert-in-loop
+
+warning[require-revert-in-loop]: `require` or `revert` inside a loop
+    ╭▸ src/libraries/Text.sol:157:9
+    │
+157 │         revert Policy.Invalid();
+    │         ━━━━━━━━━━━━━━━━━━━━━━━━
+    │
+    ╰ help: https://getfoundry.sh/forge/linting/require-revert-in-loop
+
+warning[require-revert-in-loop]: `require` or `revert` inside a loop
+    ╭▸ src/libraries/StrictJSON.sol:166:64
+    │
+166 │                         if (!_take(p, "\\") || !_take(p, "u")) revert Policy.Invalid();
+    │                                                                ━━━━━━━━━━━━━━━━━━━━━━━━
+    │
+    ╰ help: https://getfoundry.sh/forge/linting/require-revert-in-loop
+
+warning[require-revert-in-loop]: `require` or `revert` inside a loop
+    ╭▸ src/libraries/StrictJSON.sol:168:59
+    │
+168 │                         if (low < 0xdc00 || low > 0xdfff) revert Policy.Invalid();
+    │                                                           ━━━━━━━━━━━━━━━━━━━━━━━━
+    │
+    ╰ help: https://getfoundry.sh/forge/linting/require-revert-in-loop
+
+warning[require-revert-in-loop]: `require` or `revert` inside a loop
+    ╭▸ src/libraries/StrictJSON.sol:171:25
+    │
+171 │                         revert Policy.Invalid();
+    │                         ━━━━━━━━━━━━━━━━━━━━━━━━
+    │
+    ╰ help: https://getfoundry.sh/forge/linting/require-revert-in-loop
+
+warning[require-revert-in-loop]: `require` or `revert` inside a loop
+    ╭▸ src/libraries/StrictJSON.sol:174:49
+    │
+174 │                     if (n + width > MAX_STRING) revert Policy.Limit();
+    │                                                 ━━━━━━━━━━━━━━━━━━━━━━
+    │
+    ╰ help: https://getfoundry.sh/forge/linting/require-revert-in-loop
+
+warning[require-revert-in-loop]: `require` or `revert` inside a loop
+    ╭▸ src/libraries/StrictJSON.sol:197:61
+    │
+197 │                 else if (c != '"' && c != "\\" && c != "/") revert Policy.Invalid();
+    │                                                             ━━━━━━━━━━━━━━━━━━━━━━━━
+    │
+    ╰ help: https://getfoundry.sh/forge/linting/require-revert-in-loop
+
+warning[require-revert-in-loop]: `require` or `revert` inside a loop
+    ╭▸ src/libraries/StrictJSON.sol:199:34
+    │
+199 │             if (n == MAX_STRING) revert Policy.Limit();
+    │                                  ━━━━━━━━━━━━━━━━━━━━━━
+    │
+    ╰ help: https://getfoundry.sh/forge/linting/require-revert-in-loop
+
+warning[require-revert-in-loop]: `require` or `revert` inside a loop
+    ╭▸ src/libraries/StrictJSON.sol:202:9
+    │
+202 │         revert Policy.Invalid();
+    │         ━━━━━━━━━━━━━━━━━━━━━━━━
+    │
+    ╰ help: https://getfoundry.sh/forge/linting/require-revert-in-loop
+
+warning[require-revert-in-loop]: `require` or `revert` inside a loop
+    ╭▸ src/libraries/StrictJSON.sol:115:67
+    │
+115 │             if (bytes(key).length == 0 || bytes(key).length > 64) revert Policy.Limit();
+    │                                                                   ━━━━━━━━━━━━━━━━━━━━━━
+    │
+    ╰ help: https://getfoundry.sh/forge/linting/require-revert-in-loop
+
+warning[require-revert-in-loop]: `require` or `revert` inside a loop
+    ╭▸ src/libraries/StrictJSON.sol:118:40
+    │
+118 │                 if (keys[j] == digest) revert Policy.Invalid();
+    │                                        ━━━━━━━━━━━━━━━━━━━━━━━━
+    │
+    ╰ help: https://getfoundry.sh/forge/linting/require-revert-in-loop
+
+warning[require-revert-in-loop]: `require` or `revert` inside a loop
+    ╭▸ src/libraries/StrictJSON.sol:124:33
+    │
+124 │             if (!_take(p, ":")) revert Policy.Invalid();
+    │                                 ━━━━━━━━━━━━━━━━━━━━━━━━
+    │
+    ╰ help: https://getfoundry.sh/forge/linting/require-revert-in-loop
+
+warning[require-revert-in-loop]: `require` or `revert` inside a loop
+   ╭▸ src/libraries/StrictJSON.sol:77:57
+   │
+77 │         if (depth > MAX_DEPTH || p.count >= MAX_TOKENS) revert Policy.Limit();
+   │                                                         ━━━━━━━━━━━━━━━━━━━━━━
+   │
+   ╰ help: https://getfoundry.sh/forge/linting/require-revert-in-loop
+
+warning[require-revert-in-loop]: `require` or `revert` inside a loop
+   ╭▸ src/libraries/StrictJSON.sol:79:36
+   │
+79 │         if (p.pos == p.raw.length) revert Policy.Invalid();
+   │                                    ━━━━━━━━━━━━━━━━━━━━━━━━
+   │
+   ╰ help: https://getfoundry.sh/forge/linting/require-revert-in-loop
+
+warning[require-revert-in-loop]: `require` or `revert` inside a loop
+    ╭▸ src/libraries/StrictJSON.sol:128:33
+    │
+128 │             if (!_take(p, ",")) revert Policy.Invalid();
+    │                                 ━━━━━━━━━━━━━━━━━━━━━━━━
+    │
+    ╰ help: https://getfoundry.sh/forge/linting/require-revert-in-loop
+
+warning[require-revert-in-loop]: `require` or `revert` inside a loop
+    ╭▸ src/libraries/StrictJSON.sol:138:42
+    │
+138 │             if (++members > MAX_MEMBERS) revert Policy.Limit();
+    │                                          ━━━━━━━━━━━━━━━━━━━━━━
+    │
+    ╰ help: https://getfoundry.sh/forge/linting/require-revert-in-loop
+
+warning[require-revert-in-loop]: `require` or `revert` inside a loop
+    ╭▸ src/libraries/StrictJSON.sol:142:33
+    │
+142 │             if (!_take(p, ",")) revert Policy.Invalid();
+    │                                 ━━━━━━━━━━━━━━━━━━━━━━━━
+    │
+    ╰ help: https://getfoundry.sh/forge/linting/require-revert-in-loop
+
+warning[require-revert-in-loop]: `require` or `revert` inside a loop
+   ╭▸ src/libraries/StrictJSON.sol:94:53
+   │
+94 │             if (p.pos + word.length > p.raw.length) revert Policy.Invalid();
+   │                                                     ━━━━━━━━━━━━━━━━━━━━━━━━
+   │
+   ╰ help: https://getfoundry.sh/forge/linting/require-revert-in-loop
+
+warning[require-revert-in-loop]: `require` or `revert` inside a loop
+    ╭▸ src/libraries/StrictJSON.sol:217:17
+    │
+217 │                 revert Policy.Invalid();
+    │                 ━━━━━━━━━━━━━━━━━━━━━━━━
+    │
+    ╰ help: https://getfoundry.sh/forge/linting/require-revert-in-loop
+
+warning[require-revert-in-loop]: `require` or `revert` inside a loop
+    ╭▸ src/libraries/StrictJSON.sol:238:29
+    │
+238 │         if (begin == p.pos) revert Policy.Invalid();
+    │                             ━━━━━━━━━━━━━━━━━━━━━━━━
+    │
+    ╰ help: https://getfoundry.sh/forge/linting/require-revert-in-loop
+
+warning[require-revert-in-loop]: `require` or `revert` inside a loop
+    ╭▸ src/libraries/StrictJSON.sol:227:26
+    │
+227 │         if (length > 64) revert Policy.Limit();
+    │                          ━━━━━━━━━━━━━━━━━━━━━━
+    │
+    ╰ help: https://getfoundry.sh/forge/linting/require-revert-in-loop
+
+warning[uninitialized-local]: local variable is read before being initialized
+    ╭▸ src/libraries/StrictJSON.sol:138:19
+    │
+138 │             if (++members > MAX_MEMBERS) revert Policy.Limit();
+    │                   ━━━━━━━
+    │
+    ╰ help: https://getfoundry.sh/forge/linting/uninitialized-local
+
+warning[uninitialized-local]: local variable is read before being initialized
+    ╭▸ src/libraries/StrictJSON.sol:154:33
+    │
+154 │                     mstore(out, n)
+    │                                 ━
+    │
+    ╰ help: https://getfoundry.sh/forge/linting/uninitialized-local
+
+warning[unsafe-typecast]: typecast can truncate values
+    ╭▸ src/libraries/StrictJSON.sol:176:43
+    │
+176 │                         out[n++] = bytes1(uint8(scalar));
+    │                                           ━━━━━━━━━━━━━
+    │
+    ├ note: consider disabling this lint if you're certain the cast is safe
+    │       
+    │       // casting to 'uint8' is safe because [explain why]
+    │       // forge-lint: disable-next-line(unsafe-typecast)
+    │       
+    │       
+    ╰ help: https://getfoundry.sh/forge/linting/unsafe-typecast
+
+warning[unsafe-typecast]: typecast can truncate values
+    ╭▸ src/libraries/StrictJSON.sol:179:47
+    │
+179 │ …                     out[n++] = bytes1(uint8(0xc0 | (scalar >> 6)));
+    │                                         ━━━━━━━━━━━━━━━━━━━━━━━━━━━
+    │
+    ├ note: consider disabling this lint if you're certain the cast is safe
+    │       
+    │       // casting to 'uint8' is safe because [explain why]
+    │       // forge-lint: disable-next-line(unsafe-typecast)
+    │       
+    │       
+    ╰ help: https://getfoundry.sh/forge/linting/unsafe-typecast
+
+warning[unsafe-typecast]: typecast can truncate values
+    ╭▸ src/libraries/StrictJSON.sol:181:47
+    │
+181 │ …                     out[n++] = bytes1(uint8(0xe0 | (scalar >> 12)));
+    │                                         ━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+    │
+    ├ note: consider disabling this lint if you're certain the cast is safe
+    │       
+    │       // casting to 'uint8' is safe because [explain why]
+    │       // forge-lint: disable-next-line(unsafe-typecast)
+    │       
+    │       
+    ╰ help: https://getfoundry.sh/forge/linting/unsafe-typecast
+
+warning[unsafe-typecast]: typecast can truncate values
+    ╭▸ src/libraries/StrictJSON.sol:182:47
+    │
+182 │ …                     out[n++] = bytes1(uint8(0x80 | ((scalar >> 6) & 63)));
+    │                                         ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+    │
+    ├ note: consider disabling this lint if you're certain the cast is safe
+    │       
+    │       // casting to 'uint8' is safe because [explain why]
+    │       // forge-lint: disable-next-line(unsafe-typecast)
+    │       
+    │       
+    ╰ help: https://getfoundry.sh/forge/linting/unsafe-typecast
+
+warning[unsafe-typecast]: typecast can truncate values
+    ╭▸ src/libraries/StrictJSON.sol:184:47
+    │
+184 │ …                     out[n++] = bytes1(uint8(0xf0 | (scalar >> 18)));
+    │                                         ━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+    │
+    ├ note: consider disabling this lint if you're certain the cast is safe
+    │       
+    │       // casting to 'uint8' is safe because [explain why]
+    │       // forge-lint: disable-next-line(unsafe-typecast)
+    │       
+    │       
+    ╰ help: https://getfoundry.sh/forge/linting/unsafe-typecast
+
+warning[unsafe-typecast]: typecast can truncate values
+    ╭▸ src/libraries/StrictJSON.sol:185:47
+    │
+185 │ …                     out[n++] = bytes1(uint8(0x80 | ((scalar >> 12) & 63)));
+    │                                         ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+    │
+    ├ note: consider disabling this lint if you're certain the cast is safe
+    │       
+    │       // casting to 'uint8' is safe because [explain why]
+    │       // forge-lint: disable-next-line(unsafe-typecast)
+    │       
+    │       
+    ╰ help: https://getfoundry.sh/forge/linting/unsafe-typecast
+
+warning[unsafe-typecast]: typecast can truncate values
+    ╭▸ src/libraries/StrictJSON.sol:186:47
+    │
+186 │ …                     out[n++] = bytes1(uint8(0x80 | ((scalar >> 6) & 63)));
+    │                                         ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+    │
+    ├ note: consider disabling this lint if you're certain the cast is safe
+    │       
+    │       // casting to 'uint8' is safe because [explain why]
+    │       // forge-lint: disable-next-line(unsafe-typecast)
+    │       
+    │       
+    ╰ help: https://getfoundry.sh/forge/linting/unsafe-typecast
+
+warning[unsafe-typecast]: typecast can truncate values
+    ╭▸ src/libraries/StrictJSON.sol:188:43
+    │
+188 │                         out[n++] = bytes1(uint8(0x80 | (scalar & 63)));
+    │                                           ━━━━━━━━━━━━━━━━━━━━━━━━━━━
+    │
+    ├ note: consider disabling this lint if you're certain the cast is safe
+    │       
+    │       // casting to 'uint8' is safe because [explain why]
+    │       // forge-lint: disable-next-line(unsafe-typecast)
+    │       
+    │       
+    ╰ help: https://getfoundry.sh/forge/linting/unsafe-typecast
+
+warning[uninitialized-local]: local variable is read before being initialized
+   ╭▸ src/libraries/Text.sol:16:16
+   │
+16 │         while (i < s.length) {
+   │                ━
+   │
+   ╰ help: https://getfoundry.sh/forge/linting/uninitialized-local
+
+warning[require-revert-in-loop]: `require` or `revert` inside a loop
+   ╭▸ src/libraries/Text.sol:55:46
+   │
+55 │             if (c < 32 && c != 10 && c != 9) revert Policy.Invalid();
+   │                                              ━━━━━━━━━━━━━━━━━━━━━━━━
+   │
+   ╰ help: https://getfoundry.sh/forge/linting/require-revert-in-loop
+
+warning[require-revert-in-loop]: `require` or `revert` inside a loop
+   ╭▸ src/libraries/Text.sol:56:27
+   │
+56 │             if (c == 127) revert Policy.Invalid();
+   │                           ━━━━━━━━━━━━━━━━━━━━━━━━
+   │
+   ╰ help: https://getfoundry.sh/forge/linting/require-revert-in-loop
+
+warning[uninitialized-local]: local variable is read before being initialized
+    ╭▸ src/libraries/Text.sol:108:13
+    │
+108 │         out[n++] = '"';
+    │             ━
+    │
+    ╰ help: https://getfoundry.sh/forge/linting/uninitialized-local
+
+warning[uninitialized-local]: local variable is read before being initialized
+    ╭▸ src/libraries/Text.sol:147:18
+    │
+147 │             v = (v << 4) | nibble(b[i]);
+    │                  ━
+    │
+    ╰ help: https://getfoundry.sh/forge/linting/uninitialized-local
+
+warning[uninitialized-local]: local variable is read before being initialized
+    ╭▸ src/libraries/Text.sol:146:26
+    │
+146 │         for (uint256 i = offset; i < b.length; ++i) {
+    │                          ━━━━━━
+    │
+    ╰ help: https://getfoundry.sh/forge/linting/uninitialized-local
+
+warning[uninitialized-local]: local variable is read before being initialized
+    ╭▸ src/libraries/Text.sol:165:15
+    │
+165 │             ++count;
+    │               ━━━━━
+    │
+    ╰ help: https://getfoundry.sh/forge/linting/uninitialized-local
+
+warning[unsafe-typecast]: typecast can truncate values
+    ╭▸ src/libraries/Text.sol:170:33
+    │
+170 │             b[--count] = bytes1(uint8(48 + v % 10));
+    │                                 ━━━━━━━━━━━━━━━━━━
+    │
+    ├ note: consider disabling this lint if you're certain the cast is safe
+    │       
+    │       // casting to 'uint8' is safe because [explain why]
+    │       // forge-lint: disable-next-line(unsafe-typecast)
+    │       
+    │       
+    ╰ help: https://getfoundry.sh/forge/linting/unsafe-typecast
+
+warning[unused-return]: return value of an external call is not used
+    ╭▸ src/RelayBranch.sol:144:33
+    │
+144 │         (, bytes memory body) = encoder.encode(goal, direction, latestJobId, p, current);
+    │                                 ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+    │
+    ╰ help: https://getfoundry.sh/forge/linting/unused-return
+
+warning[reentrancy-no-eth]: external call can be reentered before `phase` is updated
+    ╭▸ src/RelayBranch.sol:201:21
+    │
+201 │           requestId = intake_.requestWithFailure(
+    │ ┏━━━━━━━━━━━━━━━━━━━━━┛
+202 │ ┃             action,
+203 │ ┃             body,
+204 │ ┃             IIntake.Callback(address(this), this.onIntakeResult.selector),
+    ‡ ┃
+207 │ ┃             price
+208 │ ┃         );
+    │ ┗━━━━━━━━━┛
+    │
+    ╰ help: https://getfoundry.sh/forge/linting/reentrancy-no-eth
+
+warning[reentrancy-no-eth]: external call can be reentered before `activeAttempt` is updated
+    ╭▸ src/RelayBranch.sol:201:21
+    │
+201 │           requestId = intake_.requestWithFailure(
+    │ ┏━━━━━━━━━━━━━━━━━━━━━┛
+202 │ ┃             action,
+203 │ ┃             body,
+204 │ ┃             IIntake.Callback(address(this), this.onIntakeResult.selector),
+    ‡ ┃
+207 │ ┃             price
+208 │ ┃         );
+    │ ┗━━━━━━━━━┛
+    │
+    ╰ help: https://getfoundry.sh/forge/linting/reentrancy-no-eth
+
+warning[reentrancy-events]: event emitted after an external call; reentrancy can reorder or fabricate logs that off-chain consumers rely on
+    ╭▸ src/RelayBranch.sol:222:9
+    │
+222 │         emit Purchased(number, id, requestId, msg.sender, action, price, keccak256(body));
+    │         ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+    │
+    ╰ help: https://getfoundry.sh/forge/linting/reentrancy-events
+
+warning[incorrect-strict-equality]: dangerous strict equality check on an externally-influenced value
+    ╭▸ src/RelayBranch.sol:197:13
+    │
+197 │             token.balanceOf(address(this)) != beforeBalance + price
+    │             ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+    │
+    ╰ help: https://getfoundry.sh/forge/linting/incorrect-strict-equality
+
+warning[incorrect-strict-equality]: dangerous strict equality check on an externally-influenced value
+    ╭▸ src/RelayBranch.sol:198:20
+    │
+198 │                 || token.balanceOf(msg.sender) + price != beforeSponsor
+    │                    ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+    │
+    ╰ help: https://getfoundry.sh/forge/linting/incorrect-strict-equality
+
+warning[incorrect-strict-equality]: dangerous strict equality check on an externally-influenced value
+    ╭▸ src/RelayBranch.sol:211:13
+    │
+211 │             token.balanceOf(address(this)) != beforeBalance
+    │             ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+    │
+    ╰ help: https://getfoundry.sh/forge/linting/incorrect-strict-equality
+
+warning[reentrancy-no-eth]: external call can be reentered before `registered` is updated
+   ╭▸ src/RelayFactory.sol:70:9
+   │
+70 │         branch.initialize(goal, direction, source, inheritedProjectHash, inherited);
+   │         ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+   │
+   ╰ help: https://getfoundry.sh/forge/linting/reentrancy-no-eth
+
+warning[reentrancy-events]: event emitted after an external call; reentrancy can reorder or fabricate logs that off-chain consumers rely on
+   ╭▸ src/RelayFactory.sol:73:9
+   │
+73 │         emit BranchCreated(address(branch), source.parent, source.revision, source.checkpoint, msg.sender);
+   │         ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+   │
+   ╰ help: https://getfoundry.sh/forge/linting/reentrancy-events
+

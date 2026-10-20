@@ -24,14 +24,23 @@ const ipv4Private = value => {
     || (a === 192 && (b === 0 || b === 168 || (b === 0 && c === 2)))
     || (a === 198 && (b === 18 || b === 19 || b === 51)) || (a === 203 && b === 0 && c === 113);
 };
-const ipv6Private = value => {
-  const lower = value.toLowerCase().replace(/^\[|\]$/gu, '');
-  if (lower === '::' || lower === '::1' || lower.includes('%')) return true;
-  if (lower.startsWith('::ffff:')) return ipv4Private(lower.slice(7));
-  const first = Number.parseInt(lower.split(':')[0] || '0', 16);
-  return (first & 0xfe00) === 0xfc00 || (first & 0xffc0) === 0xfe80 || (first & 0xff00) === 0xff00;
+// Fail closed for IPv6: only ordinary global-unicast addresses are eligible.
+// Reject mapped/translated IPv4, NAT64, local scopes and transition mechanisms;
+// parsing a mapped hexadecimal suffix as dotted IPv4 can permit loopback SSRF.
+const ipv6Public = value => {
+  const lower = value.toLowerCase();
+  if (lower.includes('%')) return false;
+  const [firstText, secondText] = lower.split(':');
+  const first = Number.parseInt(firstText, 16);
+  const second = Number.parseInt(secondText || '0', 16);
+  if (!(first >= 0x2000 && first <= 0x3fff)) return false;
+  if (first === 0x2002) return false; // 6to4 embeds an unchecked IPv4 endpoint.
+  if (first === 0x2001 && (second < 0x0200 || second === 0x0db8)) return false;
+  if (first === 0x3fff && second <= 0x0fff) return false; // Documentation prefix.
+  return true;
 };
-const isPublicIP = value => isIP(value) === 4 ? !ipv4Private(value) : isIP(value) === 6 ? !ipv6Private(value) : false;
+export const isPublicArtifactAddress = value => isIP(value) === 4 ? !ipv4Private(value)
+  : isIP(value) === 6 ? ipv6Public(value) : false;
 const safeURL = value => {
   let url;
   try { url = new URL(value); } catch { badURL('INVALID_URL', 'Expected an absolute HTTPS artifact URL'); }
@@ -46,7 +55,7 @@ const resolvePublic = async hostname => {
   try { answers = await lookup(hostname, { all: true, verbatim: true }); } catch (error) {
     throw new ArtifactFetchError('DNS_FAILED', 'Artifact hostname could not be resolved', { hostname, cause: error.code });
   }
-  if (!answers.length || answers.some(answer => !isPublicIP(answer.address))) {
+  if (!answers.length || answers.some(answer => !isPublicArtifactAddress(answer.address))) {
     badURL('PRIVATE_NETWORK', 'Artifact hostname resolved to a non-public address', { hostname });
   }
   // Pin the connection to a checked answer rather than letting a second DNS lookup choose a

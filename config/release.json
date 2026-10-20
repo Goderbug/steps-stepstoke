@@ -90,5 +90,7 @@
       "runtimeBytesBeforeImmutablePatching": 10590,
       "initcodeBytes": 10616
     }
-  }
+  },
+  "independentAgentReview": "PASS_WITH_REPAIRS",
+  "validationReport": "docs/validation/README.md"
 }

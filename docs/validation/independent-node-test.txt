@@ -1,0 +1,28 @@
+✔ actual HTML directory rejects symlinks/extras and verifies exact inline image bytes without execution (23.823222ms)
+✔ public artifact fetcher rejects local, credentialed and unsupported sources before any artifact is read (8.868801ms)
+✔ artifact address admission rejects private, mapped and transition IPv6 forms (3.889429ms)
+✔ artifact address admission rejects private and special IPv4 ranges (0.299829ms)
+✔ actual fetch path rejects mapped-private DNS answers before HTTPS and pins public answers (38.525553ms)
+✔ vendored ethers is exactly 6.17.0 and every locked dependency is present offline (16.934702ms)
+✔ all six functions have unsigned ABI transaction/read preparation (20.006491ms)
+✔ proposal zero, unsigned funding caps, publishing and invalid inputs are rejected (2.53328ms)
+✔ client rejects fixed-profile violations before it prepares a purchaseable proposal (1.076989ms)
+✔ raw binding preserves exact bytes and refuses a reserialization with a different digest (1.66416ms)
+✔ canonical witnesses sort, retain provenance, detect duplication and encode deterministically (6.959521ms)
+✔ SDK golden witness and calldata are shared with executed Solidity tests (5.760789ms)
+✔ history is recoverable from full witness logs and permanent checkpoint reads (9.854661ms)
+✔ optional EIP-1193 querying makes eth_call only and decodes the prepared ABI read (1.84956ms)
+✔ actual Markdown, HTML and PNG bytes verify length, SHA-256 and MIME signature (6.307301ms)
+✔ strict raw parser rejects Unicode, duplicates, trailing content and excessive resources (1.17672ms)
+✔ unknown transactions never trigger an automatic rebuy; stages remain separate (0.219469ms)
+✔ lifecycle status never treats a receipt as admission, execution, file, Git or publication proof (0.23472ms)
+✔ CLI prepares calldata without any RPC, key or signer (173.749395ms)
+✔ CLI recovers authenticated checkpoint history from explicit local evidence only (126.61249ms)
+ℹ tests 20
+ℹ suites 0
+ℹ pass 20
+ℹ fail 0
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 538.285226

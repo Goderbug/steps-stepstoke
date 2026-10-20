@@ -19,7 +19,8 @@ status    [--receipt FILE] [--phase INTEGER] [--checkpoint-verified true|false] 
 decode-checkpoint --log FILE
 recover-history --branch ADDRESS --logs FILE --checkpoints FILE
 
-Outputs calldata or eth_call requests. Never signs, sends, downloads, opens a browser, or retries automatically.
+Outputs calldata or eth_call requests. Never signs, sends transactions, opens a browser, or retries automatically.
+Only fetch-check downloads an explicit public HTTPS artifact and verifies its bytes.
 All file arguments are explicit operator inputs, never paths taken from a manifest.`;
 const [command = 'help', ...argv] = process.argv.slice(2);
 const options = Object.create(null);

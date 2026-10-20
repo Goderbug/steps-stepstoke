@@ -2,7 +2,7 @@
 
 Scope: Solidity authority, payment, callbacks, strict JSON binding, persistent assets, historical forks, and the initial offline Node preparation layer.
 
-This is the implementing contributor's local review, supported by Foundry's linter and adversarial tests. **It is not an independent contributor audit.** The network's independent review is still outstanding; production readiness is not asserted. No unresolved Critical/High finding was identified in this local pass. Live profile/API compatibility, real IMD consumption and public deployment remain `NOT_RUN`.
+This is the implementing contributor's local review, supported by Foundry's linter and adversarial tests. **It is not an independent contributor audit.** A later independent agent review and rerun of the final integration are recorded in [docs/validation/independent-review.md](validation/independent-review.md); production readiness is not asserted. No unresolved Critical/High finding was identified in this local pass. Live profile/API compatibility, real IMD consumption and public deployment remain `NOT_RUN`.
 
 ## Findings repaired
 
@@ -47,4 +47,8 @@ Slither/Mythril and a separate contributor audit were not run. Automated checks 
 
 ## Release gates still outside this assignment's local evidence
 
-An independent contributor must review the final code and replay the supplied evidence. A future release operator must validate fixed skill identifiers and the exact `steps[].inputs`/`outputs` shape against the live catalog, exercise each profile with real accepted manifests under separately authorized spending, and verify deployment addresses/code. Any confirmed Critical/High defect or core failure blocks readiness. Local mocks are not evidence that those live gates passed.
+The final integration received a separate agent review and replay; see [the report](validation/independent-review.md). An external audit has not been performed. A future release operator must validate fixed skill identifiers and the exact `steps[].inputs`/`outputs` shape against the live catalog, exercise each profile with real accepted manifests under separately authorized spending, and verify deployment addresses/code. Any confirmed Critical/High defect or core failure blocks readiness. Local mocks are not evidence that those live gates passed.
+
+## Final integration repair
+
+The independent review found that the optional artifact fetcher admitted hexadecimal IPv4-mapped IPv6 DNS answers such as `::ffff:7f00:1`, allowing a private-network connection. The repair uses a conservative positive IPv6 global-unicast allowlist with special/transition ranges excluded, including rejecting nonnumeric leading hextets. Regression tests evaluate the actual fetch implementation with synthetic DNS/HTTPS dependencies and prove rejection before transport, mixed-answer rejection and public-address pinning. See the final independent report and Node output in `docs/validation/`.
