@@ -1,0 +1,72 @@
+{
+  "scope": "Documentation-only local reproduction; source unchanged",
+  "date": "2026-10-20",
+  "inspectedBaselineCommit": "1a7dc9828411a4404e3c1b32bc22e18405558525",
+  "commands": {
+    "forgeBuild": {
+      "exitCode": 0
+    },
+    "forgeTest": {
+      "exitCode": 0,
+      "passed": 91,
+      "failed": 0,
+      "skipped": 0
+    },
+    "nodeTest": {
+      "exitCode": 0,
+      "passed": 20,
+      "failed": 0
+    },
+    "forgeFmt": {
+      "exitCode": 0
+    },
+    "inlineFixtureCheck": {
+      "exitCode": 0
+    },
+    "localIntegration": {
+      "exitCode": 0,
+      "scope": "LOCAL_MOCK_ONLY",
+      "boundRounds": 7,
+      "fundedMockAttempts": 8,
+      "recordedReceipts": 33
+    },
+    "readOnlyABIConfigComparison": {
+      "exitCode": 0,
+      "abiFiles": 5,
+      "releaseArtifacts": 4
+    },
+    "sourceFingerprintComparison": {
+      "exitCode": 0,
+      "matchedFiles": 81
+    },
+    "measurementTool": {
+      "exitCode": 0,
+      "newGasExperiment": false
+    },
+    "documentedCLIShellBlocks": {
+      "exitCode": 0,
+      "blocks": 5,
+      "submittedTransactions": false
+    },
+    "documentationConsistency": {
+      "exitCode": 0,
+      "localMarkdownTargets": 109,
+      "abiFunctionsNamed": 51,
+      "sdkExportsNamed": 35,
+      "argumentTakingCLICommands": 15,
+      "diffWhitespace": "PASS",
+      "allowedPaths": "README.md, docs/**"
+    }
+  },
+  "repairScope": "Documentation only; no contract/SDK/CLI repair made",
+  "independentAgentReview": "Previous contributor report retained; NOT_RERUN_AS_NEW_REVIEW",
+  "publicChainForkTests": "NOT_RUN",
+  "liveRequestCheck": "NOT_RUN",
+  "liveCompatibility": "NOT_RUN",
+  "realIMDConsumption": "NOT_RUN",
+  "publicDeployment": "NOT_RUN",
+  "publication": "DISABLED_NOT_RUN",
+  "gitRemoteDelivery": "NOT_VERIFIED",
+  "finalSubmissionCommit": "NOT_KNOWN",
+  "productionReady": false
+}

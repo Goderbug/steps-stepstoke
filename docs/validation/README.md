@@ -1,5 +1,7 @@
 # Final integrated local validation
 
+This is the retained integration contributor record. A later **documentation-only** pass reran local commands, checked source fingerprints/ABIs and exercised the documented CLI blocks; its [separate record](documentation-pass/README.md) does not replace these raw logs or constitute another independent agent audit. Future live steps are documented [separately](../LIVE-VALIDATION.md) and remain `NOT_RUN`.
+
 The accepted core, SDK/CLI and adversarial suites are integrated without replacing their public interfaces or changing the fixed contract policy. This pass added actual SDK-to-contract execution, repaired an SDK private-network download bypass, corrected CLI/operations documentation, exported/checked final ABIs, and independently reviewed and replayed the result.
 
 **Local integration passes. Live Intake/catalog compatibility, real IMD consumption, public deployment and publication remain `NOT_RUN`.** No real credentials, external wallets, public-chain transactions or paid jobs were used. Anvil uses temporary unlocked test accounts; only Intake and IMD are mocked. The actual release Factory deploys the actual fixed encoder, verifier and Branch implementation, and creates its actual Branch clones.

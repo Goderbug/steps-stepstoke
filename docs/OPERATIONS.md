@@ -1,5 +1,7 @@
 # Operating the fixed release
 
+**Local implementation only: live compatibility, real IMD execution and public deployment are `NOT_RUN`.** Start with [build/test](BUILD.md), [runnable unsigned CLI examples](CLI.md) and [every public contract entry point](CONTRACTS.md). The [future IMD request/observer procedure](LIVE-VALIDATION.md) has not been executed. [Handoff](HANDOFF.md) separates completed local work from missing validation.
+
 1. Read the Factory registration and Branch policy, goal, direction, latest checkpoint and phase. Recover the complete witness from its `CheckpointWritten` event and compare its ABI hash to the checkpoint read from the chain.
 2. Select only current asset keys. Verify any bytes you intend to consume against their SHA-256, length and MIME. Treat file contents, model text, callback URIs and metadata as untrusted data.
 3. Prepare a proposal using the current `anchor()`. An update must select its target. Read `bodyOf(id, witness)` and inspect the exact action, parent, inputs and output mapping. It is the authoritative request preview.
@@ -19,7 +21,11 @@ The exported functions prepare unsigned transactions: `createProject`, `proposeW
 
 The initial CLI supports the same preparation flows, local file checks and checkpoint decoding. Run `node cli/relay.mjs help`. File paths are explicit operator arguments, never paths automatically selected by an untrusted manifest. No file is executed or previewed in a browser.
 
+The CLI prints read requests; it does not itself issue RPC calls. `queryPrepared`/`queryState`/`queryPreview` are optional SDK read adapters. There is no CLI approve or send command. Sponsor-to-Branch allowance must be prepared separately; unused allowance there is distinct from the Branch-to-Intake allowance that the contract clears. Prepared transactions must be simulated and reviewed against current state by the user's chosen transaction system before any separately authorized submission.
+
 `sdk/files.mjs` adds bounded regular-file reads and `verifyHTMLDist`: it checks that an explicitly supplied local dist directory contains only a regular `index.html`, verifies its descriptor and actual bytes, and optionally checks that selected PNG bytes occur exactly as data URIs. It does not execute or prove arbitrary HTML/JavaScript behavior.
+
+CLI `html-check` calls this helper without selected images. Only the SDK's explicit `selectedImages` argument (used by the local integration runner) checks embedding. A valid hash and leading MIME signature do not establish complete image validity, no remote HTML references, runtime restoration of inputs or a safe script. These remain content/runtime inspection responsibilities.
 
 The on-chain encoder remains authoritative for current-state admission. Off-chain preparation is not a promise that a transaction will succeed: another sponsor can change the anchor first, a price can exceed the cap, or a Branch can become pending. Simulate the exact prepared call against current state when a read-only provider is available. No private key, mandatory RPC service, indexer or server is part of this package.
 

@@ -1,5 +1,7 @@
 # CTO Relay Station A1 SDK / CLI
 
+This is the earlier SDK contributor overview. The [current runnable walkthrough and complete export reference](../CLI.md), [contract reference](../CONTRACTS.md) and [handoff](../HANDOFF.md) describe the integrated delivery and its remaining limits. Live compatibility/deployment remain `NOT_RUN`.
+
 The Node ESM SDK prepares ABI calldata only. It has no wallet, signer, private-key loader,
 transaction broadcaster, indexer, database, browser, or automatic retry path.
 
@@ -10,9 +12,11 @@ transaction broadcaster, indexer, database, browser, or automatic retry path.
 | Create root project | `createProject` | `create` |
 | Propose work | `proposeWork` | `propose` |
 | Explicitly sponsor | `sponsorProposal` | `sponsor` |
-| Explicit funded retry | `retryRefused` | `retry` |
-| Bind raw result | `bindResult` | `bind` |
+| Read state, files and history | `readState`, file/history helpers | `read`, `file-check`, `recover-history`, others below |
+| Continue own latest job | `proposeWork` then `sponsorProposal` again | `propose` then `sponsor` |
 | Fork accepted history | `forkHistory` | `fork` |
+
+Recovery/settlement operations are `retryRefused` / CLI `retry` (explicitly funded same-body retry after status 1) and `bindResult` / CLI `bind` (permissionless binding, no purchase). They do not replace reading and continuation in the six user functions.
 
 `previewProposal` and `readState` prepare only `eth_call` requests. `queryPrepared`,
 `queryState`, and `queryPreview` accept an optional EIP-1193 object with `request`; they issue
@@ -36,10 +40,10 @@ regular `index.html`, and checks selected PNG data URI bytes without executing H
 `fetchPublicArtifact(url, descriptor)` is deliberately narrow: it accepts only credential-free
 HTTPS hostnames, rejects IP literals, resolves every redirect host, rejects non-public DNS
 answers, pins each TLS connection to the checked address, permits at most three HTTPS redirects,
-uses a 15-second request timeout, rejects content encoding, bounds the response before buffering,
+uses a 15-second request/socket inactivity timeout, rejects content encoding, bounds the response before buffering,
 and verifies the returned bytes against the mandatory descriptor. It never writes or executes a
-download. Successful values carry `status: "VERIFIED"`; failures are `ArtifactFetchError` values
-with stable `code` and `details` fields. Direct IP URLs are intentionally unsupported, including
+download. Successful values carry `status: "VERIFIED"`; transport/policy failures throw `ArtifactFetchError`
+with stable `code` and `details` fields; final byte-verification errors may be generic validation errors. There is no overall DNS-to-completion deadline. Direct IP URLs are intentionally unsupported, including
 public IP literals, to keep TLS hostname verification and DNS checks coupled.
 
 `lifecycleStatus` keeps transaction, admission, execution, callback, binding, file, Git, and

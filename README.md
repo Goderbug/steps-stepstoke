@@ -2,23 +2,39 @@
 
 A public project has a fixed goal, immutable execution policy, an independent Intake payer, and a permanent history of accepted asset checkpoints. Anyone can propose work, explicitly fund a current proposal, bind its authenticated result, or fork an accepted historical checkpoint.
 
-This delivery integrates the Solidity core, Node ESM SDK/CLI, adversarial tests and an actual SDK-to-contract local chain flow. Local deployments and tests use mocks at the supplied Intake and IMD addresses. **Live compatibility is `NOT_RUN`; public deployment and paid execution have not been performed.** An independent agent review and replay are recorded in [final validation](docs/validation/README.md); this is not an external audit or production readiness claim.
+This delivery integrates the Solidity core, Node ESM SDK/CLI, adversarial tests and an actual SDK-to-contract local chain flow. **This is not ready for real funds.** Local deployments and tests use mocks at the supplied Intake and IMD addresses. **Live compatibility, real IMD consumption and public deployment are `NOT_RUN`; production readiness is false.** An independent agent review and replay are recorded in [final validation](docs/validation/README.md); this is not an external audit. Missing callbacks or incompatible authenticated manifests can permanently stop purchases on a Branch. Documentation does not repair code or close findings. See [A1 → W1 handoff and missing work](docs/HANDOFF.md).
 
 ## Build and check offline
+
+Run from the repository root after cloning, with **Node.js 22+**, **Foundry (`forge`, `anvil`)** and **solc 0.8.26** available. Python 3 is needed only for the separate fixture check. Tool binaries are prerequisites, not bundled dependencies: an offline machine must already have the compiler; otherwise Foundry may try to download it.
 
 ```sh
 forge build
 FOUNDRY_FUZZ_SEED=0x146644c630d7548a74d043e2779607ab2def960ac3890b548af84b4eb4db9118 forge test
 forge fmt --check
 node --test test-sdk/*.test.mjs
-node tools/local-integration.mjs
+python3 test/adversarial/check-inline-fixtures.py
+node tools/local-integration.mjs > /tmp/relay-a1-local.json
 node tools/measure-release.mjs
 node cli/relay.mjs help
 ```
 
+No `forge install`, submodule initialization or npm installation is required. The local integration runner starts and stops its own Anvil and submits SDK-prepared calls using ephemeral unlocked local accounts; the SDK/CLI itself never signs or submits. The measurement tool checks fresh build artifacts but aggregates already saved binding traces and the saved integration report; it does not rerun those measurements. See [clean-checkout build and check details](docs/BUILD.md).
+
 The root Foundry configuration pins **solc 0.8.26**, Cancun, optimization, and IR compilation. FFI and filesystem permissions are disabled. Solidity tests use no environment, filesystem, FFI, RPC, funded wallet, or signing cheatcodes. Every test deploys fresh local contracts. `test/fixtures/FixtureData.sol` embeds the exact submitted fixture files and raw manifests; their source files are also included.
 
-The root package pins **ethers 6.17.0**. The SDK directly imports its vendored standalone ESM bundle, so Node tests require no installation. Every transitive package in `package-lock.json` also resolves to an integrity-checked ordinary tarball under `vendor/npm/`; an optional future `npm ci --offline --ignore-scripts` can use those files. No dependency is a submodule. Root configuration, lockfile and library paths are prepared for later protected-path SDK assignments.
+The root package pins **ethers 6.17.0**. The SDK directly imports its vendored standalone ESM bundle, so Node tests require no installation. Every transitive package in `package-lock.json` also resolves to an integrity-checked ordinary tarball under `vendor/npm/`. No dependency is a submodule.
+
+## Use it
+
+```sh
+node cli/relay.mjs help
+node cli/relay.mjs status --phase 2
+```
+
+The CLI prepares unsigned `{to,data,value}` transactions or `eth_call` requests. It has no wallet, key loader, broadcaster, automatic purchase or browser preview. Token approvals are separate ABI calls; no approval command is provided. No public deployment address is configured.
+
+Follow the [runnable CLI walkthrough](docs/CLI.md) to prepare **every operation** from saved local evidence, including creation, proposal, preview, sponsorship, retry, binding, reads, continuation, historical fork and actual file checks. Those examples use explicitly labelled local Anvil addresses and historical state; they are not ready-to-send live transactions. Current use requires independently verified deployment addresses, current state and exact raw evidence.
 
 ## The six public functions
 
@@ -32,6 +48,8 @@ The root package pins **ethers 6.17.0**. The SDK directly imports its vendored s
 | Fork history | `RelayFactory.fork(registeredParent, acceptedRevision, completeWitness, direction)` creates a new payer with precisely that historical asset set; no payment |
 
 `retry` and `bind` are explicit recovery/settlement operations. Contract use does not require this SDK, a browser, a server, an indexer or a signer service. All transaction arguments can be ABI-encoded directly using `abi/`.
+
+The [public contract reference](docs/CONTRACTS.md) describes every deployed entry point and getter, permissions, events and failure modes. There is no frontend, hosted page or browser UI in this repository.
 
 Adding a proposal does not change the anchor or invalidate other current proposals. Any current proposal can win the next funded execution; there is no FIFO. A completed binding changes the anchor, making proposals against the prior checkpoint stale. Sponsors cannot edit a proposal.
 
@@ -105,4 +123,6 @@ Every selected input appears explicitly in `steps[].inputs` with its complete de
 
 HTML instructions require restoring the selected HTML, inline CSS/JS, exact selected image bytes as data URIs, no symlinks, and `dist` containing only `index.html`. Before payment the encoder rejects known image-size/aggregate excess and includes Base64/data-URI overhead in its conservative HTML input budget. The integration fixture demonstrates HTML → image → HTML: the third execution parent is job two, while inputs are HTML from job one and PNG from job two.
 
-See [measured limits](docs/LIMITS.md), [operating procedure](docs/OPERATIONS.md), [review record](docs/REVIEW.md), and [final integrated evidence](docs/validation/README.md). Earlier contributor evidence remains in [evidence/](evidence/README.md).
+See [measured limits](docs/LIMITS.md), [operating procedure](docs/OPERATIONS.md), [review record](docs/REVIEW.md), and [final integrated evidence](docs/validation/README.md). Earlier contributor evidence remains in [evidence/](evidence/README.md). The [documentation reproduction record](docs/validation/documentation-pass/README.md) is a separate local check, not a new independent audit.
+
+The [future IMD request/observer procedure](docs/LIVE-VALIDATION.md) is concrete guidance for a separately authorized future run; none of it was executed here. The [A1 → W1 handoff](docs/HANDOFF.md) identifies delivered work and missing validation. Local test success, independent review, real IMD execution, Git delivery and production readiness remain separate. No Git remote delivery or final submission commit is asserted by this README.

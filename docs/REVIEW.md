@@ -2,6 +2,8 @@
 
 Scope: Solidity authority, payment, callbacks, strict JSON binding, persistent assets, historical forks, and the initial offline Node preparation layer.
 
+The [A1 → W1 handoff](HANDOFF.md) collects repair status, fixed restrictions and missing work across contributor stages. The current [documentation reproduction](validation/documentation-pass/README.md) checks the unchanged source and runnable examples; it is not a new independent security review and does not fix code.
+
 This is the implementing contributor's local review, supported by Foundry's linter and adversarial tests. **It is not an independent contributor audit.** A later independent agent review and rerun of the final integration are recorded in [docs/validation/independent-review.md](validation/independent-review.md); production readiness is not asserted. No unresolved Critical/High finding was identified in this local pass. Live profile/API compatibility, real IMD consumption and public deployment remain `NOT_RUN`.
 
 ## Findings repaired

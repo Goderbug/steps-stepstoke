@@ -1,0 +1,130 @@
+TAP version 13
+# Subtest: actual HTML directory rejects symlinks/extras and verifies exact inline image bytes without execution
+ok 1 - actual HTML directory rejects symlinks/extras and verifies exact inline image bytes without execution
+  ---
+  duration_ms: 46.89764
+  type: 'test'
+  ...
+# Subtest: public artifact fetcher rejects local, credentialed and unsupported sources before any artifact is read
+ok 2 - public artifact fetcher rejects local, credentialed and unsupported sources before any artifact is read
+  ---
+  duration_ms: 17.062402
+  type: 'test'
+  ...
+# Subtest: artifact address admission rejects private, mapped and transition IPv6 forms
+ok 3 - artifact address admission rejects private, mapped and transition IPv6 forms
+  ---
+  duration_ms: 14.951587
+  type: 'test'
+  ...
+# Subtest: artifact address admission rejects private and special IPv4 ranges
+ok 4 - artifact address admission rejects private and special IPv4 ranges
+  ---
+  duration_ms: 2.52091
+  type: 'test'
+  ...
+# Subtest: actual fetch path rejects mapped-private DNS answers before HTTPS and pins public answers
+ok 5 - actual fetch path rejects mapped-private DNS answers before HTTPS and pins public answers
+  ---
+  duration_ms: 94.695774
+  type: 'test'
+  ...
+# Subtest: vendored ethers is exactly 6.17.0 and every locked dependency is present offline
+ok 6 - vendored ethers is exactly 6.17.0 and every locked dependency is present offline
+  ---
+  duration_ms: 32.788907
+  type: 'test'
+  ...
+# Subtest: all six functions have unsigned ABI transaction/read preparation
+ok 7 - all six functions have unsigned ABI transaction/read preparation
+  ---
+  duration_ms: 42.663312
+  type: 'test'
+  ...
+# Subtest: proposal zero, unsigned funding caps, publishing and invalid inputs are rejected
+ok 8 - proposal zero, unsigned funding caps, publishing and invalid inputs are rejected
+  ---
+  duration_ms: 5.32363
+  type: 'test'
+  ...
+# Subtest: client rejects fixed-profile violations before it prepares a purchaseable proposal
+ok 9 - client rejects fixed-profile violations before it prepares a purchaseable proposal
+  ---
+  duration_ms: 2.463884
+  type: 'test'
+  ...
+# Subtest: raw binding preserves exact bytes and refuses a reserialization with a different digest
+ok 10 - raw binding preserves exact bytes and refuses a reserialization with a different digest
+  ---
+  duration_ms: 3.812511
+  type: 'test'
+  ...
+# Subtest: canonical witnesses sort, retain provenance, detect duplication and encode deterministically
+ok 11 - canonical witnesses sort, retain provenance, detect duplication and encode deterministically
+  ---
+  duration_ms: 10.616271
+  type: 'test'
+  ...
+# Subtest: SDK golden witness and calldata are shared with executed Solidity tests
+ok 12 - SDK golden witness and calldata are shared with executed Solidity tests
+  ---
+  duration_ms: 9.692645
+  type: 'test'
+  ...
+# Subtest: history is recoverable from full witness logs and permanent checkpoint reads
+ok 13 - history is recoverable from full witness logs and permanent checkpoint reads
+  ---
+  duration_ms: 22.422984
+  type: 'test'
+  ...
+# Subtest: optional EIP-1193 querying makes eth_call only and decodes the prepared ABI read
+ok 14 - optional EIP-1193 querying makes eth_call only and decodes the prepared ABI read
+  ---
+  duration_ms: 3.373991
+  type: 'test'
+  ...
+# Subtest: actual Markdown, HTML and PNG bytes verify length, SHA-256 and MIME signature
+ok 15 - actual Markdown, HTML and PNG bytes verify length, SHA-256 and MIME signature
+  ---
+  duration_ms: 15.03026
+  type: 'test'
+  ...
+# Subtest: strict raw parser rejects Unicode, duplicates, trailing content and excessive resources
+ok 16 - strict raw parser rejects Unicode, duplicates, trailing content and excessive resources
+  ---
+  duration_ms: 2.086452
+  type: 'test'
+  ...
+# Subtest: unknown transactions never trigger an automatic rebuy; stages remain separate
+ok 17 - unknown transactions never trigger an automatic rebuy; stages remain separate
+  ---
+  duration_ms: 0.452136
+  type: 'test'
+  ...
+# Subtest: lifecycle status never treats a receipt as admission, execution, file, Git or publication proof
+ok 18 - lifecycle status never treats a receipt as admission, execution, file, Git or publication proof
+  ---
+  duration_ms: 0.37861
+  type: 'test'
+  ...
+# Subtest: CLI prepares calldata without any RPC, key or signer
+ok 19 - CLI prepares calldata without any RPC, key or signer
+  ---
+  duration_ms: 307.929136
+  type: 'test'
+  ...
+# Subtest: CLI recovers authenticated checkpoint history from explicit local evidence only
+ok 20 - CLI recovers authenticated checkpoint history from explicit local evidence only
+  ---
+  duration_ms: 195.427334
+  type: 'test'
+  ...
+1..20
+# tests 20
+# suites 0
+# pass 20
+# fail 0
+# cancelled 0
+# skipped 0
+# todo 0
+# duration_ms 979.996397

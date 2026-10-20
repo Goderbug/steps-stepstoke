@@ -2,6 +2,8 @@
 
 Date: 2026-10-20 (offline local run)
 
+Historical SDK contributor record: the 17 tests below predate the three network-guard regressions. The integrated suite has 20 tests; see [final validation](../validation/README.md) and [the documentation-pass replay](../validation/documentation-pass/README.md). These raw results are preserved as originally recorded, not relabelled as a newer run.
+
 Command:
 
 ```text
