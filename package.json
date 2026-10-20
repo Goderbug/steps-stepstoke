@@ -1,0 +1,20 @@
+{
+  "name": "cto-relay-station-a1",
+  "version": "0.1.0",
+  "private": true,
+  "type": "module",
+  "engines": { "node": ">=22" },
+  "exports": "./sdk/index.mjs",
+  "bin": { "cto-relay": "./cli/relay.mjs" },
+  "scripts": {
+    "test": "node --test test-sdk/*.test.mjs",
+    "test:sdk": "node --test test-sdk/*.test.mjs",
+    "test:contracts": "forge test",
+    "build": "forge build",
+    "check": "node --test test-sdk/*.test.mjs && forge build && forge test && forge fmt --check",
+    "cli": "node cli/relay.mjs",
+    "abi": "node tools/export-abi.mjs",
+    "validate:live": "node tools/validate-live.mjs"
+  },
+  "dependencies": { "ethers": "6.17.0" }
+}

@@ -1,0 +1,86 @@
+TAP version 13
+# (node:10) [UNDICI-EHPA] Warning: EnvHttpProxyAgent is experimental, expect them to change at any time.
+# (Use `node --trace-warnings ...` to show where the warning was created)
+# Subtest: actual HTML directory rejects symlinks/extras and verifies exact inline image bytes without execution
+ok 1 - actual HTML directory rejects symlinks/extras and verifies exact inline image bytes without execution
+  ---
+  duration_ms: 12.161937
+  type: 'test'
+  ...
+# (node:22) [UNDICI-EHPA] Warning: EnvHttpProxyAgent is experimental, expect them to change at any time.
+# (Use `node --trace-warnings ...` to show where the warning was created)
+# Subtest: vendored ethers is exactly 6.17.0 and every locked dependency is present offline
+ok 2 - vendored ethers is exactly 6.17.0 and every locked dependency is present offline
+  ---
+  duration_ms: 9.332494
+  type: 'test'
+  ...
+# Subtest: all six functions have unsigned ABI transaction/read preparation
+ok 3 - all six functions have unsigned ABI transaction/read preparation
+  ---
+  duration_ms: 16.894047
+  type: 'test'
+  ...
+# Subtest: proposal zero, unsigned funding caps, publishing and invalid inputs are rejected
+ok 4 - proposal zero, unsigned funding caps, publishing and invalid inputs are rejected
+  ---
+  duration_ms: 1.368535
+  type: 'test'
+  ...
+# Subtest: raw binding preserves exact bytes and refuses a reserialization with a different digest
+ok 5 - raw binding preserves exact bytes and refuses a reserialization with a different digest
+  ---
+  duration_ms: 0.958316
+  type: 'test'
+  ...
+# Subtest: canonical witnesses sort, retain provenance, detect duplication and encode deterministically
+ok 6 - canonical witnesses sort, retain provenance, detect duplication and encode deterministically
+  ---
+  duration_ms: 2.865221
+  type: 'test'
+  ...
+# Subtest: SDK golden witness and calldata are shared with executed Solidity tests
+ok 7 - SDK golden witness and calldata are shared with executed Solidity tests
+  ---
+  duration_ms: 2.900467
+  type: 'test'
+  ...
+# Subtest: history is recoverable from full witness logs and permanent checkpoint reads
+ok 8 - history is recoverable from full witness logs and permanent checkpoint reads
+  ---
+  duration_ms: 6.684279
+  type: 'test'
+  ...
+# Subtest: actual Markdown, HTML and PNG bytes verify length, SHA-256 and MIME signature
+ok 9 - actual Markdown, HTML and PNG bytes verify length, SHA-256 and MIME signature
+  ---
+  duration_ms: 6.798574
+  type: 'test'
+  ...
+# Subtest: strict raw parser rejects Unicode, duplicates, trailing content and excessive resources
+ok 10 - strict raw parser rejects Unicode, duplicates, trailing content and excessive resources
+  ---
+  duration_ms: 0.877184
+  type: 'test'
+  ...
+# Subtest: unknown transactions never trigger an automatic rebuy; stages remain separate
+ok 11 - unknown transactions never trigger an automatic rebuy; stages remain separate
+  ---
+  duration_ms: 0.314269
+  type: 'test'
+  ...
+# Subtest: CLI prepares calldata without any RPC, key or signer
+ok 12 - CLI prepares calldata without any RPC, key or signer
+  ---
+  duration_ms: 107.790238
+  type: 'test'
+  ...
+1..12
+# tests 12
+# suites 0
+# pass 12
+# fail 0
+# cancelled 0
+# skipped 0
+# todo 0
+# duration_ms 297.561215

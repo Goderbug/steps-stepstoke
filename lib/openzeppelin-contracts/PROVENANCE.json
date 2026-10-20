@@ -1,0 +1,51 @@
+{
+  "package": "OpenZeppelin Contracts",
+  "version": "5.4.0",
+  "source": "https://github.com/OpenZeppelin/openzeppelin-contracts/tree/v5.4.0",
+  "files": [
+    {
+      "path": "LICENSE",
+      "sha256": "13cd784a6c31361f0e0c6aa3b410a1cb9a079868b7314c13e3eb8a75351746b9"
+    },
+    {
+      "path": "contracts/interfaces/IERC1363.sol",
+      "sha256": "9c3a75a925a6dac9e88b03cddc58d42fe3131b0aaaad84408521f3f7af2f991b"
+    },
+    {
+      "path": "contracts/interfaces/IERC165.sol",
+      "sha256": "dfb3f56fa928a7c6cae41a7ce2c86b9210fa18d33fa26389099d66a0fa790368"
+    },
+    {
+      "path": "contracts/interfaces/IERC20.sol",
+      "sha256": "0158e2d3e0e28bedd99eec13dcf1a8aa3a70a5b7e4bb2ad709609c95fcc740d1"
+    },
+    {
+      "path": "contracts/proxy/Clones.sol",
+      "sha256": "ae5a631c421d252eeeb842d83e581bcac1b3e88e24294df68ba0586bc105e507"
+    },
+    {
+      "path": "contracts/token/ERC20/IERC20.sol",
+      "sha256": "01b6f5c4fa45fd38822b286ecef6daf983d27306dd6362496fa71b3e4600b72c"
+    },
+    {
+      "path": "contracts/token/ERC20/utils/SafeERC20.sol",
+      "sha256": "ac1fd9fa99b194a8db8dfa9ae8e3ff44feaa8f16668241fd2b66ae8b47d7c082"
+    },
+    {
+      "path": "contracts/utils/Address.sol",
+      "sha256": "f1a9255dbc40cf9ae7c786abed3b022691a9d24bca0c7f05dc60e63421d405ab"
+    },
+    {
+      "path": "contracts/utils/Create2.sol",
+      "sha256": "1ddfef650decd5f4e4bb57ac5f42add20bf90bc8ff716de27b8f22619be332ef"
+    },
+    {
+      "path": "contracts/utils/Errors.sol",
+      "sha256": "0704b9d6c032cca8512a3bc3f30f49f86f1f03102d2896a3d23e794b82efea66"
+    },
+    {
+      "path": "contracts/utils/introspection/IERC165.sol",
+      "sha256": "9055c2994b37dea1a41b7b7926dcb510f05dbe2540b0aafc5fbee9558fffd0ca"
+    }
+  ]
+}

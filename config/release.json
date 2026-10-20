@@ -1,0 +1,94 @@
+{
+  "name": "CTO Relay Station A1",
+  "version": "0.1.0",
+  "policyId": "0x52152ca7fa11d1153bd1cce4f2f5b5716c5d21845e04f76ca1d39e07fe42c44e",
+  "intendedChainId": 1,
+  "intake": "0xa43e6f75ee006411f79ac1c84120606c2330de82",
+  "imd": "0xd34a99bc0f67ae1bbd63c660e6d0b0dd03e263b7",
+  "actions": {
+    "open": "0x6a6f622e6f70656e406a6f622d31000000000000000000000000000000000000",
+    "continue": "0x6a6f622e636f6e74696e7565406a6f622d310000000000000000000000000000"
+  },
+  "compiler": "0.8.26",
+  "ethers": "6.17.0",
+  "productionDeployment": null,
+  "liveCompatibility": "NOT_RUN",
+  "independentContributorReview": "NOT_RUN",
+  "productionReady": false,
+  "publishing": false,
+  "github": true,
+  "ipfs": false,
+  "limits": {
+    "assets": 16,
+    "inputs": 8,
+    "outputs": 1,
+    "requestBytes": 16384,
+    "manifestBytes": 8192,
+    "markdownBytes": 65536,
+    "htmlBytes": 2097152,
+    "imageBytes": 262144,
+    "selectedImagesBytes": 524288
+  },
+  "profiles": [
+    {
+      "id": 0,
+      "name": "MarkdownCreate",
+      "skill": "build-document",
+      "mime": "text/markdown",
+      "update": false
+    },
+    {
+      "id": 1,
+      "name": "MarkdownUpdate",
+      "skill": "build-document",
+      "mime": "text/markdown",
+      "update": true
+    },
+    {
+      "id": 2,
+      "name": "HTMLCreate",
+      "skill": "build-website",
+      "mime": "text/html",
+      "path": "dist/index.html",
+      "update": false
+    },
+    {
+      "id": 3,
+      "name": "HTMLUpdate",
+      "skill": "build-website",
+      "mime": "text/html",
+      "path": "dist/index.html",
+      "update": true
+    },
+    {
+      "id": 4,
+      "name": "ImageCreate",
+      "skill": "imagegen",
+      "mime": "image/png",
+      "update": false,
+      "references": false
+    }
+  ],
+  "contracts": {
+    "RelayFactory": {
+      "creationCodeHash": "0xbf72076c8e8528eaeed936dcaa2b6523ce3594a967020c472de1c240b59ba6ab",
+      "runtimeBytesBeforeImmutablePatching": 4249,
+      "initcodeBytes": 41221
+    },
+    "RelayBranch": {
+      "creationCodeHash": "0xc9ee5e4948ad57e58ea129c36fc5eb537ef21bc9ad2b24f652d05f4b62baf655",
+      "runtimeBytesBeforeImmutablePatching": 15472,
+      "initcodeBytes": 15724
+    },
+    "RelayEncoder": {
+      "creationCodeHash": "0x31601b14e0df2dc0350b2195bcb1c0b95f2b355096b9f82573b68d670eba726a",
+      "runtimeBytesBeforeImmutablePatching": 10310,
+      "initcodeBytes": 10336
+    },
+    "RelayVerifier": {
+      "creationCodeHash": "0xe345cccab68e4c76ed8e5ae56051d5823d0c3795a449d1525816ba919bce04a3",
+      "runtimeBytesBeforeImmutablePatching": 10590,
+      "initcodeBytes": 10616
+    }
+  }
+}

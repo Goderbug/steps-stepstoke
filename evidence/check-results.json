@@ -1,0 +1,32 @@
+{
+  "compiler": "0.8.26",
+  "checks": [
+    {
+      "command": "forge build --sizes",
+      "exitCode": 0,
+      "evidence": "forge-build.txt"
+    },
+    {
+      "command": "forge test -vv",
+      "exitCode": 0,
+      "tests": 54,
+      "fuzzSeed": "0x146644c630d7548a74d043e2779607ab2def960ac3890b548af84b4eb4db9118",
+      "evidence": "forge-test.txt"
+    },
+    {
+      "command": "forge fmt --check",
+      "exitCode": 0,
+      "evidence": "forge-fmt.txt",
+      "stdout": "empty on success"
+    },
+    {
+      "command": "node --test test-sdk/*.test.mjs",
+      "exitCode": 0,
+      "tests": 12,
+      "evidence": "node-test.txt"
+    }
+  ],
+  "authority": "Implementing contributor local evidence only",
+  "independentContributorReview": "NOT_RUN",
+  "liveCompatibility": "NOT_RUN"
+}
