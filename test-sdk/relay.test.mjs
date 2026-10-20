@@ -1,10 +1,12 @@
 import test from 'node:test';
 import assert from 'node:assert/strict';
-import { readFile } from 'node:fs/promises';
+import { mkdir, mkdtemp, readFile, rm, writeFile } from 'node:fs/promises';
 import { createHash } from 'node:crypto';
 import { spawnSync } from 'node:child_process';
+import { join } from 'node:path';
 import { AbiCoder, keccak256, toBeHex } from '../vendor/ethers/ethers.mjs';
 import * as relay from '../sdk/index.mjs';
+import { MockReadProvider } from './mock-rpc.mjs';
 
 const factory = '0x1000000000000000000000000000000000000001'; // Local ABI fixture only.
 const branch = '0x2000000000000000000000000000000000000002';
@@ -71,6 +73,16 @@ test('proposal zero, unsigned funding caps, publishing and invalid inputs are re
   assert.throws(() => relay.proposeWork(branch, { ...p, publish: false, inputs: [key(2), key(1)] }, []));
 });
 
+test('client rejects fixed-profile violations before it prepares a purchaseable proposal', () => {
+  const base = { anchor: key(10), profile: relay.PROFILES.MarkdownUpdate, target: key(1), inputs: [key(1)], outputName: 'main', outputPath: 'docs/main.md', text: 'Update', publish: false };
+  assert.equal(relay.validateProposal(base, [asset]).proposal.outputPath, 'docs/main.md');
+  assert.throws(() => relay.validateProposal({ ...base, inputs: [] }, [asset]), /select target/u);
+  assert.throws(() => relay.validateProposal({ ...base, outputName: 'changed' }, [asset]), /mapping/u);
+  assert.throws(() => relay.validateProposal({ ...base, profile: relay.PROFILES.HTMLUpdate, outputName: 'main', outputPath: 'dist/index.html' }, [asset]), /mapping/u);
+  assert.throws(() => relay.validateProposal({ ...base, profile: relay.PROFILES.ImageCreate, inputs: [key(1)], target: key(2), outputName: 'image', outputPath: 'image.png' }, [asset]), /references/u);
+  assert.throws(() => relay.validateProposal({ ...base, profile: relay.PROFILES.MarkdownCreate, inputs: [], target: key(1) }, [asset]), /already exists/u);
+});
+
 test('raw binding preserves exact bytes and refuses a reserialization with a different digest', () => {
   const tx = relay.bindResult(branch, raw, keccak256(raw), []);
   const args = relay.interfaces.branch.decodeFunctionData('bind', tx.data);
@@ -115,6 +127,18 @@ test('history is recoverable from full witness logs and permanent checkpoint rea
   assert.throws(() => relay.recoverHistory(branch, [log, log], checkpoints));
 });
 
+test('optional EIP-1193 querying makes eth_call only and decodes the prepared ABI read', async () => {
+  const stateRead = relay.readState(branch, 'phase');
+  const provider = new MockReadProvider(relay.interfaces.branch.encodeFunctionResult('phase', [2]));
+  assert.equal((await relay.queryState(provider, stateRead))[0], 2n);
+  assert.deepEqual(provider.calls, [{ method: 'eth_call', params: [stateRead.transaction, 'latest'] }]);
+  const preview = relay.previewProposal(branch, 1, []);
+  const previewProvider = new MockReadProvider(relay.interfaces.branch.encodeFunctionResult('bodyOf', [key(9), `0x${raw.toString('hex')}`]));
+  assert.equal((await relay.queryPreview(previewProvider, preview)).bodyHash, keccak256(raw));
+  await assert.rejects(relay.queryPrepared({ request: async () => 'nope' }, stateRead));
+  await assert.rejects(relay.queryPrepared({ request: async request => { throw new Error(request.method); } }, relay.createProject(factory, 'not a read')));
+});
+
 test('actual Markdown, HTML and PNG bytes verify length, SHA-256 and MIME signature', async () => {
   for (const filename of ['document.md', 'document-updated.md', 'html-1.html', 'image-2.png', 'html-3.html']) {
     const manifest = await fixture(`${filename}.result.json`);
@@ -128,6 +152,7 @@ test('actual Markdown, HTML and PNG bytes verify length, SHA-256 and MIME signat
   }
   const descriptor = relay.verifyManifest(raw, keccak256(raw)).file;
   assert.throws(() => relay.verifyFile({ ...descriptor, mediaType: 'image/png' }, document));
+  assert.throws(() => relay.verifyFile({ ...descriptor, hash: null, fileHash: null }, document), /Expected file hex digest/u);
   const html = (await fixture('html-3.html')).toString('utf8');
   assert.match(html, /id="original-marker"/u);
   const encoded = /data:image\/png;base64,([^"]+)/u.exec(html)[1];
@@ -165,6 +190,21 @@ test('unknown transactions never trigger an automatic rebuy; stages remain separ
   assert.equal(relay.reconcileTransaction({ receipt: { status: 1 }, phase: 4 }).purchase, false);
 });
 
+test('lifecycle status never treats a receipt as admission, execution, file, Git or publication proof', () => {
+  const pending = relay.lifecycleStatus({ receipt: { status: '0x1' }, phase: 2 });
+  assert.deepEqual(pending, {
+    transaction: 'MINED', admission: 'NOT_PROVEN_BY_TRANSACTION', execution: 'NOT_PROVEN_BY_TRANSACTION',
+    callback: 'PENDING', binding: 'NOT_READY', file: 'NOT_CHECKED', git: 'NOT_OBSERVED',
+    publication: 'DISABLED', automaticPurchase: 'NEVER'
+  });
+  const bound = relay.lifecycleStatus({ receipt: { status: 1 }, phase: 0, checkpointVerified: true, fileVerified: true, git: 'VERIFIED' });
+  assert.equal(bound.binding, 'VERIFIED');
+  assert.equal(bound.file, 'VERIFIED');
+  assert.equal(bound.publication, 'DISABLED');
+  assert.equal(relay.lifecycleStatus({ receipt: null }).transaction, 'UNKNOWN');
+  assert.throws(() => relay.lifecycleStatus({ git: 'DELIVERED' }));
+});
+
 test('CLI prepares calldata without any RPC, key or signer', () => {
   const cli = new URL('../cli/relay.mjs', import.meta.url);
   const run = spawnSync(process.execPath, [cli.pathname, 'create', '--factory', factory, '--goal', 'A fixed goal'], { encoding: 'utf8' });
@@ -172,4 +212,27 @@ test('CLI prepares calldata without any RPC, key or signer', () => {
   assert.equal(relay.interfaces.factory.parseTransaction(JSON.parse(run.stdout)).name, 'createProject');
   const invalid = spawnSync(process.execPath, [cli.pathname, 'send'], { encoding: 'utf8' });
   assert.equal(invalid.status, 1);
+  assert.equal(JSON.parse(invalid.stderr).error.code, 'INVALID_INPUT');
+});
+
+test('CLI recovers authenticated checkpoint history from explicit local evidence only', async () => {
+  const witness = relay.canonicalWitness([asset]);
+  const encoded = AbiCoder.defaultAbiCoder().encode([relay.ASSET_TYPE], [witness]);
+  const digest = key(44);
+  const event = relay.interfaces.branch.encodeEventLog('CheckpointWritten', [1, digest, encoded]);
+  const scratchRoot = new URL('../test/scratch/', import.meta.url);
+  await mkdir(scratchRoot, { recursive: true });
+  const directory = await mkdtemp(join(scratchRoot.pathname, 'history-cli-'));
+  try {
+    const logs = [{ ...event, address: branch, removed: false }];
+    const checkpoints = { 1: { digest, assetsHash: relay.witnessHash(witness) } };
+    await writeFile(join(directory, 'logs.json'), JSON.stringify(logs));
+    await writeFile(join(directory, 'checkpoints.json'), JSON.stringify(checkpoints));
+    const cli = new URL('../cli/relay.mjs', import.meta.url);
+    const run = spawnSync(process.execPath, [cli.pathname, 'recover-history', '--branch', branch, '--logs', join(directory, 'logs.json'), '--checkpoints', join(directory, 'checkpoints.json')], { encoding: 'utf8' });
+    assert.equal(run.status, 0, run.stderr);
+    assert.equal(JSON.parse(run.stdout)[0].digest, digest);
+  } finally {
+    await rm(directory, { recursive: true, force: true });
+  }
 });

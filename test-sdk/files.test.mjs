@@ -4,7 +4,7 @@ import { mkdir, mkdtemp, readFile, writeFile, symlink, rm } from 'node:fs/promis
 import { join } from 'node:path';
 import { keccak256 } from '../vendor/ethers/ethers.mjs';
 import { verifyManifest } from '../sdk/index.mjs';
-import { readArtifactFile, verifyHTMLDist } from '../sdk/files.mjs';
+import { ArtifactFetchError, fetchPublicArtifact, readArtifactFile, verifyHTMLDist } from '../sdk/files.mjs';
 
 test('actual HTML directory rejects symlinks/extras and verifies exact inline image bytes without execution', async () => {
   const scratch = new URL('../test/scratch/', import.meta.url);
@@ -38,4 +38,21 @@ test('actual HTML directory rejects symlinks/extras and verifies exact inline im
   } finally {
     await rm(dir, { recursive: true, force: true });
   }
+});
+
+test('public artifact fetcher rejects local, credentialed and unsupported sources before any artifact is read', async () => {
+  const fixtures = new URL('../test/fixtures/', import.meta.url);
+  const raw = await readFile(new URL('document.md.result.json', fixtures));
+  const descriptor = verifyManifest(raw, keccak256(raw)).file;
+  for (const [url, code] of [
+    ['http://example.com/file.md', 'UNSAFE_URL'],
+    ['https://127.0.0.1/file.md', 'UNSAFE_URL'],
+    ['https://[::1]/file.md', 'UNSAFE_URL'],
+    ['https://user:secret@example.com/file.md', 'UNSAFE_URL'],
+    ['file:///tmp/file.md', 'UNSAFE_URL'],
+    ['https://localhost/file.md', 'PRIVATE_NETWORK']
+  ]) {
+    await assert.rejects(fetchPublicArtifact(url, descriptor), error => error instanceof ArtifactFetchError && error.code === code);
+  }
+  await assert.rejects(fetchPublicArtifact('https://example.com/file.md', { mediaType: 'application/octet-stream' }), error => error.code === 'INVALID_DESCRIPTOR');
 });

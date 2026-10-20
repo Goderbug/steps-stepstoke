@@ -25,6 +25,10 @@ const hash = value => {
   if (!isHexString(value, 32) || BigInt(value) === 0n) throw new Error('Expected nonzero bytes32');
   return value.toLowerCase();
 };
+const hexDigest = (value, label) => {
+  if (typeof value !== 'string') throw new Error(`Expected ${label} hex digest`);
+  return hash(value.startsWith('0x') ? value : `0x${value}`);
+};
 const bounded = (value, max) => {
   if (typeof value !== 'string' || !value.length || Buffer.byteLength(value) > max) throw new Error('Text outside bounds');
   // UTF-8 roundtrip rejects isolated JS surrogates, which TextEncoder otherwise replaces.
@@ -84,6 +88,63 @@ export function witnessHash(assets) {
   return keccak256(coder.encode([ASSET_TYPE], [canonicalWitness(assets)]));
 }
 
+const profileRule = profile => {
+  if (!Number.isInteger(profile) || profile < 0 || profile > 4) throw new Error('Invalid profile');
+  return Object.freeze({
+    kind: profile === PROFILES.MarkdownCreate || profile === PROFILES.MarkdownUpdate ? 0 : profile === PROFILES.HTMLCreate || profile === PROFILES.HTMLUpdate ? 1 : 2,
+    update: profile === PROFILES.MarkdownUpdate || profile === PROFILES.HTMLUpdate
+  });
+};
+const outputPath = (kind, value) => {
+  const checked = path(value);
+  if ((kind === 0 && !checked.endsWith('.md')) || (kind === 1 && checked !== 'dist/index.html') || (kind === 2 && !checked.endsWith('.png'))) throw new Error('Invalid output path');
+  return checked;
+};
+
+// Mirrors the fixed encoder's locally knowable admission rules.  A current eth_call is still
+// needed before spending: anchor, phase, price and a competing transaction can change.
+export function validateProposal(proposal, witness) {
+  const p = { ...proposal };
+  if (p.publish === undefined) p.publish = false;
+  p.anchor = hash(p.anchor);
+  p.target = hash(p.target);
+  const rule = profileRule(p.profile);
+  if (p.publish !== false) throw new Error('Publication is disabled');
+  if (!Array.isArray(p.inputs) || p.inputs.length > LIMITS.inputs) throw new Error('Input count limit');
+  p.inputs = p.inputs.map(hash);
+  for (let i = 1; i < p.inputs.length; i++) if (BigInt(p.inputs[i]) <= BigInt(p.inputs[i - 1])) throw new Error('Inputs must be sorted and unique');
+  p.outputName = identifier(p.outputName);
+  p.outputPath = outputPath(rule.kind, p.outputPath);
+  p.text = bounded(p.text, 1024);
+  const current = canonicalWitness(witness);
+  const target = current.find(asset => asset.key === p.target);
+  if (rule.update) {
+    if (!target || target.kind !== rule.kind || target.name !== p.outputName || target.path !== p.outputPath) throw new Error('Update target mapping mismatch');
+    if (!p.inputs.includes(p.target)) throw new Error('Update must select target');
+  } else {
+    if (target) throw new Error('Create target already exists');
+    const kinds = new Set(current.map(asset => asset.kind));
+    kinds.add(rule.kind);
+    if (current.length + 1 + 3 - kinds.size > LIMITS.assets) throw new Error('Reserved asset slots exhausted');
+  }
+  if (rule.kind === 2 && p.inputs.length !== 0) throw new Error('Image references are disabled');
+  let imageBytes = 0;
+  let htmlBytes = 0;
+  for (const key of p.inputs) {
+    const selected = current.find(asset => asset.key === key);
+    if (!selected) throw new Error('Input is not a current asset');
+    if (rule.kind === 0 && selected.kind !== 0) throw new Error('Markdown accepts Markdown inputs only');
+    if (selected.kind === 2) {
+      imageBytes += Number(selected.size);
+      if (imageBytes > LIMITS.imagesTotal) throw new Error('Selected image aggregate limit');
+      htmlBytes += 4 * Math.ceil(Number(selected.size) / 3) + 32;
+    }
+    if (selected.kind === 1) htmlBytes += Number(selected.size);
+  }
+  if (htmlBytes > LIMITS.html) throw new Error('HTML input and data-URI overhead limit');
+  return Object.freeze({ proposal: Object.freeze(p), witness: current });
+}
+
 function transaction(iface, to, method, args) {
   return Object.freeze({ to: address(to), data: iface.encodeFunctionData(method, args), value: '0x0' });
 }
@@ -91,18 +152,8 @@ export function createProject(factory, goal) {
   return transaction(interfaces.factory, factory, 'createProject', [bounded(goal, 512)]);
 }
 export function proposeWork(branch, proposal, witness) {
-  const p = { ...proposal };
-  if (p.publish === undefined) p.publish = false;
-  p.anchor = hash(p.anchor);
-  p.target = hash(p.target);
-  if (!Number.isInteger(p.profile) || p.profile < 0 || p.profile > 4 || p.publish !== false) throw new Error('Disabled profile/publication');
-  if (!Array.isArray(p.inputs) || p.inputs.length > 8) throw new Error('Input count limit');
-  p.inputs = p.inputs.map(hash);
-  for (let i = 1; i < p.inputs.length; i++) if (BigInt(p.inputs[i]) <= BigInt(p.inputs[i - 1])) throw new Error('Inputs must be sorted and unique');
-  p.outputName = identifier(p.outputName);
-  p.outputPath = path(p.outputPath);
-  p.text = bounded(p.text, 1024);
-  return transaction(interfaces.branch, branch, 'propose', [p, canonicalWitness(witness)]);
+  const checked = validateProposal(proposal, witness);
+  return transaction(interfaces.branch, branch, 'propose', [checked.proposal, checked.witness]);
 }
 export function sponsorProposal(branch, id, maxFee, witness) {
   return transaction(interfaces.branch, branch, 'sponsor', [positive(id), positive(maxFee), canonicalWitness(witness)]);
@@ -133,6 +184,26 @@ export function decodePreview(result) {
   const [action, body] = interfaces.branch.decodeFunctionResult('bodyOf', result);
   const raw = getBytes(body);
   return { action, raw, bodyHash: keccak256(raw), byteLength: raw.length };
+}
+
+// Optional EIP-1193 read adapter. It deliberately exposes only eth_call: transaction submission,
+// accounts, signing and chain switching are outside this package's authority.
+export async function queryPrepared(provider, prepared, blockTag = 'latest') {
+  if (!provider || typeof provider.request !== 'function') throw new Error('Expected an EIP-1193 read provider');
+  if (!prepared || prepared.kind !== 'eth_call' || !prepared.transaction || typeof prepared.transaction.to !== 'string' || typeof prepared.transaction.data !== 'string') {
+    throw new Error('Expected a prepared eth_call');
+  }
+  if (typeof blockTag !== 'string' && typeof blockTag !== 'number') throw new Error('Invalid block tag');
+  const result = await provider.request({ method: 'eth_call', params: [prepared.transaction, blockTag] });
+  if (typeof result !== 'string' || !isHexString(result)) throw new Error('Provider returned an invalid eth_call result');
+  return result;
+}
+export async function queryState(provider, prepared, blockTag = 'latest') {
+  if (!prepared || typeof prepared.method !== 'string') throw new Error('Expected a prepared state read');
+  return decodeRead(prepared.method, await queryPrepared(provider, prepared, blockTag));
+}
+export async function queryPreview(provider, prepared, blockTag = 'latest') {
+  return decodePreview(await queryPrepared(provider, prepared, blockTag));
 }
 
 export function decodeCheckpoint(log) {
@@ -180,19 +251,20 @@ export function verifyManifest(raw, recordedHash) {
   if ((kind === 0 && !file.path.endsWith('.md')) || (kind === 1 && file.path !== 'dist/index.html') || (kind === 2 && !file.path.endsWith('.png'))) throw new Error('Invalid output mapping');
   const bytes = unsignedJSONInteger(file.bytes, caps[kind]);
   if (!bytes) throw new Error('Empty file');
-  const sha = hash(file.hash.startsWith('0x') ? file.hash : `0x${file.hash}`);
-  const submissionHash = hash(file.submissionHash.startsWith('0x') ? file.submissionHash : `0x${file.submissionHash}`);
+  const sha = hexDigest(file.hash, 'file');
+  const submissionHash = hexDigest(file.submissionHash, 'submission');
   return { jobId: manifest.jobId, projectId: manifest.projectId, file: { name: file.name, path: file.path, hash: sha, mediaType: file.mediaType, bytes, submissionHash } };
 }
 
 export function verifyFile(descriptor, bytes) {
   if (!(bytes instanceof Uint8Array)) throw new Error('Supply actual file bytes');
+  if (!descriptor || typeof descriptor !== 'object') throw new Error('Supply a file descriptor');
   const size = BigInt(descriptor.bytes ?? descriptor.size);
   const kind = mime.indexOf(descriptor.mediaType);
   if (kind < 0 || bytes.length === 0 || bytes.length > caps[kind] || BigInt(bytes.length) !== size) throw new Error('File length or MIME limit');
   const expected = descriptor.hash ?? descriptor.fileHash;
   const actual = `0x${createHash('sha256').update(bytes).digest('hex')}`;
-  if (actual !== hash(expected.startsWith('0x') ? expected : `0x${expected}`)) throw new Error('File SHA-256 mismatch');
+  if (actual !== hexDigest(expected, 'file')) throw new Error('File SHA-256 mismatch');
   if (kind === 2) {
     if (!Buffer.from(bytes.subarray(0, 8)).equals(Buffer.from('89504e470d0a1a0a', 'hex'))) throw new Error('PNG signature mismatch');
   } else {
@@ -215,6 +287,33 @@ export function reconcileTransaction({ receipt, phase }) {
     callback, binding: phase === 3 ? 'REQUIRED' : 'READ_CHECKPOINT', file: 'VERIFY_BYTES_SEPARATELY',
     git: 'UNVERIFIED', publication: 'DISABLED', purchase: false
   };
+}
+
+// This intentionally reports observations, not conclusions a receipt cannot prove.  In
+// particular, a mined purchase says nothing about Intake admission, execution, Git, or hosting.
+export function lifecycleStatus({ receipt, phase, checkpointVerified = false, fileVerified = false, git = 'NOT_OBSERVED', publication = 'DISABLED' } = {}) {
+  const transaction = !receipt || ![0, 1, 0n, 1n, '0', '1', '0x0', '0x1'].includes(receipt.status)
+    ? 'UNKNOWN'
+    : Number(receipt.status) === 0 ? 'REVERTED' : 'MINED';
+  let callback = 'NOT_OBSERVED';
+  let binding = 'NOT_READY';
+  if (Number.isInteger(phase) && PHASES[phase]) {
+    callback = ['NOT_OBSERVED', 'IN_FLIGHT', 'PENDING', 'RESULT_RECORDED', 'REFUSED', 'FROZEN'][phase];
+    binding = phase === 3 ? 'REQUIRED' : phase === 0 && checkpointVerified ? 'VERIFIED' : phase === 0 ? 'CHECKPOINT_NOT_VERIFIED' : 'NOT_READY';
+  }
+  if (!['NOT_OBSERVED', 'VERIFIED', 'FAILED', 'UNVERIFIED'].includes(git)) throw new Error('Invalid Git observation');
+  if (!['DISABLED', 'NOT_OBSERVED', 'VERIFIED', 'FAILED', 'UNVERIFIED'].includes(publication)) throw new Error('Invalid publication observation');
+  return Object.freeze({
+    transaction,
+    admission: transaction === 'MINED' ? 'NOT_PROVEN_BY_TRANSACTION' : 'NOT_OBSERVED',
+    execution: 'NOT_PROVEN_BY_TRANSACTION',
+    callback,
+    binding,
+    file: fileVerified ? 'VERIFIED' : 'NOT_CHECKED',
+    git,
+    publication,
+    automaticPurchase: 'NEVER'
+  });
 }
 
 export { strictJSON, unsignedJSONInteger };

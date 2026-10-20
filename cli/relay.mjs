@@ -1,6 +1,6 @@
 #!/usr/bin/env node
 import * as relay from '../sdk/index.mjs';
-import { readArtifactFile, verifyHTMLDist } from '../sdk/files.mjs';
+import { fetchPublicArtifact, readArtifactFile, verifyHTMLDist } from '../sdk/files.mjs';
 
 const usage = `CTO Relay Station A1 — unsigned, offline transaction preparation
 create    --factory ADDRESS --goal TEXT
@@ -14,7 +14,10 @@ read      --branch ADDRESS [--method phase] [--args JSON_ARRAY]
 witness   --witness FILE
 file-check --descriptor FILE --file FILE
 html-check --descriptor FILE --directory DIST_DIRECTORY
+fetch-check --url HTTPS_URL --descriptor FILE
+status    [--receipt FILE] [--phase INTEGER] [--checkpoint-verified true|false] [--file-verified true|false]
 decode-checkpoint --log FILE
+recover-history --branch ADDRESS --logs FILE --checkpoints FILE
 
 Outputs calldata or eth_call requests. Never signs, sends, downloads, opens a browser, or retries automatically.
 All file arguments are explicit operator inputs, never paths taken from a manifest.`;
@@ -30,6 +33,12 @@ try {
     }
     const required = name => { if (!options[name]) throw new Error(`Missing --${name}`); return options[name]; };
     const jsonFile = async name => JSON.parse((await readArtifactFile(required(name), 65_536)).toString('utf8'));
+    const largeJSONFile = async name => JSON.parse((await readArtifactFile(required(name), relay.LIMITS.html)).toString('utf8'));
+    const boolean = name => {
+      if (options[name] === undefined) return false;
+      if (options[name] !== 'true' && options[name] !== 'false') throw new Error(`Expected --${name} true or false`);
+      return options[name] === 'true';
+    };
     const witness = () => jsonFile('witness');
     let result;
     switch (command) {
@@ -44,12 +53,27 @@ try {
       case 'witness': result = { witness: relay.canonicalWitness(await witness()), hash: relay.witnessHash(await witness()) }; break;
       case 'file-check': result = relay.verifyFile(await jsonFile('descriptor'), await readArtifactFile(required('file'))); break;
       case 'html-check': result = await verifyHTMLDist(required('directory'), await jsonFile('descriptor')); break;
+      case 'fetch-check': {
+        const fetched = await fetchPublicArtifact(required('url'), await jsonFile('descriptor'));
+        // Do not print artifact bytes; output only the independently checked observation.
+        result = { ...fetched, bytes: fetched.bytes.length };
+        break;
+      }
+      case 'status': {
+        const phase = options.phase === undefined ? undefined : Number(options.phase);
+        if (phase !== undefined && (!Number.isInteger(phase) || phase < 0 || phase >= relay.PHASES.length)) throw new Error('Expected --phase from 0 through 5');
+        result = relay.lifecycleStatus({
+          receipt: options.receipt ? await jsonFile('receipt') : undefined, phase,
+          checkpointVerified: boolean('checkpoint-verified'), fileVerified: boolean('file-verified')
+        }); break;
+      }
       case 'decode-checkpoint': result = relay.decodeCheckpoint(await jsonFile('log')); break;
+      case 'recover-history': result = relay.recoverHistory(required('branch'), await largeJSONFile('logs'), await largeJSONFile('checkpoints')); break;
       default: throw new Error('Unknown command; use help');
     }
     console.log(JSON.stringify(result, (_, value) => typeof value === 'bigint' ? value.toString() : value, 2));
   }
 } catch (error) {
-  console.error(error.message);
+  console.error(JSON.stringify({ ok: false, error: { code: error.code ?? 'INVALID_INPUT', message: error.message } }));
   process.exitCode = 1;
 }
