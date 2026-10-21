@@ -11,6 +11,8 @@ Release candidate only: `productionDeployment:null`, `liveCompatibility:NOT_RUN`
 5. **Continue** prepares work at the Branch's current checkpoint; it does not purchase. If the Branch has its own latest accepted job, encoding uses `job.continue` and that job. The selected old input file still uses its original producer/submission hash. Changing inputs never rewrites the continuation parent.
 6. **Historical fork** uses the selected accepted revision and exact complete witness even after later parent purchases. It creates a separate Branch/payer with inherited asset provenance and no own project/job. Its first purchase uses `job.open`; only after acceptance does it continue its own latest job. The parent is unchanged.
 
+Create and fork deploy a full independent Branch, so they consume much more gas than a clone: the current disposable measurements are 3,419,527 gas for a maximum-goal root and 4,653,112 for a full 16-asset fork. They do not pay IMD. A current gas estimate and the launch service's actual limits must be checked later; these finite cases do not prove a universal bound. The three named launch contracts also consume 10,509,092 gas in the local atomic batch rehearsal. See [limits](LIMITS.md) before treating any measured case as a ceiling.
+
 ## Results and failures
 
 | Observed state | Permitted next step |
@@ -21,6 +23,8 @@ Release candidate only: `productionDeployment:null`, `liveCompatibility:NOT_RUN`
 | Authenticated status 2 or unknown failure status | Frozen permanently; no recovery authority |
 | Authenticated result recorded | Retrieve the original bytes from the recorded URI, verify keccak, and bind separately |
 | Invalid/oversized/ambiguous binding | Keep the same recorded result; diagnose without stripping metadata, synthesizing a smaller document, changing the hash or purchasing again. Extra files alone are allowed when exactly one declared name/path matches and the original envelope fits all bounds |
+
+There is no refund, arbitrary unlock, timeout settlement or alternate proposal after a refused attempt. An identical status-1 retry can charge again and fail identically; stop if the refusal looks deterministic or the fixed action is unpriced/withdrawn. A corrected `bind` is gas-only and is possible only for the same callback-authenticated raw bytes with a correct witness; an incompatible original envelope may remain recorded forever. A callback URI over this candidate's 1,024-byte bound can be undelivered under Intake's callback stipend and leave Pending indefinitely. None of these states authorizes a new purchase.
 
 Only Intake and the Branch's own pending request may deliver the result/failure. Duplicates, cross-Branch requests and impersonation revert. The callback only stores/emits under 200,000 gas. Parsing and checkpoint construction occur later. The 1,024-byte URI bound is a candidate limit: official documentation gives no universal maximum URI length. Above it the callback is undelivered and the Branch stays pending.
 

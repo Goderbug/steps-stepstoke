@@ -2,6 +2,18 @@
 
 This candidate has no production deployment or official handoff. `productionDeployment:null`, `liveCompatibility:NOT_RUN`, `productionReady:false`. No `launch.json` or `dist/imd-deployment.json` is manufactured. No paid job or public transaction was performed.
 
+## Candidate pin and profile transitions
+
+The imported ancestry is `https://github.com/identity-md-launches/launch-2294-build-cto-relay-station` at source commit `9b0294e7ab19060bd00c489fbe032cf248528e0d`, imported as `d29eedf8e7d6608ed109972c179b367ac07ce91f` in `config/release.json.sourceBaseline`; the current tree is a later candidate with reviewed changes. A later requester must pin the **final submitted repository URL and full commit ID** after this documentation commit is accepted. Record `git rev-parse HEAD` and a clean `git status --porcelain` from that immutable checkout, verify the [source/export hash inventory](validation/documentation-v1/README.md), and give that exact commit to independent review and the later `workflow.open` `evm_contracts` launch. Do not treat the imported baseline, a branch name, an unpinned head, or a local fixture as the final source identity. Any runtime byte change requires affected tests, a new frozen build, export/evidence manifests and another review before handoff.
+
+| Profile | Evidence needed | Effect |
+| --- | --- | --- |
+| Undeployed candidate (now) | Frozen source, static export, local checks; no chain-1 deployment. | No public project reads or paid controls. `liveCompatibility:NOT_RUN`. |
+| Verified public pilot (later) | Actual three-contract handoff plus canonical receipt/trace/runtime/ABI/source verification and a separately authorized two-job pilot with different sponsors, the same Branch payer, authenticated callbacks and binding. | Bounded pilot evidence only; it does not mark five profiles or the whole release live validated. Stop on any core failure. |
+| Live-validated (later) | Independent security/runtime-child/service acceptance and seven total authenticated jobs across five profiles, including the two pilot jobs and historical child lifecycle, plus gas and closed production gates. | An explicit review may consider readiness; it never places the next order automatically. |
+
+For the later launch, the three named entries and backward constructor references are in [CONTRACTS.md](CONTRACTS.md). The official platform manifest stage alone writes `launch.json` after accepting the pinned build. That manifest is a separate handoff artifact, not a file to create in this candidate. Launch payment, chain-1 deployment, IMD job spending and platform hosting each require their own authorization. The `workflow.open` source pin must match the final candidate commit and the importer must later verify the source bytes it claims. Platform publication after launch is distinct from per-round site publication, which remains disabled.
+
 After a separately authorized launch, provide the **actual** `.imd/reads/deployment.json` and optional `.imd/reads/network.json`, the deployed source commit already present in the local object set, the frozen compiler artifacts and an operator-reviewed receipt-evidence file. Do not edit a local fixture into a production handoff. Run from the repository root, after the final frontend build:
 
 ```sh

@@ -1,0 +1,42 @@
+{
+  "archive": "checks.tar.xz",
+  "bytes": 52028,
+  "sha256": "8706e8a53747a5d42da6fd93815df7056ca0b0e670b4bcc8eeea96893490d933",
+  "entries": [
+    {
+      "path": "build.log",
+      "bytes": 62242,
+      "sha256": "d13285f7edae3edb31fd02635c2ddaba9b0fb0139353b1e9992c9dff653b29ba"
+    },
+    {
+      "path": "sdk.log",
+      "bytes": 6881,
+      "sha256": "f8121daec01d0a201a028926f8be04bfccd56a83522751a4510d6f009295898a"
+    },
+    {
+      "path": "forge-test.log",
+      "bytes": 17259,
+      "sha256": "ab7af98beab1de8163784ae395acb7927ac92264c6d3298140226f2b19953951"
+    },
+    {
+      "path": "deployment-rehearsal.log",
+      "bytes": 112169,
+      "sha256": "30485dc9621580008bc6344dd234d04892048d5d448fc099bd5b188db5be513b"
+    },
+    {
+      "path": "local-integration.log",
+      "bytes": 331782,
+      "sha256": "c55036a6666622f206d5b650abd7e995338c3a5520e57804fb26be25bbeed169"
+    },
+    {
+      "path": "measure-binding.log",
+      "bytes": 1035826,
+      "sha256": "1d915c9fdc05888da20a0dcea0b08316d7a2d6a7e398d447c1a7131b403ae90b"
+    },
+    {
+      "path": "history.log",
+      "bytes": 304,
+      "sha256": "654144e94b3c37a134656ffa9705bf2b211ec1d8ab0f0d959e1e7e7ec27008bf"
+    }
+  ]
+}

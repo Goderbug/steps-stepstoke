@@ -2,6 +2,10 @@
 
 No paid jobs or public-chain transactions are authorized by this candidate. All seven rows remain **NOT_RUN**. Execute only in a later explicitly authorized session, after actual deployment verification, independent security/runtime-child approval, service size/gas acceptance and exact current free preflights. A free check is structural screening, not worker/callback/ownership proof. Sepolia cannot run these Intake job actions.
 
+The proposed **first two jobs** are a stop gate: two different sponsor wallets must explicitly approve and fund jobs 1 and 2 while the **same root Branch** is Intake payer both times. Job 2 follows job 1 only after its authentic callback, original-byte binding and checkpoint pass. At the observed 0.5 IMD per `job.open@job-1`/`job.continue@job-1`, this gate would cost **1 IMD plus gas**. Stop on any core payment, callback, binding, provenance, payer or lineage failure; a receipt or free admission is insufficient. Read both actual `priceOf` values immediately before any later spending. That observed price is not a quote or authorization.
+
+Only if the pilot and independent gates pass, the complete seven-job proposal exercises all five profiles and a historical child open/continue lifecycle. At the same observed price it would cost **3.5 IMD total, including the first two jobs, plus gas**; a status-1 retry would be an additional separately authorized paid attempt outside that base total. Do not budget 1 + 3.5 IMD. Sponsor addresses, actual deployment addresses and transaction hashes can only come from that later authorized session; no stand-ins belong in the candidate. Finishing a pilot, closing gates or publishing the platform never automatically requests another order.
+
 | Job | Branch / profile | Required action and lineage check |
 | --- | --- | --- |
 | 1 | root / HTMLCreate (2) | `job.open`; root Branch is payer; one bounded self-contained artifacts/index.html |

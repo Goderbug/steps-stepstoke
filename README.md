@@ -1,40 +1,48 @@
 # STEPS · Stepstoke
 
-**RELEASE-CANDIDATE-V1 — development only, undeployed, not production ready.** Ethereum chain 1 is the only public target. Official X: https://x.com/stepstoke.
+STEPS is an Open Workshop where anyone can create a fixed-goal project, propose a bounded job, and separately fund one Intake execution. A Branch records authenticated results as checkpoints so people can inspect, continue, or fork a selected historical output. Official X: https://x.com/stepstoke (no post is part of this release).
 
-STEPS preserves the Open Workshop flow: create a project, propose work, explicitly fund it, inspect accepted outputs/history, continue, or fork a selected historical checkpoint. Every Branch is a full independent contract and its own Intake payer. Proposal, approval and purchase are separate actions.
+**RELEASE-CANDIDATE-V1 is development only.** It is undeployed on Ethereum, has no official deployment handoff, and has never run a paid STEPS job. `productionDeployment:null`, `liveCompatibility:NOT_RUN`, `productionReady:false`. The `#/demo` UI is simulated, `#/local` uses disposable contracts with MockIntake/MockToken, and `#/ethereum` shows unavailable until a later verified chain-1 deployment. The delivered `dist/` is a static export, not a hosted service. Local/free checks do not establish that Intake will return a bindable result. A missing callback can leave a paid Branch pending; a malformed or oversized authenticated result can leave it unbindable. There is no timeout, admin unlock, refund promise, or automatic retry. [Release gates and risks](docs/REVIEW.md) are open.
 
-The static export is in `dist/`. Open it through a static HTTP server; hash routes and relative assets also support subpaths. `#/demo` is labelled fixture data; `#/local` uses actual candidate contracts with local mocks; `#/ethereum` requires a later confirmed deployment. The public handoff is unavailable until the later official deployment; no handoff or addresses are invented. There is no hosting in this delivery.
+## Build, test, inspect
 
-Install the pinned frontend dependencies, check/rebuild the export, then preview it on loopback:
+From a fresh clone with Node 22+, Python 3, Forge/Anvil 1.8.3 and solc 0.8.26 available, run from the repository root. Forge libraries and the Node SDK runtime are committed as ordinary files; these commands need no key or public RPC:
+
+```sh
+node tools/build-release.mjs
+FOUNDRY_FUZZ_SEED=0x0658c4410aa492d0cfda058f7f13f56d416689bcd97d746fd69793d6a2483bd5 forge test
+node --test test-sdk/*.test.mjs
+python3 tools/verify-history.py --predecessor
+python3 tools/check-delivery.py
+```
+
+The first command forces a clean Solidity compilation and checks frozen ABI/bytecode fingerprints. The current source/export inventory, exact outcomes, raw logs and measured gas are in [reproduction evidence](docs/validation/documentation-v1/README.md); the current delivery measurement is [here](docs/validation/rc-v1/delivery-size.json). Old validation records are retained as [historical evidence](docs/history/README.md), not silently promoted to current passes.
+
+To inspect the committed export offline, serve it on loopback and open `http://127.0.0.1:4173/#/demo`:
+
+```sh
+python3 -m http.server 4173 --bind 127.0.0.1 --directory dist
+```
+
+To rebuild the frontend source in a networked development clone, use its exact lockfile, then compare the rebuilt `dist/` with the recorded export hashes. This command installs build tools locally; the export itself is already committed for offline inspection:
 
 ```sh
 npm ci --ignore-scripts --prefix frontend
 npm run typecheck --prefix frontend
 npm run test:unit --prefix frontend
 npm run build --prefix frontend
-npm run preview --prefix frontend -- --host 127.0.0.1
 ```
 
-The build writes root `dist/` with relative assets. Validation uses a `/tmp` mirror with the same unchanged manifests so no dependency/cache directory enters the repository. [Current revision evidence](docs/validation/boundary-revision/README.md) records public-read invalidation, transaction replacement handling, reproducible clean compilation and actual check results. The [previous revision](docs/validation/multi-file-revision/README.md) records the accepted multi-file repair; earlier evidence remains recoverable as described in [history](docs/history/README.md).
+## Use
 
-## Review and run
+`node cli/relay.mjs help` lists every unsigned CLI operation. For a no-wallet tour, use `#/demo`; the demo's signatures, callbacks and outcomes are fixtures. For real candidate contracts on a disposable local chain, run `node frontend/scripts/local-setup.mjs` in one terminal, serve `dist/` on loopback in another, and open `#/local`. Local setup creates a new chain/configuration; the committed `local-config.json` describes an old disposable session. Stop setup to discard its chain. [Build and rehearsal](docs/BUILD.md) explains the local tools.
 
-- [ADAPTATION.md](ADAPTATION.md): exact launch and reproduced compatibility changes.
-- [Build and local rehearsal](docs/BUILD.md), [operations/runbook](docs/OPERATIONS.md), [SDK and CLI](docs/CLI.md).
-- [Three constructor proposal and runtime-child policy](docs/CONTRACTS.md).
-- [Protocol evidence](docs/PROTOCOL-OVERVIEW.md), [limits](docs/LIMITS.md), [open release gates](docs/REVIEW.md).
-- [Integration checks](docs/validation/integration-v1/README.md), [contract measurements](docs/validation/rc-v1/README.md), [historical byte recovery](docs/history/README.md).
-- [Open Workshop design](DESIGN.md), [agent guide](docs/AGENT-GUIDE.md).
+The six workflows are **create, propose, explicitly fund, inspect outputs/history, continue, and historical fork**. Anyone can create, propose, sponsor, bind a valid recorded result, or fork a registered accepted checkpoint; only the fixed Intake may call result/failure callbacks. Funding has two distinct wallet transactions: approve the current exact IMD price to the Branch, then confirm `sponsor` with a reviewed `maxFee`. A Branch, not the sponsor wallet, is the Intake payer. `continue` prepares a proposal only. Forking creates an independent full Branch with inherited file provenance but no inherited IMD project or execution head. [Operator runbook](docs/OPERATIONS.md) keeps recovery and spending limits beside each step; [entry points](docs/ENTRYPOINTS.md) lists every contract function, CLI command, page and failure path.
 
-```sh
-forge build
-FOUNDRY_FUZZ_SEED=0x0658c4410aa492d0cfda058f7f13f56d416689bcd97d746fd69793d6a2483bd5 forge test
-node --test test-sdk/*.test.mjs
-node tools/check-release.mjs
-node tools/deployment-rehearsal.mjs
-```
+Only Ethereum chain 1 is a possible later public target; Sepolia cannot execute these job actions. No wallet switches implicitly. Public reads must verify the actual handoff, receipt, code, policy and Branch registration; public signing additionally requires all production gates and live profile evidence. No public signing, deployment, hosting, paid IMD call, extra order, per-round site publication, image edit, artwork commission, or X post occurred here.
 
-The delivered SDK uses vendored ethers and runs without package installation. The existing Foundry configuration and dependencies were not changed. Root package names/CLI technical identifiers are retained for compatibility.
+## Later launch boundary
 
-`productionDeployment:null`, `liveCompatibility:NOT_RUN`, `productionReady:false`. Free API checks and disposable local transactions do not prove live readiness. The later platform manifest stage alone writes `launch.json`; this tree contains none.
+The proposed `workflow.open` **evm_contracts** launch has exactly three named constructor-complete applications: `RelayEncoder()`, `RelayVerifier()`, then `RelayFactory($contract:RelayEncoder,$contract:RelayVerifier)`. Product-created `RelayBranch` instances are full runtime children, not proxies or separate manifest entries. [Contract roles and policy](docs/CONTRACTS.md) and [handoff](docs/HANDOFF.md) explain the unresolved runtime-child service acceptance and exact deployment/config import. This checkout intentionally has no `launch.json`; only the later manifest stage writes it after acceptance. The final submission must be pinned by its immutable repository URL and **actual final commit ID**, with frozen source/export hashes, before that stage or any independent review. A pinned baseline inside `config/release.json` identifies imported ancestry, not the final candidate commit.
+
+Profiles for any later live validation remain separate: **undeployed candidate** (this tree), **verified public pilot** (real deployment/reads with paid execution still unproved), and **live-validated** (independently reviewed authenticated jobs and closed gates). None triggers the next order automatically. [Seven-job acceptance proposal](docs/LIVE-VALIDATION.md) is unrun and requires separate spending authorization and fresh `priceOf` reads.
