@@ -82,14 +82,61 @@ If a build is unable to find solc or Anvil, provision the documented toolchain; 
 
 ## Current English frontend
 
-The PLATFORM-UX-V1 frontend is separate from the protected root build. From the repository root run `npm ci --prefix frontend`, `npm run typecheck --prefix frontend`, `npm run test:unit --prefix frontend`, and `npm run build --prefix frontend`. The last command writes root `dist/` using relative assets and hash routes. `npm run preview --prefix frontend` serves it on port 4173. `node frontend/scripts/static-preview.mjs` serves the same bytes at `/preview/` on port 4175.
+The authoritative [frontend README](frontend-README.md) describes clean install, build, static preview and every route. Use Node ≥22. The locked frontend npm packages and Playwright browser runtimes are **not vendored**; registry access (or a preprovisioned matching cache) is required for `npm ci --prefix frontend`. This differs from the root SDK's committed offline dependencies. Build once before the browser checks:
 
-`npm run test:e2e --prefix frontend` runs the current English `platform.spec.ts` in the five configured browser/viewport projects. `node frontend/tests/integration/platform-chain.mjs` drives actual disposable contracts through the production browser UI; `--webkit` selects WebKit. Browser runtimes/shared libraries may be installed outside the repository. Original W1 selectors remain historical source; the current suite and its results are explained in [PLATFORM-UX-V1 validation](validation/platform-ux-v1/README.md).
+```sh
+npm ci --prefix frontend
+npm run typecheck --prefix frontend
+npm run test:unit --prefix frontend
+npm run build --prefix frontend
+npm run test:e2e:install --prefix frontend
+npm run test:e2e --prefix frontend
+```
 
-## PLATFORM-UX-V1 final regression stage
+The build writes root `dist/` (not `frontend/dist/`). `npm run preview --prefix frontend` serves port 4173. `node frontend/scripts/static-preview.mjs` serves the committed export at `http://127.0.0.1:4175/preview/` using Node alone. The relative base and hash routes need no rewrite or backend. A public/IPFS deployment was not attempted.
 
-All 24 original fixture scenarios and the 10 platform scenarios run together through `frontend/playwright.config.ts`; a reduced-motion regression adds one more scenario per configured project. Nothing is skipped. Use `npm run test:e2e --prefix frontend` after rebuilding the committed root export. The five projects remain Chromium 1440/390/320 and WebKit 1440/390. Optional `W1_PREVIEW_PORT`, `W1_E2E_OUTPUT` and `W1_E2E_REPORT` isolate a diagnostic run without changing the browser matrix.
+The complete fixture suite matches **all `tests/e2e/*.spec.ts`**, including 24 original cases, 10 platform cases and one reduced-motion regression in each of five configured projects. Chromium viewports are 1440×900, 390×844 and 320×844; WebKit is 1440×900 and 390×844. The final delivered-source report records 175 passes, not the earlier 50-case subset.
 
-`node frontend/tests/integration/browser-chain.mjs --browser chromium --group all` and `--browser webkit` run every original local-contract assertion plus the final regressions. Add `--mobile` for actual signing at 390px. These runners own Anvil, the static preview and the artifact server, and must run sequentially because they generate the local deployment configuration. No source address is guessed or replaced.
+Run the full actual-contract runner sequentially after `forge build`:
 
-Final evidence is under `docs/validation/platform-ux-v1/final/`. Large historical raw traces have lossless restoration instructions at their original paths. Root offline dependencies remain intact.
+```sh
+node frontend/tests/integration/browser-chain.mjs --browser chromium --group all
+node frontend/tests/integration/browser-chain.mjs --browser webkit --group all
+node frontend/tests/integration/browser-chain.mjs --browser chromium --group all --mobile
+node frontend/tests/integration/browser-chain.mjs --browser webkit --group all --mobile
+```
+
+Each owns disposable Anvil plus static/artifact ports, regenerates `frontend/public/local-config.json` and `dist/local-config.json`, and records 16 scenarios. Stop manual local setup first. `--out test/scratch/local-check` redirects this runner's evidence, but deployment configuration still changes; use a disposable checkout to preserve the delivered bytes. The narrower `platform-chain.mjs` is not a substitute for the full regression suite. These transactions use MockToken/MockIntake and unlocked Anvil accounts, not live IMD or a production signer.
+
+Optional rendered probes:
+
+```sh
+node frontend/scripts/design-review.mjs
+node frontend/scripts/design-review.mjs --webkit
+node frontend/scripts/platform-review.mjs
+node frontend/scripts/platform-review.mjs --webkit
+```
+
+They write evidence in the final validation directory; run in a disposable checkout when preserving history. The historical taste probe referenced a removed task-only `.imd` script and is **not reproducible from this checkout alone**. Its recorded 16/16 result remains historical evidence, not an install instruction or a fresh result.
+
+## Test environments and output handling
+
+Frontend versions are locked in `frontend/package-lock.json`: React 19.3.1, TypeScript 5.9.3, Vite 8.3.4, Vitest 5.0.5, Playwright 1.64.1. Core compiler settings remain solc 0.8.26/Cancun/viaIR/optimizer 200. Historical final tool observations and source hashes remain in [final evidence](validation/platform-ux-v1/final/README.md); the documentation rerun's actual tool versions/results are [recorded separately](validation/platform-ux-v1/documentation/README.md).
+
+Install Chromium/WebKit and their required host shared libraries before browser tests. `PLAYWRIGHT_BROWSERS_PATH` selects a preinstalled runtime location; `W1_CHROMIUM_EXECUTABLE` / `W1_WEBKIT_EXECUTABLE` select compatible launchers. On a supported host missing WebKit libraries, `bash frontend/scripts/prepare-webkit.sh /tmp/cto-relay-webkit` downloads/extracts temporary libraries and prints a launcher setting; it is not an offline or universal OS installer. Emulated WebKit is not native Safari certification.
+
+`W1_PREVIEW_PORT`, `W1_E2E_OUTPUT` and `W1_E2E_REPORT` isolate fixture-suite ports/artifacts. For example:
+
+```sh
+W1_E2E_REPORT=../test/scratch/e2e-report.json npm run test:e2e --prefix frontend
+```
+
+The default suite writes `docs/validation/platform-ux-v1/final/e2e.json`; do not overwrite retained acceptance evidence when comparing runs. Browser scripts need loopback networking and disposable ports, but no external RPC, private key or account. Checks must report original failures alongside later successful revisions. The structural checker `node frontend/scripts/check-integration.mjs` writes a report and checks bytes/configuration only; it is not behavioral or independent review.
+
+To compare protected core bytes and the delivered source/export against their recorded hashes without writing any runtime/configuration files:
+
+```sh
+python3 docs/validation/platform-ux-v1/documentation/verify.py
+```
+
+This excludes intentionally updated README/docs from the old source manifest, prints all compared hashes and exits nonzero on mismatch. It does not certify behavior. The [current acceptance matrix](validation/platform-ux-v1/documentation/README.md) separates historical local acceptance, documentation reruns and unperformed live gates.

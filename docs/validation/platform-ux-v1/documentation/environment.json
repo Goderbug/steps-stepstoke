@@ -1,0 +1,10 @@
+{
+  "node": "v24.21.0",
+  "npm": "12.2.0",
+  "forge": "forge Version: 1.8.3\nCommit SHA: cae51ad458f6abb64852b7709eb784352429825d\nBuild Timestamp: 2026-09-15T10:46:16.519267388Z (1789469176)\nBuild Profile: dist",
+  "anvil": "anvil Version: 1.8.3\nCommit SHA: cae51ad458f6abb64852b7709eb784352429825d\nBuild Timestamp: 2026-09-15T10:46:16.519267388Z (1789469176)\nBuild Profile: dist",
+  "python": "Python 3.12.3",
+  "os": "Linux",
+  "execution": "Scratch copy for frontend install/typecheck/units/build and forge test; SDK/CLI/format/fixture audit read original checkout. No source/config/export mutation.",
+  "frontendLockSHA256": "9ebd51773f6770f6560fa308ee94fd2a42d233d6df4bf7b847bbf27fd8db8d8c"
+}

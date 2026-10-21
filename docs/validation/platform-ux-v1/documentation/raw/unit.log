@@ -1,0 +1,21 @@
+npm notice run cto-relay-station-w1@0.1.0 test:unit
+npm notice run vitest run
+
+ RUN  v5.0.5 <scratch>/frontend
+
+12:56:27 PM [vite] (client) Failed to load source map for <scratch>/vendor/ethers/ethers.mjs.
+Error: An error occurred while trying to read the map file at ethers.js.map
+Error: ENOENT: no such file or directory, open '<scratch>/vendor/ethers/ethers.js.map'
+    at Object.readFileSync (node:fs:483:20)
+    at file://<scratch>/frontend/node_modules/vite/dist/node/chunks/node.js:17690:13
+    at readFromFileMap (file://<scratch>/frontend/node_modules/vite/dist/node/chunks/node.js:17388:13)
+    at exports.fromMapFileComment (file://<scratch>/frontend/node_modules/vite/dist/node/chunks/node.js:17483:12)
+    at exports.fromMapFileSource (file://<scratch>/frontend/node_modules/vite/dist/node/chunks/node.js:17494:22)
+    at extractSourcemapFromFile (file://<scratch>/frontend/node_modules/vite/dist/node/chunks/node.js:17676:87)
+    at loadAndTransform (file://<scratch>/frontend/node_modules/vite/dist/node/chunks/node.js:20150:22)
+
+ Test Files  4 passed (4)
+      Tests  43 passed (43)
+   Start at  12:56:25
+   Duration  5.25s (import 32%, environment 31%, transform 17%, tests 16%, setup 3%)
+

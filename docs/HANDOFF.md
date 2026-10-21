@@ -1,45 +1,28 @@
-# A1 and W1 handoff and readiness
+# Current handoff and readiness
 
-**This checkout is a local A1 repair candidate; production readiness remains false.** It builds on the original IMD-delivered commit [`9b0294e7ab19060bd00c489fbe032cf248528e0d`](https://github.com/identity-md-launches/launch-2294-build-cto-relay-station/tree/9b0294e7ab19060bd00c489fbe032cf248528e0d), with revised contracts, SDK/CLI and regression tests under policy A1/2. It is not a new IMD delivery or a public deployment. Use [current repair evidence](validation/review-fixes/README.md) for source-specific results. Older validation logs remain historical.
+CTO Relay now includes the English Open Workshop frontend, A1 browser SDK integration and committed relative static export. **Public deployment and live acceptance remain absent:** `productionDeployment:null`, `liveCompatibility:NOT_RUN`, `productionReady:false`.
 
-W1 was delivered separately at [`d48bc2117a06c79c3b8545d15eeff2675da94a31`](https://github.com/identity-md-launches/launch-2297-build-cto-relay-station/tree/d48bc2117a06c79c3b8545d15eeff2675da94a31). Its working interactions use fixtures and its real A1 interface remains `A1_INTEGRATION_PENDING`. Connecting and testing that webpage against accepted A1 contracts/SDK is outside this repair. A1's asset, history and payment correctness cannot be deferred to the webpage.
+The required A1 source is commit `878ba4ba1cf7c601656f3a25d17546a425ba1207`. The accepted platform work already applied to the starting checkout is preserved. This documentation pass makes no implementation, configuration, dependency, ABI or core changes. [Byte comparison](validation/platform-ux-v1/documentation/byte-audit.json) checks the pinned core and final source/export manifests. Do not confuse the current tree with the original A1-only delivery or the earlier Chinese W1 fixture interface.
 
-## A1 surface and remaining boundaries
+## Delivered and remaining boundaries
 
-| Surface | Implementation | Remaining boundary |
+| Surface | Delivered | Unfinished or unverified |
 | --- | --- | --- |
-| Create / propose / sponsor | Fixed goal, registered independent Branch payer, current-anchor immutable proposals, exact fee/maxFee, no FIFO | Public deployment and actual runtime request acceptance unverified |
-| Read / continue / historical fork | Public state/events, exact raw result commitment, complete asset provenance, independent child job/project identity | Real file availability, runtime restoration and continuation admission unverified |
-| Markdown / HTML / image | Fixed create/update profiles, one declared target, explicit authenticated selected inputs, real local file checks | Local fixtures are not AI-generated live deliveries; profile compliance remains to be checked |
-| Callback / binding | Authenticated callback; permissionless exact-byte binding; finite metadata-aware parser | Missing callback or incompatible authenticated result can still stop purchases |
-| SDK / CLI | Unsigned operations/read preparation, witnesses, local file checks, optional guarded download | No signer, public deployment command, automatic purchase or complete live observer |
+| Six operations | Create/propose/fund/read/continue/historical fork through production components and local contracts | Public deployment, live request admission and real AI execution NOT_RUN |
+| Design/English | Light semantic tokens, responsive sequence-first workspace, production showcase, local system fonts | Native screen reader/zoom/device and real wallet-app/passkey journeys NOT_RUN |
+| Browser-to-contract | Final evidence: 16 scenarios in each Chromium/WebKit desktop/mobile run, actual local receipts | MockToken/MockIntake and disposable unlocked accounts do not establish live compatibility |
+| WebKit | Final transport regression repair and complete clean local reruns recorded | Earlier failures retained; native Safari and universal transport reliability unverified |
+| Binding/files/history | Exact callback bytes, strict finite parser, immutable witness/provenance, bounded isolated previews/downloads | Oversized authenticated results can remain unbindable; external retention/Git/liveness unverified |
+| Review | Worker six-domain design and structural reviews; prior A1 review/repair records | Independent contributor review of the final frontend NOT_RUN; no external audit certification |
 
-Creation, proposals and forks do not buy AI. No frontend or centralized service is required for those A1 operations. Local mock successes do not prove live protocol acceptance.
+Final evidence records 175 fixture-browser, 43 frontend unit, 125 Solidity and 39 SDK tests. [The current matrix](validation/platform-ux-v1/documentation/README.md) distinguishes these earlier results from documentation reruns. Earlier A1 repairs (mapping conflicts, bounded metadata-aware parser, reserved HTML path) and review records remain under [review-fixes](validation/review-fixes/README.md) and [REVIEW.md](REVIEW.md); they are historical evidence, not pending implementation instructions.
 
-## Current review repairs
+## Gates that remain
 
-| Finding | Candidate repair | Evidence boundary |
-| --- | --- | --- |
-| Medium: different slots could claim the same public mapping | Reject cross-slot names, equal paths and file/directory ancestor paths before payment; updates preserve their own mapping; historical provenance remains readable | Pre-fix failures and positive/negative regression controls in [review-fixes](validation/review-fixes/README.md) |
-| Medium: unrelated metadata exhausted the retained JSON parser envelope | Validate the full raw document while retaining only acceptance fields; 32 KiB raw limit with strict total-value/key/depth budgets; matching SDK binding parser | Bounded compatibility repair, not guaranteed acceptance of every IMD result |
-| Low: Markdown/PNG could occupy `dist/` | Reserve top-level `dist/` for the HTML profile's `dist/index.html` | On-chain/SDK proposal checks; actual runtime directory and HTML bytes still need file checks |
-| Review follow-up: retained parser work and duplicate-key cost need bounds | Cap whole-document values and aggregate decoded key bytes, preserving strict malformed/duplicate rejection | Current worst-shape measurements and tests are indexed with the repair evidence |
+Under separate authorization, verify live request/profile/schema compatibility, authentic manifests within the fixed envelope, callback delivery under the protocol stipend, actual file retrieval/retention, root continuation and historical-child identity. Confirm external Git delivery independently. [LIVE-VALIDATION.md](LIVE-VALIDATION.md) describes future evidence; nothing here executes or authorizes it.
 
-The original implementing/independent review reports and earlier repairs, including the artifact-fetcher address guard, are preserved in [REVIEW.md](REVIEW.md) and [original validation](validation/README.md). A later Swarm review did execute and reported the three findings above; the original handoff's `independentContributorReview: NOT_RUN` narrative was incomplete. The current record distinguishes that review from local repair validation and from an external audit.
+Missing callbacks can leave Pending indefinitely. Incompatible authenticated manifests can leave ResultRecorded. Status 1 permits only a separately funded identical retry; status 2/unknown failures freeze purchases. There is no refund, timeout/admin unlock, automatic retry or HTTP settlement. An earlier-history fork does not recover spent fees. Image-reference/edit/variation and publication remain disabled; a demo control is not live support.
 
-## Restrictions that remain
+Confirmed Critical/High defects or core regression failures block readiness; structural byte agreement and a documentation review cannot waive them. Local final core checks pass in the recorded scope, but live/core manifest liveness remains an open acceptance gate. No public hosting, deployment, funded credential, real IMD test or new child order is part of this delivery.
 
-The [current envelope](LIMITS.md) limits assets, selected inputs, exactly one output, raw request/result bytes and parser complexity. The fixed HTML path means one HTML slot per Branch; update it or fork history. Image editing/reference/variation and publishing remain disabled.
-
-The writer/runtime must truthfully report and retain accepted bytes, honor selected inputs and output profiles, and preserve job/project identity. Hashes do not prove quality, input consumption or safe HTML behavior. SDK `verifyHTMLDist` checks actual local shape/bytes and optional selected PNG inclusion; it does not certify arbitrary JavaScript safety. File/network checks are not a complete filesystem sandbox or end-to-end availability guarantee.
-
-Missing callbacks leave `Pending`; incompatible authenticated documents can leave `ResultRecorded`; non-refusal failures freeze purchases. Status 1 allows only a separately funded retry of the same active proposal. No refund, timeout/admin unlock or automatic rebuy exists. Forking earlier accepted history, when available, does not recover the spent fee or accept a failed result.
-
-## Remaining acceptance work
-
-1. Complete source-specific local repair checks and independent review using [current evidence](validation/review-fixes/README.md); do not reuse original test counts or artifact hashes as current proof.
-2. Integrate the separately delivered W1 with the accepted A1 ABI/SDK and test the actual local flow. Fixture/browser success alone is insufficient.
-3. Under separate runtime-test authorization, verify live protocol/profile/schema acceptance, actual result envelopes and files, root continuation and historical-child identity. Follow [LIVE-VALIDATION.md](LIVE-VALIDATION.md); local mocks are not live compatibility evidence.
-4. Treat public deployment, paid runtime requests, callbacks, binding, actual artifact checks and external Git delivery as separate observations. The original A1 source delivery is established; this repair and future runtime jobs require their own evidence.
-
-Confirmed Critical/High findings or core failures block readiness. If an actual runtime result lies outside fixed candidate policy, record that incompatibility and design a reviewed successor rather than adding privileged repair or substituting manifest bytes. Live compatibility, real IMD runtime consumption and public deployment remain `NOT_RUN`.
+Current operator entry points: [frontend README](frontend-README.md), [build/test](BUILD.md), [operations](OPERATIONS.md), [Agent guide](AGENT-GUIDE.md), [design](DESIGN.md), [authoring policy](PLATFORM-AUTHORING.md). Raw historical records remain in their original evidence directories or indexed lossless archives.
