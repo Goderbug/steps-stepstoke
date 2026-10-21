@@ -1,0 +1,9 @@
+{
+  "source": "https://github.com/notofonts/noto-cjk",
+  "download": "https://raw.githubusercontent.com/notofonts/noto-cjk/main/Sans/Variable/TTF/Subset/NotoSansSC-VF.ttf",
+  "sourceSha256": "d68bafcb48a2707749396aa12bbbd833cb70401f3a9a689fd2902c7e0d295964",
+  "subsetSha256": "4156bbd1f97e634db3e5490a06026dbb70e3ad51cf0d24812db9e5096f34ade3",
+  "tool": "fonttools 4.67.0, brotli 1.2.0",
+  "subset": "462 CJK characters present in frontend source and all local acceptance tests; variable weights and layout features retained; WOFF2. Existing W1 fallback family; other characters use system fonts.",
+  "license": "OFL-1.1 in Noto-Sans-OFL.txt"
+}

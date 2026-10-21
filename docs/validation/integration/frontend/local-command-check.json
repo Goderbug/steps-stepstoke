@@ -1,0 +1,111 @@
+{
+  "kind": "ACTUAL_LOCAL_UTILITY_CHECK_NOT_BROWSER_EVIDENCE",
+  "productionDeployment": null,
+  "liveCompatibility": "NOT_RUN",
+  "command": {
+    "kind": "EXPLICIT_LOCAL_MOCK_CALLBACK",
+    "hash": "0x5f786224a5d92ac094f8f1dc9e7f96644c0637ff2e278274e1edb04f399e4ba4",
+    "rawResultFile": "/root/.identitymd/work/5b630958-5d27-4b47-bebf-4e682a6d2ab7/fbe5bcf4-edc3-4a22-8256-40c04927644a/test/scratch/local-artifacts/manual-local-job/result.json",
+    "next": "Refresh W1 progress and select this original result.json in the binding form."
+  },
+  "stderr": "",
+  "verifiedFile": {
+    "sha256": "0xf05c9229f3640e1f4fcd91e9e4cf64633fc5143867a343697e1a48b36ce7d888",
+    "bytes": 45,
+    "mediaType": "text/markdown",
+    "verified": true
+  },
+  "latestJobId": "manual-local-job",
+  "purchases": "1",
+  "result": "PASS",
+  "trace": [
+    {
+      "operation": "initialize MockIntake",
+      "hash": "0x720851bc455b551bdbebb1cf0ebf8eae797952d49e07b1eb68a9e320b0f8638f",
+      "from": "0xf39fd6e51aad88f6f4ce6ab8827279cfffb92266",
+      "to": "0xa43e6f75ee006411f79ac1c84120606c2330de82",
+      "block": "0x1",
+      "gasUsed": "0x15cc1"
+    },
+    {
+      "operation": "set mock price",
+      "hash": "0x0000d5ddef3a8ac131a59acac7157ea6deccedae1bc1343fd03ba40054dd0845",
+      "from": "0xf39fd6e51aad88f6f4ce6ab8827279cfffb92266",
+      "to": "0xa43e6f75ee006411f79ac1c84120606c2330de82",
+      "block": "0x2",
+      "gasUsed": "0xab88"
+    },
+    {
+      "operation": "set mock price",
+      "hash": "0x84080244e84c697284711f58a68ec7132f07fbc8daf2c3015deaaf6005c1b5d5",
+      "from": "0xf39fd6e51aad88f6f4ce6ab8827279cfffb92266",
+      "to": "0xa43e6f75ee006411f79ac1c84120606c2330de82",
+      "block": "0x3",
+      "gasUsed": "0xabb8"
+    },
+    {
+      "operation": "mint local mock balance",
+      "hash": "0xf4a50c80c2a2be3396b77071cb1416661bd49a1c0c2a141bb6b58cf362693475",
+      "from": "0xf39fd6e51aad88f6f4ce6ab8827279cfffb92266",
+      "to": "0xd34a99bc0f67ae1bbd63c660e6d0b0dd03e263b7",
+      "block": "0x4",
+      "gasUsed": "0xac8f"
+    },
+    {
+      "operation": "mint local mock balance",
+      "hash": "0x1c821955364793b4ae3c6e1876c0a6abdd3756b920f16509235d1416e3bc4db1",
+      "from": "0xf39fd6e51aad88f6f4ce6ab8827279cfffb92266",
+      "to": "0xd34a99bc0f67ae1bbd63c660e6d0b0dd03e263b7",
+      "block": "0x5",
+      "gasUsed": "0xac8f"
+    },
+    {
+      "operation": "deploy actual final RelayFactory",
+      "hash": "0xfca55618ce9023c5da070d06d5d3f12346bee0359b00b6d61a647695ecfbac42",
+      "from": "0xf39fd6e51aad88f6f4ce6ab8827279cfffb92266",
+      "to": "0x5fc8d32690cc91d4c39d9d3abcbd16989f875707",
+      "block": "0x6",
+      "gasUsed": "0x970736"
+    },
+    {
+      "operation": "SDK utility create",
+      "hash": "0x40a4d7ba8fb3b7e35100e8c1bb0cae9f61e106b59e4f145d9885711195da40b5",
+      "from": "0xf39fd6e51aad88f6f4ce6ab8827279cfffb92266",
+      "to": "0x5FC8d32690cc91D4c39d9d3abcBD16989F875707",
+      "block": "0x7",
+      "gasUsed": "0x48aed"
+    },
+    {
+      "operation": "SDK utility propose",
+      "hash": "0xa7a24c4acc16f6bc770fd78deb02b2edd89266925a1e8c89eacdbdead3cb5776",
+      "from": "0xf39fd6e51aad88f6f4ce6ab8827279cfffb92266",
+      "to": "0x6743E5c6E1B453372507E8dfD6CA53508721425B",
+      "block": "0x8",
+      "gasUsed": "0x84519"
+    },
+    {
+      "operation": "SDK utility exact allowance",
+      "hash": "0x4f2553658217c2888c219d261ab375401aacc384cd5a0dc8b0bac7ab27fa7ebe",
+      "from": "0xf39fd6e51aad88f6f4ce6ab8827279cfffb92266",
+      "to": "0xD34a99Bc0f67aE1bbd63C660e6d0b0dd03E263B7",
+      "block": "0x9",
+      "gasUsed": "0xac46"
+    },
+    {
+      "operation": "SDK utility sponsor",
+      "hash": "0xef7b508b3be857e77d3f8dddf281f0381a5e8bbf7c3649602fb3dc53bf7a060d",
+      "from": "0xf39fd6e51aad88f6f4ce6ab8827279cfffb92266",
+      "to": "0x6743E5c6E1B453372507E8dfD6CA53508721425B",
+      "block": "0xa",
+      "gasUsed": "0x146ca1"
+    },
+    {
+      "operation": "SDK utility bind",
+      "hash": "0x47fb8afe0d39cafeeda1ab70c699164c594a6ef210d0a4166bce47b00adb1121",
+      "from": "0xf39fd6e51aad88f6f4ce6ab8827279cfffb92266",
+      "to": "0x6743E5c6E1B453372507E8dfD6CA53508721425B",
+      "block": "0xc",
+      "gasUsed": "0xb2a88"
+    }
+  ]
+}

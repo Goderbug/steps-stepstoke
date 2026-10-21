@@ -1,0 +1,62 @@
+import { readFile } from "node:fs/promises";
+import { test, expect } from "./harness";
+
+test("long identifiers, prose, Markdown code and failed verification reflow at the configured width", async ({ page }, info) => {
+  await page.goto("./#/demo/b/fx-branch-1");
+  await expect(page.getByRole("heading", { name: "中继站示例项目", exact: true })).toBeVisible();
+  await page.evaluate(async () => {
+    const state = JSON.parse(localStorage.getItem("w1.fixture.v1")!);
+    const branch = state.branches.find((b: { id: string }) => b.id === "fx-branch-1");
+    branch.projectTitle = "W".repeat(80);
+    branch.goal = "longgoal".repeat(128);
+    state.proposals[0].requirement = "longrequirement".repeat(512);
+    const checkpoint = state.checkpoints.find((c: { id: string }) => c.id === "fx-branch-1:3");
+    checkpoint.assets.find((a: { assetKey: string }) => a.assetKey === "site").descriptor.name = "long-filename-".repeat(10) + ".html";
+    const notes = checkpoint.assets.find((a: { assetKey: string }) => a.assetKey === "notes");
+    const markdown = "# 布局测试\n\n```text\n" + "long-code-token".repeat(512) + "\n```\n";
+    const bytes = new TextEncoder().encode(markdown);
+    const digest = new Uint8Array(await crypto.subtle.digest("SHA-256", bytes));
+    notes.descriptor.bytes = bytes.length;
+    notes.descriptor.sha256 = "0x" + [...digest].map((b) => b.toString(16).padStart(2, "0")).join("");
+    state.files[`${notes.producerJobId}:${notes.descriptor.path}`].b64 = btoa(String.fromCharCode(...bytes));
+    localStorage.setItem("w1.fixture.v1", JSON.stringify(state));
+  });
+  await page.reload();
+  await expect(page.getByRole("heading", { name: "W".repeat(80), exact: true })).toBeVisible();
+  await page.locator("#assets > ul > li", { hasText: /^site / }).getByRole("button", { name: "下载并校验" }).click();
+  await expect(page.getByText("已校验：与 A1 描述一致")).toBeVisible();
+  expect(await page.evaluate(() => document.documentElement.scrollWidth - document.documentElement.clientWidth)).toBe(0);
+  await page.locator("#assets > ul > li", { hasText: /^notes / }).getByRole("button", { name: "下载并校验" }).click();
+  await expect(page.locator(".md pre")).toContainText("long-code-token".repeat(512));
+  expect(await page.evaluate(() => document.documentElement.scrollWidth - document.documentElement.clientWidth)).toBe(0);
+  await page.screenshot({ scale: "css", path: `../docs/validation/integration/frontend/screenshots/${info.project.name}-long-values.jpg`, type: "jpeg", quality: 50 });
+  await page.goto("./#/demo/b/fx-branch-sec");
+  await page.locator("#assets > ul > li", { hasText: /^tampered / }).getByRole("button", { name: "下载并校验" }).click();
+  await expect(page.getByText("SHA-256：不通过", { exact: false })).toBeVisible();
+  expect(await page.evaluate(() => document.documentElement.scrollWidth - document.documentElement.clientWidth)).toBe(0);
+});
+
+test("static export works beneath a gateway subpath with local metadata and assets", async ({ page }) => {
+  // Serve the actual dist bytes unchanged under /gateway/. There is no app server or rewrite.
+  // Playwright's route is only a static file transport so this test also runs against vite preview.
+  await page.route("http://127.0.0.1:4173/gateway/**", async (route) => {
+    const pathname = new URL(route.request().url()).pathname;
+    const relative = pathname.slice("/gateway/".length) || "index.html";
+    if (relative.includes("..")) return route.abort();
+    const body = await readFile(`../dist/${relative}`);
+    const ext = relative.split(".").pop();
+    const type = ext === "js" ? "text/javascript" : ext === "css" ? "text/css" : ext === "svg" ? "image/svg+xml" : ext === "png" ? "image/png" : "text/html";
+    return route.fulfill({ status: 200, body, contentType: type });
+  });
+  await page.goto("./gateway/index.html");
+  await expect(page.getByRole("heading", { name: "公开项目", exact: true })).toBeVisible();
+  await expect(page.getByText("A1_INTEGRATION_PENDING", { exact: true })).toBeVisible();
+  await expect(page).toHaveTitle("CTO 中继站 · 公开项目工作区");
+  const metadata = await page.locator("meta[property='og:image']").getAttribute("content");
+  expect(metadata).toBe("./og.png");
+  expect(await page.locator(".brand img").evaluate((e) => (e as HTMLImageElement).naturalWidth)).toBeGreaterThan(0);
+  const paths = await page.evaluate(() => performance.getEntriesByType("resource").map((entry) => new URL(entry.name).pathname));
+  expect(paths.filter((path) => /\.(js|css|svg)$/.test(path)).every((path) => path.startsWith("/gateway/"))).toBe(true);
+  await page.getByRole("link", { name: "打开演示模式", exact: true }).click();
+  await expect(page.getByRole("link", { name: "中继站示例项目", exact: true })).toBeVisible();
+});

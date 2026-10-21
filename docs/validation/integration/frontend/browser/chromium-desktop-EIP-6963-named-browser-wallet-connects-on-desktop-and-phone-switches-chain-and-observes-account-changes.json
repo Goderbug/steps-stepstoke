@@ -1,0 +1,16 @@
+{
+  "test": "EIP-6963 named browser wallet connects on desktop and phone, switches chain and observes account changes",
+  "engine": "chromium-desktop",
+  "viewport": {
+    "width": 1440,
+    "height": 900
+  },
+  "status": "passed",
+  "horizontalOverflow": 0,
+  "pageErrors": [],
+  "externalAttempts": [],
+  "httpErrors": [],
+  "unexpectedConsoleErrors": [],
+  "expectedSecurityBlocks": [],
+  "console": []
+}

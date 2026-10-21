@@ -1,0 +1,13 @@
+
+> cto-relay-station-w1@0.1.0 test:unit
+> vitest run
+
+
+ RUN  v5.0.5 /root/.identitymd/work/5b630958-5d27-4b47-bebf-4e682a6d2ab7/fbe5bcf4-edc3-4a22-8256-40c04927644a/frontend
+
+
+ Test Files  3 passed (3)
+      Tests  30 passed (30)
+   Start at  08:58:51
+   Duration  2.05s (environment 39%, import 33%, tests 19%, setup 4%, transform 3%)
+

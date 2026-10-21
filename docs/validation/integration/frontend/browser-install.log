@@ -1,0 +1,2 @@
+Failed to install browsers
+Error: EROFS: read-only file system, mkdir '/root/.cache/ms-playwright/__dirlock'

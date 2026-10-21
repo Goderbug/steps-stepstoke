@@ -1,4 +1,6 @@
-# CTO Relay Station A1
+# CTO Relay Station
+
+The current deliverable adds the W1 Chinese browser UI and actual local-contract acceptance. Start with [frontend setup and validation](#w1-browser-integration-and-static-export). The A1 core and CLI documentation below remains applicable; its historical reports are preserved.
 
 A public project has a fixed goal, immutable execution policy, an independent Intake payer, and a permanent history of accepted asset checkpoints. Anyone can propose work, explicitly fund a current proposal, bind its authenticated result, or fork an accepted historical checkpoint.
 
@@ -130,3 +132,109 @@ HTML instructions require restoring the selected HTML, inline CSS/JS, exact sele
 See [current repair evidence](docs/validation/review-fixes/README.md), [limits](docs/LIMITS.md), [operating procedure](docs/OPERATIONS.md) and [review record](docs/REVIEW.md). Original [integrated evidence](docs/validation/README.md), [contributor evidence](evidence/README.md) and [documentation reproduction](docs/validation/documentation-pass/README.md) remain unchanged historical records; their source hashes, counts and gas figures are not measurements of this candidate.
 
 The [future IMD request/observer procedure](docs/LIVE-VALIDATION.md) describes a separately authorized runtime test; that test has not run. W1 was delivered separately with fixture-based browser flows and awaits integration with the accepted A1 candidate. W1 integration is outside this repair. Local tests, review, original IMD source delivery, real runtime execution and production readiness are separate evidence categories.
+
+## W1 browser integration and static export
+
+The Chinese W1 website is in `frontend/`; the committed production export is in root `dist/`.
+It uses relative assets and hash routes and works at a static gateway subpath. No public hosting
+or chain deployment was performed. `#/` explains that public configuration is unavailable;
+`#/local` uses actual local A1 contracts, and `#/demo` is a separately labeled fixture.
+
+Requirements: Node 22+, npm, Foundry (`forge`, `anvil`). Install only frontend dependencies:
+
+```sh
+npm ci --prefix frontend
+npm run typecheck --prefix frontend
+npm run test:unit --prefix frontend
+npm run build --prefix frontend
+npm run preview --prefix frontend
+```
+
+Preview at `http://localhost:4173/`. Build writes root `dist/`, including local metadata, favicon,
+share image and a small self-hosted subset of W1's existing Chinese font fallback. No private
+RPC, API key, signer, mandatory proxy, indexer or backend is bundled. Missing local/public
+configuration never substitutes fixture addresses. The frontend lockfile retains W1's exact
+locked dependency versions; root compiler/dependency files remain untouched.
+
+### Reproducible actual local contract setup
+
+```sh
+forge build
+forge test
+node --test test-sdk/*.test.mjs
+node frontend/scripts/local-setup.mjs
+```
+
+Leave the last command running in a separate terminal. It refuses occupied ports instead of
+modifying an existing chain, starts disposable Anvil 31337 on `127.0.0.1:8545`, installs MockToken
+and MockIntake at A1's fixed protocol addresses **on this local chain only**, deploys the actual
+final RelayFactory, and executes `tools/generate-local-config.mjs` against deployed code. It writes
+`frontend/public/local-config.json` and updates the export's copy. Anvil uses temporary unlocked
+development accounts; never use these accounts on a public chain. The printed two accounts are
+funded with local MockToken. Runtime mock files/session data stay in ignored `test/scratch/`.
+
+Configure a development wallet for this loopback network and choose one of those temporary
+accounts, or run the automated named EIP-6963 test provider below. In another terminal:
+
+```sh
+npm run build --prefix frontend
+npm run preview --prefix frontend
+```
+
+Open `http://localhost:4173/#/local`. Connect through the single wallet control. Public reads do
+not need a connection. Create a project, propose work, then select any current proposal, review
+the complete SDK/encoder body, confirm exact Branch allowance, and explicitly buy execution.
+Creating, proposing and forking never buy AI. Titles are stored with the immutable goal; the
+combined text must fit A1's 512-byte goal limit. Proposal requirements use the actual 1024-byte
+text limit; the full encoded body is checked on chain against 16384 bytes before signing.
+
+A real Intake worker is not connected to this local chain. Explicitly deliver a deterministic
+mock result after a local purchase (replace the arguments with the actual Branch and a new
+local identifier):
+
+```sh
+node frontend/scripts/local-deliver.mjs --branch ACTUAL_LOCAL_BRANCH --job LOCAL_JOB_ID
+```
+
+The command prints the original `result.json` path. Refresh progress, select that file in W1,
+and choose **提交原始结果绑定（不重新购买）**. Download/verify the actual asset bytes before a badge or
+preview appears. `--file PATH` supplies real Markdown/HTML/PNG bytes matching the proposal;
+`--status 1` sends an authenticated mock refusal (explicit newly funded identical-body retry),
+and `--status 2` or `--status 7` demonstrates permanent freeze. These controls never purchase work.
+Continuation uses Branch latestJobId; fork a selected accepted historical checkpoint, then
+fund child work separately. File provenance remains with original producing branches/jobs.
+
+The generated local config is committed as a reproducible **local mock observation**, guarded by
+loopback page/RPC checks, chain ID, Factory registration, fixed policy/ABI and deployed code hashes.
+Running setup regenerates it from the actual deployment. Public deployment remains null.
+Browser downloads use the explicit test-only loopback artifact host; any future public deployment
+must configure trusted HTTPS locations. Browsers cannot observe DNS answers or the connected IP;
+see [SDK-BROWSER.md](docs/SDK-BROWSER.md) for that trust limitation. No result URI can unlock a
+Branch. The UI keeps transaction, admission, execution, callback, binding, file, Git and publication
+states separate. Missing callbacks stay pending, status 2/unknown failure freezes, and unknown
+transactions are reconciled by their original hash/nonce without automatic purchase.
+
+### Worker validation
+
+```sh
+# Browser binaries are local testing tools, never submission assets.
+cd frontend
+npx playwright install chromium
+npm run test:e2e -- --project=chromium-desktop --project=chromium-mobile --project=chromium-narrow
+npm run test:local
+cd ..
+IMD_PLAYWRIGHT="$PWD/frontend/node_modules/playwright/index.mjs" node .imd/reads/skills/design-critic/scripts/taste.mjs --out test/scratch/taste
+```
+
+`W1_CHROMIUM_EXECUTABLE` may select an already installed Chromium. `test:local` starts its own
+Anvil/artifact server, serves the actual production export, and signs W1 interactions through
+a named EIP-6963 provider using two disposable unlocked accounts. It does not replace the UI
+adapter, synthesize state or replay CLI transactions. Stop a manual local setup first because
+these tests reserve the same loopback ports. `test/scratch/` is disposable and is not submitted.
+
+Actual results, matrix coverage, limitations, commands, screenshots, traces, input hashes and
+release hashes are in [the integration report](docs/validation/integration/frontend/README.md).
+Historical W1 evidence is referenced at its immutable commit instead of duplicated binaries.
+`productionDeployment:null`, `liveCompatibility:NOT_RUN`, `productionReady:false` remain in force.
+Authenticated oversized manifests can remain permanently unbindable. No administrator/timeout
+unlock, refund, result rewriting or automatic retry was added.

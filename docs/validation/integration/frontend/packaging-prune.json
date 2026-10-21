@@ -1,0 +1,107 @@
+{
+  "purpose": "Fit complete source submission under 8 MiB while keeping source, locked dependencies, runtime assets, raw logs/traces and representative current screenshots complete. Screenshots are captured directly as JPEG by Playwright; no post-processing or synthetic images. All original W1 historical binaries stay referenced at the pinned commit.",
+  "supersededArtifacts": [
+    {
+      "path": "docs/validation/integration/frontend/screenshots/chromium-mobile-wide-table.png",
+      "bytes": 56635,
+      "sha256": "a331a1026dbee53b6ec4e473c243297b2f07a0eec505a10289f6495650da67f0",
+      "reason": "Superseded by final native JPEG browser capture at the same viewport/state"
+    },
+    {
+      "path": "docs/validation/integration/frontend/screenshots/chromium-desktop-wide-table.png",
+      "bytes": 63030,
+      "sha256": "1c6a2024cd06f426c1de1ebc246c4fa460c073f75a5ebf3a9dd836f352388337",
+      "reason": "Superseded by final native JPEG browser capture at the same viewport/state"
+    },
+    {
+      "path": "docs/validation/integration/frontend/screenshots/chromium-mobile-retry-review.png",
+      "bytes": 85656,
+      "sha256": "19bd6e973b34db2af8074c45c1ccacbc56969a955af430ee9487f1b718957e7a",
+      "reason": "Superseded by final native JPEG browser capture at the same viewport/state"
+    },
+    {
+      "path": "docs/validation/integration/frontend/screenshots/chromium-narrow-retry-review.png",
+      "bytes": 67692,
+      "sha256": "f33839f6b8568e20c62c3df1007045adb0cd09be2ed319b9cc6e7c88771ba4a7",
+      "reason": "Superseded by final native JPEG browser capture at the same viewport/state"
+    },
+    {
+      "path": "docs/validation/integration/frontend/screenshots/chromium-mobile-demo-home.png",
+      "bytes": 84096,
+      "sha256": "cba6f38d54f3f7a2d8eb174da4282f68e65c3883e65e14377462e0f0ee578bed",
+      "reason": "Superseded by final native JPEG browser capture at the same viewport/state"
+    },
+    {
+      "path": "docs/validation/integration/frontend/screenshots/chromium-mobile-workspace-first.png",
+      "bytes": 85401,
+      "sha256": "7a2bba6e6bf44275ccc8e6e94251adb955ef5db0696ea44dc4bdb86a72ed7872",
+      "reason": "Superseded by final native JPEG browser capture at the same viewport/state"
+    },
+    {
+      "path": "docs/validation/integration/frontend/screenshots/chromium-desktop-retry-review.png",
+      "bytes": 170761,
+      "sha256": "d920fc7dc14ac3b96abb923fd44225e88451e042b01c0a0f5cdb315ae33b8078",
+      "reason": "Superseded by final native JPEG browser capture at the same viewport/state"
+    },
+    {
+      "path": "docs/validation/integration/frontend/screenshots/chromium-narrow-demo-home.png",
+      "bytes": 81092,
+      "sha256": "4e676083f860b19652e8b64f3226eabf8d7150b183fc800a01e9d78253070199",
+      "reason": "Superseded by final native JPEG browser capture at the same viewport/state"
+    },
+    {
+      "path": "docs/validation/integration/frontend/screenshots/chromium-mobile-live.png",
+      "bytes": 96813,
+      "sha256": "ed177d15bb3c880709b0d6b0ea0435b6466558ecd0f80a547606240eecd91f16",
+      "reason": "Superseded by final native JPEG browser capture at the same viewport/state"
+    },
+    {
+      "path": "docs/validation/integration/frontend/screenshots/chromium-desktop-demo-home.png",
+      "bytes": 85800,
+      "sha256": "efcc15f3397486926c0a12f186e291df68a1cac74e7bd14452b15ab22bd4f8af",
+      "reason": "Superseded by final native JPEG browser capture at the same viewport/state"
+    },
+    {
+      "path": "docs/validation/integration/frontend/screenshots/actual-failure.jpg",
+      "bytes": 127464,
+      "sha256": "af76a1c50d713ddfa509a142e7767c7f4c576de99f227fb866afcafd4701ded1",
+      "reason": "Intermediate failed-run screenshot; repaired final states and original failure logs retained"
+    },
+    {
+      "path": "docs/validation/integration/frontend/screenshots/chromium-narrow-live.png",
+      "bytes": 81415,
+      "sha256": "f7852d47215144aae133589c213885d1ead8069f2574556aef83216746699c7d",
+      "reason": "Superseded by final native JPEG browser capture at the same viewport/state"
+    },
+    {
+      "path": "docs/validation/integration/frontend/screenshots/chromium-narrow-workspace-first.png",
+      "bytes": 67907,
+      "sha256": "64286f5d7d9c8061ce3a9b09376e8676a5f599ce0970efbd17ad66a5279f33e2",
+      "reason": "Superseded by final native JPEG browser capture at the same viewport/state"
+    },
+    {
+      "path": "docs/validation/integration/frontend/screenshots/chromium-narrow-wide-table.png",
+      "bytes": 58825,
+      "sha256": "e903499d3fb728bf101a16bd0c32e4936f3cca7b882a827662c5f6a41eff4ce6",
+      "reason": "Superseded by final native JPEG browser capture at the same viewport/state"
+    },
+    {
+      "path": "docs/validation/integration/frontend/screenshots/chromium-desktop-live.png",
+      "bytes": 108928,
+      "sha256": "ce97a5f9f40091e7fc6ab5d585c60cbc3028c5b9f81fd0b2c349292d9b1eb7f7",
+      "reason": "Superseded by final native JPEG browser capture at the same viewport/state"
+    },
+    {
+      "path": "docs/validation/integration/frontend/screenshots/chromium-desktop-workspace-first.png",
+      "bytes": 157165,
+      "sha256": "2f32e52786257912fea127ce21aa8d5a03678d9ca1015b363e0f9397448b7a9f",
+      "reason": "Superseded by final native JPEG browser capture at the same viewport/state"
+    },
+    {
+      "path": "docs/validation/integration/frontend/failure-dom.html",
+      "bytes": 7987,
+      "sha256": "c2661951fac8fb6b817b68e51e313e8086fda4d5a08b21909e2f8fad699c04ca",
+      "reason": "Intermediate failed-run DOM; final raw per-test browser audits and failure logs retained"
+    }
+  ]
+}

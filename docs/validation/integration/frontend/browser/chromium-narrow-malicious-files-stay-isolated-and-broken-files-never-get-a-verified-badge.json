@@ -1,0 +1,16 @@
+{
+  "test": "malicious files stay isolated and broken files never get a verified badge",
+  "engine": "chromium-narrow",
+  "viewport": {
+    "width": 320,
+    "height": 844
+  },
+  "status": "passed",
+  "horizontalOverflow": 0,
+  "pageErrors": [],
+  "externalAttempts": [],
+  "httpErrors": [],
+  "unexpectedConsoleErrors": [],
+  "expectedSecurityBlocks": [],
+  "console": []
+}
