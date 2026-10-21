@@ -11,7 +11,7 @@ const listeners = new Set<() => void>();
 let version = 0;
 
 export const verificationKey = (a: AssetVersion) =>
-  JSON.stringify([a.originCheckpoint, a.producerJobId, a.kind, a.descriptor.name, a.descriptor.path, a.descriptor.mediaType, a.descriptor.bytes, a.descriptor.sha256]);
+  JSON.stringify([a.originBranchId, a.originCheckpoint, a.assetKey, a.revision, a.producerJobId, a.kind, a.descriptor.name, a.descriptor.path, a.descriptor.mediaType, a.descriptor.bytes, a.descriptor.sha256]);
 
 export function recordVerification(a: AssetVersion, result: VerificationResult) {
   const key = verificationKey(a);

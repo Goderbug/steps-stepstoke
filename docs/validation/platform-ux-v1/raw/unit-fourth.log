@@ -1,0 +1,1211 @@
+
+> cto-relay-station-w1@0.1.0 test:unit
+> vitest run
+
+
+ RUN  v5.0.5 /root/.identitymd/work/55cf8df2-04b1-4d15-9291-eef351d0247f/7c1ff61b-d9f8-48da-a32a-965c2dff2362/frontend
+
+ ❯ tests/unit/security.test.tsx (18 tests | 1 failed) 1484ms
+   ❯ fixture purchase exclusion (not A1 integration) (4)
+     × an identical status-1 retry is explicit, single-use and has no new revision until binding 32ms
+ ❯ tests/unit/platform.test.tsx (10 tests | 1 failed) 1316ms
+   ❯ consistent read recovery (2)
+     × offers a visible read-only Retry and recovers without reload or signature 1018ms
+
+⎯⎯⎯⎯⎯⎯⎯ Failed Tests 2 ⎯⎯⎯⎯⎯⎯⎯
+
+ FAIL  tests/unit/platform.test.tsx > consistent read recovery > offers a visible read-only Retry and recovers without reload or signature
+TestingLibraryElementError: Unable to find an accessible element with the role "button" and name `/01 Round 1/`
+
+Here are the accessible roles:
+
+  region:
+
+  Name "Relay introduction":
+  [36m<section[39m
+    [33maria-labelledby[39m=[32m"project-title"[39m
+    [33mclass[39m=[32m"project-header"[39m
+  [36m/>[39m
+
+  Name "Sequence":
+  [36m<section[39m
+    [33maria-labelledby[39m=[32m"sequence-title"[39m
+    [33mclass[39m=[32m"sequence"[39m
+  [36m/>[39m
+
+  Name "Round 3 output":
+  [36m<section[39m
+    [33maria-labelledby[39m=[32m"output-title"[39m
+    [33mclass[39m=[32m"artifact-viewer"[39m
+    [33mid[39m=[32m"assets"[39m
+    [33mtabindex[39m=[32m"-1"[39m
+  [36m/>[39m
+
+  Name "Asset provenance table":
+  [36m<div[39m
+    [33maria-label[39m=[32m"Asset provenance table"[39m
+    [33mclass[39m=[32m"table-scroll"[39m
+    [33mrole[39m=[32m"region"[39m
+    [33mtabindex[39m=[32m"0"[39m
+  [36m/>[39m
+
+  Name "What comes next?":
+  [36m<section[39m
+    [33maria-labelledby[39m=[32m"next-title"[39m
+    [33mclass[39m=[32m"next-action"[39m
+  [36m/>[39m
+
+  Name "Contributions":
+  [36m<section[39m
+    [33maria-labelledby[39m=[32m"contributions-title"[39m
+    [33mclass[39m=[32m"work-section"[39m
+    [33mid[39m=[32m"proposals"[39m
+    [33mtabindex[39m=[32m"-1"[39m
+  [36m/>[39m
+
+  Name "Funding and build status":
+  [36m<section[39m
+    [33maria-labelledby[39m=[32m"progress-title"[39m
+    [33mclass[39m=[32m"work-section"[39m
+    [33mid[39m=[32m"progress"[39m
+    [33mtabindex[39m=[32m"-1"[39m
+  [36m/>[39m
+
+  --------------------------------------------------
+  link:
+
+  Name "← All projects":
+  [36m<a[39m
+    [33mclass[39m=[32m"back-link"[39m
+    [33mhref[39m=[32m"#/demo"[39m
+  [36m/>[39m
+
+  Name "View contributions (2)":
+  [36m<a[39m
+    [33mclass[39m=[32m"btn btn-secondary"[39m
+    [33mhref[39m=[32m"#proposals"[39m
+  [36m/>[39m
+
+  --------------------------------------------------
+  heading:
+
+  Name "Relay introduction":
+  [36m<h1[39m
+    [33mid[39m=[32m"project-title"[39m
+  [36m/>[39m
+
+  Name "Sequence":
+  [36m<h2[39m
+    [33mid[39m=[32m"sequence-title"[39m
+  [36m/>[39m
+
+  Name "Round 3 output":
+  [36m<h2[39m
+    [33mid[39m=[32m"output-title"[39m
+  [36m/>[39m
+
+  Name "What comes next?":
+  [36m<h2[39m
+    [33mid[39m=[32m"next-title"[39m
+  [36m/>[39m
+
+  Name "Contributions":
+  [36m<h2[39m
+    [33mid[39m=[32m"contributions-title"[39m
+  [36m/>[39m
+
+  Name "Update Markdown · notes":
+  [36m<h3 />[39m
+
+  Name "Update HTML page · site":
+  [36m<h3 />[39m
+
+  Name "Create PNG image · banner":
+  [36m<h3 />[39m
+
+  Name "Funding and build status":
+  [36m<h2[39m
+    [33mid[39m=[32m"progress-title"[39m
+  [36m/>[39m
+
+  --------------------------------------------------
+  paragraph:
+
+  Name "":
+  [36m<p[39m
+    [33mclass[39m=[32m"project-goal"[39m
+  [36m/>[39m
+
+  Name "":
+  [36m<p[39m
+    [33mclass[39m=[32m"meta"[39m
+  [36m/>[39m
+
+  Name "":
+  [36m<p[39m
+    [33mclass[39m=[32m"state-line"[39m
+  [36m/>[39m
+
+  Name "":
+  [36m<p[39m
+    [33mclass[39m=[32m"hint"[39m
+  [36m/>[39m
+
+  Name "":
+  [36m<p[39m
+    [33mclass[39m=[32m"meta origin-line"[39m
+  [36m/>[39m
+
+  Name "":
+  [36m<p[39m
+    [33mclass[39m=[32m"hint"[39m
+  [36m/>[39m
+
+  Name "":
+  [36m<p />[39m
+
+  Name "":
+  [36m<p[39m
+    [33mclass[39m=[32m"meta"[39m
+  [36m/>[39m
+
+  Name "":
+  [36m<p[39m
+    [33mclass[39m=[32m"req"[39m
+  [36m/>[39m
+
+  Name "":
+  [36m<p[39m
+    [33mclass[39m=[32m"req"[39m
+  [36m/>[39m
+
+  Name "":
+  [36m<p[39m
+    [33mclass[39m=[32m"req"[39m
+  [36m/>[39m
+
+  Name "":
+  [36m<p[39m
+    [33mclass[39m=[32m"hint"[39m
+  [36m/>[39m
+
+  Name "":
+  [36m<p[39m
+    [33mclass[39m=[32m"empty"[39m
+  [36m/>[39m
+
+  --------------------------------------------------
+  list:
+
+  Name "":
+  [36m<ol[39m
+    [33mclass[39m=[32m"sequence-rail"[39m
+  [36m/>[39m
+
+  Name "":
+  [36m<ul[39m
+    [33mclass[39m=[32m"list"[39m
+  [36m/>[39m
+
+  Name "":
+  [36m<ul[39m
+    [33mclass[39m=[32m"list"[39m
+  [36m/>[39m
+
+  --------------------------------------------------
+  listitem:
+
+  Name "":
+  [36m<li[39m
+    [33mclass[39m=[32m"round-item"[39m
+  [36m/>[39m
+
+  Name "":
+  [36m<li[39m
+    [33mclass[39m=[32m"round-item"[39m
+  [36m/>[39m
+
+  Name "":
+  [36m<li[39m
+    [33mclass[39m=[32m"round-item"[39m
+  [36m/>[39m
+
+  Name "":
+  [36m<li[39m
+    [33mclass[39m=[32m"round-item selected"[39m
+  [36m/>[39m
+
+  Name "":
+  [36m<li />[39m
+
+  Name "":
+  [36m<li />[39m
+
+  Name "":
+  [36m<li />[39m
+
+  --------------------------------------------------
+  button:
+
+  Name "00Project createdFixed goal; no paid round":
+  [36m<button[39m
+    [33mclass[39m=[32m"round-button"[39m
+    [33mtype[39m=[32m"button"[39m
+  [36m/>[39m
+
+  Name "01Round 1HTML page + Markdown":
+  [36m<button[39m
+    [33mclass[39m=[32m"round-button"[39m
+    [33mtype[39m=[32m"button"[39m
+  [36m/>[39m
+
+  Name "PNG02Round 2PNG image":
+  [36m<button[39m
+    [33mclass[39m=[32m"round-button"[39m
+    [33mtype[39m=[32m"button"[39m
+  [36m/>[39m
+
+  Name "03Round 3HTML pageLatestSelected":
+  [36m<button[39m
+    [33maria-current[39m=[32m"step"[39m
+    [33mclass[39m=[32m"round-button"[39m
+    [33mtype[39m=[32m"button"[39m
+  [36m/>[39m
+
+  Name "Historical Fork":
+  [36m<button[39m
+    [33mclass[39m=[32m"btn btn-secondary"[39m
+    [33mdisabled[39m=[32m""[39m
+  [36m/>[39m
+
+  Name "assets/notes.mdMarkdown":
+  [36m<button[39m
+    [33maria-pressed[39m=[32m"false"[39m
+    [33mclass[39m=[32m"asset-tab"[39m
+  [36m/>[39m
+
+  Name "assets/cover.pngPNG image":
+  [36m<button[39m
+    [33maria-pressed[39m=[32m"false"[39m
+    [33mclass[39m=[32m"asset-tab"[39m
+  [36m/>[39m
+
+  Name "assets/site.htmlHTML page":
+  [36m<button[39m
+    [33maria-pressed[39m=[32m"true"[39m
+    [33mclass[39m=[32m"asset-tab active"[39m
+  [36m/>[39m
+
+  Name "Copy file SHA-256":
+  [36m<button[39m
+    [33maria-label[39m=[32m"Copy file SHA-256"[39m
+    [33mclass[39m=[32m"btn btn-link"[39m
+    [33mtype[39m=[32m"button"[39m
+  [36m/>[39m
+
+  Name "Copy producer job":
+  [36m<button[39m
+    [33maria-label[39m=[32m"Copy producer job"[39m
+    [33mclass[39m=[32m"btn btn-link"[39m
+    [33mtype[39m=[32m"button"[39m
+  [36m/>[39m
+
+  Name "Copy notes SHA-256":
+  [36m<button[39m
+    [33maria-label[39m=[32m"Copy notes SHA-256"[39m
+    [33mclass[39m=[32m"btn btn-link"[39m
+    [33mtype[39m=[32m"button"[39m
+  [36m/>[39m
+
+  Name "Copy cover SHA-256":
+  [36m<button[39m
+    [33maria-label[39m=[32m"Copy cover SHA-256"[39m
+    [33mclass[39m=[32m"btn btn-link"[39m
+    [33mtype[39m=[32m"button"[39m
+  [36m/>[39m
+
+  Name "Copy site SHA-256":
+  [36m<button[39m
+    [33maria-label[39m=[32m"Copy site SHA-256"[39m
+    [33mclass[39m=[32m"btn btn-link"[39m
+    [33mtype[39m=[32m"button"[39m
+  [36m/>[39m
+
+  Name "Copy checkpoint ID":
+  [36m<button[39m
+    [33maria-label[39m=[32m"Copy checkpoint ID"[39m
+    [33mclass[39m=[32m"btn btn-link"[39m
+    [33mtype[39m=[32m"button"[39m
+  [36m/>[39m
+
+  Name "Copy manifest keccak256":
+  [36m<button[39m
+    [33maria-label[39m=[32m"Copy manifest keccak256"[39m
+    [33mclass[39m=[32m"btn btn-link"[39m
+    [33mtype[39m=[32m"button"[39m
+  [36m/>[39m
+
+  Name "Continue":
+  [36m<button[39m
+    [33mclass[39m=[32m"btn btn-primary"[39m
+  [36m/>[39m
+
+  Name "Copy proposal ID":
+  [36m<button[39m
+    [33maria-label[39m=[32m"Copy proposal ID"[39m
+    [33mclass[39m=[32m"btn btn-link"[39m
+    [33mtype[39m=[32m"button"[39m
+  [36m/>[39m
+
+  Name "Copy proposal anchor":
+  [36m<button[39m
+    [33maria-label[39m=[32m"Copy proposal anchor"[39m
+    [33mclass[39m=[32m"btn btn-link"[39m
+    [33mtype[39m=[32m"button"[39m
+  [36m/>[39m
+
+  Name "Copy proposer":
+  [36m<button[39m
+    [33maria-label[39m=[32m"Copy proposer"[39m
+    [33mclass[39m=[32m"btn btn-link"[39m
+    [33mtype[39m=[32m"button"[39m
+  [36m/>[39m
+
+  Name "Review funding":
+  [36m<button[39m
+    [33mclass[39m=[32m"btn btn-secondary"[39m
+    [33mdisabled[39m=[32m""[39m
+  [36m/>[39m
+
+  Name "Copy proposal ID":
+  [36m<button[39m
+    [33maria-label[39m=[32m"Copy proposal ID"[39m
+    [33mclass[39m=[32m"btn btn-link"[39m
+    [33mtype[39m=[32m"button"[39m
+  [36m/>[39m
+
+  Name "Copy proposal anchor":
+  [36m<button[39m
+    [33maria-label[39m=[32m"Copy proposal anchor"[39m
+    [33mclass[39m=[32m"btn btn-link"[39m
+    [33mtype[39m=[32m"button"[39m
+  [36m/>[39m
+
+  Name "Copy proposer":
+  [36m<button[39m
+    [33maria-label[39m=[32m"Copy proposer"[39m
+    [33mclass[39m=[32m"btn btn-link"[39m
+    [33mtype[39m=[32m"button"[39m
+  [36m/>[39m
+
+  Name "Review funding":
+  [36m<button[39m
+    [33mclass[39m=[32m"btn btn-secondary"[39m
+    [33mdisabled[39m=[32m""[39m
+  [36m/>[39m
+
+  Name "Copy proposal ID":
+  [36m<button[39m
+    [33maria-label[39m=[32m"Copy proposal ID"[39m
+    [33mclass[39m=[32m"btn btn-link"[39m
+    [33mtype[39m=[32m"button"[39m
+  [36m/>[39m
+
+  Name "Copy proposal anchor":
+  [36m<button[39m
+    [33maria-label[39m=[32m"Copy proposal anchor"[39m
+    [33mclass[39m=[32m"btn btn-link"[39m
+    [33mtype[39m=[32m"button"[39m
+  [36m/>[39m
+
+  Name "Copy proposer":
+  [36m<button[39m
+    [33maria-label[39m=[32m"Copy proposer"[39m
+    [33mclass[39m=[32m"btn btn-link"[39m
+    [33mtype[39m=[32m"button"[39m
+  [36m/>[39m
+
+  Name "Prepare at current checkpoint":
+  [36m<button[39m
+    [33mclass[39m=[32m"btn btn-quiet"[39m
+  [36m/>[39m
+
+  Name "Refresh chain state":
+  [36m<button[39m
+    [33mclass[39m=[32m"btn btn-quiet"[39m
+  [36m/>[39m
+
+  Name "Copy Branch":
+  [36m<button[39m
+    [33maria-label[39m=[32m"Copy Branch"[39m
+    [33mclass[39m=[32m"btn btn-link"[39m
+    [33mtype[39m=[32m"button"[39m
+  [36m/>[39m
+
+  Name "Copy latest checkpoint":
+  [36m<button[39m
+    [33maria-label[39m=[32m"Copy latest checkpoint"[39m
+    [33mclass[39m=[32m"btn btn-link"[39m
+    [33mtype[39m=[32m"button"[39m
+  [36m/>[39m
+
+  Name "Copy selected checkpoint":
+  [36m<button[39m
+    [33maria-label[39m=[32m"Copy selected checkpoint"[39m
+    [33mclass[39m=[32m"btn btn-link"[39m
+    [33mtype[39m=[32m"button"[39m
+  [36m/>[39m
+
+  --------------------------------------------------
+  strong:
+
+  Name "":
+  [36m<strong />[39m
+
+  Name "":
+  [36m<strong />[39m
+
+  Name "":
+  [36m<strong />[39m
+
+  Name "":
+  [36m<strong />[39m
+
+  --------------------------------------------------
+  group:
+
+  Name "Files in selected snapshot":
+  [36m<div[39m
+    [33maria-label[39m=[32m"Files in selected snapshot"[39m
+    [33mclass[39m=[32m"asset-tabs"[39m
+    [33mrole[39m=[32m"group"[39m
+  [36m/>[39m
+
+  Name "":
+  [36m<details[39m
+    [33mclass[39m=[32m"evidence"[39m
+  [36m/>[39m
+
+  Name "":
+  [36m<details[39m
+    [33mclass[39m=[32m"evidence"[39m
+  [36m/>[39m
+
+  Name "":
+  [36m<details[39m
+    [33mclass[39m=[32m"evidence"[39m
+  [36m/>[39m
+
+  Name "":
+  [36m<details[39m
+    [33mclass[39m=[32m"evidence"[39m
+  [36m/>[39m
+
+  Name "":
+  [36m<details[39m
+    [33mclass[39m=[32m"evidence"[39m
+  [36m/>[39m
+
+  Name "":
+  [36m<details[39m
+    [33mclass[39m=[32m"evidence"[39m
+  [36m/>[39m
+
+  Name "":
+  [36m<details[39m
+    [33mclass[39m=[32m"evidence"[39m
+  [36m/>[39m
+
+  --------------------------------------------------
+  term:
+
+  Name "":
+  [36m<dt />[39m
+
+  Name "":
+  [36m<dt />[39m
+
+  Name "":
+  [36m<dt />[39m
+
+  Name "":
+  [36m<dt />[39m
+
+  Name "":
+  [36m<dt />[39m
+
+  Name "":
+  [36m<dt />[39m
+
+  Name "":
+  [36m<dt />[39m
+
+  Name "":
+  [36m<dt />[39m
+
+  Name "":
+  [36m<dt />[39m
+
+  Name "":
+  [36m<dt />[39m
+
+  Name "":
+  [36m<dt />[39m
+
+  Name "":
+  [36m<dt />[39m
+
+  Name "":
+  [36m<dt />[39m
+
+  Name "":
+  [36m<dt />[39m
+
+  Name "":
+  [36m<dt />[39m
+
+  Name "":
+  [36m<dt />[39m
+
+  Name "":
+  [36m<dt />[39m
+
+  Name "":
+  [36m<dt />[39m
+
+  Name "":
+  [36m<dt />[39m
+
+  Name "":
+  [36m<dt />[39m
+
+  Name "":
+  [36m<dt />[39m
+
+  Name "":
+  [36m<dt />[39m
+
+  Name "":
+  [36m<dt />[39m
+
+  Name "":
+  [36m<dt />[39m
+
+  Name "":
+  [36m<dt />[39m
+
+  Name "":
+  [36m<dt />[39m
+
+  Name "":
+  [36m<dt />[39m
+
+  Name "":
+  [36m<dt />[39m
+
+  Name "":
+  [36m<dt />[39m
+
+  --------------------------------------------------
+  definition:
+
+  Name "":
+  [36m<dd />[39m
+
+  Name "":
+  [36m<dd />[39m
+
+  Name "":
+  [36m<dd />[39m
+
+  Name "":
+  [36m<dd />[39m
+
+  Name "":
+  [36m<dd />[39m
+
+  Name "":
+  [36m<dd />[39m
+
+  Name "":
+  [36m<dd />[39m
+
+  Name "":
+  [36m<dd />[39m
+
+  Name "":
+  [36m<dd />[39m
+
+  Name "":
+  [36m<dd />[39m
+
+  Name "":
+  [36m<dd />[39m
+
+  Name "":
+  [36m<dd />[39m
+
+  Name "":
+  [36m<dd />[39m
+
+  Name "":
+  [36m<dd />[39m
+
+  Name "":
+  [36m<dd />[39m
+
+  Name "":
+  [36m<dd />[39m
+
+  Name "":
+  [36m<dd />[39m
+
+  Name "":
+  [36m<dd />[39m
+
+  Name "":
+  [36m<dd />[39m
+
+  Name "":
+  [36m<dd />[39m
+
+  Name "":
+  [36m<dd />[39m
+
+  Name "":
+  [36m<dd />[39m
+
+  Name "":
+  [36m<dd />[39m
+
+  Name "":
+  [36m<dd />[39m
+
+  Name "":
+  [36m<dd />[39m
+
+  Name "":
+  [36m<dd />[39m
+
+  Name "":
+  [36m<dd />[39m
+
+  Name "":
+  [36m<dd />[39m
+
+  Name "":
+  [36m<dd />[39m
+
+  --------------------------------------------------
+  code:
+
+  Name "":
+  [36m<code[39m
+    [33mclass[39m=[32m"mono id-text"[39m
+  [36m/>[39m
+
+  Name "":
+  [36m<code[39m
+    [33mclass[39m=[32m"mono id-text"[39m
+  [36m/>[39m
+
+  Name "":
+  [36m<code[39m
+    [33mclass[39m=[32m"mono id-text"[39m
+  [36m/>[39m
+
+  Name "":
+  [36m<code[39m
+    [33mclass[39m=[32m"mono id-text"[39m
+  [36m/>[39m
+
+  Name "":
+  [36m<code[39m
+    [33mclass[39m=[32m"mono id-text"[39m
+  [36m/>[39m
+
+  Name "":
+  [36m<code[39m
+    [33mclass[39m=[32m"mono id-text"[39m
+  [36m/>[39m
+
+  Name "":
+  [36m<code[39m
+    [33mclass[39m=[32m"mono id-text"[39m
+  [36m/>[39m
+
+  Name "":
+  [36m<code[39m
+    [33mclass[39m=[32m"mono id-text"[39m
+  [36m/>[39m
+
+  Name "":
+  [36m<code[39m
+    [33mclass[39m=[32m"mono id-text"[39m
+  [36m/>[39m
+
+  Name "":
+  [36m<code[39m
+    [33mclass[39m=[32m"mono id-text"[39m
+  [36m/>[39m
+
+  Name "":
+  [36m<code[39m
+    [33mclass[39m=[32m"mono id-text"[39m
+  [36m/>[39m
+
+  Name "":
+  [36m<code[39m
+    [33mclass[39m=[32m"mono id-text"[39m
+  [36m/>[39m
+
+  Name "":
+  [36m<code[39m
+    [33mclass[39m=[32m"mono id-text"[39m
+  [36m/>[39m
+
+  Name "":
+  [36m<code[39m
+    [33mclass[39m=[32m"mono id-text"[39m
+  [36m/>[39m
+
+  Name "":
+  [36m<code[39m
+    [33mclass[39m=[32m"mono id-text"[39m
+  [36m/>[39m
+
+  Name "":
+  [36m<code[39m
+    [33mclass[39m=[32m"mono id-text"[39m
+  [36m/>[39m
+
+  Name "":
+  [36m<code[39m
+    [33mclass[39m=[32m"mono id-text"[39m
+  [36m/>[39m
+
+  Name "":
+  [36m<code[39m
+    [33mclass[39m=[32m"mono id-text"[39m
+  [36m/>[39m
+
+  Name "":
+  [36m<code[39m
+    [33mclass[39m=[32m"mono id-text"[39m
+  [36m/>[39m
+
+  --------------------------------------------------
+  table:
+
+  Name "":
+  [36m<table />[39m
+
+  --------------------------------------------------
+  rowgroup:
+
+  Name "":
+  [36m<thead />[39m
+
+  Name "":
+  [36m<tbody />[39m
+
+  --------------------------------------------------
+  row:
+
+  Name "File / version Original branch Original checkpoint Producer job Descriptor":
+  [36m<tr />[39m
+
+  Name "assets/notes.mdnotes@1 fx-branch-1 fx-branch-1:1 fx-job-1 152 bytestext/markdown0x5b2d051b5387d56a31dbb74d5ae99fe36efb6f77bf40a510dfa1c4c563fec747 Copy":
+  [36m<tr />[39m
+
+  Name "assets/cover.pngcover@2 fx-branch-1 fx-branch-1:2 fx-job-2 87 bytesimage/png0xc9d4eb7fbdd6362e6cf57c114055039222f2487d4e40ea5ad20334f58597e1cc Copy":
+  [36m<tr />[39m
+
+  Name "assets/site.htmlsite@3 fx-branch-1 fx-branch-1:3 fx-job-3 617 bytestext/html0x37c2e0e0ee9dfa9ccb4ed5de4d7392c628cdb4003d1231855cefe9e9ed83f5fd Copy":
+  [36m<tr />[39m
+
+  --------------------------------------------------
+  columnheader:
+
+  Name "File / version":
+  [36m<th />[39m
+
+  Name "Original branch":
+  [36m<th />[39m
+
+  Name "Original checkpoint":
+  [36m<th />[39m
+
+  Name "Producer job":
+  [36m<th />[39m
+
+  Name "Descriptor":
+  [36m<th />[39m
+
+  --------------------------------------------------
+  rowheader:
+
+  Name "assets/notes.mdnotes@1":
+  [36m<th[39m
+    [33mscope[39m=[32m"row"[39m
+  [36m/>[39m
+
+  Name "assets/cover.pngcover@2":
+  [36m<th[39m
+    [33mscope[39m=[32m"row"[39m
+  [36m/>[39m
+
+  Name "assets/site.htmlsite@3":
+  [36m<th[39m
+    [33mscope[39m=[32m"row"[39m
+  [36m/>[39m
+
+  --------------------------------------------------
+  cell:
+
+  Name "fx-branch-1":
+  [36m<td />[39m
+
+  Name "fx-branch-1:1":
+  [36m<td />[39m
+
+  Name "fx-job-1":
+  [36m<td />[39m
+
+  Name "152 bytestext/markdown0x5b2d051b5387d56a31dbb74d5ae99fe36efb6f77bf40a510dfa1c4c563fec747 Copy":
+  [36m<td />[39m
+
+  Name "fx-branch-1":
+  [36m<td />[39m
+
+  Name "fx-branch-1:2":
+  [36m<td />[39m
+
+  Name "fx-job-2":
+  [36m<td />[39m
+
+  Name "87 bytesimage/png0xc9d4eb7fbdd6362e6cf57c114055039222f2487d4e40ea5ad20334f58597e1cc Copy":
+  [36m<td />[39m
+
+  Name "fx-branch-1":
+  [36m<td />[39m
+
+  Name "fx-branch-1:3":
+  [36m<td />[39m
+
+  Name "fx-job-3":
+  [36m<td />[39m
+
+  Name "617 bytestext/html0x37c2e0e0ee9dfa9ccb4ed5de4d7392c628cdb4003d1231855cefe9e9ed83f5fd Copy":
+  [36m<td />[39m
+
+  --------------------------------------------------
+  article:
+
+  Name "":
+  [36m<article[39m
+    [33mclass[39m=[32m"contribution-card"[39m
+  [36m/>[39m
+
+  Name "":
+  [36m<article[39m
+    [33mclass[39m=[32m"contribution-card"[39m
+  [36m/>[39m
+
+  Name "":
+  [36m<article[39m
+    [33mclass[39m=[32m"contribution-card"[39m
+  [36m/>[39m
+
+  --------------------------------------------------
+  combobox:
+
+  Name "Callback outcome":
+  [36m<select />[39m
+
+  Name "Purchase receipt":
+  [36m<select />[39m
+
+  --------------------------------------------------
+  option:
+
+  Name "Accept and bind":
+  [36m<option[39m
+    [33mvalue[39m=[32m"accepted"[39m
+  [36m/>[39m
+
+  Name "Missing; remain pending":
+  [36m<option[39m
+    [33mvalue[39m=[32m"missing"[39m
+  [36m/>[39m
+
+  Name "Refused; status 1":
+  [36m<option[39m
+    [33mvalue[39m=[32m"refused"[39m
+  [36m/>[39m
+
+  Name "Frozen; status 2":
+  [36m<option[39m
+    [33mvalue[39m=[32m"failed"[39m
+  [36m/>[39m
+
+  Name "Accepted; invalid binding":
+  [36m<option[39m
+    [33mvalue[39m=[32m"bad_binding"[39m
+  [36m/>[39m
+
+  Name "Confirmed":
+  [36m<option[39m
+    [33mvalue[39m=[32m"ok"[39m
+  [36m/>[39m
+
+  Name "Unknown; reconcile":
+  [36m<option[39m
+    [33mvalue[39m=[32m"unknown"[39m
+  [36m/>[39m
+
+  --------------------------------------------------
+  checkbox:
+
+  Name "Reject next simulated signature":
+  [36m<input[39m
+    [33mtype[39m=[32m"checkbox"[39m
+  [36m/>[39m
+
+  --------------------------------------------------
+
+Ignored nodes: comments, script, style
+[36m<body>[39m
+  [36m<div>[39m
+    [36m<div[39m
+      [33mclass[39m=[32m"ws"[39m
+    [36m>[39m
+      [36m<section[39m
+        [33maria-labelledby[39m=[32m"project-title"[39m
+        [33mclass[39m=[32m"project-header"[39m
+      [36m>[39m
+        [36m<a[39m
+          [33mclass[39m=[32m"back-link"[39m
+          [33mhref[39m=[32m"#/demo"[39m
+        [36m>[39m
+          [0m← All projects[0m
+        [36m</a>[39m
+        [36m<div[39m
+          [33mclass[39m=[32m"panel-head"[39m
+        [36m>[39m
+          [36m<h1[39m
+            [33mid[39m=[32m"project-title"[39m
+          [36m>[39m
+            [0mRelay introduction[0m
+          [36m</h1>[39m
+        [36m</div>[39m
+        [36m<p[39m
+          [33mclass[39m=[32m"project-goal"[39m
+        [36m>[39m
+          [0mBuild a public introduction to the relay, with a cover image and project notes.[0m
+        [36m</p>[39m
+      [36m</section>[39m
+      [36m<section[39m
+        [33maria-labelledby[39m=[32m"sequence-title"[39m
+        [33mclass[39m=[32m"sequence"[39m
+      [36m>[39m
+        [36m<div[39m
+          [33mclass[39m=[32m"section-heading"[39m
+        [36m>[39m
+          [36m<h2[39m
+            [33mid[39m=[32m"sequence-title"[39m
+          [36m>[39m
+            [0mSequence[0m
+          [36m</h2>[39m
+          [36m<span[39m
+            [33mclass[39m=[32m"meta"[39m
+          [36m>[39m
+            [0mAccepted checkpoints in chain order[0m
+          [36m</span>[39m
+        [36m</div>[39m
+        [36m<ol[39m
+          [33mclass[39m=[32m"sequence-rail"[39m
+        [36m>[39m
+          [36m<li[39m
+            [33mclass[39m=[32m"round-item"[39m
+          [36m>[39m
+            [36m<button[39m
+              [33mclass[39m=[32m"round-button"[39m
+              [33mtype[39m=[32m"button"[39m
+            [36m>[39m
+              [36m<span[39m
+                [33mclass[39m=[32m"round-number mono"[39m
+              [36m>[39m
+                [0m00[0m
+              [36m</span>[39m
+              [36m<span[39m
+                [33mclass[39m=[32m"round-info"[39m
+              [36m>[39m
+                [36m<strong>[39m
+                  [0mProject created[0m
+                [36m</strong>[39m
+                [36m<span[39m
+                  [33mclass[39m=[32m"meta"[39m
+                [36m>[39m
+                  [0mFixed goal; no paid round[0m
+                [36m</span>[39m
+              [36m</span>[39m
+              [36m<span[39m
+                [33mclass[39m=[32m"round-labels"[39m
+              [36m/>[39m
+            [36m</button>[39m
+          [36m</li>[39m
+          [36m<li[39m
+            [33mclass[39m=[32m"round-item"[39m
+          [36m>[39m
+            [36m<button[39m
+              [33mclass[39m=[32m"round-button"[39m
+              [33mtype[39m=[32m"button"[39m
+            [36m>[39m
+              [36m<span[39m
+                [33mclass[39m=[32m"round-number mono"[39m
+              [36m>[39m
+                [0m01[0m
+              [36m</span>[39m
+              [36m<span[39m
+                [33mclass[39m=[32m"round-info"[39m
+              [36m>[39m
+                [36m<strong>[39m
+                  [0mRound 1[0m
+                [36m</strong>[39m
+                [36m<span[39m
+                  [33mclass[39m=[32m"meta"[39m
+                [36m>[39m
+                  [0mHTML page + Markdown[0m
+                [36m</span>[39m
+              [36m</span>[39m
+              [36m<span[39m
+                [33mclass[39m=[32m"round-labels"[39m
+              [36m/>[39m
+            [36m</button>[39m
+          [36m</li>[39m
+          [36m<li[39m
+            [33mclass[39m=[32m"round-item"[39m
+          [36m>[39m
+            [36m<button[39m
+              [33mclass[39m=[32m"round-button"[39m
+              [33mtype[39m=[32m"button"[39m
+            [36m>[39m
+              [36m<span[39m
+                [33mclass[39m=[32m"verified-thumbnail"[39m
+                [33mtitle[39m=[32m"Thumbnail waiting for verification"[39m
+              [36m>[39m
+                [36m<span>[39m
+                  [0mPNG[0m
+                [36m</span>[39m
+              [36m</span>[39m
+              [36m<span[39m
+                [33mclass[39m=[32m"round-number mono"[39m
+              [36m>[39m
+                [0m02[0m
+              [36m</span>[39m
+              [36m<span[39m
+                [33mclass[39m=[32m"round-info"[39m
+              [36m>[39m
+                [36m<strong>[39m
+                  [0mRound 2[0m
+                [36m</strong>[39m
+                [36m<span[39m
+                  [33mclass[39m=[32m"meta"[39m
+                [36m>[39m
+                  [0mPNG image[0m
+                [36m</span>[39m
+              [36m</span>[39m
+              [36m<span[39m
+                [33mclass[39m=[32m"round-labels"[39m
+              [36m/>[39m
+            [36m</button>[39m
+          [36m</li>[39m
+          [36m<li[39m
+            [33mclass[39m=[32m"round-item selected"[39m
+          [36m>[39m
+            [36m<button[39m
+              [33maria-current[39m=[32m"step"[39m
+              [33mclass[39m=[32m"round-button"[39m
+              [33mtype[39m=[32m"button"[39m
+            [36m>[39m
+              [36m<span[39m
+                [33mclass[39m=[32m"round-number mono"[39m
+              [36m>[39m
+                [0m03[0m
+              [36m</span>[39m
+              [36m<span[39m
+                [33mclass[39m=[32m"round-info"[39m
+              [36m>[39m
+                [36m<strong>[39m
+                  [0mRound 3[0m
+                [36m</strong>[39m
+                [36m<span[39m
+                  [33mclass[39m=[32m"meta"[39m
+                [36m>[39m
+                  [0mHTML page[0m
+                [36m</span>[39m
+              [36m</span>[39m
+              [36m<span[39m
+                [33mclass[39m=[32m"round-labels"[39m
+              [36m>[39m
+                [36m<span[39m
+                  [33mclass[39m=[32m"tag"[39m
+                [36m>[39m
+                  [0mLatest[0m
+                [36m</span>[39m
+                [36m<span[39m
+                  [33mclass[39m=[32m"tag tag-accent"[39m
+                [36m>[39m
+                  [0mSelected[0m
+                [36m</span>[39m
+              [36m</span>[39m
+            [36m</button>[39m
+          [36m</li>[39m
+        [36m</ol>[39m
+      [36m</section>[39m
+      [36m<section[39m
+        [33maria-labelledby[39m=[32m"output-title"[39m
+        [33mclass[39m=[32m"artifact-viewer"[39m
+        [33mid[39m=[32m"assets"[39m
+        [33mtabindex[39m=[32m"-1"[39m
+      [36m>[39m
+        [36m<div[39m
+          [33mclass[39m=[32m"panel-head"[39m
+        [36m>[39m
+      ...
+ ❯ Object.getElementError node_modules/@testing-library/dom/dist/config.js:37:19
+ ❯ node_modules/@testing-library/dom/dist/query-helpers.js:76:38
+ ❯ node_modules/@testing-library/dom/dist/query-helpers.js:52:17
+ ❯ node_modules/@testing-library/dom/dist/query-helpers.js:95:19
+ ❯ tests/unit/platform.test.tsx:62:28
+
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[1/2]⎯
+
+ FAIL  tests/unit/security.test.tsx > fixture purchase exclusion (not A1 integration) > an identical status-1 retry is explicit, single-use and has no new revision until binding
+AssertionError: expected [Function] to throw error including 'Failed的Binding' but got 'Only a failed binding can be submitte…'
+
+Expected: "Failed的Binding"
+Received: "Only a failed binding can be submitted again"
+
+ ❯ tests/unit/security.test.tsx:190:64
+    188|     expect(await a.getSponsorships("fx-branch-1")).toHaveLength(2);
+    189|     expect((await a.getBranch("fx-branch-1")).latestCheckpoint).toBe("…
+    190|     await expect(a.resubmitBinding(DEMO_ACCOUNTS[1], retry.id)).reject…
+       |                                                                ^
+    191|   });
+    192|
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[2/2]⎯
+
+
+ Test Files  2 failed | 2 passed (4)
+      Tests  2 failed | 38 passed (40)
+   Start at  11:12:39
+   Duration  7.16s (import 34%, environment 33%, tests 23%, transform 5%, setup 4%)
+
+Environment  jsdom was created 4 times · 4.35s total, 33% of tracked time
+             create it once per worker with pool: 'vmThreads' (keeps per-file isolation) or isolate: false (shares it across files)
+             learn more: https://vitest.dev/guide/improving-performance#test-environments
+

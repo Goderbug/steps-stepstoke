@@ -1,0 +1,27 @@
+PASS Public reads without wallet; create and propose do not purchase
+PASS HTML round 1; exact approval, purchase, authenticated bind and isolated bytes
+PASS PNG round 2; alternate sponsor and retained original HTML provenance
+PASS HTML round 3 continues PNG round 2 with exact selected inputs
+PASS Historical fork uses selected round 1 exactly and requires its own later funding
+PASS Missing callback stays pending through reload and original-record reconciliation without rebuy
+locator.click: Timeout 30000ms exceeded.
+Call log:
+[2m  - waiting for getByRole('button', { name: 'Review identical paid retry' })[22m
+[2m    - locator resolved to <button disabled class="btn btn-secondary">Review identical paid retry</button>[22m
+[2m  - attempting click action[22m
+[2m    2 × waiting for element to be visible, enabled and stable[22m
+[2m      - element is not enabled[22m
+[2m    - retrying click action[22m
+[2m    - waiting 20ms[22m
+[2m    2 × waiting for element to be visible, enabled and stable[22m
+[2m      - element is not enabled[22m
+[2m    - retrying click action[22m
+[2m      - waiting 100ms[22m
+[2m    57 × waiting for element to be visible, enabled and stable[22m
+[2m       - element is not enabled[22m
+[2m     - retrying click action[22m
+[2m       - waiting 500ms[22m
+
+    at /root/.identitymd/work/55cf8df2-04b1-4d15-9291-eef351d0247f/7c1ff61b-d9f8-48da-a32a-965c2dff2362/frontend/tests/integration/platform-chain.mjs:82:475
+    at async record (/root/.identitymd/work/55cf8df2-04b1-4d15-9291-eef351d0247f/7c1ff61b-d9f8-48da-a32a-965c2dff2362/frontend/tests/integration/platform-chain.mjs:24:62)
+    at async file:///root/.identitymd/work/55cf8df2-04b1-4d15-9291-eef351d0247f/7c1ff61b-d9f8-48da-a32a-965c2dff2362/frontend/tests/integration/platform-chain.mjs:82:2

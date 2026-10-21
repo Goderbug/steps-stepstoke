@@ -66,34 +66,37 @@ export async function verifyFile(
 ): Promise<VerifyResult> {
   const actualSha256 = await sha256Hex(bytes);
   const checks: VerifyResult["checks"] = [];
-  checks.push({ name: "长度", ok: bytes.length === descriptor.bytes, detail: `实际 ${bytes.length} 字节，描述 ${descriptor.bytes} 字节` });
-  checks.push({ name: "SHA-256", ok: actualSha256 === descriptor.sha256.toLowerCase(), detail: actualSha256 === descriptor.sha256.toLowerCase() ? "与描述一致" : `实际 ${actualSha256}` });
-  checks.push({ name: "大小上限", ok: bytes.length <= maxBytes, detail: `上限 ${maxBytes} 字节` });
+  checks.push({ name: "Length", ok: bytes.length === descriptor.bytes, detail: `Actual ${bytes.length} bytes, descriptor ${descriptor.bytes} bytes` });
+  checks.push({ name: "SHA-256", ok: actualSha256 === descriptor.sha256.toLowerCase(), detail: actualSha256 === descriptor.sha256.toLowerCase() ? "Matches descriptor" : `Actual ${actualSha256}` });
+  checks.push({ name: "Size limit", ok: bytes.length <= maxBytes, detail: `Limit ${maxBytes} bytes` });
   let formatOk = allowedTypes.includes(descriptor.mediaType);
   let formatDetail = descriptor.mediaType;
   if (kind === "image") {
     const sniffed = sniffImage(bytes);
     formatOk = formatOk && sniffed === descriptor.mediaType;
-    formatDetail = sniffed ? `文件头为 ${sniffed}` : "文件头不是 PNG、JPEG 或 WebP";
+    formatDetail = sniffed ? `Header type: ${sniffed}` : "Header is not PNG, JPEG or WebP";
     const size = imageDimensions(bytes);
-    checks.push({ name: "图片资源上限", ok: !!size && size.width > 0 && size.height > 0 && size.width <= MAX_PREVIEW_IMAGE_SIDE && size.height <= MAX_PREVIEW_IMAGE_SIDE, detail: size ? `${size.width} × ${size.height}，预览每边最多 ${MAX_PREVIEW_IMAGE_SIDE} 像素` : "缺少有效图片尺寸头" });
+    checks.push({ name: "Image resource limit", ok: !!size && size.width > 0 && size.height > 0 && size.width <= MAX_PREVIEW_IMAGE_SIDE && size.height <= MAX_PREVIEW_IMAGE_SIDE, detail: size ? `${size.width} × ${size.height}, maximum preview side: ${MAX_PREVIEW_IMAGE_SIDE} pixels` : "No valid image dimensions" });
   } else {
     try {
       new TextDecoder("utf-8", { fatal: true }).decode(bytes);
     } catch {
       formatOk = false;
-      formatDetail = "不是有效的 UTF-8 文本";
+      formatDetail = "Invalid UTF-8 text";
     }
   }
-  checks.push({ name: "格式", ok: formatOk, detail: formatDetail });
+  checks.push({ name: "Format", ok: formatOk, detail: formatDetail });
   return { ok: checks.every((c) => c.ok), checks, actualSha256, actualBytes: bytes.length };
 }
 
 /** A download file name that cannot escape into a path or carry control characters. */
-export function safeFileName(name: string): string {
-  const base = name.split(/[\\/]/).pop() ?? "file";
+export function safeFileName(path: string): string {
+  const base = path.split(/[\\/]/).pop() ?? "file";
   const cleaned = base.replace(/[^\p{L}\p{N}._-]/gu, "_").replace(/^\.+/, "");
-  return cleaned.slice(0, 96) || "file";
+  const dot = cleaned.lastIndexOf(".");
+  const ext = dot > 0 ? cleaned.slice(dot).slice(0, 16) : "";
+  const stem = dot > 0 ? cleaned.slice(0, dot) : cleaned;
+  return (stem.slice(0, 96 - ext.length) || "file") + ext;
 }
 
 export const toBase64 = (b: Uint8Array) => {

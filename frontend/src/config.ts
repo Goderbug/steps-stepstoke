@@ -2,8 +2,8 @@
 // A1 source is delivered; no verified product deployment is supplied (A1_INTEGRATION_PENDING).
 import { foundry, mainnet } from "viem/chains";
 
-export const SITE_NAME = "CTO 中继站";
-export const SITE_DESCRIPTION = "浏览公开项目、提出工作、明确资助、查看真实资产与历史，并从已接受的检查点分叉。";
+export const SITE_NAME = "CTO Relay";
+export const SITE_DESCRIPTION = "Browse public projects, propose work, fund execution and continue from accepted checkpoints.";
 
 /** What W1 observed about A1 at build time. Updated by hand at each integration step. */
 export const A1_SOURCE = {

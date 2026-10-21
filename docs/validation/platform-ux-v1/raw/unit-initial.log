@@ -1,0 +1,567 @@
+
+> cto-relay-station-w1@0.1.0 test:unit
+> vitest run
+
+
+ RUN  v5.0.5 /root/.identitymd/work/55cf8df2-04b1-4d15-9291-eef351d0247f/7c1ff61b-d9f8-48da-a32a-965c2dff2362/frontend
+
+ ❯ tests/unit/domain.test.ts (10 tests | 2 failed) 194ms
+   ❯ fixture adapter semantics (4)
+     × sponsoring needs exact allowance, rejects stale anchors, and a missing callback stays pending 33ms
+   ❯ proposal budgets come from capabilities (1)
+     × enforces request body, input count and image-input rules 8ms
+ ❯ tests/unit/security.test.tsx (18 tests | 4 failed) 1383ms
+   ❯ wallet action lifetime and recovery (8)
+     × approves the current exact price rather than maxFee and requires new approval if the price rises 158ms
+   ❯ fixture purchase exclusion (not A1 integration) (4)
+     × allows only one outstanding request while a callback is missing or a tx is unknown 15ms
+     × an identical status-1 retry is explicit, single-use and has no new revision until binding 17ms
+     × rejects signatures and freezes status 2 without an HTTP/time unlock 11ms
+11:09:48 AM [vite] (client) Failed to load source map for /root/.identitymd/work/55cf8df2-04b1-4d15-9291-eef351d0247f/7c1ff61b-d9f8-48da-a32a-965c2dff2362/vendor/ethers/ethers.mjs.
+Error: An error occurred while trying to read the map file at ethers.js.map
+Error: ENOENT: no such file or directory, open '/root/.identitymd/work/55cf8df2-04b1-4d15-9291-eef351d0247f/7c1ff61b-d9f8-48da-a32a-965c2dff2362/vendor/ethers/ethers.js.map'
+    at Object.readFileSync (node:fs:483:20)
+    at file:///root/.identitymd/work/55cf8df2-04b1-4d15-9291-eef351d0247f/7c1ff61b-d9f8-48da-a32a-965c2dff2362/frontend/node_modules/vite/dist/node/chunks/node.js:17690:13
+    at readFromFileMap (file:///root/.identitymd/work/55cf8df2-04b1-4d15-9291-eef351d0247f/7c1ff61b-d9f8-48da-a32a-965c2dff2362/frontend/node_modules/vite/dist/node/chunks/node.js:17388:13)
+    at exports.fromMapFileComment (file:///root/.identitymd/work/55cf8df2-04b1-4d15-9291-eef351d0247f/7c1ff61b-d9f8-48da-a32a-965c2dff2362/frontend/node_modules/vite/dist/node/chunks/node.js:17483:12)
+    at exports.fromMapFileSource (file:///root/.identitymd/work/55cf8df2-04b1-4d15-9291-eef351d0247f/7c1ff61b-d9f8-48da-a32a-965c2dff2362/frontend/node_modules/vite/dist/node/chunks/node.js:17494:22)
+    at extractSourcemapFromFile (file:///root/.identitymd/work/55cf8df2-04b1-4d15-9291-eef351d0247f/7c1ff61b-d9f8-48da-a32a-965c2dff2362/frontend/node_modules/vite/dist/node/chunks/node.js:17676:87)
+    at loadAndTransform (file:///root/.identitymd/work/55cf8df2-04b1-4d15-9291-eef351d0247f/7c1ff61b-d9f8-48da-a32a-965c2dff2362/frontend/node_modules/vite/dist/node/chunks/node.js:20150:22)
+ ❯ tests/unit/chain-provider.test.ts (2 tests | 1 failed) 28ms
+   ❯ selected provider safety (1)
+     × does not sign through a previously selected provider when another provider has the same account/chain 23ms
+
+⎯⎯⎯⎯⎯⎯⎯ Failed Tests 7 ⎯⎯⎯⎯⎯⎯⎯
+
+ FAIL  tests/unit/chain-provider.test.ts > selected provider safety > does not sign through a previously selected provider when another provider has the same account/chain
+AssertionError: expected [Function] to throw error including 'Selected wallet提供方已变更' but got 'Selected wallet provider changed. Rev…'
+
+Expected: "Selected wallet提供方已变更"
+Received: "Selected wallet provider changed. Review again"
+
+ ❯ tests/unit/chain-provider.test.ts:24:139
+     22|     adapter.verify = vi.fn(async () => {});
+     23|     adapter.provider.request = vi.fn(async ({ method }) => method === …
+     24|     await expect(adapter.createBranch({ ...DEMO_ACCOUNTS[0], chainId: …
+       |                                                                                                                                           ^
+     25|     expect(request.mock.calls.some(([a]) => a.method === "eth_sendTran…
+     26|   });
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[1/7]⎯
+
+ FAIL  tests/unit/domain.test.ts > fixture adapter semantics > sponsoring needs exact allowance, rejects stale anchors, and a missing callback stays pending
+AssertionError: expected 'confirmed' to be 'pending' // Object.is equality
+
+Expected: "pending"
+Received: "confirmed"
+
+ ❯ tests/unit/domain.test.ts:90:32
+     88|     await a.approve(A, q, q.price);
+     89|     const sp = await a.sponsor(A, "fx-prop-1", q.price, q);
+     90|     expect(sp.stages.callback).toBe("pending");
+       |                                ^
+     91|     expect(sp.stages.binding).toBe("not_started");
+     92|     const q0 = await a.quoteFee("fx-prop-0");
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[2/7]⎯
+
+ FAIL  tests/unit/domain.test.ts > proposal budgets come from capabilities > enforces request body, input count and image-input rules
+AssertionError: expected 'Maximum inputs: 1 items,Image inputs …' to match /请求体Limit/
+
+- Expected:
+/请求体Limit/
+
++ Received:
+"Maximum inputs: 1 items,Image inputs and editing are disabled in A1,Requirement contains 16 bytes, exceeds request text limit 10 bytes"
+
+ ❯ tests/unit/domain.test.ts:115:22
+    113|     const caps = { ...FIXTURE_CAPABILITIES, maxRequestBodyBytes: 10, m…
+    114|     const p = draftProblems(caps, latest, { kind: "image", mode: "crea…
+    115|     expect(p.join()).toMatch(/请求体Limit/);
+       |                      ^
+    116|     expect(p.join()).toMatch(/Maximum inputs: 1 items/);
+    117|     expect(p.join()).toMatch(/Image inputs and editing/);
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[3/7]⎯
+
+ FAIL  tests/unit/security.test.tsx > wallet action lifetime and recovery > approves the current exact price rather than maxFee and requires new approval if the price rises
+TestingLibraryElementError: Unable to find an accessible element with the role "button" and name "2. Purchase execution"
+
+Here are the accessible roles:
+
+  list:
+
+  Name "":
+  [36m<ol[39m
+    [33mclass[39m=[32m"funding-steps"[39m
+  [36m/>[39m
+
+  --------------------------------------------------
+  listitem:
+
+  Name "":
+  [36m<li />[39m
+
+  Name "":
+  [36m<li[39m
+    [33maria-current[39m=[32m"step"[39m
+  [36m/>[39m
+
+  Name "":
+  [36m<li />[39m
+
+  --------------------------------------------------
+  heading:
+
+  Name "Update notes":
+  [36m<h3 />[39m
+
+  --------------------------------------------------
+  paragraph:
+
+  Name "":
+  [36m<p[39m
+    [33mclass[39m=[32m"req"[39m
+  [36m/>[39m
+
+  Name "":
+  [36m<p[39m
+    [33mclass[39m=[32m"hint"[39m
+  [36m/>[39m
+
+  --------------------------------------------------
+  term:
+
+  Name "":
+  [36m<dt />[39m
+
+  Name "":
+  [36m<dt />[39m
+
+  Name "":
+  [36m<dt />[39m
+
+  Name "":
+  [36m<dt />[39m
+
+  Name "":
+  [36m<dt />[39m
+
+  Name "":
+  [36m<dt />[39m
+
+  Name "":
+  [36m<dt />[39m
+
+  Name "":
+  [36m<dt />[39m
+
+  --------------------------------------------------
+  definition:
+
+  Name "":
+  [36m<dd[39m
+    [33mclass[39m=[32m"price"[39m
+  [36m/>[39m
+
+  Name "":
+  [36m<dd />[39m
+
+  Name "":
+  [36m<dd />[39m
+
+  Name "":
+  [36m<dd />[39m
+
+  Name "":
+  [36m<dd />[39m
+
+  Name "":
+  [36m<dd />[39m
+
+  Name "":
+  [36m<dd />[39m
+
+  Name "":
+  [36m<dd />[39m
+
+  --------------------------------------------------
+  code:
+
+  Name "":
+  [36m<code[39m
+    [33mclass[39m=[32m"mono id-text"[39m
+  [36m/>[39m
+
+  Name "":
+  [36m<code[39m
+    [33mclass[39m=[32m"mono id-text"[39m
+  [36m/>[39m
+
+  Name "":
+  [36m<code[39m
+    [33mclass[39m=[32m"mono id-text"[39m
+  [36m/>[39m
+
+  Name "":
+  [36m<code[39m
+    [33mclass[39m=[32m"mono id-text"[39m
+  [36m/>[39m
+
+  --------------------------------------------------
+  button:
+
+  Name "Copy approval spender":
+  [36m<button[39m
+    [33maria-label[39m=[32m"Copy approval spender"[39m
+    [33mclass[39m=[32m"btn btn-link"[39m
+    [33mtype[39m=[32m"button"[39m
+  [36m/>[39m
+
+  Name "Copy proposal ID":
+  [36m<button[39m
+    [33maria-label[39m=[32m"Copy proposal ID"[39m
+    [33mclass[39m=[32m"btn btn-link"[39m
+    [33mtype[39m=[32m"button"[39m
+  [36m/>[39m
+
+  Name "Copy anchor checkpoint":
+  [36m<button[39m
+    [33maria-label[39m=[32m"Copy anchor checkpoint"[39m
+    [33mclass[39m=[32m"btn btn-link"[39m
+    [33mtype[39m=[32m"button"[39m
+  [36m/>[39m
+
+  Name "Copy input SHA-256":
+  [36m<button[39m
+    [33maria-label[39m=[32m"Copy input SHA-256"[39m
+    [33mclass[39m=[32m"btn btn-link"[39m
+    [33mtype[39m=[32m"button"[39m
+  [36m/>[39m
+
+  Name "Confirming approval…":
+  [36m<button[39m
+    [33mclass[39m=[32m"btn btn-primary"[39m
+    [33mdisabled[39m=[32m""[39m
+  [36m/>[39m
+
+  --------------------------------------------------
+  group:
+
+  Name "":
+  [36m<details[39m
+    [33mclass[39m=[32m"evidence"[39m
+  [36m/>[39m
+
+  --------------------------------------------------
+  textbox:
+
+  Name "Maximum fee (IMD (demo)) Approve the exact current price. Maximum fee is a purchase cap, never an allowance.":
+  [36m<input[39m
+    [33maria-describedby[39m=[32m"fee-hint"[39m
+    [33maria-invalid[39m=[32m"false"[39m
+    [33mdisabled[39m=[32m""[39m
+    [33minputmode[39m=[32m"decimal"[39m
+    [33mvalue[39m=[32m"100"[39m
+  [36m/>[39m
+
+  --------------------------------------------------
+
+Ignored nodes: comments, script, style
+[36m<body>[39m
+  [36m<div>[39m
+    [36m<div[39m
+      [33maria-busy[39m=[32m"true"[39m
+      [33maria-label[39m=[32m"Review funding"[39m
+      [33mclass[39m=[32m"funding-review"[39m
+    [36m>[39m
+      [36m<ol[39m
+        [33mclass[39m=[32m"funding-steps"[39m
+      [36m>[39m
+        [36m<li>[39m
+          [0m1. Review proposal[0m
+        [36m</li>[39m
+        [36m<li[39m
+          [33maria-current[39m=[32m"step"[39m
+        [36m>[39m
+          [0m2. Approve tokens[0m
+        [36m</li>[39m
+        [36m<li>[39m
+          [0m3. Purchase execution[0m
+        [36m</li>[39m
+      [36m</ol>[39m
+      [36m<h3>[39m
+        [0mUpdate[0m
+        [0m [0m
+        [0mnotes[0m
+      [36m</h3>[39m
+      [36m<p[39m
+        [33mclass[39m=[32m"req"[39m
+      [36m>[39m
+        [0mExpand the notes with the project goal, how to fund work and how to fork.[0m
+      [36m</p>[39m
+      [36m<p[39m
+        [33mclass[39m=[32m"hint"[39m
+      [36m>[39m
+        [0mSponsors cannot edit proposals. Approval and purchase each require your confirmation.[0m
+      [36m</p>[39m
+      [36m<dl[39m
+        [33mclass[39m=[32m"facts"[39m
+      [36m>[39m
+        [36m<div>[39m
+          [36m<dt>[39m
+            [0mCurrent price[0m
+          [36m</dt>[39m
+          [36m<dd[39m
+            [33mclass[39m=[32m"price"[39m
+          [36m>[39m
+            [0m25 IMD (demo)[0m
+          [36m</dd>[39m
+        [36m</div>[39m
+        [36m<div>[39m
+          [36m<dt>[39m
+            [0mUSD context[0m
+          [36m</dt>[39m
+          [36m<dd>[39m
+            [0mUnavailable[0m
+          [36m</dd>[39m
+        [36m</div>[39m
+        [36m<div>[39m
+          [36m<dt>[39m
+            [0mApproval spender[0m
+          [36m</dt>[39m
+          [36m<dd>[39m
+            [36m<span[39m
+              [33mclass[39m=[32m"copy-id"[39m
+            [36m>[39m
+              [36m<code[39m
+                [33mclass[39m=[32m"mono id-text"[39m
+              [36m>[39m
+                [0m0xe881c7ad745f92c87dFECBD727479248edCB78F7[0m
+              [36m</code>[39m
+              [36m<button[39m
+                [33maria-label[39m=[32m"Copy approval spender"[39m
+                [33mclass[39m=[32m"btn btn-link"[39m
+                [33mtype[39m=[32m"button"[39m
+              [36m>[39m
+                [0mCopy [0m
+              [36m</button>[39m
+            [36m</span>[39m
+          [36m</dd>[39m
+        [36m</div>[39m
+      [36m</dl>[39m
+      [36m<details[39m
+        [33mclass[39m=[32m"evidence"[39m
+      [36m>[39m
+        [36m<summary>[39m
+          [0mExact proposal, inputs and request[0m
+        [36m</summary>[39m
+        [36m<div[39m
+          [33mclass[39m=[32m"evidence-body"[39m
+        [36m>[39m
+          [36m<dl[39m
+            [33mclass[39m=[32m"facts"[39m
+          [36m>[39m
+            [36m<div>[39m
+              [36m<dt>[39m
+                [0mProposal[0m
+              [36m</dt>[39m
+              [36m<dd>[39m
+                [36m<span[39m
+                  [33mclass[39m=[32m"copy-id"[39m
+                [36m>[39m
+                  [36m<code[39m
+                    [33mclass[39m=[32m"mono id-text"[39m
+                  [36m>[39m
+                    [0mfx-prop-1[0m
+                  [36m</code>[39m
+                  [36m<button[39m
+                    [33maria-label[39m=[32m"Copy proposal ID"[39m
+                    [33mclass[39m=[32m"btn btn-link"[39m
+                    [33mtype[39m=[32m"button"[39m
+                  [36m>[39m
+                    [0mCopy [0m
+                  [36m</button>[39m
+                [36m</span>[39m
+              [36m</dd>[39m
+            [36m</div>[39m
+            [36m<div>[39m
+              [36m<dt>[39m
+                [0mCheckpoint[0m
+              [36m</dt>[39m
+              [36m<dd>[39m
+                [36m<span[39m
+                  [33mclass[39m=[32m"copy-id"[39m
+                [36m>[39m
+                  [36m<code[39m
+                    [33mclass[39m=[32m"mono id-text"[39m
+                  [36m>[39m
+                    [0mfx-branch-1:3[0m
+                  [36m</code>[39m
+                  [36m<button[39m
+                    [33maria-label[39m=[32m"Copy anchor checkpoint"[39m
+                    [33mclass[39m=[32m"btn btn-link"[39m
+                    [33mtype[39m=[32m"button"[39m
+                  [36m>[39m
+                    [0mCopy [0m
+                  [36m</button>[39m
+                [36m</span>[39m
+              [36m</dd>[39m
+            [36m</div>[39m
+            [36m<div>[39m
+              [36m<dt>[39m
+                [0mInputs[0m
+              [36m</dt>[39m
+              [36m<dd>[39m
+                [36m<div>[39m
+                  [0mnotes[0m
+                  [0m@[0m
+                  [0m1[0m
+                  [0m · [0m
+                  [36m<span[39m
+                    [33mclass[39m=[32m"copy-id"[39m
+                  [36m>[39m
+                    [36m<code[39m
+                      [33mclass[39m=[32m"mono id-text"[39m
+                    [36m>[39m
+                      [0m0x5b2d051b5387d56a31dbb74d5ae99fe36efb6f77bf40a510dfa1c4c563fec747[0m
+                    [36m</code>[39m
+                    [36m<button[39m
+                      [33maria-label[39m=[32m"Copy input SHA-256"[39m
+                      [33mclass[39m=[32m"btn btn-link"[39m
+                      [33mtype[39m=[32m"button"[39m
+                    [36m>[39m
+                      [0mCopy [0m
+                    [36m</button>[39m
+                  [36m</span>[39m
+                [36m</div>[39m
+              [36m</dd>[39m
+            [36m</div>[39m
+            [36m<div>[39m
+              [36m<dt>[39m
+                [0mIMD action / parent[0m
+              [36m</dt>[39m
+              [36m<dd>[39m
+                [0mjob.continue[0m
+                [0m / [0m
+                [0mfx-job-3[0m
+              [36m</dd>[39m
+            [36m</div>[39m
+            [36m<div>[39m
+              [36m<dt>[39m
+                [0mPublication[0m
+              [36m</dt>[39m
+              [36m<dd>[39m
+                [0mNot requested[0m
+              [36m</dd>[39m
+            [36m</div>[39m
+          [36m</dl>[39m
+        [36m</div>[39m
+      [36m</details>[39m
+      [36m<label[39m
+        [33mclass[39m=[32m"field"[39m
+      [36m>[39m
+        [36m<span>[39m
+          [0mMaximum fee ([0m
+          [0mIMD (demo)[0m
+          [0m)[0m
+        [36m</span>[39m
+        [36m<input[39m
+          [33maria-describedby[39m=[32m"fee-hint"[39m
+          [33maria-invalid[39m=[32m"false"[39m
+          [33mdisabled[39m=[32m""[39m
+          [33minputmode[39m=[32m"decimal"[39m
+          [33mvalue[39m=[32m"100"[39m
+        [36m/>[39m
+        [36m<span[39m
+          [33mclass[39m=[32m"hint"[39m
+          [33mid[39m=[32m"fee-hint"[39m
+        [36m>[39m
+          [0mApprove the exact current price. Maximum fee is a purchase cap, never an allowance.[0m
+        [36m</span>[39m
+      [36m</label>[39m
+      [36m<div[39m
+        [33mclass[39m=[32m"actions"[39m
+      [36m>[39m
+        [36m<button[39m
+          [33mclass[39m=[32m"btn btn-primary"[39m
+          [33mdisabled[39m=[32m""[39m
+        [36m>[39m
+          [0mConfirming approval…[0m
+        [36m</button>[39m
+      [36m</div>[39m
+    [36m</div>[39m
+  [36m</div>[39m
+[36m</body>[39m
+ ❯ Object.getElementError node_modules/@testing-library/dom/dist/config.js:37:19
+ ❯ node_modules/@testing-library/dom/dist/query-helpers.js:76:38
+ ❯ node_modules/@testing-library/dom/dist/query-helpers.js:52:17
+ ❯ node_modules/@testing-library/dom/dist/query-helpers.js:95:19
+ ❯ tests/unit/security.test.tsx:116:24
+    114|     fireEvent.change(screen.getByRole("textbox"), { target: { value: "…
+    115|     fireEvent.click(button);
+    116|     const buy = screen.getByRole("button", { name: "2. Purchase execut…
+       |                        ^
+    117|     await waitFor(() => expect(buy).toBeEnabled());
+    118|     expect(approve).toHaveBeenCalledWith(DEMO_ACCOUNTS[0], q, q.price);
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[4/7]⎯
+
+ FAIL  tests/unit/security.test.tsx > fixture purchase exclusion (not A1 integration) > allows only one outstanding request while a callback is missing or a tx is unknown
+AssertionError: expected [Function] to throw error including '尚未完成' but got 'An unresolved request exists. Wait or…'
+
+Expected: "尚未完成"
+Received: "An unresolved request exists. Wait or correct the binding; do not purchase again"
+
+ ❯ tests/unit/security.test.tsx:157:73
+    155|     await a.approve(DEMO_ACCOUNTS[1], q2, q2.price);
+    156|     const first = a.sponsor(DEMO_ACCOUNTS[0], "fx-prop-1", q1.price, q…
+    157|     await expect(a.sponsor(DEMO_ACCOUNTS[1], "fx-prop-2", q2.price, q2…
+       |                                                                         ^
+    158|     await first;
+    159|     await expect(a.sponsor(DEMO_ACCOUNTS[1], "fx-prop-2", q2.price, q2…
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[5/7]⎯
+
+ FAIL  tests/unit/security.test.tsx > fixture purchase exclusion (not A1 integration) > an identical status-1 retry is explicit, single-use and has no new revision until binding
+AssertionError: expected [Function] to throw error including '报价不属于' but got 'Quote does not match this branch'
+
+Expected: "报价不属于"
+Received: "Quote does not match this branch"
+
+ ❯ tests/unit/security.test.tsx:175:114
+    173|     // B has no allowance of its own: the retry cannot fabricate an ap…
+    174|     await expect(a.retryRefused(DEMO_ACCOUNTS[1], sp.id, rq.price, rq)…
+    175|     await expect(a.retryRefused(DEMO_ACCOUNTS[1], sp.id, rq.price, { .…
+       |                                                                                                                  ^
+    176|     await a.approve(DEMO_ACCOUNTS[1], rq, rq.price);
+    177|     a.controls.callbackOutcome = "bad_binding";
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[6/7]⎯
+
+ FAIL  tests/unit/security.test.tsx > fixture purchase exclusion (not A1 integration) > rejects signatures and freezes status 2 without an HTTP/time unlock
+AssertionError: expected [Function] to throw error including '拒绝' but got 'Signature rejected in the wallet'
+
+Expected: "拒绝"
+Received: "Signature rejected in the wallet"
+
+ ❯ tests/unit/security.test.tsx:218:58
+    216|     const q = await a.quoteFee("fx-prop-1");
+    217|     a.controls.rejectNextSignature = true;
+    218|     await expect(a.approve(DEMO_ACCOUNTS[0], q, q.price)).rejects.toTh…
+       |                                                          ^
+    219|     expect(await a.getSponsorships("fx-branch-1")).toHaveLength(0);
+    220|     await a.approve(DEMO_ACCOUNTS[0], q, q.price);
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[7/7]⎯
+
+
+ Test Files  3 failed (3)
+      Tests  7 failed | 23 passed (30)
+   Start at  11:09:43
+   Duration  5.78s (environment 34%, import 30%, tests 18%, transform 14%, setup 4%)
+
+Environment  jsdom was created 3 times · 3.09s total, 34% of tracked time
+             create it once per worker with pool: 'vmThreads' (keeps per-file isolation) or isolate: false (shares it across files)
+             learn more: https://vitest.dev/guide/improving-performance#test-environments
+

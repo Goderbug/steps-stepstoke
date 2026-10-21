@@ -12,9 +12,9 @@ const pending = (what: string) => () => Promise.reject(new IntegrationPendingErr
 export function createLiveAdapter(): RelayAdapter {
   const status: IntegrationStatus = {
     state: "A1_INTEGRATION_PENDING",
-    summary: "A1 与浏览器 SDK 已接入本地合约模式；productionDeployment 为 null，公开项目与公开链操作保持关闭。",
+    summary: "A1 and its browser SDK are integrated locally. productionDeployment is null; public operations are unavailable.",
     missing: [
-      "已验证的链 ID、Factory 地址与公开 RPC",
+      "Verified chain ID, Factory address and public RPC",
       
       
     ],
@@ -22,7 +22,7 @@ export function createLiveAdapter(): RelayAdapter {
   };
   return {
     kind: "live",
-    label: "A1 实时",
+    label: "A1 public",
     capabilities: {
       read: false,
       createBranch: false,
@@ -33,21 +33,21 @@ export function createLiveAdapter(): RelayAdapter {
       realWalletSigning: false,
     },
     status: () => status,
-    getCapabilities: pending("能力配置"),
-    listBranches: pending("公开项目列表"),
-    getBranch: pending("分支读取"),
-    getHistory: pending("历史读取"),
-    getProposals: pending("提案读取"),
-    getSponsorships: pending("资助状态读取"),
-    quoteFee: pending("费用报价"),
-    createBranch: pending("创建根分支"),
-    propose: pending("提交提案"),
-    approve: pending("授权额度"),
-    sponsor: pending("资助"),
-    retryRefused: pending("拒绝后重试"),
-    resubmitBinding: pending("重新提交绑定"),
-    fork: pending("分叉"),
-    reconcile: pending("交易对账"),
-    fetchFile: pending("文件下载"),
+    getCapabilities: pending("Capabilities"),
+    listBranches: pending("Project list"),
+    getBranch: pending("Branch read"),
+    getHistory: pending("History read"),
+    getProposals: pending("Proposal read"),
+    getSponsorships: pending("Funding status read"),
+    quoteFee: pending("Fee quote"),
+    createBranch: pending("Create root branch"),
+    propose: pending("SubmitProposal"),
+    approve: pending("Token approval"),
+    sponsor: pending("Funding"),
+    retryRefused: pending("Explicit refusal retry"),
+    resubmitBinding: pending("Submit binding again"),
+    fork: pending("Fork"),
+    reconcile: pending("Transaction reconciliation"),
+    fetchFile: pending("File download"),
   };
 }

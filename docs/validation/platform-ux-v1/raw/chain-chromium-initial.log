@@ -1,0 +1,8 @@
+locator.selectOption: Timeout 30000ms exceeded.
+Call log:
+[2m  - waiting for getByRole('dialog', { name: 'Prepare a contribution' }).getByLabel('Type', { exact: true })[22m
+
+    at propose (/root/.identitymd/work/55cf8df2-04b1-4d15-9291-eef351d0247f/7c1ff61b-d9f8-48da-a32a-965c2dff2362/frontend/tests/integration/platform-chain.mjs:67:303)
+    at async file:///root/.identitymd/work/55cf8df2-04b1-4d15-9291-eef351d0247f/7c1ff61b-d9f8-48da-a32a-965c2dff2362/frontend/tests/integration/platform-chain.mjs:76:310
+    at async record (/root/.identitymd/work/55cf8df2-04b1-4d15-9291-eef351d0247f/7c1ff61b-d9f8-48da-a32a-965c2dff2362/frontend/tests/integration/platform-chain.mjs:24:62)
+    at async file:///root/.identitymd/work/55cf8df2-04b1-4d15-9291-eef351d0247f/7c1ff61b-d9f8-48da-a32a-965c2dff2362/frontend/tests/integration/platform-chain.mjs:76:2

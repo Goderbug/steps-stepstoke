@@ -1,0 +1,16 @@
+{
+  "sameBytes": true,
+  "exitCode": 0,
+  "files": {
+    "dist/assets/dist-BxNQFNqP.js": "bc43e603f69b33babce6d7612cc8cdd53c70e62c980eda821da6981e628b959d",
+    "dist/assets/index-BmBfKiXI.css": "b1001b6d1df4dfbf80d12656877023a469ab27a2a271335b8fea9f4654bfb26c",
+    "dist/assets/index-Bs_50GqP.js": "5ef563c87071b2d0043b6f808136e7e9c31baf5e7b80bce3f247fae6c16e4d43",
+    "dist/favicon.svg": "759fec54d3994b36ac2f504a699d7cac8bf5febc16a14f8b9a890d7fa46aff24",
+    "dist/index.html": "54f8e3561d3ad2813eb70edb556e5d876e2e99b763b7de4dcaeb49cd61dc0ac5",
+    "dist/local-config.json": "260ac4a7231a260c303fb4b7a4259dc43b3085df5753175b133b42e314f262ec",
+    "dist/og.png": "d413a0a3cb73408d6dec43e965be2153d921c2f63468093a9d0df57eec3a1fdb",
+    "dist/og.svg": "a262fbd07dbe3c788c100bf9615c15c88aa1469e434bbe81ec92b14f34004e58"
+  },
+  "beforeFileCount": 8,
+  "afterFileCount": 8
+}

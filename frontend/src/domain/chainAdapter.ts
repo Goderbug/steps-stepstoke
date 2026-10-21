@@ -44,17 +44,17 @@ export function httpProvider(url: string): Provider {
   } };
 }
 export function assertLoopbackConfig(c: LocalConfig) {
-  if (!["localhost", "127.0.0.1", "[::1]"].includes(location.hostname) || c.kind !== "LOCAL_DEPLOYMENT" || c.chainId !== 31337) throw new Error("本地配置只能在回环页面与本地链使用；公开部署未配置。");
+  if (!["localhost", "127.0.0.1", "[::1]"].includes(location.hostname) || c.kind !== "LOCAL_DEPLOYMENT" || c.chainId !== 31337) throw new Error("Local configuration requires a loopback page and local chain. No public deployment is configured.");
   for (const value of [c.rpcURL, c.artifactBase]) {
     const u = new URL(value);
-    if (u.protocol !== "http:" || !["localhost", "127.0.0.1", "[::1]"].includes(u.hostname) || u.username || u.password) throw new Error("本地服务必须是无凭据的回环 HTTP 地址");
+    if (u.protocol !== "http:" || !["localhost", "127.0.0.1", "[::1]"].includes(u.hostname) || u.username || u.password) throw new Error("Local services require credential-free loopback HTTP URLs");
   }
 }
 
 /** Actual A1 contracts + browser SDK. Reads are public RPC; only the selected wallet signs. */
 export class ChainAdapter implements RelayAdapter {
   readonly kind = "live" as const;
-  readonly label = "本地合约 · MockToken / MockIntake（非真实 IMD）";
+  readonly label = "Local contracts with MockToken / MockIntake (not live IMD)";
   readonly capabilities = { read: true, createBranch: true, propose: true, sponsor: true, fork: true, bindingRetry: true, realWalletSigning: true };
   readonly provider: Provider;
   private locked = false;
@@ -62,7 +62,7 @@ export class ChainAdapter implements RelayAdapter {
   constructor(readonly config: LocalConfig, private wallet: WalletGetter) { assertLoopbackConfig(config); this.provider = httpProvider(config.rpcURL); }
   async verify() {
     const problems = await deployment.verifyDeploymentConfig(this.provider, this.config, release);
-    if (problems.length) throw new Error(`部署核验失败：${problems.join(", ")}`);
+    if (problems.length) throw new Error(`Deployment verification failed: ${problems.join(", ")}`);
   }
   status() { return { state: "ready" as const, summary: this.label, missing: [], a1: { jobId: "d5530989-b886-4f9d-80dd-44d26d85ffd2", submittedBodySha256: "", checkedAt: "2026-10-21", observedState: "local verified", delivery: null } }; }
   private read = async (branch: string, method: string, args: any[] = []) => (await sdk.queryState(this.provider, sdk.readState(branch, method, args)))[0];
@@ -73,15 +73,15 @@ export class ChainAdapter implements RelayAdapter {
   }
   private async checkBranch(branch: string) {
     address(branch);
-    if (!await this.factoryRead("registered", [branch])) throw new Error("Factory 未注册此分支");
-    for (const name of ["factory", "encoder", "verifier"]) if (!eq(await this.read(branch, name), this.config.contracts[name])) throw new Error(`分支 ${name} 核验失败`);
+    if (!await this.factoryRead("registered", [branch])) throw new Error("Branch is not registered by this Factory");
+    for (const name of ["factory", "encoder", "verifier"]) if (!eq(await this.read(branch, name), this.config.contracts[name])) throw new Error(`Branch ${name} verification failed`);
     // Factory registered clones have the fixed implementation code; check the minimal proxy runtime too.
     const code = await this.provider.request({ method: "eth_getCode", params: [branch, "latest"] });
     const expected = `0x363d3d373d3d3d363d73${this.config.contracts.implementation.slice(2).toLowerCase()}5af43d82803e903d91602b57fd5bf3`;
-    if (!eq(code, expected)) throw new Error("分支代理代码核验失败");
+    if (!eq(code, expected)) throw new Error("Branch proxy code verification failed");
   }
   async getCapabilities(): Promise<Capabilities> {
-    return { source: `A1 ${release.version} · policy ${release.policyId}`, chainId: this.config.chainId, chainName: "本地合约链", enabledKinds: ["document", "html", "image"], maxAssets: release.limits.assets, maxInputs: release.limits.inputs, maxOutputs: release.limits.outputs, maxBytes: { document: release.limits.markdownBytes, html: release.limits.htmlBytes, image: release.limits.imageBytes }, maxRequestBodyBytes: release.limits.requestBytes, maxTextBytes: 1024, maxGoalBytes: 512, maxAssetNameBytes: 64, sitePublication: release.publishing, imageEditing: false, mediaTypes: { document: ["text/markdown"], html: ["text/html"], image: ["image/png"] } };
+    return { source: `A1 ${release.version} · policy ${release.policyId}`, chainId: this.config.chainId, chainName: "Local contract chain", enabledKinds: ["document", "html", "image"], maxAssets: release.limits.assets, maxInputs: release.limits.inputs, maxOutputs: release.limits.outputs, maxBytes: { document: release.limits.markdownBytes, html: release.limits.htmlBytes, image: release.limits.imageBytes }, maxRequestBodyBytes: release.limits.requestBytes, maxTextBytes: 1024, maxGoalBytes: 512, maxAssetNameBytes: 64, sitePublication: release.publishing, imageEditing: false, mediaTypes: { document: ["text/markdown"], html: ["text/html"], image: ["image/png"] } };
   }
   async listBranches() {
     const count = Number(await this.factoryRead("branchCount"));
@@ -93,7 +93,7 @@ export class ChainAdapter implements RelayAdapter {
     await this.checkBranch(id);
     const [goal, direction, project, head, anchor, phase] = await Promise.all(["goal", "direction", "projectId", "latestJobId", "anchor", "phase"].map(m => this.read(id, m)));
     const log = (await this.logs(this.config.contracts.factory, sdk.interfaces.factory)).find((l: any) => l.parsed?.name === "BranchCreated" && eq(l.parsed.args.branch, id));
-    if (!log) throw new Error("缺少可认证的分支创建事件");
+    if (!log) throw new Error("Authenticated BranchCreated event is missing");
     const e = log.parsed.args;
     return { id: address(id), address: address(id), projectTitle: goal.split("\n")[0], goal, direction: direction || null, parent: BigInt(e.parent) ? { branchId: address(e.parent), checkpointId: e.parentCheckpoint } : null, creator: address(e.creator), imdProjectId: project || null, head: head || null, latestCheckpoint: anchor, frozen: Number(phase) === 5, createdAt: await this.time(log.blockNumber) };
   }
@@ -110,7 +110,7 @@ export class ChainAdapter implements RelayAdapter {
     const data = await this.historyData(branch);
     const anchor = digest ?? await this.read(branch, "anchor");
     const item = data.history.find((c: any) => eq(c.digest, anchor));
-    if (!item) throw new Error("检查点见证不可用");
+    if (!item) throw new Error("Checkpoint witness is unavailable");
     return item;
   }
   async getHistory(branch: string): Promise<Checkpoint[]> {
@@ -131,7 +131,7 @@ export class ChainAdapter implements RelayAdapter {
     }
     return rows;
   }
-  private split(id: string) { const [branch, n] = id.split(":"); if (!validHex(branch, 20) || !/^[1-9][0-9]*$/.test(n ?? "")) throw new Error("需要非零链上编号"); return { branch: address(branch), n: BigInt(n) }; }
+  private split(id: string) { const [branch, n] = id.split(":"); if (!validHex(branch, 20) || !/^[1-9][0-9]*$/.test(n ?? "")) throw new Error("A nonzero on-chain ID is required"); return { branch: address(branch), n: BigInt(n) }; }
   async getProposals(branch: string): Promise<Proposal[]> {
     await this.checkBranch(branch);
     const [count, anchor, logs, attempts] = await Promise.all([this.read(branch, "proposalCount"), this.read(branch, "anchor"), this.logs(branch), this.read(branch, "attemptCount")]);
@@ -143,7 +143,7 @@ export class ChainAdapter implements RelayAdapter {
       const log = logs.find((l: any) => l.parsed?.name === "Proposed" && Number(l.parsed.args.proposalId) === n);
       const tx = await this.provider.request({ method: "eth_getTransactionByHash", params: [log.transactionHash] });
       const w = (await this.witness(branch, p.anchor)).witness;
-      out.push({ id: `${address(branch)}:${n}`, branchId: address(branch), proposer: address(tx.from), anchor: p.anchor, kind: p.profile < 2 ? "document" : p.profile < 4 ? "html" : "image", mode: [1, 3].includes(Number(p.profile)) ? "update" : "create", targetKey: p.outputName, inputs: p.inputs.map((key: string) => { const a = w.find((a: any) => eq(a.key, key)); if (!a) throw new Error("提案输入见证缺失"); return { assetKey: a.name, revision: Number(a.revision), sha256: a.fileHash }; }), requirement: p.text, publish: p.publish, status: sponsored.has(String(n)) ? "sponsored" : eq(p.anchor, anchor) ? "current" : "stale", createdAt: await this.time(log.blockNumber) });
+      out.push({ id: `${address(branch)}:${n}`, branchId: address(branch), proposer: address(tx.from), anchor: p.anchor, kind: p.profile < 2 ? "document" : p.profile < 4 ? "html" : "image", mode: [1, 3].includes(Number(p.profile)) ? "update" : "create", targetKey: p.outputName, inputs: p.inputs.map((key: string) => { const a = w.find((a: any) => eq(a.key, key)); if (!a) throw new Error("Proposal input witness is missing"); return { assetKey: a.name, revision: Number(a.revision), sha256: a.fileHash }; }), requirement: p.text, publish: p.publish, status: sponsored.has(String(n)) ? "sponsored" : eq(p.anchor, anchor) ? "current" : "stale", createdAt: await this.time(log.blockNumber) });
     }
     return out;
   }
@@ -155,7 +155,7 @@ export class ChainAdapter implements RelayAdapter {
     for (let n = 1; n <= Number(count); n++) {
       const a = await this.read(branch, "attempt", [n]);
       const log = logs.find((l: any) => l.parsed?.name === "Purchased" && Number(l.parsed.args.attempt) === n);
-      if (!log || !eq(log.parsed.args.requestId, a.requestId)) throw new Error("资助事件与链上尝试不一致");
+      if (!log || !eq(log.parsed.args.requestId, a.requestId)) throw new Error("Purchase event does not match the on-chain attempt");
       const tx = await this.provider.request({ method: "eth_getTransactionByHash", params: [log.transactionHash] });
       const bound = logs.find((l: any) => l.parsed?.name === "Bound" && Number(l.parsed.args.attempt) === n);
       const cp = bound ? await this.read(branch, "checkpoint", [bound.parsed.args.revision]) : null;
@@ -168,7 +168,7 @@ export class ChainAdapter implements RelayAdapter {
       const stages = Object.fromEntries(STAGES.map(k => [k, "not_started"])) as Sponsorship["stages"];
       Object.assign(stages, { approval: "confirmed", purchase: "confirmed", admission: failed ? Number(a.status) === 1 ? "refused" : "unknown" : result ? "confirmed" : "unknown", execution: result ? "confirmed" : failed ? "unknown" : "pending", callback: frozen ? "frozen" : failed ? "refused" : result ? "confirmed" : "pending", binding: bound ? "confirmed" : result ? "pending" : "not_started", files: bound ? "pending" : "not_started", git: "unknown", publication: "not_applicable" });
       const key = String(a.proposalId), attempt = (perProposal.get(key) ?? 0) + 1; perProposal.set(key, attempt);
-      rows.push({ id: `${address(branch)}:${n}`, branchId: address(branch), proposalId: `${address(branch)}:${a.proposalId}`, sponsor: a.sponsor, maxFee: a.fee, txHash: log.transactionHash, nonce: Number(BigInt(tx.nonce)), attempt, stages, note: frozen ? `认证失败状态 ${a.status}，分支永久冻结。` : result && !bound ? "结果哈希已认证；用原始 result.json 显式绑定，不再购买。有限清单限制可能使结果永久无法绑定。" : !a.delivered ? "交易已确认不代表工作被接收。缺失回调保持等待；HTTP 状态不能解锁。" : bound ? "绑定与文件、Git、发布分别观察。" : "认证状态 1 允许重新明确支付相同请求体；没有退款。", checkpointId: cp?.digest ?? null, updatedAt: await this.time(log.blockNumber) });
+      rows.push({ id: `${address(branch)}:${n}`, branchId: address(branch), proposalId: `${address(branch)}:${a.proposalId}`, sponsor: a.sponsor, maxFee: a.fee, txHash: log.transactionHash, nonce: Number(BigInt(tx.nonce)), attempt, stages, note: frozen ? `Authenticated failure status ${a.status}, Branch permanently frozen. ` : result && !bound ? "Result hash authenticated. Bind the original result.json without repurchasing. A result outside the manifest limits may remain permanently unbindable." : !a.delivered ? "Purchase confirmed. Admission is separate; a missing callback remains pending. HTTP cannot settle or unlock it." : bound ? "Binding, files, Git and publication are observed separately." : "Authenticated status 1 permits an explicit paid retry with the identical body. No refund.", checkpointId: cp?.digest ?? null, updatedAt: await this.time(log.blockNumber) });
     }
     const journals = [...loadJournal(), ...this.memory.values()].filter(r => eq(r.branch, branch) && r.chainId === this.config.chainId && ["sponsor", "retry"].includes(r.operation));
     for (const j of journals) {
@@ -176,7 +176,7 @@ export class ChainAdapter implements RelayAdapter {
       const status = await this.reconcileJournal(j);
       const stages = Object.fromEntries(STAGES.map(k => [k, "not_started"])) as Sponsorship["stages"];
       stages.purchase = status === "REVERTED" || status === "REPLACED_OTHER" ? "failed" : "unknown";
-      rows.push({ id: `unknown:${j.hash}`, branchId: branch, proposalId: j.proposalId ?? "unknown", sponsor: j.account, maxFee: 0n, txHash: j.hash, nonce: j.nonce, attempt: Number(active) + 1, stages, note: `原交易对账：${status}。不会自动重购。链上阶段 ${Number(phase)}。`, checkpointId: null, updatedAt: j.at });
+      rows.push({ id: `unknown:${j.hash}`, branchId: branch, proposalId: j.proposalId ?? "unknown", sponsor: j.account, maxFee: 0n, txHash: j.hash, nonce: j.nonce, attempt: Number(active) + 1, stages, note: `Original transaction reconciliation: ${status}. No automatic purchase. On-chain phase ${Number(phase)}. `, checkpointId: null, updatedAt: j.at });
     }
     // Without a journal, a connected account's pending nonce is still chain evidence of an
     // unresolved transaction. Its operation/hash are unknown; never infer a new purchase is safe.
@@ -189,7 +189,7 @@ export class ChainAdapter implements RelayAdapter {
         if (BigInt(pending) > BigInt(mined) && !rows.some(r => r.nonce === Number(BigInt(mined)) && eq(r.sponsor, accounts[0]))) {
           const stages = Object.fromEntries(STAGES.map(k => [k, "not_started"])) as Sponsorship["stages"];
           stages.purchase = "unknown";
-          rows.push({ id: `pending-account:${accounts[0]}:${mined}`, branchId: branch, proposalId: "unknown", sponsor: address(accounts[0]), maxFee: 0n, txHash: null, nonce: Number(BigInt(mined)), attempt: 0, stages, note: "账户有待确认交易，但本机记录不可用；操作与哈希未知，先确认原交易。不会自动重购。", checkpointId: null, updatedAt: now() });
+          rows.push({ id: `pending-account:${accounts[0]}:${mined}`, branchId: branch, proposalId: "unknown", sponsor: address(accounts[0]), maxFee: 0n, txHash: null, nonce: Number(BigInt(mined)), attempt: 0, stages, note: "Pending account transaction with no local record. Operation and hash are unknown. Reconcile the original transaction; no automatic purchase.", checkpointId: null, updatedAt: now() });
         }
       }
     }
@@ -201,34 +201,40 @@ export class ChainAdapter implements RelayAdapter {
     const p = await this.read(branch, "proposal", [n]);
     if (!eq(p.anchor, w.digest)) throw new StaleProposalError();
     const preview = await sdk.queryPreview(this.provider, sdk.previewProposal(branch, n, w.witness));
-    if (preview.byteLength > sdk.LIMITS.body) throw new Error("完整请求体超限");
+    if (preview.byteLength > sdk.LIMITS.body) throw new Error("Complete request body exceeds its limit");
     const price = (await sdk.queryState(this.provider, sdk.readPrice(this.config.contracts.intake, preview.action, this.config.contracts.imd)))[0];
-    if (price <= 0n) throw new Error("当前动作未出售");
+    if (price <= 0n) throw new Error("This action is not currently for sale");
     const head = await this.read(branch, "latestJobId");
     return { price, token: "Mock IMD", decimals: 18, quotedAt: now(), anchor: w.digest, action: head ? "job.continue" : "job.open", parentJobId: head || null, spender: address(branch), proposalId, bodyHash: preview.bodyHash, bodyBytes: preview.byteLength, bodyText: new TextDecoder().decode(preview.raw) };
   }
   private async selected(account: Account): Promise<Provider> {
-    const p = await this.wallet(); if (!p) throw new Error("请连接所选 EIP-6963 钱包");
+    account.assertActive?.();
+    const p = await this.wallet(); account.assertActive?.(); if (!p) throw new Error("Connect the selected EIP-6963 wallet");
     const [accounts, chain] = await Promise.all([p.request({ method: "eth_accounts" }), p.request({ method: "eth_chainId" })]);
-    if (!accounts[0] || !eq(accounts[0], account.address) || Number(BigInt(chain)) !== account.chainId || account.chainId !== this.config.chainId) throw new Error("账户或网络已变更，请重新预览");
+    account.assertActive?.();
+    if (!accounts[0] || !eq(accounts[0], account.address) || Number(BigInt(chain)) !== account.chainId || account.chainId !== this.config.chainId) throw new Error("Account or network changed. Review the action again");
     return p;
   }
   private async send(account: Account, operation: string, branch: string, prepare: () => Promise<any>, proposalId?: string): Promise<any> {
-    if (this.locked) throw new Error("已有签名或待对账交易，请等待");
+    if (this.locked) throw new Error("A signature or unresolved transaction is already in progress");
     this.locked = true;
     try {
       await this.verify();
       const wallet = await this.selected(account);
       let prepared = await prepare();
+      account.assertActive?.();
       const request = sdk.toWalletRequest(prepared, { from: account.address, chainId: account.chainId });
       await this.provider.request({ method: "eth_call", params: [{ ...request.params[0] }, "latest"] });
+      account.assertActive?.();
       const nonce = Number(BigInt(await wallet.request({ method: "eth_getTransactionCount", params: [account.address, "pending"] })));
-      if (await this.selected(account) !== wallet) throw new Error("所选钱包提供方已变更，请重新预览");
+      if (await this.selected(account) !== wallet) throw new Error("Selected wallet provider changed. Review again");
       const finalPrepared = await prepare();
-      if (finalPrepared.to !== prepared.to || finalPrepared.data !== prepared.data) throw new Error("签名前状态已变更，请重新预览");
+      account.assertActive?.();
+      if (finalPrepared.to !== prepared.to || finalPrepared.data !== prepared.data) throw new Error("State changed before signing. Review again");
       prepared = finalPrepared;
-      if (await this.selected(account) !== wallet) throw new Error("所选钱包提供方已变更，请重新预览");
+      if (await this.selected(account) !== wallet) throw new Error("Selected wallet provider changed. Review again");
       // Use the nonce actually submitted. Save the original hash before ANY receipt wait.
+      account.assertActive?.();
       const hash = await wallet.request({ method: request.method, params: [{ ...request.params[0], nonce: `0x${nonce.toString(16)}` }] }) as Hex;
       const row: Journal = { hash, nonce, account: account.address, chainId: account.chainId, operation, branch, proposalId, data: prepared.data, to: prepared.to, state: "SUBMITTED", at: now() };
       persist(row); this.memory.set(hash, row);
@@ -236,12 +242,12 @@ export class ChainAdapter implements RelayAdapter {
         const receipt = await this.provider.request({ method: "eth_getTransactionReceipt", params: [hash] });
         if (receipt) {
           row.state = BigInt(receipt.status) === 1n ? "MINED" : "REVERTED"; persist(row);
-          if (row.state === "REVERTED") throw new Error(`交易回退：${hash}`);
+          if (row.state === "REVERTED") throw new Error(`Transaction reverted: ${hash}`);
           return receipt;
         }
         await new Promise(r => setTimeout(r, 150));
       }
-      throw new Error(`交易 ${hash} 结果未知。原哈希与 nonce 已记录；请刷新对账，不会自动重购。`);
+      throw new Error(`Transaction ${hash} outcome unknown. Original hash and nonce recorded; refresh to reconcile without repurchasing.`);
     } finally { this.locked = false; }
   }
   private async reconcileJournal(j: Journal): Promise<string> {
@@ -263,11 +269,11 @@ export class ChainAdapter implements RelayAdapter {
   }
   private async unresolvedPurchase(branch: string, account: Account) {
     const [latestNonce, pendingNonce] = await Promise.all(["latest", "pending"].map(tag => this.provider.request({ method: "eth_getTransactionCount", params: [account.address, tag] })));
-    if (BigInt(pendingNonce) > BigInt(latestNonce)) throw new Error("账户仍有待确认交易；即使本机记录丢失，也需先确认原交易，不可重复购买");
+    if (BigInt(pendingNonce) > BigInt(latestNonce)) throw new Error("An account transaction is pending. Reconcile it before another purchase, even if local records are missing");
     for (const j of [...loadJournal(), ...this.memory.values()]) {
       if (!eq(j.branch, branch) || j.chainId !== this.config.chainId || !eq(j.account, account.address) || !["sponsor", "retry"].includes(j.operation)) continue;
       const status = await this.reconcileJournal(j);
-      if (!["MINED", "REVERTED", "REPLACED_OTHER", "REPLACED_SAME_CALL_READ_CHAIN"].includes(status)) throw new Error(`原购买结果 ${status}，先对账；禁止自动或重复购买`);
+      if (!["MINED", "REVERTED", "REPLACED_OTHER", "REPLACED_SAME_CALL_READ_CHAIN"].includes(status)) throw new Error(`Original purchase status ${status}, reconcile first; no automatic or duplicate purchase`);
     }
   }
   async createBranch(account: Account, input: { title: string; goal: string }) {
@@ -282,7 +288,7 @@ export class ChainAdapter implements RelayAdapter {
     const find = (name: string) => w.witness.find((a: any) => a.name === name);
     const target = find(d.targetKey);
     const kind = ["document", "html", "image"].indexOf(d.kind);
-    const p = { anchor: w.digest, profile: kind * 2 + (d.mode === "update" ? 1 : 0), target: target?.key ?? keccak256(toUtf8Bytes(d.targetKey)), inputs: d.inputKeys.map(name => { const a = find(name); if (!a) throw new Error("输入不在当前见证"); return a.key; }).sort((a, b) => BigInt(a) < BigInt(b) ? -1 : 1), outputName: target?.name ?? d.targetKey, outputPath: target?.path ?? (kind === 1 ? "dist/index.html" : kind === 0 ? `docs/${d.targetKey}.md` : `images/${d.targetKey}.png`), text: d.requirement, publish: d.publish };
+    const p = { anchor: w.digest, profile: kind * 2 + (d.mode === "update" ? 1 : 0), target: target?.key ?? keccak256(toUtf8Bytes(d.targetKey)), inputs: d.inputKeys.map(name => { const a = find(name); if (!a) throw new Error("Input is absent from the current witness"); return a.key; }).sort((a, b) => BigInt(a) < BigInt(b) ? -1 : 1), outputName: target?.name ?? d.targetKey, outputPath: target?.path ?? (kind === 1 ? "dist/index.html" : kind === 0 ? `docs/${d.targetKey}.md` : `images/${d.targetKey}.png`), text: d.requirement, publish: d.publish };
     return { p, w: w.witness };
   }
   async propose(account: Account, d: ProposalDraft) {
@@ -290,14 +296,14 @@ export class ChainAdapter implements RelayAdapter {
     return (await this.getProposals(d.branchId)).at(-1)!;
   }
   async approve(account: Account, quote: FeeQuote, amount: bigint): Promise<Hex> {
-    if (!quote.proposalId) throw new Error("需要明确的提案报价");
+    if (!quote.proposalId) throw new Error("An explicit proposal quote is required");
     const receipt = await this.send(account, "approve", quote.spender, async () => {
       const q = await this.quoteFee(quote.proposalId!);
-      if (q.price !== quote.price || amount !== q.price || q.bodyHash !== quote.bodyHash || !eq(q.anchor, quote.anchor) || !eq(q.spender, quote.spender)) throw new Error("价格或提案已变更，请重新预览授权");
+      if (q.price !== quote.price || amount !== q.price || q.bodyHash !== quote.bodyHash || !eq(q.anchor, quote.anchor) || !eq(q.spender, quote.spender)) throw new Error("Price or proposal changed. Review approval again");
       return sdk.approveExact(this.config.contracts.imd, q.spender, amount);
     }, quote.proposalId);
     const allowance = (await sdk.queryState(this.provider, sdk.readAllowance(this.config.contracts.imd, account.address, quote.spender)))[0];
-    if (allowance !== amount) throw new Error("确认后的 Branch 额度不是精确价格");
+    if (allowance !== amount) throw new Error("Confirmed Branch allowance is not the exact price");
     return receipt.transactionHash;
   }
   private async purchase(account: Account, proposalId: string, maxFee: bigint, quote: FeeQuote, retry: boolean) {
@@ -305,15 +311,15 @@ export class ChainAdapter implements RelayAdapter {
     await this.send(account, retry ? "retry" : "sponsor", branch, async () => {
       await this.unresolvedPurchase(branch, account);
       const q = await this.quoteFee(proposalId);
-      if (maxFee < q.price || q.price !== quote.price || q.bodyHash !== quote.bodyHash || q.parentJobId !== quote.parentJobId || q.anchor !== quote.anchor || q.spender !== quote.spender) throw new Error("报价、父作业或价格已变更，请重新授权精确价格");
+      if (maxFee < q.price || q.price !== quote.price || q.bodyHash !== quote.bodyHash || q.parentJobId !== quote.parentJobId || q.anchor !== quote.anchor || q.spender !== quote.spender) throw new Error("Quote, parent job or price changed. Approve the exact price again");
       const phase = Number(await this.read(branch, "phase"));
-      if (phase !== (retry ? 4 : 0)) throw new Error("分支仍在等待或已冻结，不能再次购买");
+      if (phase !== (retry ? 4 : 0)) throw new Error("Branch is pending or frozen. Another purchase is unavailable");
       if (retry) {
         const a = await this.read(branch, "attempt", [await this.read(branch, "activeAttempt")]);
-        if (!a.delivered || Number(a.status) !== 1 || a.proposalId !== n || a.bodyHash !== q.bodyHash) throw new Error("只有认证状态 1 的相同请求体可以明确重试");
+        if (!a.delivered || Number(a.status) !== 1 || a.proposalId !== n || a.bodyHash !== q.bodyHash) throw new Error("Only an authenticated status 1 with the identical body permits an explicit retry");
       }
       const allowance = (await sdk.queryState(this.provider, sdk.readAllowance(this.config.contracts.imd, account.address, branch)))[0];
-      if (allowance !== q.price) throw new Error("请先确认授权当前精确价格到此 Branch");
+      if (allowance !== q.price) throw new Error("Confirm the exact current price allowance to this Branch first");
       const witness = (await this.witness(branch)).witness;
       return retry ? sdk.retryRefused(branch, maxFee, witness) : sdk.sponsorProposal(branch, n, maxFee, witness);
     }, proposalId);
@@ -322,14 +328,14 @@ export class ChainAdapter implements RelayAdapter {
   sponsor(account: Account, id: string, max: bigint, q: FeeQuote) { return this.purchase(account, id, max, q, false); }
   async retryRefused(account: Account, id: string, max: bigint, q: FeeQuote) {
     const { branch, n } = this.split(id), a = await this.read(branch, "attempt", [n]);
-    if (BigInt(await this.read(branch, "activeAttempt")) !== n) throw new Error("只能重试当前尝试");
+    if (BigInt(await this.read(branch, "activeAttempt")) !== n) throw new Error("Only the current attempt can be retried");
     return this.purchase(account, `${branch}:${a.proposalId}`, max, q, true);
   }
   async resubmitBinding(account: Account, id: string, raw?: Uint8Array) {
     const { branch, n } = this.split(id);
-    if (!raw) throw new Error("请选择回调所认证的原始 result.json；不修改原始字节");
+    if (!raw) throw new Error("Select the original callback-authenticated result.json. Preserve its exact bytes");
     await this.send(account, "bind", branch, async () => {
-      if (Number(await this.read(branch, "phase")) !== 3 || BigInt(await this.read(branch, "activeAttempt")) !== n) throw new Error("尚无可绑定的认证结果");
+      if (Number(await this.read(branch, "phase")) !== 3 || BigInt(await this.read(branch, "activeAttempt")) !== n) throw new Error("No authenticated result is ready to bind");
       const a = await this.read(branch, "attempt", [n]);
       return sdk.bindResult(branch, raw, a.outcome, (await this.witness(branch)).witness);
     });
@@ -349,7 +355,7 @@ export class ChainAdapter implements RelayAdapter {
     // Locations are an explicit local-test policy, not discovered from untrusted result metadata.
     const base = new URL(this.config.artifactBase);
     const policy = sdk.createLoopbackFixturePolicy({ locations: [{ origin: base.origin, pathPrefix: base.pathname }] });
-    if (!/^[a-zA-Z0-9_-]+$/.test(producerJobId) || d.path.split("/").some(s => !s || s === "." || s === "..")) throw new Error("文件位置无效");
+    if (!/^[a-zA-Z0-9_-]+$/.test(producerJobId) || d.path.split("/").some(s => !s || s === "." || s === "..")) throw new Error("Invalid artifact location");
     const url = new URL(`${encodeURIComponent(producerJobId)}/${d.path}`, base).href;
     const result = await sdk.fetchTrustedArtifact(url, { ...d, hash: d.sha256 }, { policy });
     return result.bytes;

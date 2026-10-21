@@ -3,29 +3,29 @@ import type { AssetKind, StageName, StageState } from "../domain/types";
 
 export const short = (a: string) => (a.length > 14 ? `${a.slice(0, 6)}…${a.slice(-4)}` : a);
 
-export const KIND_LABEL: Record<AssetKind, string> = { document: "文档", html: "单页网站", image: "图片" };
+export const KIND_LABEL: Record<AssetKind, string> = { document: "Markdown", html: "HTML page", image: "PNG image" };
 
 export const STAGE_LABEL: Record<StageName, string> = {
-  approval: "授权额度",
-  purchase: "购买交易",
-  admission: "IMD 受理",
-  execution: "IMD 执行",
-  callback: "回调",
-  binding: "绑定",
-  files: "文件校验",
+  approval: "Token approval",
+  purchase: "Purchase",
+  admission: "Admission",
+  execution: "Execution",
+  callback: "Callback",
+  binding: "Binding",
+  files: "File verification",
   git: "Git",
-  publication: "网站发布",
+  publication: "Publication",
 };
 
 export const STATE_LABEL: Record<StageState, string> = {
-  not_started: "未开始",
-  pending: "等待中",
-  confirmed: "已确认",
-  unknown: "未知，待对账",
-  refused: "已拒绝（状态 1）",
-  failed: "失败",
-  frozen: "已冻结",
-  not_applicable: "不适用",
+  not_started: "Not started",
+  pending: "Pending",
+  confirmed: "Confirmed",
+  unknown: "Unknown; reconcile",
+  refused: "Refused (status 1)",
+  failed: "Failed",
+  frozen: "Frozen",
+  not_applicable: "Not applicable",
 };
 
 export function formatUnits(v: bigint, decimals: number): string {
@@ -41,7 +41,7 @@ export function parseUnits(s: string, decimals: number): bigint | null {
   return BigInt(m[1]) * 10n ** BigInt(decimals) + BigInt((m[2] ?? "").padEnd(decimals, "0") || "0");
 }
 
-export const formatTime = (iso: string | null) => (iso ? new Date(iso).toLocaleString("zh-CN", { hour12: false }) : "未观察到");
+export const formatTime = (iso: string | null) => (iso ? new Date(iso).toLocaleString("en-US", { hour12: false }) : "Not observed");
 
 /** An identifier shown secondary but whole, with a copy button. Never clipped. */
 export function CopyId({ value, label }: { value: string; label: string }) {
@@ -52,7 +52,7 @@ export function CopyId({ value, label }: { value: string; label: string }) {
       <button
         type="button"
         className="btn btn-link"
-        aria-label={`复制${label}`}
+        aria-label={`Copy ${label}`}
         onClick={async () => {
           try {
             await navigator.clipboard.writeText(value);
@@ -63,7 +63,7 @@ export function CopyId({ value, label }: { value: string; label: string }) {
           }
         }}
       >
-        {copied ? "已复制" : "复制"}
+        {copied ? "Copied" : "Copy "}
       </button>
     </span>
   );

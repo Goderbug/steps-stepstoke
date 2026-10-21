@@ -47,7 +47,7 @@ describe("untrusted previews and resource bounds", () => {
       const d = { name: "x.png", path: "x.png", mediaType: "image/png", bytes: bytes.length, sha256: await sha256Hex(bytes) };
       const result = await verifyFile(bytes, d, "image", 1024, ["image/png"]);
       expect(result.ok).toBe(false);
-      expect(result.checks.find((c) => c.name === "图片资源上限")?.ok).toBe(false);
+      expect(result.checks.find((c) => c.name === "Image resource limit")?.ok).toBe(false);
     }
   });
 
@@ -70,14 +70,14 @@ describe("wallet action lifetime and recovery", () => {
     const a = await FixtureAdapter.create({ reset: true, latency: 0 });
     const b = await a.getBranch("fx-branch-1");
     const p = (await a.getProposals(b.id))[0];
-    const latest = (await a.getHistory(b.id))[0];
+    const latest = (await a.getHistory(b.id)).find(c => c.id === b.latestCheckpoint)!;
     const q = await a.quoteFee(p.id);
     let resolve!: (value: typeof q) => void;
     const deferred = new Promise<typeof q>((r) => { resolve = r; });
     vi.spyOn(a, "quoteFee").mockResolvedValueOnce(q).mockReturnValueOnce(deferred);
     const approve = vi.spyOn(a, "approve");
     const view = render(<SponsorPanel adapter={a} account={DEMO_ACCOUNTS[0]} branch={b} proposal={p} latest={latest} onDone={vi.fn()} />);
-    const button = await screen.findByRole("button", { name: "1. 授权精确额度" });
+    const button = await screen.findByRole("button", { name: "1. Approve exact amount" });
     await waitFor(() => expect(button).toBeEnabled());
     fireEvent.click(button);
     view.unmount();
@@ -89,13 +89,13 @@ describe("wallet action lifetime and recovery", () => {
 
   it.each(["spender", "anchor", "price", "parentJobId"])("refuses a refreshed quote with changed %s before signing", async (field) => {
     const a = await FixtureAdapter.create({ reset: true, latency: 0 });
-    const b = await a.getBranch("fx-branch-1"), p = (await a.getProposals(b.id))[0], latest = (await a.getHistory(b.id))[0];
+    const b = await a.getBranch("fx-branch-1"), p = (await a.getProposals(b.id))[0], latest = (await a.getHistory(b.id)).find(c => c.id === b.latestCheckpoint)!;
     const q = await a.quoteFee(p.id);
     const bad = { ...q, [field]: field === "price" ? q.price + 1n : field === "spender" ? DEMO_ACCOUNTS[1].address : "changed" };
     vi.spyOn(a, "quoteFee").mockResolvedValueOnce(q).mockResolvedValueOnce(bad);
     const approve = vi.spyOn(a, "approve");
     render(<SponsorPanel adapter={a} account={DEMO_ACCOUNTS[0]} branch={b} proposal={p} latest={latest} onDone={vi.fn()} />);
-    const button = await screen.findByRole("button", { name: "1. 授权精确额度" });
+    const button = await screen.findByRole("button", { name: "1. Approve exact amount" });
     await waitFor(() => expect(button).toBeEnabled());
     fireEvent.click(button);
     await screen.findByRole("alert");
@@ -104,22 +104,22 @@ describe("wallet action lifetime and recovery", () => {
 
   it("approves the current exact price rather than maxFee and requires new approval if the price rises", async () => {
     const a = await FixtureAdapter.create({ reset: true, latency: 0 });
-    const b = await a.getBranch("fx-branch-1"), p = (await a.getProposals(b.id))[0], latest = (await a.getHistory(b.id))[0];
+    const b = await a.getBranch("fx-branch-1"), p = (await a.getProposals(b.id))[0], latest = (await a.getHistory(b.id)).find(c => c.id === b.latestCheckpoint)!;
     const q = await a.quoteFee(p.id);
     vi.spyOn(a, "quoteFee").mockResolvedValueOnce(q).mockResolvedValueOnce(q).mockResolvedValue({ ...q, price: q.price + 1n });
     const approve = vi.spyOn(a, "approve"), purchase = vi.spyOn(a, "sponsor");
     render(<SponsorPanel adapter={a} account={DEMO_ACCOUNTS[0]} branch={b} proposal={p} latest={latest} onDone={vi.fn()} />);
-    const button = await screen.findByRole("button", { name: "1. 授权精确额度" });
+    const button = await screen.findByRole("button", { name: "1. Approve exact amount" });
     await waitFor(() => expect(button).toBeEnabled());
     fireEvent.change(screen.getByRole("textbox"), { target: { value: "100" } });
     fireEvent.click(button);
-    const buy = screen.getByRole("button", { name: "2. 购买执行" });
+    const buy = await screen.findByRole("button", { name: "2. Purchase execution" });
     await waitFor(() => expect(buy).toBeEnabled());
-    expect(approve).toHaveBeenCalledWith(DEMO_ACCOUNTS[0], q, q.price);
+    expect(approve).toHaveBeenCalledWith(expect.objectContaining({ address: DEMO_ACCOUNTS[0].address }), q, q.price);
     fireEvent.click(buy);
-    await screen.findByText("当前价格不等于已确认的授权额度，请重新授权当前精确价格");
+    await screen.findByText("Price differs from the confirmed approval. Approve the exact current price again.");
     expect(purchase).not.toHaveBeenCalled();
-    expect(await screen.findByRole("button", { name: "1. 授权精确额度" })).toBeEnabled();
+    expect(await screen.findByRole("button", { name: "1. Approve exact amount" })).toBeEnabled();
   });
 
   it("treats corrupt storage as absent and handles storage denial without converting a purchase to a failure", () => {
@@ -150,13 +150,14 @@ describe("wallet action lifetime and recovery", () => {
 describe("fixture purchase exclusion (not A1 integration)", () => {
   it("allows only one outstanding request while a callback is missing or a tx is unknown", async () => {
     const a = await FixtureAdapter.create({ reset: true, latency: 1 });
+    a.controls.callbackOutcome = "missing";
     const q1 = await a.quoteFee("fx-prop-1"), q2 = await a.quoteFee("fx-prop-2");
     await a.approve(DEMO_ACCOUNTS[0], q1, q1.price);
     await a.approve(DEMO_ACCOUNTS[1], q2, q2.price);
     const first = a.sponsor(DEMO_ACCOUNTS[0], "fx-prop-1", q1.price, q1);
-    await expect(a.sponsor(DEMO_ACCOUNTS[1], "fx-prop-2", q2.price, q2)).rejects.toThrow("尚未完成");
+    await expect(a.sponsor(DEMO_ACCOUNTS[1], "fx-prop-2", q2.price, q2)).rejects.toThrow("unresolved request");
     await first;
-    await expect(a.sponsor(DEMO_ACCOUNTS[1], "fx-prop-2", q2.price, q2)).rejects.toThrow("尚未完成");
+    await expect(a.sponsor(DEMO_ACCOUNTS[1], "fx-prop-2", q2.price, q2)).rejects.toThrow("unresolved request");
     expect(await a.getSponsorships("fx-branch-1")).toHaveLength(1);
     expect((await a.getBranch("fx-branch-1")).latestCheckpoint).toBe("fx-branch-1:3");
   });
@@ -169,10 +170,10 @@ describe("fixture purchase exclusion (not A1 integration)", () => {
     const sp = await a.sponsor(DEMO_ACCOUNTS[0], "fx-prop-1", q.price, q);
     const before = await a.getProposals("fx-branch-1");
     const rq = await a.quoteFee("fx-prop-1");
-    await expect(a.retryRefused(DEMO_ACCOUNTS[1], sp.id, 0n, rq)).rejects.toThrow("最高费用");
+    await expect(a.retryRefused(DEMO_ACCOUNTS[1], sp.id, 0n, rq)).rejects.toThrow("Maximum fee");
     // B has no allowance of its own: the retry cannot fabricate an approval.
-    await expect(a.retryRefused(DEMO_ACCOUNTS[1], sp.id, rq.price, rq)).rejects.toThrow("授权额度不足");
-    await expect(a.retryRefused(DEMO_ACCOUNTS[1], sp.id, rq.price, { ...rq, spender: DEMO_ACCOUNTS[0].address })).rejects.toThrow("报价不属于");
+    await expect(a.retryRefused(DEMO_ACCOUNTS[1], sp.id, rq.price, rq)).rejects.toThrow("Confirm an approval for the exact price first");
+    await expect(a.retryRefused(DEMO_ACCOUNTS[1], sp.id, rq.price, { ...rq, spender: DEMO_ACCOUNTS[0].address })).rejects.toThrow("Quote does not match");
     await a.approve(DEMO_ACCOUNTS[1], rq, rq.price);
     a.controls.callbackOutcome = "bad_binding";
     const retry = await a.retryRefused(DEMO_ACCOUNTS[1], sp.id, rq.price, rq);
@@ -181,12 +182,12 @@ describe("fixture purchase exclusion (not A1 integration)", () => {
     expect(retry.sponsor).toBe(DEMO_ACCOUNTS[1].address);
     expect(retry.txHash).not.toBe(sp.txHash);
     expect((await a.getBranch("fx-branch-1")).latestCheckpoint).toBe("fx-branch-1:3");
-    await expect(a.retryRefused(DEMO_ACCOUNTS[1], sp.id, rq.price, rq)).rejects.toThrow("未重试");
+    await expect(a.retryRefused(DEMO_ACCOUNTS[1], sp.id, rq.price, rq)).rejects.toThrow("without a later retry");
     expect(await a.getProposals("fx-branch-1")).toEqual(before);
     await a.resubmitBinding(DEMO_ACCOUNTS[1], retry.id);
     expect(await a.getSponsorships("fx-branch-1")).toHaveLength(2);
     expect((await a.getBranch("fx-branch-1")).latestCheckpoint).toBe("fx-branch-1:4");
-    await expect(a.resubmitBinding(DEMO_ACCOUNTS[1], retry.id)).rejects.toThrow("失败的绑定");
+    await expect(a.resubmitBinding(DEMO_ACCOUNTS[1], retry.id)).rejects.toThrow("failed binding");
   });
 
   it("an unknown retry receipt stays unknown and reconciles by the retry's own hash and nonce", async () => {
@@ -215,13 +216,13 @@ describe("fixture purchase exclusion (not A1 integration)", () => {
     const a = await FixtureAdapter.create({ reset: true, latency: 0 });
     const q = await a.quoteFee("fx-prop-1");
     a.controls.rejectNextSignature = true;
-    await expect(a.approve(DEMO_ACCOUNTS[0], q, q.price)).rejects.toThrow("拒绝");
+    await expect(a.approve(DEMO_ACCOUNTS[0], q, q.price)).rejects.toThrow("rejected");
     expect(await a.getSponsorships("fx-branch-1")).toHaveLength(0);
     await a.approve(DEMO_ACCOUNTS[0], q, q.price);
     a.controls.callbackOutcome = "failed";
     const sp = await a.sponsor(DEMO_ACCOUNTS[0], "fx-prop-1", q.price, q);
-    await expect(a.retryRefused(DEMO_ACCOUNTS[1], sp.id, q.price, q)).rejects.toThrow("状态 1");
-    await expect(a.sponsor(DEMO_ACCOUNTS[1], "fx-prop-2", q.price, q)).rejects.toThrow("冻结");
+    await expect(a.retryRefused(DEMO_ACCOUNTS[1], sp.id, q.price, q)).rejects.toThrow("status 1");
+    await expect(a.sponsor(DEMO_ACCOUNTS[1], "fx-prop-2", q.price, q)).rejects.toThrow("frozen");
     expect((await a.getBranch("fx-branch-1")).frozen).toBe(true);
   });
 });

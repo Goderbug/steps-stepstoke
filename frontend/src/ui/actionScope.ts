@@ -1,10 +1,18 @@
-import { useEffect, useRef } from "react";
+import { useLayoutEffect, useRef } from "react";
 
-/** A delayed read may finish after its form/wallet has gone away. Never start a signature then. */
-export function useActionScope() {
-  const active = useRef(true);
-  useEffect(() => { active.current = true; return () => { active.current = false; }; }, []);
+/** Carries cancellation through delayed adapter preparation to the final wallet boundary. */
+export function useActionScope(identity = "") {
+  const ref = useRef({ identity, active: true });
+  if (ref.current.identity !== identity) {
+    ref.current.active = false;
+    ref.current = { identity, active: true };
+  }
+  const scope = ref.current;
+  useLayoutEffect(() => {
+    scope.active = true;
+    return () => { scope.active = false; };
+  }, [scope]);
   return () => {
-    if (!active.current) throw new Error("账户、网络或页面已变更，请重新预览操作");
+    if (!scope.active) throw new Error("Preparation cancelled. Review again for the current account, network and page.");
   };
 }

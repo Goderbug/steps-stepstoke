@@ -28,7 +28,7 @@ export function renderMarkdown(src: string): string {
     box.className = "table-scroll";
     box.setAttribute("role", "region");
     box.setAttribute("tabindex", "0");
-    box.setAttribute("aria-label", "文档表格（可横向滚动）");
+    box.setAttribute("aria-label", "Document table (scroll horizontally)");
     table.replaceWith(box);
     box.append(table);
   }

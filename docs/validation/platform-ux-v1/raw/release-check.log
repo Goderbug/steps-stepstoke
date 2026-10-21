@@ -1,0 +1,15 @@
+node:internal/fs/promises:1345
+  return new FileHandle(await PromisePrototypeThen(
+                        ^
+
+Error: ENOENT: no such file or directory, open '/root/.identitymd/work/55cf8df2-04b1-4d15-9291-eef351d0247f/7c1ff61b-d9f8-48da-a32a-965c2dff2362/out/RelayFactory.sol/RelayFactory.json'
+    at async open (node:internal/fs/promises:1345:25)
+    at async readFile (node:internal/fs/promises:1996:14)
+    at async file:///root/.identitymd/work/55cf8df2-04b1-4d15-9291-eef351d0247f/7c1ff61b-d9f8-48da-a32a-965c2dff2362/tools/check-release.mjs:11:24 {
+  errno: -2,
+  code: 'ENOENT',
+  syscall: 'open',
+  path: '/root/.identitymd/work/55cf8df2-04b1-4d15-9291-eef351d0247f/7c1ff61b-d9f8-48da-a32a-965c2dff2362/out/RelayFactory.sol/RelayFactory.json'
+}
+
+Node.js v24.21.0

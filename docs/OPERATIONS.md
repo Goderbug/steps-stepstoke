@@ -36,3 +36,7 @@ The release trusts the external Intake contract and its writer to preserve the d
 Content commitments do not prove task quality, model compliance, input consumption, HTTP availability, symlink absence, self-contained HTML behavior, Git delivery or publication. Inspecting content is an off-chain responsibility. Never execute an untrusted artifact to perform a hash or MIME check.
 
 This work contains no public-chain deployment, live paid run, credentials, token issuance, child-job spending, governance, ranking or treasury.
+
+## Current browser operations
+
+The English platform maps these same fixed operations onto preparation, explicit signing and independent result stages. Continue opens preparation only. Funding requires a fresh quote, exact confirmed approval and a separate purchase. Historical Fork sits beside the selected accepted output. When branch/history disagree, Retry reads both without signing. See [the current interface guide](FRONTEND.md), [authoring guide](PLATFORM-AUTHORING.md) and [fresh local evidence](validation/platform-ux-v1/README.md). These do not change live acceptance or authorize public deployment.

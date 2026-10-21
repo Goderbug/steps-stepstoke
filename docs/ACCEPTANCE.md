@@ -1,3 +1,5 @@
+> Current English platform results are in [PLATFORM-UX-V1](validation/platform-ux-v1/README.md). The retained matrix below is historical integration evidence, not a new platform run.
+
 # Acceptance matrix and unresolved issues
 
 **Overall: INCOMPLETE. `productionDeployment: null`, `liveCompatibility: NOT_RUN`, `productionReady: false`.**

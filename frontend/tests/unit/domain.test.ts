@@ -74,7 +74,7 @@ describe("fixture adapter semantics", () => {
   it("proposing does not invalidate other current proposals; update requires target as input", async () => {
     const a = await FixtureAdapter.create({ latency: 0, reset: true });
     const [A] = DEMO_ACCOUNTS;
-    await expect(a.propose(A, { branchId: "fx-branch-1", anchor: "fx-branch-1:3", kind: "html", mode: "update", targetKey: "site", inputKeys: [], requirement: "x", publish: false })).rejects.toThrow("目标资产必须作为输入");
+    await expect(a.propose(A, { branchId: "fx-branch-1", anchor: "fx-branch-1:3", kind: "html", mode: "update", targetKey: "site", inputKeys: [], requirement: "x", publish: false })).rejects.toThrow("The update target must be included as an input");
     await a.propose(A, { branchId: "fx-branch-1", anchor: "fx-branch-1:3", kind: "document", mode: "create", targetKey: "faq", inputKeys: [], requirement: "x", publish: false });
     const ps = await a.getProposals("fx-branch-1");
     expect(ps.filter((p) => p.status === "current")).toHaveLength(3);
@@ -83,20 +83,21 @@ describe("fixture adapter semantics", () => {
   it("sponsoring needs exact allowance, rejects stale anchors, and a missing callback stays pending", async () => {
     const a = await FixtureAdapter.create({ latency: 0, reset: true });
     const [A] = DEMO_ACCOUNTS;
+    a.controls.callbackOutcome = "missing";
     const q = await a.quoteFee("fx-prop-1");
-    await expect(a.sponsor(A, "fx-prop-1", q.price, q)).rejects.toThrow("授权额度不足");
+    await expect(a.sponsor(A, "fx-prop-1", q.price, q)).rejects.toThrow("Confirm an approval for the exact price first");
     await a.approve(A, q, q.price);
     const sp = await a.sponsor(A, "fx-prop-1", q.price, q);
     expect(sp.stages.callback).toBe("pending");
     expect(sp.stages.binding).toBe("not_started");
     const q0 = await a.quoteFee("fx-prop-0");
     await a.approve(A, q0, q0.price);
-    await expect(a.sponsor(A, "fx-prop-0", q0.price, q0)).rejects.toThrow("需要重新提交");
+    await expect(a.sponsor(A, "fx-prop-0", q0.price, q0)).rejects.toThrow("stale");
   });
 
   it("fork copies the chosen historical asset set, not latest, proposals or project", async () => {
     const a = await FixtureAdapter.create({ latency: 0, reset: true });
-    const child = await a.fork(DEMO_ACCOUNTS[1], { branchId: "fx-branch-1", checkpointId: "fx-branch-1:2", direction: "英文版" });
+    const child = await a.fork(DEMO_ACCOUNTS[1], { branchId: "fx-branch-1", checkpointId: "fx-branch-1:2", direction: "English version" });
     expect(child.imdProjectId).toBeNull();
     expect(child.head).toBeNull();
     const [genesis] = await a.getHistory(child.id);
@@ -111,9 +112,9 @@ describe("proposal budgets come from capabilities", () => {
     const a = await FixtureAdapter.create({ latency: 0, reset: true });
     const latest = (await a.getHistory("fx-branch-1"))[0];
     const caps = { ...FIXTURE_CAPABILITIES, maxRequestBodyBytes: 10, maxInputs: 1 };
-    const p = draftProblems(caps, latest, { kind: "image", mode: "create", targetKey: "banner", inputKeys: ["site", "cover"], requirement: "一二三四五" });
-    expect(p.join()).toMatch(/请求体上限/);
-    expect(p.join()).toMatch(/输入最多 1 个/);
-    expect(p.join()).toMatch(/图片参考或编辑/);
+    const p = draftProblems(caps, latest, { kind: "image", mode: "create", targetKey: "banner", inputKeys: ["site", "cover"], requirement: "abcdefghijklmnop" });
+    expect(p.join()).toMatch(/request text limit/);
+    expect(p.join()).toMatch(/Maximum inputs: 1 items/);
+    expect(p.join()).toMatch(/Image inputs and editing/);
   });
 });

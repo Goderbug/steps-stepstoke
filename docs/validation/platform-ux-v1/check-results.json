@@ -1,55 +1,127 @@
 {
-  "classification": "PLANNING_STAGE_CHECKS_NOT_PRODUCT_ACCEPTANCE",
-  "baselineCommit": "878ba4ba1cf7c601656f3a25d17546a425ba1207",
+  "schema": "PLATFORM-UX-V1-LOCAL-ACCEPTANCE-1",
+  "date": "2026-10-21",
   "productionDeployment": null,
   "liveCompatibility": "NOT_RUN",
   "productionReady": false,
-  "checks": [
-    {
-      "name": "Protected A1 and root build/dependency paths",
-      "command": "git diff --quiet HEAD -- src sdk cli abi config foundry.toml foundry.lock remappings.txt lib package.json package-lock.json",
+  "implementation": "COMPLETE",
+  "localAcceptanceQualification": "Retained intermittent WebKit loopback RPC error: original and diagnostic strict runtime gates failed; confirmation with redundant navigation removed passed. No general historical fix claimed.",
+  "baseline": {
+    "protectedA1Files": 26,
+    "identical": true,
+    "protectedBuildDependenciesDiffEmpty": true,
+    "report": "baseline-final.json"
+  },
+  "frontend": {
+    "typecheck": "PASS",
+    "unit": {
       "status": "PASS",
-      "outcome": "clean"
+      "tests": 41
     },
-    {
-      "name": "SDK and browser-entrypoint regressions",
-      "command": "node --test test-sdk/*.test.mjs",
+    "build": "PASS",
+    "byteIdenticalRebuild": true,
+    "browser": {
       "status": "PASS",
+      "passed": 50,
+      "failed": 0,
+      "projects": 5,
+      "widths": [
+        320,
+        390,
+        1440
+      ]
+    },
+    "renderedWidths": [
+      320,
+      390,
+      768,
+      1440
+    ],
+    "taste": {
+      "passed": 16,
+      "total": 16
+    },
+    "sourceBudget": {
+      "frontendSourceBytes": 764342,
+      "limit": 8388608,
+      "status": "PASS",
+      "excludes": "generated node_modules/cache/test-result/scratch directories only",
+      "distBytes": 877404
+    }
+  },
+  "core": {
+    "forgeBuild": "PASS",
+    "forgeTests": {
+      "passed": 125,
+      "failed": 0
+    },
+    "forgeFormat": "PASS",
+    "sdkTests": {
       "passed": 39,
       "failed": 0
     },
-    {
-      "name": "Solidity formatting",
-      "command": "forge fmt --check",
-      "status": "PASS",
-      "exitCode": 0
+    "allFiveABIComparisons": "PASS",
+    "releaseCheck": "PASS",
+    "independentFixtureIntegrity": "PASS"
+  },
+  "localContracts": {
+    "chromium": {
+      "functionalCasesPassed": 8,
+      "functionalCasesTotal": 8,
+      "walletReceipts": 29,
+      "strictRuntimeGate": "PASS",
+      "pageErrors": [],
+      "consoleErrors": [],
+      "failedRequests": [],
+      "download": {
+        "filename": "index.html",
+        "sha256": "a93f847a369ff2850922ace790b0dcb7327365d949b74eb72e4196809d35d063",
+        "descriptorSHA256": "a93f847a369ff2850922ace790b0dcb7327365d949b74eb72e4196809d35d063",
+        "bytes": 111
+      },
+      "report": "receipts/chromium/browser-chain.json"
     },
-    {
-      "name": "ABI embedding consistency",
-      "command": "node tools/generate-sdk-abi.mjs --check",
-      "status": "PASS"
+    "webkit": {
+      "functionalCasesPassed": 8,
+      "functionalCasesTotal": 8,
+      "walletReceipts": 29,
+      "strictRuntimeGate": "FAIL",
+      "pageErrors": [
+        "/127.0.0.1:8545/ due to access control checks."
+      ],
+      "consoleErrors": [],
+      "failedRequests": [],
+      "download": null,
+      "report": "receipts/webkit/browser-chain.json"
     },
-    {
-      "name": "CLI availability",
-      "command": "node cli/relay.mjs help",
-      "status": "PASS"
+    "webkit-diagnostic": {
+      "functionalCasesPassed": 8,
+      "functionalCasesTotal": 8,
+      "walletReceipts": 29,
+      "strictRuntimeGate": "FAIL",
+      "pageErrors": [
+        "/127.0.0.1:8545/ due to access control checks."
+      ],
+      "consoleErrors": [],
+      "failedRequests": [],
+      "download": null,
+      "report": "receipts/webkit-diagnostic/browser-chain.json"
     },
-    {
-      "name": "Foundry build and release artifact validation",
-      "command": "forge build; node tools/check-release.mjs",
-      "status": "NOT_COMPLETED",
-      "limitation": "The execution wrapper ended repeated forge build attempts during Solc compilation before an exit status or out/ artifacts existed. check-release therefore reported missing out/RelayFactory.sol/RelayFactory.json; this is not a PASS or a source-failure verdict."
-    },
-    {
-      "name": "Frontend and browser/local-contract acceptance",
-      "status": "NOT_RUN",
-      "limitation": "This bounded planning stage did not modify or install protected frontend node_modules/. Retained reports are historical evidence only."
+    "webkit-diagnostic-confirmation": {
+      "functionalCasesPassed": 8,
+      "functionalCasesTotal": 8,
+      "walletReceipts": 29,
+      "strictRuntimeGate": "PASS",
+      "pageErrors": [],
+      "consoleErrors": [],
+      "failedRequests": [],
+      "download": {
+        "filename": "index.html",
+        "sha256": "a93f847a369ff2850922ace790b0dcb7327365d949b74eb72e4196809d35d063",
+        "descriptorSHA256": "a93f847a369ff2850922ace790b0dcb7327365d949b74eb72e4196809d35d063",
+        "bytes": 111
+      },
+      "report": "receipts/webkit-diagnostic-confirmation/browser-chain.json"
     }
-  ],
-  "openDiagnostic": {
-    "status": "OPEN_INTERMITTENT",
-    "subject": "Three historical WebKit reload-heavy groups recorded loopback RPC pageerrors despite passing functional assertions.",
-    "source": "docs/validation/integration/acceptance/browser-diagnostics.json",
-    "resolution": "NOT_ESTABLISHED"
   }
 }

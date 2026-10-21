@@ -1,0 +1,5 @@
+
+> cto-relay-station-w1@0.1.0 build
+> tsc --noEmit -p tsconfig.json && vite build
+
+tests/e2e/platform.spec.ts(25,73): error TS6133: 'info' is declared but its value is never read.

@@ -47,7 +47,7 @@ export function ConnectSheet() {
   const named = connectors.some((c) => c.type === "injected" && c.id !== "injected");
   const listed = [...connectors.filter((c) => c.type === "injected"), ...connectors.filter((c) => c.type !== "injected")]
     .filter((c) => !(c.id === "injected" && named));
-  const label = (c: Connector) => (c.id === "injected" ? "浏览器钱包" : c.id === "coinbaseWalletSDK" && mobile ? "Coinbase Smart Wallet" : c.name);
+  const label = (c: Connector) => (c.id === "injected" ? "Browser wallet" : c.id === "coinbaseWalletSDK" && mobile ? "Coinbase Smart Wallet" : c.name);
   const icon = (c: Connector) => c.icon ?? (WALLET_ICONS[c.id] ? svgSrc(WALLET_ICONS[c.id]) : undefined);
 
   if (isConnected && address) {
@@ -55,41 +55,41 @@ export function ConnectSheet() {
       return (
         <div className="wallet-row">
           <button ref={opener} className="btn btn-primary" disabled={switching} onClick={() => switchChain({ chainId: target.id })}>
-            {switching ? "正在切换…" : `切换到 ${target.name}`}
+            {switching ? "Switching…" : `Switch to ${target.name}`}
           </button>
-          <button className="btn btn-quiet" onClick={() => disconnect()}>断开</button>
+          <button className="btn btn-quiet" onClick={() => disconnect()}>Disconnect</button>
         </div>
       );
     return (
       <div className="wallet-row">
         <span className="wallet-addr mono" title={address}>{short(address)}</span>
-        <button ref={opener} className="btn btn-quiet" onClick={() => disconnect()}>断开</button>
+        <button ref={opener} className="btn btn-quiet" onClick={() => disconnect()}>Disconnect</button>
       </div>
     );
   }
   return (
     <>
-      <button ref={opener} className="btn btn-primary" onClick={() => { reset(); setOpen(true); }}>连接钱包</button>
+      <button ref={opener} className="btn btn-secondary" onClick={() => { reset(); setOpen(true); }}>Connect wallet</button>
       {open && createPortal(
         <div className="sheet-bg" onClick={() => setOpen(false)}>
           <div ref={sheet} className="sheet" role="dialog" aria-modal="true" aria-labelledby="connect-title" onClick={(e) => e.stopPropagation()}>
             <div className="sheet-head">
-              <h2 id="connect-title">连接钱包</h2>
-              <button className="x" aria-label="关闭" onClick={() => setOpen(false)}>×</button>
+              <h2 id="connect-title">Connect wallet</h2>
+              <button className="x" aria-label="Close" onClick={() => setOpen(false)}>×</button>
             </div>
             {mobile && OPEN_IN.map((w) => (
               <a key={w.id} className="sheet-row" href={w.href(location.href)} rel="noopener noreferrer">
                 <span className="ic">{WALLET_ICONS[w.id] ? <img width={28} height={28} src={svgSrc(WALLET_ICONS[w.id])} alt="" /> : null}</span>
-                <span>在 {w.name} 中打开</span>
+                <span>Open in {w.name}</span>
               </a>
             ))}
             {listed.map((c) => (
               <button key={c.uid} className="sheet-row" onClick={() => connect({ connector: c })} disabled={isPending}>
                 <span className="ic">{icon(c) ? <img width={28} height={28} src={icon(c)} alt="" /> : null}</span>
-                <span>{label(c)}{isPending && variables?.connector === c ? " · 正在打开…" : ""}</span>
+                <span>{label(c)}{isPending && variables?.connector === c ? " · Opening…" : ""}</span>
               </button>
             ))}
-            {error && <p className="note" role="status">{/rejected|denied/i.test(error.message) ? "你在钱包中取消了连接。" : "钱包没有完成连接，请重试。"}</p>}
+            {error && <p className="note" role="status">{/rejected|denied/i.test(error.message) ? "Connection cancelled in the wallet." : "Wallet connection did not complete. Try again."}</p>}
           </div>
         </div>, document.body
       )}

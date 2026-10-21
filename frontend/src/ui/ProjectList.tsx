@@ -1,3 +1,5 @@
+import { ProjectHeader } from "../components/platform";
+import { useActionScope } from "./actionScope";
 import { signingAccount } from "../domain/types";
 import { useRef, useState } from "react";
 import { useQuery, useQueryClient } from "@tanstack/react-query";
@@ -12,31 +14,27 @@ export function ProjectList({ adapter, account }: { adapter: RelayAdapter; accou
   const [creating, setCreating] = useState(false);
   return (
     <>
-      <section className="panel" aria-labelledby="list-title">
-        <div className="panel-head">
-          <h1 id="list-title">公开项目</h1>
-          <button className="btn btn-primary" aria-expanded={creating} aria-controls="create-form" onClick={() => setCreating((v) => !v)}>
-            {creating ? "收起创建表单" : "创建项目"}
-          </button>
-        </div>
-        <p className="lede">每个项目从一个根分支开始，目标创建后不能修改。创建只花 gas，不会购买 AI。</p>
+      <section className="project-list" aria-label="Project list">
+        <ProjectHeader title="Projects" goal="Build in rounds. Browse public goals, inspect outputs, then choose what to move forward.">
+          <button className="btn btn-primary" aria-expanded={creating} aria-controls="create-form" onClick={() => setCreating(v => !v)}>{creating ? "Close creation" : "Create project"}</button>
+        </ProjectHeader>
         {creating && <CreateBranchForm key={`${account.address}:${account.chainId}`} adapter={adapter} account={account} onDone={() => setCreating(false)} />}
-        {q.isPending && <p className="state-line">正在读取项目…</p>}
-        {q.isError && <p className="alert alert-error" role="alert">读取失败：{(q.error as Error).message} <button className="btn btn-link" onClick={() => q.refetch()}>重试</button></p>}
-        {q.data && q.data.length === 0 && <p className="empty">还没有项目。创建第一个项目，写下它的固定目标。</p>}
+        {q.isPending && <p className="state-line">Reading projects…</p>}
+        {q.isError && <p className="alert alert-error" role="alert">Read failed: {(q.error as Error).message} <button className="btn btn-link" onClick={() => q.refetch()}>Retry</button></p>}
+        {q.data && q.data.length === 0 && <p className="empty">No projects yet. Create a project with a fixed public goal.</p>}
         {q.data && q.data.length > 0 && (
           <ul className="list">
             {q.data.map((b) => (
               <li key={b.id} className="row">
                 <div className="row-main">
                   <a className="row-title" href={`#/${adapter.kind === "fixture" ? "demo" : "local"}/b/${b.id}`}>{b.projectTitle}</a>
-                  <p className="row-goal">{b.direction ? `分叉方向：${b.direction}` : b.goal}</p>
+                  <p className="row-goal">{b.direction ? `Fork direction: ${b.direction}` : b.goal}</p>
                   <p className="meta">
-                    {b.parent ? "分叉分支" : "根分支"} · 创建者 {short(b.creator)} · {formatTime(b.createdAt)}
-                    {b.imdProjectId ? "" : " · 尚无 IMD 项目"}
+                    {b.parent ? "Fork branch" : "Root branch"} · Created by {short(b.creator)} · {formatTime(b.createdAt)}
+                    {b.imdProjectId ? "" : " · No IMD project yet"}
                   </p>
                 </div>
-                <a className="btn btn-secondary" href={`#/${adapter.kind === "fixture" ? "demo" : "local"}/b/${b.id}`} aria-label={`打开 ${b.projectTitle}`}>打开</a>
+                <a className="btn btn-secondary" href={`#/${adapter.kind === "fixture" ? "demo" : "local"}/b/${b.id}`} aria-label={`Open ${b.projectTitle}`}>Open</a>
               </li>
             ))}
           </ul>
@@ -54,10 +52,11 @@ function CreateBranchForm({ adapter, account, onDone }: { adapter: RelayAdapter;
   const [busy, setBusy] = useState(false);
   const [msg, setMsg] = useState<{ kind: "error" | "ok"; text: string; href?: string } | null>(null);
   const lock = useRef(false);
+  const assertActive = useActionScope(`${account.address}:${account.chainId}:${review}:${title}:${goal}`);
   const caps = useQuery({ queryKey: ["caps", adapter.kind], queryFn: () => adapter.getCapabilities() });
   const wrongNet = !account.address || account.chainId !== (caps.data?.chainId ?? FIXTURE_CHAIN_ID);
-  const titleErr = review && !title.trim() ? "请填写项目名称" : null;
-  const goalErr = review && !goal.trim() ? "请填写项目目标" : null;
+  const titleErr = review && !title.trim() ? "Enter a project title" : null;
+  const goalErr = review && !goal.trim() ? "Enter a fixed goal" : null;
 
   const submit = async () => {
     if (lock.current) return;
@@ -65,9 +64,9 @@ function CreateBranchForm({ adapter, account, onDone }: { adapter: RelayAdapter;
     setBusy(true);
     setMsg(null);
     try {
-      const b = await adapter.createBranch(signingAccount(account), { title, goal });
+      const b = await adapter.createBranch(signingAccount(account, assertActive), { title, goal });
       await qc.invalidateQueries({ queryKey: ["branches"] });
-      setMsg({ kind: "ok", text: `已创建「${b.projectTitle}」。`, href: `#/${adapter.kind === "fixture" ? "demo" : "local"}/b/${b.id}` });
+      setMsg({ kind: "ok", text: `Created project: ${b.projectTitle}.`, href: `#/${adapter.kind === "fixture" ? "demo" : "local"}/b/${b.id}` });
       setTitle("");
       setGoal("");
       setReview(false);
@@ -81,38 +80,38 @@ function CreateBranchForm({ adapter, account, onDone }: { adapter: RelayAdapter;
 
   return (
     <form id="create-form" className="form" onSubmit={(e) => { e.preventDefault(); setReview(true); }} noValidate>
-      <h2>创建项目根分支</h2>
+      <h2>Create a project</h2>
       <label className="field">
-        <span>项目名称</span>
-        <input value={title} onChange={(e) => { setTitle(e.target.value); setReview(false); }} aria-invalid={!!titleErr} aria-describedby={titleErr ? "title-err" : undefined} maxLength={80} autoComplete="off" />
+        <span>Project title</span>
+        <input aria-label="Project title" value={title} onChange={(e) => { setTitle(e.target.value); setReview(false); }} aria-invalid={!!titleErr} aria-describedby={titleErr ? "title-err" : undefined} maxLength={80} autoComplete="off" />
         {titleErr && <span id="title-err" className="field-err">{titleErr}</span>}
       </label>
       <label className="field">
-        <span>固定目标（创建后不能修改）</span>
-        <textarea rows={3} value={goal} onChange={(e) => { setGoal(e.target.value); setReview(false); }} aria-invalid={!!goalErr} aria-describedby={goalErr ? "goal-err" : "goal-len"} />
-        <span id="goal-len" className="hint">{utf8Length(goal)} 字节</span>
+        <span>Fixed goal (cannot change after creation)</span>
+        <textarea aria-label="Fixed goal (cannot change after creation)" rows={3} value={goal} onChange={(e) => { setGoal(e.target.value); setReview(false); }} aria-invalid={!!goalErr} aria-describedby={goalErr ? "goal-err" : "goal-len"} />
+        <span id="goal-len" className="hint">{utf8Length(goal)} bytes</span>
         {goalErr && <span id="goal-err" className="field-err">{goalErr}</span>}
       </label>
-      {!review && <button className="btn btn-primary" type="submit">预览创建</button>}
+      {!review && <button className="btn btn-primary" type="submit">Review creation</button>}
       {review && title.trim() && goal.trim() && (
-        <div className="confirm" aria-label="创建预览">
-          <h3>签名前确认</h3>
+        <div className="confirm" aria-label="Review creation">
+          <h3>Review before signing</h3>
           <dl className="facts">
-            <div><dt>项目名称</dt><dd>{title.trim()}</dd></div>
-            <div><dt>固定目标</dt><dd>{goal.trim()}</dd></div>
-            <div><dt>签名账户</dt><dd><CopyId value={account.address} label="签名账户" />（{account.label}）</dd></div>
-            <div><dt>费用</dt><dd>只需 gas；不会购买 AI。名称和目标一同固定在链上，完整文本最多 512 字节；执行需要之后单独资助</dd></div>
+            <div><dt>Project title</dt><dd>{title.trim()}</dd></div>
+            <div><dt>Fixed goal</dt><dd>{goal.trim()}</dd></div>
+            <div><dt>Signing account</dt><dd><CopyId value={account.address} label="Signing account" /> ({account.label})</dd></div>
+            <div><dt>Cost</dt><dd>Gas only. Title and goal are fixed on chain, up to 512 bytes combined. Execution requires separate funding.</dd></div>
           </dl>
-          {wrongNet && <p className="alert alert-error" role="alert">请连接钱包并切换到此模式的链。</p>}
+          {wrongNet && <p className="alert alert-error" role="alert">Connect a wallet on the correct network to sign.</p>}
           <div className="actions">
-            <button type="button" className="btn btn-primary" disabled={busy || wrongNet} onClick={submit}>{busy ? "等待签名…" : "签名并创建"}</button>
-            <button type="button" className="btn btn-quiet" onClick={() => setReview(false)}>返回修改</button>
+            <button type="button" className="btn btn-primary" disabled={busy || wrongNet} onClick={submit}>{busy ? "Confirming transaction…" : "Sign and create"}</button>
+            <button type="button" className="btn btn-quiet" onClick={() => setReview(false)}>Back to edit</button>
           </div>
         </div>
       )}
       {msg && (
         <p className={msg.kind === "ok" ? "alert alert-ok" : "alert alert-error"} role={msg.kind === "ok" ? "status" : "alert"}>
-          {msg.text} {msg.href && <a href={msg.href} onClick={onDone}>打开项目</a>}
+          {msg.text} {msg.href && <a href={msg.href} onClick={onDone}>Open project</a>}
         </p>
       )}
     </form>

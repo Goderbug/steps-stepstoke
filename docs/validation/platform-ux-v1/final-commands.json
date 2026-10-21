@@ -1,0 +1,38 @@
+[
+  {
+    "name": "typecheck",
+    "command": [
+      "npm",
+      "--prefix",
+      "frontend",
+      "run",
+      "typecheck"
+    ],
+    "exitCode": 0,
+    "log": "raw/typecheck-final.log"
+  },
+  {
+    "name": "unit",
+    "command": [
+      "npm",
+      "--prefix",
+      "frontend",
+      "run",
+      "test:unit"
+    ],
+    "exitCode": 0,
+    "log": "raw/unit-final.log"
+  },
+  {
+    "name": "build",
+    "command": [
+      "npm",
+      "--prefix",
+      "frontend",
+      "run",
+      "build"
+    ],
+    "exitCode": 0,
+    "log": "raw/build-final.log"
+  }
+]

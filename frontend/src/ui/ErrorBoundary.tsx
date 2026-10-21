@@ -11,7 +11,7 @@ export class ErrorBoundary extends Component<{ children: ReactNode }, { error: E
     return (
       <main className="page">
         <p className="alert alert-error" role="alert">
-          页面出现错误：{this.state.error.message}。没有发送任何交易。<a href="#/">返回首页</a>后重新加载。
+          This page could not be rendered: {this.state.error.message}. Review the original transaction records before trying again. <a href="#/">Return home</a> and reload.
         </p>
       </main>
     );

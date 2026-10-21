@@ -21,7 +21,7 @@ describe("selected provider safety", () => {
     const adapter = new ChainAdapter(config as LocalConfig, async () => ++selections === 1 ? first : next);
     adapter.verify = vi.fn(async () => {});
     adapter.provider.request = vi.fn(async ({ method }) => method === "eth_getTransactionCount" ? "0x0" : "0x");
-    await expect(adapter.createBranch({ ...DEMO_ACCOUNTS[0], chainId: 31337 }, { title: "Provider safety", goal: "A fixed public goal" })).rejects.toThrow("所选钱包提供方已变更");
+    await expect(adapter.createBranch({ ...DEMO_ACCOUNTS[0], chainId: 31337 }, { title: "Provider safety", goal: "A fixed public goal" })).rejects.toThrow("Selected wallet provider changed");
     expect(request.mock.calls.some(([a]) => a.method === "eth_sendTransaction")).toBe(false);
   });
 });
@@ -33,5 +33,5 @@ it("uses A1 name limits for CLI-produced names rather than fixture slot restrict
   expect(targetKey.length).toBe(64);
   const draft = { kind: "document" as const, mode: "create" as const, targetKey, inputKeys: [], requirement: "A valid requirement" };
   expect(draftProblems(caps, { assets: [] } as unknown as Checkpoint, draft)).toEqual([]);
-  expect(draftProblems(caps, { assets: [] } as unknown as Checkpoint, { ...draft, targetKey: targetKey + "A" })).toContain("目标名称使用字母、数字、下划线或连字符，最长 64 字节");
+  expect(draftProblems(caps, { assets: [] } as unknown as Checkpoint, { ...draft, targetKey: targetKey + "A" })).toContain("Use letters, numbers, underscores or hyphens, up to 64 bytes");
 });

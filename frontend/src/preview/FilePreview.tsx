@@ -4,7 +4,8 @@ import { imageDimensions, safeFileName, verifyFile, type VerifyResult } from "..
 import type { AssetVersion, Capabilities } from "../domain/types";
 import { isolatedSrcDoc, renderMarkdown } from "./sanitize";
 import { CopyId, KIND_LABEL } from "../ui/format";
-import { recordVerification } from "../ui/verification";
+import { EvidenceDisclosure } from "../components/platform";
+import { recordVerification, verificationKey } from "../ui/verification";
 
 type Load =
   | { phase: "loading" }
@@ -14,7 +15,7 @@ type Load =
 /** Fetches the actual bytes of one asset version, verifies them against the A1 descriptor and previews safely. */
 export function FilePreview({ asset, adapter, caps }: { asset: AssetVersion; adapter: RelayAdapter; caps: Capabilities }) {
   // Reset synchronously on version change: old verified bytes never flash as the new version.
-  return <VerifiedPreview key={JSON.stringify([asset.producerJobId, asset.descriptor.path, asset.descriptor.sha256, asset.descriptor.bytes, asset.kind, asset.descriptor.mediaType, caps.maxBytes[asset.kind], caps.mediaTypes[asset.kind]])} asset={asset} adapter={adapter} caps={caps} />;
+  return <VerifiedPreview key={JSON.stringify([verificationKey(asset), caps.maxBytes[asset.kind], caps.mediaTypes[asset.kind]])} asset={asset} adapter={adapter} caps={caps} />;
 }
 
 function VerifiedPreview({ asset, adapter, caps }: { asset: AssetVersion; adapter: RelayAdapter; caps: Capabilities }) {
@@ -35,7 +36,7 @@ function VerifiedPreview({ asset, adapter, caps }: { asset: AssetVersion; adapte
           let decoded = false;
           try { await image.decode(); decoded = true; } catch { /* matching hashes do not establish a decodable image */ }
           finally { URL.revokeObjectURL(url); }
-          result.checks.push({ name: "图片解码", ok: decoded, detail: decoded ? "浏览器成功解码" : "图片损坏，无法解码" });
+          result.checks.push({ name: "Image decode", ok: decoded, detail: decoded ? "Decoded by the browser" : "Image could not be decoded" });
           result.ok = decoded;
         }
         if (live) {
@@ -64,60 +65,14 @@ function VerifiedPreview({ asset, adapter, caps }: { asset: AssetVersion; adapte
 
   const text = load.phase === "done" && verified && asset.kind !== "image" ? new TextDecoder().decode(load.bytes) : null;
 
-  return (
-    <div className="preview" aria-live="polite">
-      <dl className="facts">
-        <div><dt>文件</dt><dd>{d.name}（{KIND_LABEL[asset.kind]}，{d.mediaType}）</dd></div>
-        <div><dt>描述长度</dt><dd>{d.bytes} 字节</dd></div>
-        <div><dt>描述 SHA-256</dt><dd><CopyId value={d.sha256} label="文件 SHA-256" /></dd></div>
-        <div><dt>生产作业</dt><dd><CopyId value={asset.producerJobId} label="生产作业" /></dd></div>
-      </dl>
-      {load.phase === "loading" && <p className="state-line">正在下载并校验实际文件…</p>}
-      {load.phase === "error" && (
-        <p className="alert alert-error" role="alert">无法获取文件：{load.message}。不显示内容，也不标记为已校验。</p>
-      )}
-      {load.phase === "done" && (
-        <>
-          <ul className="checks">
-            {load.result.checks.map((c) => (
-              <li key={c.name} className={c.ok ? "check-ok" : "check-bad"}>
-                <span aria-hidden="true">{c.ok ? "✓" : "✕"}</span> {c.name}：{c.ok ? "通过" : "不通过"}，{c.detail}
-              </li>
-            ))}
-          </ul>
-          {verified ? (
-            <p className="badge badge-ok">已校验：与 A1 描述一致</p>
-          ) : (
-            <p className="alert alert-error" role="alert">校验失败：内容不予预览，也不提供下载。请让生产方重新提交正确的文件或绑定。</p>
-          )}
-        </>
-      )}
-      {verified && asset.kind === "html" && text !== null && (
-        <iframe
-          className="frame"
-          title={`${d.name} 隔离预览`}
-          sandbox=""
-          referrerPolicy="no-referrer"
-          srcDoc={isolatedSrcDoc(text)}
-        />
-      )}
-      {verified && asset.kind === "document" && text !== null && (
-        <div className="md" dangerouslySetInnerHTML={{ __html: renderMarkdown(text) }} />
-      )}
-      {verified && asset.kind === "image" && blobUrl && (
-        <figure className="img-box">
-          <img
-            src={blobUrl}
-            alt={`${asset.assetKey} 第 ${asset.revision} 轮图片`}
-          />
-          <figcaption>{imageDimensions(load.phase === "done" ? load.bytes : new Uint8Array())?.width} × {imageDimensions(load.phase === "done" ? load.bytes : new Uint8Array())?.height} 像素</figcaption>
-        </figure>
-      )}
-      {verified && blobUrl && (
-        <a className="btn btn-secondary" href={blobUrl} download={safeFileName(d.name)}>
-          下载已校验文件
-        </a>
-      )}
-    </div>
-  );
+  return <div className="preview" aria-live="polite">
+    {load.phase === "loading" && <p className="state-line">Retrieving and verifying exact bytes…</p>}
+    {load.phase === "error" && <p className="alert alert-error" role="alert">File unavailable: {load.message}. Preview and download are unavailable; this file is not verified.</p>}
+    {load.phase === "done" && !verified && <p className="alert alert-error" role="alert">Verification failed. Preview and download are unavailable. The producer must supply the correct file or binding.</p>}
+    {verified && <div className="preview-state"><span className="badge badge-ok">Verified locally · SHA-256, length, media</span>{blobUrl && <a className="btn btn-secondary" href={blobUrl} download={safeFileName(d.path)}>Download verified file</a>}</div>}
+    {verified && asset.kind === "html" && text !== null && <iframe className="frame" title={`${d.name} isolated preview`} sandbox="" referrerPolicy="no-referrer" srcDoc={isolatedSrcDoc(text)} />}
+    {verified && asset.kind === "document" && text !== null && <div className="md" dangerouslySetInnerHTML={{__html:renderMarkdown(text)}} />}
+    {verified && asset.kind === "image" && blobUrl && <figure className="img-box"><img src={blobUrl} alt={`${asset.assetKey} from round ${asset.revision}`} /><figcaption>{imageDimensions(load.phase === "done" ? load.bytes : new Uint8Array())?.width} × {imageDimensions(load.phase === "done" ? load.bytes : new Uint8Array())?.height} pixels · natural aspect ratio</figcaption></figure>}
+    <EvidenceDisclosure title="File verification details"><dl className="facts"><div><dt>File</dt><dd>{d.path} · {KIND_LABEL[asset.kind]} · {d.mediaType}</dd></div><div><dt>Descriptor length</dt><dd>{d.bytes} bytes</dd></div><div><dt>Descriptor SHA-256</dt><dd><CopyId value={d.sha256} label="file SHA-256" /></dd></div><div><dt>Producer job</dt><dd><CopyId value={asset.producerJobId} label="producer job" /></dd></div></dl>{load.phase === "done" && <ul className="checks">{load.result.checks.map(c => <li key={c.name} className={c.ok ? "check-ok" : "check-bad"}>{c.name}: {c.ok ? "Pass" : "Fail"} · {c.detail}</li>)}</ul>}<p className="hint">Exact descriptor and version keyed bytes. Verification is a local observation. HTML is isolated; Markdown is sanitized.</p></EvidenceDisclosure>
+  </div>;
 }

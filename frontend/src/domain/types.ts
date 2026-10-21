@@ -158,6 +158,8 @@ export interface ProposalDraft {
 }
 
 export interface Account {
+  /** Local cancellation guard only; never serialized or passed to the SDK. */
+  assertActive?: () => void;
   address: Hex;
   chainId: number;
   label: string;
@@ -184,20 +186,21 @@ export class IntegrationPendingError extends Error {
 export class UserRejectedError extends Error {
   readonly code = "USER_REJECTED";
   constructor() {
-    super("用户在钱包中拒绝了签名");
+    super("Signature rejected in the wallet");
   }
 }
 
 export class StaleProposalError extends Error {
   readonly code = "STALE_PROPOSAL";
   constructor() {
-    super("提案绑定的检查点已不是当前检查点，需要重新提交提案");
+    super("This proposal is stale. Submit a new proposal at the current checkpoint");
   }
 }
 
 /** Public reads have no signing identity. The empty display value is never passed to the SDK. */
 export type DisplayAccount = Account | { address: ""; chainId: number; label: string };
-export function signingAccount(a: DisplayAccount): Account {
-  if (!a.address) throw new Error("请先连接钱包；公开读取不需要账户");
-  return a as Account;
+export function signingAccount(a: DisplayAccount, assertActive?: () => void): Account {
+  assertActive?.();
+  if (!a.address) throw new Error("Connect a wallet to sign. Browsing needs no account");
+  return { ...a, assertActive } as Account;
 }

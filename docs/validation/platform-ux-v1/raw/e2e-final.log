@@ -1,0 +1,71 @@
+
+> cto-relay-station-w1@0.1.0 test:e2e
+> playwright test
+
+[WebServer] (node:28) Warning: The 'NO_COLOR' env is ignored due to the 'FORCE_COLOR' env being set.
+[WebServer] (Use `node --trace-warnings ...` to show where the warning was created)
+
+Running 50 tests using 2 workers
+
+(node:40) Warning: The 'NO_COLOR' env is ignored due to the 'FORCE_COLOR' env being set.
+(Use `node --trace-warnings ...` to show where the warning was created)
+(node:41) Warning: The 'NO_COLOR' env is ignored due to the 'FORCE_COLOR' env being set.
+(Use `node --trace-warnings ...` to show where the warning was created)
+  ✓   2 [chromium-mobile] › tests/e2e/platform.spec.ts:21:1 › first screen identifies the product and main action; gateway metadata (1.1s)
+  ✓   1 [chromium-desktop] › tests/e2e/platform.spec.ts:21:1 › first screen identifies the product and main action; gateway metadata (1.4s)
+  ✓   3 [chromium-mobile] › tests/e2e/platform.spec.ts:25:1 › project list and separate gas-only project creation (1.4s)
+  ✓   4 [chromium-desktop] › tests/e2e/platform.spec.ts:25:1 › project list and separate gas-only project creation (1.5s)
+  ✓   5 [chromium-mobile] › tests/e2e/platform.spec.ts:28:1 › sequence selection is read-only and exact verified downloads preserve extension (1.6s)
+  ✓   6 [chromium-desktop] › tests/e2e/platform.spec.ts:28:1 › sequence selection is read-only and exact verified downloads preserve extension (1.5s)
+  ✓   7 [chromium-mobile] › tests/e2e/platform.spec.ts:33:1 › continue prepares a proposal without approval or purchase (1.4s)
+  ✓   8 [chromium-desktop] › tests/e2e/platform.spec.ts:33:1 › continue prepares a proposal without approval or purchase (1.5s)
+  ✓   9 [chromium-mobile] › tests/e2e/platform.spec.ts:36:1 › approval confirms before a separate purchase; exact allowance; completed attempt (2.1s)
+  ✓  10 [chromium-desktop] › tests/e2e/platform.spec.ts:36:1 › approval confirms before a separate purchase; exact allowance; completed attempt (2.0s)
+  ✓  11 [chromium-mobile] › tests/e2e/platform.spec.ts:39:1 › historical fork copies selected output and retains original provenance (1.7s)
+  ✓  12 [chromium-desktop] › tests/e2e/platform.spec.ts:39:1 › historical fork copies selected output and retains original provenance (1.7s)
+  ✓  13 [chromium-mobile] › tests/e2e/platform.spec.ts:42:1 › PNG uses its natural aspect ratio and all original file origins remain reachable (1.3s)
+  ✓  14 [chromium-desktop] › tests/e2e/platform.spec.ts:42:1 › PNG uses its natural aspect ratio and all original file origins remain reachable (1.6s)
+  ✓  15 [chromium-mobile] › tests/e2e/platform.spec.ts:45:1 › isolated HTML and sanitized Markdown; bad and unavailable files never verified (2.3s)
+  ✓  16 [chromium-desktop] › tests/e2e/platform.spec.ts:45:1 › isolated HTML and sanitized Markdown; bad and unavailable files never verified (2.3s)
+  ✓  17 [chromium-mobile] › tests/e2e/platform.spec.ts:48:1 › account changes cancel preparation; wrong network disables signing (1.6s)
+  ✓  18 [chromium-desktop] › tests/e2e/platform.spec.ts:48:1 › account changes cancel preparation; wrong network disables signing (1.7s)
+  ✓  20 [chromium-desktop] › tests/e2e/platform.spec.ts:51:1 › production-component showcase and wallet sheet keyboard focus (887ms)
+  ✓  19 [chromium-mobile] › tests/e2e/platform.spec.ts:51:1 › production-component showcase and wallet sheet keyboard focus (1.3s)
+(node:408) Warning: The 'NO_COLOR' env is ignored due to the 'FORCE_COLOR' env being set.
+(Use `node --trace-warnings ...` to show where the warning was created)
+(node:407) Warning: The 'NO_COLOR' env is ignored due to the 'FORCE_COLOR' env being set.
+(Use `node --trace-warnings ...` to show where the warning was created)
+  ✓  22 [chromium-narrow] › tests/e2e/platform.spec.ts:21:1 › first screen identifies the product and main action; gateway metadata (942ms)
+  ✓  21 [webkit-desktop] › tests/e2e/platform.spec.ts:21:1 › first screen identifies the product and main action; gateway metadata (2.0s)
+  ✓  23 [chromium-narrow] › tests/e2e/platform.spec.ts:25:1 › project list and separate gas-only project creation (1.6s)
+  ✓  25 [chromium-narrow] › tests/e2e/platform.spec.ts:28:1 › sequence selection is read-only and exact verified downloads preserve extension (1.3s)
+  ✓  24 [webkit-desktop] › tests/e2e/platform.spec.ts:25:1 › project list and separate gas-only project creation (2.6s)
+  ✓  26 [chromium-narrow] › tests/e2e/platform.spec.ts:33:1 › continue prepares a proposal without approval or purchase (1.4s)
+  ✓  28 [chromium-narrow] › tests/e2e/platform.spec.ts:36:1 › approval confirms before a separate purchase; exact allowance; completed attempt (1.8s)
+  ✓  27 [webkit-desktop] › tests/e2e/platform.spec.ts:28:1 › sequence selection is read-only and exact verified downloads preserve extension (3.4s)
+  ✓  29 [chromium-narrow] › tests/e2e/platform.spec.ts:39:1 › historical fork copies selected output and retains original provenance (2.0s)
+  ✓  31 [chromium-narrow] › tests/e2e/platform.spec.ts:42:1 › PNG uses its natural aspect ratio and all original file origins remain reachable (1.2s)
+  ✓  30 [webkit-desktop] › tests/e2e/platform.spec.ts:33:1 › continue prepares a proposal without approval or purchase (4.1s)
+  ✓  32 [chromium-narrow] › tests/e2e/platform.spec.ts:45:1 › isolated HTML and sanitized Markdown; bad and unavailable files never verified (2.4s)
+  ✓  34 [chromium-narrow] › tests/e2e/platform.spec.ts:48:1 › account changes cancel preparation; wrong network disables signing (1.9s)
+  ✓  35 [chromium-narrow] › tests/e2e/platform.spec.ts:51:1 › production-component showcase and wallet sheet keyboard focus (1.2s)
+(node:849) Warning: The 'NO_COLOR' env is ignored due to the 'FORCE_COLOR' env being set.
+(Use `node --trace-warnings ...` to show where the warning was created)
+  ✓  33 [webkit-desktop] › tests/e2e/platform.spec.ts:36:1 › approval confirms before a separate purchase; exact allowance; completed attempt (5.6s)
+  ✓  36 [webkit-mobile] › tests/e2e/platform.spec.ts:21:1 › first screen identifies the product and main action; gateway metadata (2.6s)
+  ✓  37 [webkit-desktop] › tests/e2e/platform.spec.ts:39:1 › historical fork copies selected output and retains original provenance (5.3s)
+  ✓  38 [webkit-mobile] › tests/e2e/platform.spec.ts:25:1 › project list and separate gas-only project creation (3.2s)
+  ✓  39 [webkit-desktop] › tests/e2e/platform.spec.ts:42:1 › PNG uses its natural aspect ratio and all original file origins remain reachable (2.8s)
+  ✓  40 [webkit-mobile] › tests/e2e/platform.spec.ts:28:1 › sequence selection is read-only and exact verified downloads preserve extension (3.2s)
+  ✓  41 [webkit-desktop] › tests/e2e/platform.spec.ts:45:1 › isolated HTML and sanitized Markdown; bad and unavailable files never verified (4.7s)
+  ✓  42 [webkit-mobile] › tests/e2e/platform.spec.ts:33:1 › continue prepares a proposal without approval or purchase (4.8s)
+  ✓  43 [webkit-desktop] › tests/e2e/platform.spec.ts:48:1 › account changes cancel preparation; wrong network disables signing (4.7s)
+  ✓  44 [webkit-mobile] › tests/e2e/platform.spec.ts:36:1 › approval confirms before a separate purchase; exact allowance; completed attempt (4.2s)
+  ✓  45 [webkit-desktop] › tests/e2e/platform.spec.ts:51:1 › production-component showcase and wallet sheet keyboard focus (2.6s)
+  ✓  46 [webkit-mobile] › tests/e2e/platform.spec.ts:39:1 › historical fork copies selected output and retains original provenance (3.6s)
+  ✓  47 [webkit-mobile] › tests/e2e/platform.spec.ts:42:1 › PNG uses its natural aspect ratio and all original file origins remain reachable (2.1s)
+  ✓  48 [webkit-mobile] › tests/e2e/platform.spec.ts:45:1 › isolated HTML and sanitized Markdown; bad and unavailable files never verified (3.3s)
+  ✓  49 [webkit-mobile] › tests/e2e/platform.spec.ts:48:1 › account changes cancel preparation; wrong network disables signing (3.5s)
+  ✓  50 [webkit-mobile] › tests/e2e/platform.spec.ts:51:1 › production-component showcase and wallet sheet keyboard focus (2.0s)
+
+  50 passed (1.2m)
