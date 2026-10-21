@@ -478,6 +478,9 @@ try {
     // Restore the original evidence hint to demonstrate replacement lookup by original nonce.
     await page.evaluate(original => localStorage.setItem('relay.local.transactions.v1', JSON.stringify([original])), original);
     await page.reload(); await expect(page.locator('#progress')).toContainText('REPLACED_OTHER');
+    await disclose('Transaction and attempt identity');
+    await expect(page.locator('#progress code').filter({hasText:original.hash})).toHaveText(original.hash);
+    await expect(page.locator('#progress code').filter({hasText:replacementHash})).toHaveText(replacementHash);
     assert.equal(await countPurchases(), before); assert.equal(Number(await read(pendingBranch, 'phase')), 0);
     evidence.replacement = { original, replacementHash, purchasesUnchanged: before };
     await page.evaluate(() => localStorage.removeItem('relay.local.transactions.v1'));
@@ -502,6 +505,11 @@ try {
     // Reload abandons the old receipt waiter but preserves its original hash/nonce journal.
     await page.reload();
     await page.getByRole('button', { name: 'Connect wallet', exact: true }).click(); await page.getByRole('button', { name: 'Relay Local Test Wallet', exact: true }).click();
+    await disclose('Transaction and attempt identity');
+    await expect(page.locator('#progress .attempt')).toHaveCount(1);
+    await expect(page.locator('#progress code').filter({hasText:original.hash})).toHaveText(original.hash);
+    await expect(page.locator('#progress code').filter({hasText:replacement})).toHaveText(replacement);
+    await expect(page.locator('#progress')).toContainText('Replacement outcome');
     await tx('mock status1 after same-call replacement', local.release.intake, local.intakeI.encodeFunctionData('fail', [first.requestId, 1, `0x${'11'.repeat(32)}`]));
     await refresh();
     await page.getByRole('button', { name: 'Review identical paid retry', exact: true }).click();

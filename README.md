@@ -16,7 +16,7 @@ npm run build --prefix frontend
 npm run preview --prefix frontend -- --host 127.0.0.1
 ```
 
-The build writes root `dist/` with relative assets. Validation in this revision used a `/tmp` mirror with the same unchanged manifests so no dependency/cache directory entered the repository. [Revision evidence](docs/validation/multi-file-revision/README.md) records the multi-file repair, actual final results and browser limitations; earlier evidence remains recoverable as described in [history](docs/history/README.md).
+The build writes root `dist/` with relative assets. Validation uses a `/tmp` mirror with the same unchanged manifests so no dependency/cache directory enters the repository. [Current revision evidence](docs/validation/boundary-revision/README.md) records public-read invalidation, transaction replacement handling, reproducible clean compilation and actual check results. The [previous revision](docs/validation/multi-file-revision/README.md) records the accepted multi-file repair; earlier evidence remains recoverable as described in [history](docs/history/README.md).
 
 ## Review and run
 

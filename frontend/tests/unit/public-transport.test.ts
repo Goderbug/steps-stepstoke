@@ -110,7 +110,7 @@ describe("public chain configuration", () => {
     expect(() => deployment.verifyRuntime("0x" + "00".repeat(spec.bytes), "RelayFactory", release)).toThrow(/RelayFactory (runtime code mismatch|inconsistent immutable)/);
   });
   it("propagates RPC errors instead of rendering an empty project list", async () => {
-    const a = publicAdapter(m => { if (m === "eth_call") throw new Error("eth_call: upstream unavailable"); return null; });
+    const a = publicAdapter(() => { throw new Error("RPC upstream unavailable"); });
     await expect(a.listBranches()).rejects.toThrow("upstream unavailable");
   });
 });
@@ -190,8 +190,8 @@ describe("transaction observation and recovery", () => {
   });
   it("reports replacement and unknown outcomes against the original hash", async () => {
     const same = { hash: hex64(0xb2), from: account, nonce: "0x7", to: "0x" + "44".repeat(20), input: "0xbeef" };
-    expect(await recovering({ ...same, input: "0xdead" }).reconcileJournal(j())).toBe("REPLACED_OTHER");
-    expect(await recovering(same, null).reconcileJournal(j())).toBe("REPLACED_SAME_CALL_READ_CHAIN");
+    expect(await recovering({ ...same, input: "0xdead" }, { transactionHash: same.hash, blockNumber: "0x96", blockHash: hex64(150), status: "0x1" }).reconcileJournal(j())).toBe("REPLACED_OTHER");
+    expect(await recovering(same, null).reconcileJournal(j())).toBe("REPLACED_PENDING_OR_UNKNOWN");
     const reverted = { transactionHash: same.hash, blockNumber: "0x96", blockHash: hex64(150), status: "0x0" };
     expect(await recovering(same, reverted).reconcileJournal(j())).toBe("REPLACED_SAME_CALL_REVERTED");
     expect(await recovering(same, { ...reverted, status: "0x1" }).reconcileJournal(j())).toBe("REPLACED_SAME_CALL_READ_CHAIN");
@@ -223,7 +223,7 @@ describe("retry journal regression: reverted/replaced rows versus authenticated 
     expect(isLatestAttempt([refusal, journalRow(status)], refusal)).toBe(true);
     expect(journalRow(status).stages.callback).not.toBe("refused"); // a journal row never authorizes a retry itself
   });
-  it.each(["DROPPED_OR_UNKNOWN", "PENDING", "NONCE_USED_UNKNOWN", "MINED_UNFINALIZED", "REPLACED_SAME_CALL_READ_CHAIN"])("an %s retry row blocks another paid retry until reconciled", status => {
+  it.each(["DROPPED_OR_UNKNOWN", "PENDING", "NONCE_USED_UNKNOWN", "MINED_UNFINALIZED", "REPLACED_SAME_CALL_READ_CHAIN", "REPLACED_MINED_UNFINALIZED", "REPLACED_REORGED", "REPLACED_PENDING_OR_UNKNOWN"])("an %s retry row blocks another paid retry until reconciled", status => {
     expect(isLatestAttempt([refusal, journalRow(status)], refusal)).toBe(false);
   });
 });

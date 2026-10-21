@@ -138,6 +138,8 @@ export interface Sponsorship {
   sponsor: Hex;
   maxFee: bigint;
   txHash: Hex | null;
+  replacementHash?: Hex;
+  replacementState?: string;
   nonce: number | null;
   attempt: number;
   stages: Record<StageName, StageState>;

@@ -114,3 +114,11 @@ The revision preserves the tokens, typography, components, logo/mark, spacing an
 A 32-checkpoint layout rehearsal confirms the existing desktop rail scrolls internally, its earlier control works and keyboard selection changes the selected output while preserving the latest label. At 390px and 320px the accepted two-column mobile sequence grows vertically; all checkpoints and the output remain reachable without horizontal page overflow. Long phone histories therefore require more vertical scrolling. This revision preserves that existing layout.
 
 Current measured design/browser coverage and limitations are in `docs/validation/multi-file-revision/README.md`. The earlier integration paragraph's browser availability refers to that historical run. Native screen readers, browser-native zoom and physical wallet/device sessions remain unverified; a narrow or emulated viewport does not establish those checks.
+
+## Public-boundary revision
+
+The same tokens, type scale, components and responsive rules remain in use. `LocalApp` replaces project content with the existing unavailable panel and explicit verification control when the configured public deployment fails a fresh verification. Previously accepted output and open preparation sheets are removed. The reason uses the existing alert semantics and the panel remains wallet-independent.
+
+`Workspace` keeps transaction evidence inside the existing native disclosure. Original and replacement hashes occupy separate labelled rows with full wrapping and copy controls; replacement outcome is written explicitly. The established original hash copy-control name remains compatible with the existing keyboard/browser regressions. A pending or reorged replacement continues to block another paid preparation.
+
+Current six-domain review, rendered widths, measurements and honest limitations are recorded in [boundary revision evidence](docs/validation/boundary-revision/README.md). Earlier coverage above remains historical and does not stand in for this revision's checks.

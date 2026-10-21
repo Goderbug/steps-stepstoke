@@ -1,0 +1,334 @@
+{
+  "classification": "WORKER_LOCAL_REVISION_EVIDENCE; NOT INDEPENDENT PRODUCTION APPROVAL",
+  "revisionBaseline": "61c829259507587220062d62ef5120beb0781deb",
+  "productionDeployment": null,
+  "liveCompatibility": "NOT_RUN",
+  "productionReady": false,
+  "checks": {
+    "cleanCompilations": {
+      "count": 2,
+      "repositoryInputs": 45,
+      "forge": "1.8.3",
+      "solc": "0.8.26",
+      "releaseVerification": "PASS; exact matching full-build artifacts and immutable metadata"
+    },
+    "forge": {
+      "passed": 143,
+      "failed": 0,
+      "suites": 18,
+      "fuzzSeed": "0x0658c4410aa492d0cfda058f7f13f56d416689bcd97d746fd69793d6a2483bd5"
+    },
+    "sdk": {
+      "passed": 71,
+      "failed": 0
+    },
+    "frontendUnit": {
+      "passed": 100,
+      "failed": 0
+    },
+    "typecheck": "PASS",
+    "productionBuild": "PASS",
+    "fixtures": {
+      "startTime": "2026-10-21T21:30:23.834Z",
+      "duration": 251416.694,
+      "expected": 180,
+      "skipped": 0,
+      "unexpected": 0,
+      "flaky": 0
+    },
+    "fixtureCasesPerProject": 36,
+    "configuredBrowserProjects": [
+      "chromium-desktop",
+      "chromium-mobile",
+      "chromium-narrow",
+      "webkit-desktop",
+      "webkit-mobile"
+    ],
+    "localContractBrowser": [
+      {
+        "project": "chromium",
+        "passed": 16,
+        "failed": 0,
+        "browserRuntime": "PASS",
+        "multiFile": {
+          "counts": [
+            2,
+            17
+          ],
+          "acceptedAssets": 1,
+          "purchases": 2,
+          "exactResultHashes": [
+            "0x30dc1a70bcd8b997942cb47b97c04a5f19a5a08b82627e4482e54846f176fca8",
+            "0xbd89e9e2eb9c15cf36330e4ccb6a379240943943e197f72635f66b90e83953da"
+          ]
+        },
+        "replacementHashesRetained": true
+      },
+      {
+        "project": "chromium-mobile",
+        "passed": 16,
+        "failed": 0,
+        "browserRuntime": "PASS",
+        "multiFile": {
+          "counts": [
+            2,
+            17
+          ],
+          "acceptedAssets": 1,
+          "purchases": 2,
+          "exactResultHashes": [
+            "0x30dc1a70bcd8b997942cb47b97c04a5f19a5a08b82627e4482e54846f176fca8",
+            "0xbd89e9e2eb9c15cf36330e4ccb6a379240943943e197f72635f66b90e83953da"
+          ]
+        },
+        "replacementHashesRetained": true
+      },
+      {
+        "project": "webkit",
+        "passed": 16,
+        "failed": 0,
+        "browserRuntime": "PASS",
+        "multiFile": {
+          "counts": [
+            2,
+            17
+          ],
+          "acceptedAssets": 1,
+          "purchases": 2,
+          "exactResultHashes": [
+            "0x30dc1a70bcd8b997942cb47b97c04a5f19a5a08b82627e4482e54846f176fca8",
+            "0xbd89e9e2eb9c15cf36330e4ccb6a379240943943e197f72635f66b90e83953da"
+          ]
+        },
+        "replacementHashesRetained": true
+      },
+      {
+        "project": "webkit-mobile",
+        "passed": 16,
+        "failed": 0,
+        "browserRuntime": "PASS",
+        "multiFile": {
+          "counts": [
+            2,
+            17
+          ],
+          "acceptedAssets": 1,
+          "purchases": 2,
+          "exactResultHashes": [
+            "0x30dc1a70bcd8b997942cb47b97c04a5f19a5a08b82627e4482e54846f176fca8",
+            "0xbd89e9e2eb9c15cf36330e4ccb6a379240943943e197f72635f66b90e83953da"
+          ]
+        },
+        "replacementHashesRetained": true
+      }
+    ],
+    "publicAdapter": {
+      "passed": 11,
+      "scope": "ACTUAL_LOCAL_CHAIN_1; HTTPS ROUTES ARE LOCAL TEST TRANSPORT",
+      "views": [
+        {
+          "width": 1440,
+          "state": "Ethereum deployment unavailable",
+          "horizontalOverflow": 0
+        },
+        {
+          "width": 390,
+          "state": "Ethereum deployment unavailable",
+          "horizontalOverflow": 0
+        }
+      ],
+      "pageErrors": [],
+      "expectedArtifactTransportFailures": 1,
+      "sourceAuthentication": "All 45 frozen repository inputs verified against accepted baseline Git commit"
+    },
+    "firstTabBeforeChanges": {
+      "chromiumDesktopPassed": 9,
+      "sourceChanged": false
+    },
+    "previewReadinessAfterFix": {
+      "startTime": "2026-10-21T20:51:51.669Z",
+      "duration": 69041.071,
+      "expected": 32,
+      "skipped": 0,
+      "unexpected": 0,
+      "flaky": 0
+    },
+    "taste": {
+      "passed": 16,
+      "total": 16
+    },
+    "renderedWidths": [
+      320,
+      390,
+      768,
+      1440
+    ],
+    "longHistoryCheckpoints": 32,
+    "suppliedBrowserTool": "NOT_RUN; Chrome distribution unavailable",
+    "physicalDevicesAndWallets": "NOT_RUN",
+    "nativeScreenReaderAndZoom": "NOT_RUN",
+    "showcasePreviewReadiness": {
+      "startTime": "2026-10-21T21:16:31.237Z",
+      "duration": 29367.165999999997,
+      "expected": 16,
+      "skipped": 0,
+      "unexpected": 0,
+      "flaky": 0
+    }
+  },
+  "contracts": {
+    "RelayFactory": {
+      "creationCodeHash": "0x41d0c6705f10ee3306fd4799b3374c2b820d75653bbc15690473465054ba47a1",
+      "runtimeBytesBeforeImmutablePatching": 21195,
+      "initcodeBytes": 21475
+    },
+    "RelayBranch": {
+      "creationCodeHash": "0x90239deb23f571538b695329b676ba29ef5faaa9872f48e2eaef88ca5349edd6",
+      "runtimeBytesBeforeImmutablePatching": 12876,
+      "initcodeBytes": 16219
+    },
+    "RelayEncoder": {
+      "creationCodeHash": "0x17851ae68096e2ce6ef106cb75cd75647dece459039e59d5e46bb5f266c3bbe8",
+      "runtimeBytesBeforeImmutablePatching": 12020,
+      "initcodeBytes": 12046
+    },
+    "RelayVerifier": {
+      "creationCodeHash": "0x702683c558092f216679e946e9c238591527d9f7cf2306f832fbea17b7185b98",
+      "runtimeBytesBeforeImmutablePatching": 14719,
+      "initcodeBytes": 14745
+    }
+  },
+  "measurements": {
+    "namedConstructorBatchGas": 10509092,
+    "maximumFiniteBindingGas": 13579287,
+    "bindingShapes": 8,
+    "runtimeCreations": [
+      {
+        "label": "maximum 512-byte root goal",
+        "calldataBytes": 580,
+        "zeroBytes": 62,
+        "nonzeroBytes": 518,
+        "intrinsicGas": 29536,
+        "eip7623Floor": 42340,
+        "gasUsed": 3419527,
+        "declaredGasLimit": 16777216,
+        "netExecutionGas": 3389991,
+        "withinEip7825Ceiling": true,
+        "hash": "0xe34fecf4588f2ba6f5e1fe39fef71b04d5a87deb88f831e53a016aad5efd11fb"
+      },
+      {
+        "label": "full 16-asset fork with 512-byte goal and direction",
+        "calldataBytes": 13924,
+        "zeroBytes": 7069,
+        "nonzeroBytes": 6855,
+        "intrinsicGas": 158956,
+        "eip7623Floor": 365890,
+        "gasUsed": 4653112,
+        "declaredGasLimit": 16777216,
+        "netExecutionGas": 4494156,
+        "withinEip7825Ceiling": true,
+        "hash": "0x0e9f8141bd155c2445bafd1adf5fdade1f7f861c6589b67436d7c45d8d320437",
+        "childInitcodeBytes": 30875,
+        "childInitcodeKeccak": "0x6613db09738049bf2e00d1f0317c97560c7824cd655c8188dea560122d692b05"
+      }
+    ],
+    "scope": "DISPOSABLE_LOCAL_MOCKS; finite samples, not a global maximum or live service cost"
+  },
+  "initialRuns": {
+    "reproductions": "Original public-read, replacement identity and one-confirmation cancellation regressions failed as reported; original clean release check rejected Encoder fingerprint",
+    "fixturesBeforeCopyLabelRepair": {
+      "startTime": "2026-10-21T20:21:29.214Z",
+      "duration": 349024.179,
+      "expected": 173,
+      "skipped": 0,
+      "unexpected": 7,
+      "flaky": 0
+    },
+    "fixturesBeforePreviewReadinessRepair": {
+      "startTime": "2026-10-21T20:42:03.263Z",
+      "duration": 280858.776,
+      "expected": 178,
+      "skipped": 0,
+      "unexpected": 2,
+      "flaky": 0
+    },
+    "instrumentedPreviewReadinessReproduction": {
+      "startTime": "2026-10-21T20:49:12.924Z",
+      "duration": 65583.351,
+      "expected": 31,
+      "skipped": 0,
+      "unexpected": 1,
+      "flaky": 0
+    },
+    "unitHarness": "Incomplete synthetic handoff, missing test-account label and empty fixture attempt repaired; initial failures retained",
+    "renderedHarness": "Incorrect expect import repaired; original error retained",
+    "uppercaseJournal": "FAIL: duplicate same-hash hint; final case-insensitive projection regression PASS",
+    "fixturesBeforeShowcaseReadiness": {
+      "startTime": "2026-10-21T21:09:43.819Z",
+      "duration": 288545.25700000004,
+      "expected": 179,
+      "skipped": 0,
+      "unexpected": 1,
+      "flaky": 0
+    },
+    "fixturesBeforeReloadCallbackReadiness": {
+      "startTime": "2026-10-21T21:21:53.806Z",
+      "duration": 267312.365,
+      "expected": 179,
+      "skipped": 0,
+      "unexpected": 1,
+      "flaky": 0
+    }
+  },
+  "export": [
+    {
+      "path": "dist/assets/dist-DG6zOiXU.js",
+      "bytes": 102692,
+      "sha256": "be0ac5c70b60b3a620dc3c1f17d61d7118e3b03cf9aab4b24ff1cb26527e5d2b"
+    },
+    {
+      "path": "dist/assets/index-4UpPiOax.css",
+      "bytes": 18774,
+      "sha256": "495955c0bf1f98305d4536decee51018fccbb3a4ea63b61fcab2179edff5ff0c"
+    },
+    {
+      "path": "dist/assets/index-CM7iRyMh.js",
+      "bytes": 748285,
+      "sha256": "d9bfdafaac16575674c097514144a421e4046c63128469d6c58a1a93f3d89cea"
+    },
+    {
+      "path": "dist/favicon.svg",
+      "bytes": 267,
+      "sha256": "759fec54d3994b36ac2f504a699d7cac8bf5febc16a14f8b9a890d7fa46aff24"
+    },
+    {
+      "path": "dist/index.html",
+      "bytes": 1023,
+      "sha256": "ab5574aa2c662dcbcd7a6239408eb0372cb9ecf61d74ebf11288657f37755282"
+    },
+    {
+      "path": "dist/local-config.json",
+      "bytes": 3473,
+      "sha256": "00c905d093964110122fbe1c1b1359c3580cb42a5285f7d7d8283b87eae442a5"
+    },
+    {
+      "path": "dist/og.png",
+      "bytes": 50098,
+      "sha256": "5679126801c83042c4b3e74e19e1e6d7e0f7048d0319f1cc6edcc0a6f737f8e5"
+    },
+    {
+      "path": "dist/og.svg",
+      "bytes": 979,
+      "sha256": "ae8e3af19715ba91d948cc1a028f3d38e20fb6f57508103fae4068ffd650fe5f"
+    }
+  ],
+  "limitations": [
+    "Local tests use disposable Anvil and MockIntake/MockToken; no public-chain signing/broadcast/deployment/spending or paid IMD call",
+    "Public HTTPS is intercepted local test transport; no live browser CORS or public RPC availability claim",
+    "Read-boundary full verification requires historical code and CREATE trace support and adds RPC latency",
+    "Twelve confirmations are an application observation policy, not consensus finality",
+    "Refusal-only identical paid retry, compiled-in catalog migration risk and permanently unbindable raw results remain unchanged",
+    "No hosting, X post, new artwork, administration or invented production handoff"
+  ],
+  "deliveryMeasurement": "docs/validation/rc-v1/delivery-size.json"
+}

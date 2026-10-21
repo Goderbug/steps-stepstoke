@@ -1,6 +1,7 @@
 // Refresh exact compiler outputs only; never deployment/readiness claims.
 import { readFile, writeFile } from 'node:fs/promises';
 import { keccak256, toUtf8Bytes } from '../vendor/ethers/ethers.mjs';
+import { compilationContext } from './compilation-context.mjs';
 const root = new URL('../', import.meta.url);
 const release = JSON.parse(await readFile(new URL('config/release.json', root)));
 release.contracts = {}; release.runtimeChecks = {};
@@ -20,6 +21,9 @@ for (const name of ['RelayFactory', 'RelayBranch', 'RelayEncoder', 'RelayVerifie
   frozen.compiler = metadata.compiler.version; frozen.settings = settings;
   for (const [path, source] of Object.entries(metadata.sources)) frozen.sources[path] = source.keccak256;
 }
+const context = await compilationContext(root);
+frozen.sources = context.sources;
+frozen.compilation = context.compilation;
 release.frozenBuild = frozen;
 release.policyId = keccak256(toUtf8Bytes('STEPS/RELEASE-CANDIDATE-V1/fixed-profiles/artifacts/unpublished'));
 release.profiles.filter(p => p.mime === 'text/html').forEach(p => p.path = 'artifacts/index.html');

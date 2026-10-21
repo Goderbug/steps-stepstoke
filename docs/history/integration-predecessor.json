@@ -32,6 +32,22 @@
       "sha256": "10bfeb9b72641c514990c0b498052ca44887da8a74c6dc0b2009058f0f8ce055",
       "gitBlob": "58e49d6829316c0b3a8d52d9a89721603a7055f0",
       "storage": "verified-immutable-predecessor"
+    },
+    {
+      "commit": "61c829259507587220062d62ef5120beb0781deb",
+      "path": "docs/validation/multi-file-revision/evidence.tar.xz",
+      "bytes": 255684,
+      "sha256": "d8f7682a2f614327fcade0764eec080f572a607869dca6a7a516903184ddaf5c",
+      "gitBlob": "e5b9d332c0f484bef968ccb14e560e04ecd5b61f",
+      "storage": "verified-immutable-predecessor"
+    },
+    {
+      "commit": "61c829259507587220062d62ef5120beb0781deb",
+      "path": "docs/history/imported-evidence-text.tar.xz",
+      "bytes": 187664,
+      "sha256": "d20dc375f7eda92a65d2307411f537fcee1b32f0869960882c1471b13063e992",
+      "gitBlob": "4072bf490aa98ef38e1a9300740d5f61916ff1df",
+      "storage": "verified-immutable-predecessor"
     }
   ]
 }

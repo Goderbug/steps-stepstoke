@@ -76,6 +76,21 @@ it("never carries verification across different origin branches or versions",asy
   for(const changed of [{...asset,originBranchId:"another-producer"},{...asset,revision:asset.revision+1},{...asset,originCheckpoint:"another-checkpoint"}]){expect(verificationKey(changed)).not.toBe(verificationKey(asset));expect(verificationOf(changed)).toBeNull();}
 });
 
+it("labels original and successful replacement hashes separately in the authenticated attempt",async()=>{
+  const a=await FixtureAdapter.create({latency:0,reset:true}),branch="fx-branch-1";
+  const quote=await a.quoteFee("fx-prop-1");await a.approve(DEMO_ACCOUNTS[0],quote,quote.price);
+  const sp=await a.sponsor(DEMO_ACCOUNTS[0],"fx-prop-1",quote.price,quote);
+  const original=`0x${"a1".padStart(64,"0")}` as const,replacement=`0x${"b2".padStart(64,"0")}` as const;
+  vi.spyOn(a,"getSponsorships").mockResolvedValue([{...sp,txHash:original,replacementHash:replacement,replacementState:"CONFIRMED"}]);
+  const qc=new QueryClient({defaultOptions:{queries:{retry:false}}});
+  render(<QueryClientProvider client={qc}><Workspace adapter={a} account={{address:"",chainId:0,label:"Public reader"}} branchId={branch}/></QueryClientProvider>);
+  const disclosure=await screen.findByText("Transaction and attempt identity");fireEvent.click(disclosure);
+  expect(screen.getByText("Original transaction").nextElementSibling).toHaveTextContent(original);
+  expect(screen.getByText("Replacement transaction").nextElementSibling).toHaveTextContent(replacement);
+  expect(screen.getByText("Replacement outcome").nextElementSibling).toHaveTextContent("CONFIRMED");
+  expect(screen.getAllByTestId(/^sp-/)).toHaveLength(1);
+});
+
 it("reload reconciliation preserves a missing callback outcome instead of applying the new demo success default",async()=>{
   const a=await FixtureAdapter.create({latency:0,reset:true});a.controls.callbackOutcome="missing";a.controls.txOutcome="unknown";
   const q=await a.quoteFee("fx-prop-1");await a.approve(DEMO_ACCOUNTS[0],q,q.price);

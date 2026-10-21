@@ -4,9 +4,13 @@ import assert from 'node:assert/strict';
 import { readFile, readdir } from 'node:fs/promises';
 import { validateReleaseState } from '../sdk/gates.mjs';
 import { keccak256 } from '../vendor/ethers/ethers.mjs';
+import { compilationContext } from './compilation-context.mjs';
 const root = new URL('../', import.meta.url);
 const read = p => readFile(new URL(p, root), 'utf8');
 const config = JSON.parse(await read('config/release.json'));
+const context = await compilationContext(root);
+assert.deepEqual(config.frozenBuild.sources, context.sources, 'Complete clean compilation source drift');
+assert.deepEqual(config.frozenBuild.compilation, context.compilation, 'Clean compilation context drift');
 const out = {};
 for (const name of ['RelayFactory','RelayBranch','RelayEncoder','RelayVerifier']) {
   const a = JSON.parse(await read(`out/${name}.sol/${name}.json`));

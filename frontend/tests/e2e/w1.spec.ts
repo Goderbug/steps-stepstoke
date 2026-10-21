@@ -144,6 +144,7 @@ test("missing callback stays pending; refused retry; bad binding resubmits witho
   await expect(first.locator(".stage", { hasText: "Callback" })).toContainText("Pending");
   await page.reload();
   await expect(page.locator("#progress > ul > li").first().locator(".stage", { hasText: "Callback" })).toContainText("Pending");
+  await expect(page.getByRole("link", { name: "Download verified file" })).toBeVisible();
   await page.locator("#progress > ul > li").first().getByRole("button", { name: "Demo: deliver callback" }).click();
   await expect(page.locator("#progress > ul > li").first().locator(".stage", { hasText: "Binding" })).toContainText("Confirmed");
   await selectRound(page, 4);

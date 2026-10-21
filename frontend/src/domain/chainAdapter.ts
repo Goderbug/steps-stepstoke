@@ -76,6 +76,9 @@ export class ChainAdapter implements RelayAdapter {
   get label() { return this.config.chainId === 1 ? "STEPS · Ethereum mainnet" : "Local contracts with MockToken / MockIntake (not live IMD)"; }
   get routeBase() { return this.config.chainId === 1 ? "ethereum" : "local"; }
   private verified = false;
+  private verificationError: string | null = null;
+  private verifying: Promise<void> | null = null;
+  private unavailableListeners = new Set<(reason: string) => void>();
   get identity() { return this.config.chainId === 1 ? sdk.deploymentIdentity(this.config.handoff) : `local:31337:${this.config.contracts.factory.toLowerCase()}:${this.config.deploymentBlockHash ?? "legacy-local"}`; }
   get capabilities() { return this.config.chainId === 31337 ? { read: true, createBranch: true, propose: true, sponsor: true, fork: true, bindingRetry: true, realWalletSigning: true } : sdk.uiCapabilities({ verified: this.verified, gate: this.config.productionGate, config: this.config }); }
   private logCache: any;
@@ -84,11 +87,34 @@ export class ChainAdapter implements RelayAdapter {
   private memory = new Map<string, Journal>();
   constructor(readonly config: LocalConfig, private wallet: WalletGetter) { assertChainConfig(config); this.provider = httpProvider(config.rpcURL); this.logCache = new sdk.EventLogCache({ identity: this.identity, deploymentBlock: config.deploymentBlock ?? 0 }); }
   async verify() {
-    const problems = await deployment.verifyDeploymentConfig(this.provider, this.config, release);
-    if (problems.length) throw new Error(`Deployment verification failed: ${problems.join(", ")}`);
-    this.verified = true;
+    // Share concurrent boundary checks, never reuse a completed verification as a read cache.
+    if (!this.verifying) this.verifying = this.verifyNow().finally(() => { this.verifying = null; });
+    return this.verifying;
   }
-  status() { return { state: "ready" as const, summary: this.label, missing: [], a1: { jobId: "d5530989-b886-4f9d-80dd-44d26d85ffd2", submittedBodySha256: "", checkedAt: "2026-10-21", observedState: `Candidate runtime verified on chain ${this.config.chainId}`, delivery: null } }; }
+  private async verifyNow() {
+    try {
+      const problems = await deployment.verifyDeploymentConfig(this.provider, this.config, release);
+      if (problems.length) throw new Error(`Deployment verification failed: ${problems.join(", ")}`);
+      this.verificationError = null; this.verified = true;
+    } catch (e) {
+      this.verified = false;
+      this.verificationError = (e as Error).message;
+      // Discard the entire deployment-scoped cache, including in-flight cache ownership.
+      this.logCache = new sdk.EventLogCache({ identity: this.identity, deploymentBlock: this.config.deploymentBlock ?? 0 });
+      for (const listener of this.unavailableListeners) listener(this.verificationError);
+      throw e;
+    }
+  }
+  onUnavailable(listener: (reason: string) => void) {
+    this.unavailableListeners.add(listener);
+    return () => { this.unavailableListeners.delete(listener); };
+  }
+  private async publicReadBoundary() {
+    if (this.config.chainId !== 1) return;
+    if (this.verificationError) throw new Error(this.verificationError);
+    await this.verify();
+  }
+  status() { return { state: this.verificationError ? "A1_INTEGRATION_PENDING" as const : "ready" as const, summary: this.verificationError ?? this.label, missing: this.verificationError ? [this.verificationError] : [], a1: { jobId: "d5530989-b886-4f9d-80dd-44d26d85ffd2", submittedBodySha256: "", checkedAt: "2026-10-21", observedState: this.verificationError ?? `Candidate runtime verified on chain ${this.config.chainId}`, delivery: null } }; }
   private read = async (branch: string, method: string, args: any[] = []) => (await sdk.queryState(this.provider, sdk.readState(branch, method, args)))[0];
   private factoryRead = async (method: string, args: any[] = []) => (await sdk.queryState(this.provider, sdk.readFactory(this.config.contracts.factory, method, args)))[0];
   private async logs(at: string, iface = sdk.interfaces.branch) {
@@ -98,6 +124,7 @@ export class ChainAdapter implements RelayAdapter {
     return raw.map((log: any) => { try { return { ...log, parsed: iface.parseLog(log) }; } catch { return { ...log, parsed: null }; } });
   }
   private async checkBranch(branch: string) {
+    await this.publicReadBoundary();
     address(branch);
     if (!await this.factoryRead("registered", [branch])) throw new Error("Branch is not registered by this Factory");
     for (const name of ["factory", "encoder", "verifier"]) if (!eq(await this.read(branch, name), this.config.contracts[name])) throw new Error(`Branch ${name} verification failed`);
@@ -108,6 +135,7 @@ export class ChainAdapter implements RelayAdapter {
     return { source: `A1 ${release.version} · policy ${release.policyId}`, chainId: this.config.chainId, chainName: this.config.chainId === 1 ? "Ethereum" : "Local contract chain", enabledKinds: ["document", "html", "image"], maxAssets: release.limits.assets, maxInputs: release.limits.inputs, maxOutputs: release.limits.outputs, maxBytes: { document: release.limits.markdownBytes, html: release.limits.htmlBytes, image: release.limits.imageBytes }, maxRequestBodyBytes: release.limits.requestBytes, maxTextBytes: 1024, maxGoalBytes: 512, maxAssetNameBytes: 64, sitePublication: release.publishing, imageEditing: false, mediaTypes: { document: ["text/markdown"], html: ["text/html"], image: ["image/png"] } };
   }
   async listBranches() {
+    await this.publicReadBoundary();
     const count = Number(await this.factoryRead("branchCount"));
     const rows: Branch[] = [];
     if (count > 200) throw new Error("Project list exceeds the 200-item window; open a known deployment-scoped Branch route or use SDK pagination");
@@ -198,13 +226,23 @@ export class ChainAdapter implements RelayAdapter {
       const key = String(a.proposalId), attempt = (perProposal.get(key) ?? 0) + 1; perProposal.set(key, attempt);
       rows.push({ id: `${address(branch)}:${n}`, branchId: address(branch), proposalId: `${address(branch)}:${a.proposalId}`, sponsor: a.sponsor, maxFee: a.fee, txHash: log.transactionHash, nonce: Number(BigInt(tx.nonce)), attempt, stages, note: stages.purchase === "pending" ? "Purchase is mined but awaits 12 canonical Ethereum confirmations. No automatic resubmission or repurchase." : frozen ? `Authenticated failure status ${a.status}, Branch permanently frozen. ` : result && !bound ? "Result hash authenticated. Bind the original result.json without repurchasing. A result outside the manifest limits may remain permanently unbindable." : !a.delivered ? "Purchase confirmed. Admission is separate; a missing callback remains pending. HTTP cannot settle or unlock it." : bound ? "Binding, files, Git and publication are observed separately." : "Authenticated status 1 permits an explicit paid retry with the identical body. No refund.", checkpointId: cp?.digest ?? null, updatedAt: await this.time(log.blockNumber) });
     }
-    const journals = [...loadJournal(), ...this.memory.values()].filter(r => eq(r.branch, branch) && r.chainId === this.config.chainId && r.identity === this.identity && ["sponsor", "retry"].includes(r.operation));
+    const journals = [...this.memory.values()].reduce(mergeJournal, loadJournal()).filter(r => eq(r.branch, branch) && r.chainId === this.config.chainId && r.identity === this.identity && ["sponsor", "retry"].includes(r.operation));
+    for (const row of rows) {
+      const tx = await this.provider.request({ method: "eth_getTransactionByHash", params: [row.txHash] });
+      const original = journals.find(j => eq(j.account, row.sponsor) && eq(tx?.from ?? "", j.account) && row.nonce === j.nonce && eq(tx?.to ?? "", j.to) && eq(tx?.input ?? "", j.data));
+      if (!original?.hash || eq(original.hash, row.txHash!)) continue;
+      row.replacementHash = row.txHash!; row.txHash = original.hash;
+      const observation = this.config.chainId === 1 ? await sdk.observeTransaction(this.provider, row.replacementHash) : { state: "CONFIRMED" };
+      row.replacementState = observation.state;
+      row.stages.purchase = observation.state === "CONFIRMED" ? "confirmed" : observation.state === "MINED_UNFINALIZED" ? "pending" : "unknown";
+      row.note = `Original transaction replaced by an identical call: ${observation.state}. ${row.note ?? ""}`;
+    }
     for (const j of journals) {
-      if (rows.some(r => r.txHash === j.hash || (eq(r.sponsor, j.account) && r.nonce === j.nonce))) continue;
-      const status = await this.reconcileJournal(j);
+      if (rows.some(r => j.hash && ((r.txHash && eq(r.txHash, j.hash)) || (r.replacementHash && eq(r.replacementHash, j.hash))))) continue;
+      const observation = await this.journalObservation(j), status = observation.state;
       const stages = Object.fromEntries(STAGES.map(k => [k, "not_started"])) as Sponsorship["stages"];
       stages.purchase = FINALLY_FAILED.includes(status) ? "failed" : "unknown";
-      rows.push({ id: `unknown:${j.hash}`, branchId: branch, proposalId: j.proposalId ?? "unknown", sponsor: j.account, maxFee: 0n, txHash: j.hash, nonce: j.nonce, attempt: Number(active) + 1, stages, note: `Original transaction reconciliation: ${status}. No automatic purchase. On-chain phase ${Number(phase)}. `, checkpointId: null, updatedAt: j.at });
+      rows.push({ id: `unknown:${j.hash}`, branchId: branch, proposalId: j.proposalId ?? "unknown", sponsor: j.account, maxFee: 0n, txHash: j.hash, replacementHash: observation.replacementHash, replacementState: observation.replacementState, nonce: j.nonce, attempt: Number(active) + 1, stages, note: `Original transaction reconciliation: ${status}. No automatic purchase. On-chain phase ${Number(phase)}. `, checkpointId: null, updatedAt: j.at });
     }
     // Without a journal, a connected account's pending nonce is still chain evidence of an
     // unresolved transaction. Its operation/hash are unknown; never infer a new purchase is safe.
@@ -281,30 +319,37 @@ export class ChainAdapter implements RelayAdapter {
     } finally { this.locked = false; }
   }
   async reconcileJournal(j: Journal): Promise<string> {
+    return (await this.journalObservation(j)).state;
+  }
+  private async journalObservation(j: Journal): Promise<{ state: string; replacementHash?: Hex; replacementState?: string }> {
     const receipt = await this.provider.request({ method: "eth_getTransactionReceipt", params: [j.hash] });
     if (receipt) {
-      if (this.config.chainId === 1) { const o = await sdk.observeTransaction(this.provider, j.hash); return o.state === "CONFIRMED" ? "MINED" : o.state; }
-      return BigInt(receipt.status) === 1n ? "MINED" : "REVERTED";
+      if (this.config.chainId === 1) { const o = await sdk.observeTransaction(this.provider, j.hash); return { state: o.state === "CONFIRMED" ? "MINED" : o.state }; }
+      return { state: BigInt(receipt.status) === 1n ? "MINED" : "REVERTED" };
     }
     const tx = await this.provider.request({ method: "eth_getTransactionByHash", params: [j.hash] });
-    if (tx) return "PENDING";
+    if (tx) return { state: "PENDING" };
     const minedNonce = Number(BigInt(await this.provider.request({ method: "eth_getTransactionCount", params: [j.account, "latest"] })));
     if (minedNonce > j.nonce) {
       const head = Number(BigInt(await this.provider.request({ method: "eth_blockNumber" })));
       for (let b = head; b >= Math.max(this.config.deploymentBlock ?? 0, head - 127); b--) {
         const block = await this.provider.request({ method: "eth_getBlockByNumber", params: [`0x${b.toString(16)}`, true] });
-        const replacement = block.transactions.find((t: any) => eq(t.from, j.account) && Number(BigInt(t.nonce)) === j.nonce);
+        const replacement = block?.transactions?.find((t: any) => eq(t.from, j.account) && Number(BigInt(t.nonce)) === j.nonce);
         if (!replacement) continue;
-        if (!eq(replacement.to ?? "", j.to) || !eq(replacement.input, j.data)) return "REPLACED_OTHER";
-        // A same-call replacement that finally reverted never became an attempt; it must not
-        // block an authenticated status-1 retry forever, nor may an unfinalized one unblock it.
-        if (this.config.chainId === 1) return (await sdk.observeTransaction(this.provider, replacement.hash)).state === "REVERTED" ? "REPLACED_SAME_CALL_REVERTED" : "REPLACED_SAME_CALL_READ_CHAIN";
+        const sameCall = eq(replacement.to ?? "", j.to) && eq(replacement.input, j.data);
+        // Every replacement, including a cancellation, uses the same canonical receipt/depth
+        // policy. A recent, reorged or unavailable replacement cannot unlock another payment.
+        if (this.config.chainId === 1) {
+          const o = await sdk.observeTransaction(this.provider, replacement.hash);
+          const final = ["CONFIRMED", "REVERTED"].includes(o.state);
+          return { state: !final ? `REPLACED_${o.state}` : !sameCall ? "REPLACED_OTHER" : o.state === "REVERTED" ? "REPLACED_SAME_CALL_REVERTED" : "REPLACED_SAME_CALL_READ_CHAIN", replacementHash: replacement.hash, replacementState: o.state };
+        }
         const r = await this.provider.request({ method: "eth_getTransactionReceipt", params: [replacement.hash] });
-        return r && BigInt(r.status) === 0n ? "REPLACED_SAME_CALL_REVERTED" : "REPLACED_SAME_CALL_READ_CHAIN";
+        return { state: !sameCall ? "REPLACED_OTHER" : r && BigInt(r.status) === 0n ? "REPLACED_SAME_CALL_REVERTED" : "REPLACED_SAME_CALL_READ_CHAIN", replacementHash: replacement.hash, replacementState: r ? BigInt(r.status) === 0n ? "REVERTED" : "CONFIRMED" : "PENDING_OR_UNKNOWN" };
       }
-      return "NONCE_USED_UNKNOWN";
+      return { state: "NONCE_USED_UNKNOWN" };
     }
-    return "DROPPED_OR_UNKNOWN";
+    return { state: "DROPPED_OR_UNKNOWN" };
   }
   async unresolvedPurchase(branch: string, account: Account) {
     const [latestNonce, pendingNonce] = await Promise.all(["latest", "pending"].map(tag => this.provider.request({ method: "eth_getTransactionCount", params: [account.address, tag] })));

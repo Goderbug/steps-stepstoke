@@ -4,7 +4,7 @@
 // transactions, public deployment, keys or production-ready configuration are involved.
 import assert from 'node:assert/strict';
 import {chromium,expect} from '@playwright/test';
-import {readFile,writeFile} from 'node:fs/promises';
+import {readFile,writeFile,mkdir} from 'node:fs/promises';
 import {execFileSync} from 'node:child_process';
 import {spawn} from 'node:child_process';
 import {resolve,dirname} from 'node:path';
@@ -18,7 +18,9 @@ import {Interface,getCreate2Address,toUtf8Bytes,keccak256,toBeHex} from '../../.
 const root=resolve(dirname(fileURLToPath(import.meta.url)),'../../..');
 const local=await startLocal({rpcPort:18645,artifactPort:18646,configOut:'/tmp/steps-public-chain-local-config.json'});
 let browser,preview;
-const report={scope:'ACTUAL_LOCAL_CHAIN_1; HTTPS ROUTES ARE LOCAL TEST TRANSPORT',productionDeployment:null,liveCompatibility:'NOT_RUN',productionReady:false,checks:[],rpcMethods:[],pageErrors:[]};
+const report={scope:'ACTUAL_LOCAL_CHAIN_1; HTTPS ROUTES ARE LOCAL TEST TRANSPORT',productionDeployment:null,liveCompatibility:'NOT_RUN',productionReady:false,checks:[],rpcMethods:[],pageErrors:[],consoleMessages:[],failedRequests:[],views:[]};
+let rpcFault=null;
+let artifactFailureExpected=false;
 const send=(label,tx,from=local.accounts[0])=>local.send(label,{from,...tx});
 const read=async(branch,method,args=[])=>(await sdk.queryState(local.provider,sdk.readState(branch,method,args)))[0];
 try {
@@ -64,8 +66,10 @@ try {
  report.observation=observed;report.branch=branch;
  preview=spawn(process.execPath,['node_modules/vite/bin/vite.js','preview','--port','4179','--host','127.0.0.1','--strictPort'],{cwd:resolve(root,'frontend'),stdio:'ignore'});
  for(let n=0;;n++){try{if((await fetch('http://127.0.0.1:4179/')).ok)break;}catch{}if(n===100)throw Error('preview unavailable');await new Promise(r=>setTimeout(r,25));}
- browser=await chromium.launch({executablePath:process.env.W1_CHROMIUM_EXECUTABLE});const page=await browser.newPage();page.on('pageerror',e=>report.pageErrors.push(e.message));
- await page.route('https://steps-rpc.example.test/',async route=>{const r=route.request().postDataJSON();assert.ok(['eth_call','eth_getCode','eth_getLogs','eth_chainId','eth_blockNumber','eth_getBlockByNumber','eth_getTransactionByHash','eth_getTransactionReceipt','eth_getTransactionCount','debug_traceTransaction'].includes(r.method),'read-only public transport');report.rpcMethods.push(r.method);try{await route.fulfill({json:{jsonrpc:'2.0',id:r.id,result:await local.provider.request(r)}});}catch(e){await route.fulfill({json:{jsonrpc:'2.0',id:r.id,error:{code:-32000,message:e.message}}});}});
+ browser=await chromium.launch({executablePath:process.env.W1_CHROMIUM_EXECUTABLE});const page=await browser.newPage({viewport:{width:1440,height:900}});page.on('pageerror',e=>report.pageErrors.push(e.message));
+ page.on('console',m=>{if(['error','warning'].includes(m.type()))report.consoleMessages.push({type:m.type(),text:m.text(),url:m.location().url,artifactFailureExpected});});
+ page.on('requestfailed',r=>report.failedRequests.push({url:r.url(),error:r.failure()?.errorText,artifactFailureExpected}));
+ await page.route('https://steps-rpc.example.test/',async route=>{const r=route.request().postDataJSON();assert.ok(['eth_call','eth_getCode','eth_getLogs','eth_chainId','eth_blockNumber','eth_getBlockByNumber','eth_getTransactionByHash','eth_getTransactionReceipt','eth_getTransactionCount','debug_traceTransaction'].includes(r.method),'read-only public transport');report.rpcMethods.push(r.method);try{let result=await local.provider.request(r);if(rpcFault==='receipt'&&r.method==='eth_getTransactionReceipt'&&result)result={...result,blockHash:toBeHex(999,32)};await route.fulfill({json:{jsonrpc:'2.0',id:r.id,result}});}catch(e){await route.fulfill({json:{jsonrpc:'2.0',id:r.id,error:{code:-32000,message:e.message}}});}});
  // Public runtime reads dist/imd-deployment.json and its actual inventoried files.
  // HTTPS RPC transport remains explicitly local; no config route replaces runtime verification.
  await page.route('https://api.imd.fun/artifacts/'+m.files[0].hash,route=>route.fulfill({body:file,contentType:'text/markdown'}));
@@ -79,6 +83,34 @@ try {
  const [downloaded]=await Promise.all([page.waitForEvent('download'),page.getByRole('link',{name:'Download verified file'}).click()]);
  assert.deepEqual(await readFile(await downloaded.path()),file);
  report.checks.push('Public HTTPS artifact path verifies and downloads exact descriptor bytes from authenticated history');
+ // Reproduce drift after a real verification and an accepted output, never just on startup.
+ const refresh=()=>page.getByRole('button',{name:'Refresh chain state'}).click();
+ const unavailable=()=>expect(page.getByRole('heading',{name:'Ethereum deployment unavailable'})).toBeVisible();
+ const recover=async()=>{await page.getByRole('button',{name:'Verify configuration again'}).click();await expect(page.getByRole('heading',{name:'Round 1 output'})).toBeVisible();};
+ const shots=resolve(root,'test/scratch/public-boundary-shots');await mkdir(shots,{recursive:true});
+ for(const width of [1440,390]){
+ await page.setViewportSize({width,height:900});
+ await expect(page.getByRole('heading',{name:'Round 1 output'})).toBeVisible();
+ const start=report.rpcMethods.length;
+ await local.provider.request({method:'anvil_setChainId',params:[31337]});await refresh();await unavailable();
+ await expect(page.getByRole('heading',{name:'Round 1 output'})).toHaveCount(0);
+ assert.ok(report.rpcMethods.slice(start).includes('eth_chainId'));
+ const overflow=await page.evaluate(()=>document.documentElement.scrollWidth-document.documentElement.clientWidth);assert.equal(overflow,0);
+ await page.screenshot({path:resolve(shots,`unavailable-${width}.jpg`),type:'jpeg',quality:50});
+ report.views.push({width,state:'Ethereum deployment unavailable',horizontalOverflow:overflow});
+ await local.provider.request({method:'anvil_setChainId',params:[1]});await recover();
+ report.checks.push('A verified RPC changing to chain 31337 revokes public reads and removes accepted output; explicit re-verification restores chain 1');
+ const encoderCode=await local.provider.request({method:'eth_getCode',params:[addresses[0],'latest']});
+ await local.provider.request({method:'anvil_setCode',params:[addresses[0],'0x00']});await refresh();await unavailable();
+ await expect(page.getByRole('heading',{name:'Round 1 output'})).toHaveCount(0);
+ await local.provider.request({method:'anvil_setCode',params:[addresses[0],encoderCode]});await recover();
+ report.checks.push('Named runtime drift after verification disables existing-project reads until a fresh successful verification');
+ rpcFault='receipt';await refresh();await unavailable();
+ await expect(page.getByRole('heading',{name:'Round 1 output'})).toHaveCount(0);
+ rpcFault=null;await recover();
+ report.checks.push('Canonical deployment receipt drift revokes prior verification and cached output; restored evidence requires explicit verification');
+ }
+ await page.setViewportSize({width:1440,height:900});
  for(const summary of await page.locator('summary').all())if((await summary.textContent()).includes('Attempt'))await summary.click();
  const originalButton=page.getByRole('button',{name:'Download original result'});
  await expect(originalButton).toBeVisible();
@@ -86,6 +118,7 @@ try {
  assert.deepEqual(await readFile(await original.path()),pendingRaw);report.checks.push('Public original result download matches authenticated callback bytes; binding stays pending');
  assert.ok(!report.rpcMethods.some(m=>m==='eth_sendTransaction'||m.includes('switch')));assert.deepEqual(report.pageErrors,[]);
  // Reproduce a transport refusal, then verify a manually selected original without a server.
+ artifactFailureExpected=true;
  await page.route('https://api.imd.fun/artifacts/'+m.files[0].hash,route=>route.abort('failed'));
  await page.reload();
  await expect(page.getByLabel('Select original file to verify')).toBeVisible();
@@ -96,6 +129,9 @@ try {
  report.checks.push('CORS/transport failure supports explicit manual original selection; wrong bytes refused and correct bytes locally verified without settlement');
  assert.equal(Number(await read(branch,'attemptCount')),2);
  report.checks.push('No wallet transaction or implicit chain switch through public transport; production gates remain closed');
+ assert.deepEqual(report.pageErrors,[]);
+ assert.deepEqual(report.failedRequests.filter(r=>!r.artifactFailureExpected||r.url!=='https://api.imd.fun/artifacts/'+m.files[0].hash),[]);
+ assert.deepEqual(report.consoleMessages.filter(r=>r.type==='error'&&(!r.artifactFailureExpected||r.url!=='https://api.imd.fun/artifacts/'+m.files[0].hash)),[]);
  report.transactions=local.trace;
  console.log(JSON.stringify(report,null,2));
 }finally{if(browser)await browser.close();if(preview)preview.kill();await local.close();}

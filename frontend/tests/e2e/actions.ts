@@ -1,13 +1,26 @@
 import { expect, type Page } from '@playwright/test';
 
 export const funding = (page: Page) => page.getByRole('dialog', { name: /Fund a contribution|Review identical paid retry/ });
+// Verification replaces a short loading line with a full preview. Wait for that layout before
+// clicking controls below it; otherwise WebKit can send the pointer into the arriving iframe.
+async function settledPreview(page: Page) {
+  if (await page.getByRole('dialog').count()) return; // Modal controls use their own stable layout.
+  await expect(page.locator('#assets .preview .state-line')).toHaveCount(0);
+  if (await page.locator('#assets .preview .badge-ok').count())
+    await expect(page.getByRole('link', { name: 'Download verified file' })).toBeVisible();
+}
 export async function prepare(page: Page) {
-  if (!(await page.getByRole('dialog', { name: 'Prepare a contribution' }).count()))
+  if (!(await page.getByRole('dialog', { name: 'Prepare a contribution' }).count())) {
+    await expect(page.getByRole('button', { name: 'Continue', exact: true })).toBeVisible();
+    await settledPreview(page);
     await page.getByRole('button', { name: 'Continue', exact: true }).click();
+  }
+  await expect(page.getByRole('dialog', { name: 'Prepare a contribution' })).toBeVisible();
   return page.getByRole('dialog', { name: 'Prepare a contribution' });
 }
 export async function disclose(page: Page, title: string | RegExp) {
   if (page.url().includes("/b/")) await expect(page.locator("#assets")).toHaveAttribute("data-branch-id", page.url().split("/b/")[1]);
+  await settledPreview(page);
   const summary = page.locator('summary').filter({ hasText: title });
   await expect(summary.first()).toBeAttached();
   for (const item of await summary.all()) {
