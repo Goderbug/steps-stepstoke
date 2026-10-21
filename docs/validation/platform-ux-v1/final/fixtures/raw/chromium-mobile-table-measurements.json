@@ -1,6 +1,6 @@
 {
   "minCell": 140,
-  "glyph": 10.0625,
+  "glyph": 9.390625,
   "overlap": 0,
   "region": {
     "left": 50,
@@ -19,8 +19,8 @@
   },
   "download": {
     "left": 33,
-    "right": 264.328125,
-    "width": 231.328125
+    "right": 232.359375,
+    "width": 199.359375
   },
   "children": [
     {

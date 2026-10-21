@@ -581,35 +581,44 @@ try {
     const previous=evidence.web.r1.digest;
     const current=await read(web,'anchor');
     assert.notEqual(previous,current);
-    let corrupt=2, anchors=0, branches=0, histories=0;
+    // getBranch dispatches goal, direction, projectId, latestJobId, anchor, phase synchronously, so
+    // its own anchor call carries the goal call's JSON-RPC id + 4. Only that anchor is corrupted:
+    // proposal and witness reads also call anchor() and must not decide whether this test passes.
+    let mode='once', corrupted=0, anchors=0, branches=0, histories=0;
+    const goalIds=new Set();
     const intercept=async route=>{
       const request=route.request().postDataJSON();const call=request?.params?.[0];
       if(request?.method==='eth_call'&&call?.to?.toLowerCase()===web.toLowerCase()) {
-        if(call.data===goalSelector) branches++;
+        if(call.data===goalSelector) {branches++;goalIds.add(request.id);}
         if(call.data.startsWith(checkpointSelector)) histories++;
-        if(call.data===anchorSelector) {anchors++;if(corrupt>0){corrupt--;return route.fulfill({status:200,contentType:'application/json',headers:{'access-control-allow-origin':'*'},body:JSON.stringify({jsonrpc:'2.0',id:request.id,result:previous})});}}
+        if(call.data===anchorSelector) {
+          anchors++;
+          const branchRead=goalIds.has(request.id-4);
+          if(branchRead&&(mode==='always'||(mode==='once'&&corrupted===0))){corrupted++;return route.fulfill({status:200,contentType:'application/json',headers:{'access-control-allow-origin':'*'},body:JSON.stringify({jsonrpc:'2.0',id:request.id,result:previous})});}
+        }
       }
       return route.continue();
     };
     await page.route(local.config.rpcURL+'/**',intercept);
     const signed=evidence.walletTransactions.length,bought=await countPurchases();
     await refresh();
-    await expect.poll(()=>anchors).toBeGreaterThanOrEqual(3);
+    // One inconsistent branch/history pair, then the snapshot repeats BOTH reads by itself.
+    await expect.poll(()=>({corrupted,pairedReads:branches>=2&&histories>=2})).toEqual({corrupted:1,pairedReads:true});
     await expect(page.getByRole('button',{name:'Continue',exact:true})).toBeVisible();
-    assert.ok(branches>=2&&histories>=2,'both reads repeated after the mixed snapshot');
+    await expect(page.getByRole('button',{name:'Retry reads',exact:true})).toHaveCount(0);
     await expect(page.getByRole('heading',{name:'Round 1 output',exact:true})).toBeVisible();
-    const automatic={anchors,branches,histories};
-    corrupt=100;
+    const automatic={corruptedPairs:corrupted,anchors,branches,histories};
+    mode='always';
     await refresh();
     const retry=page.getByRole('button',{name:'Retry reads',exact:true});await expect(retry).toBeVisible();
     await expect(page.getByRole('button',{name:'Continue',exact:true})).toHaveCount(0);
     await expect(page.getByText('Read-only. Branch and history disagree',{exact:false})).toBeVisible();
-    const before={branches,histories};corrupt=0;await retry.click();
+    const before={branches,histories};mode='off';await retry.click();
     await expect(page.getByRole('heading',{name:'Round 1 output',exact:true})).toBeVisible();
     assert.ok(branches>before.branches&&histories>before.histories);
     assert.equal(await read(web,'anchor'),current);assert.equal(evidence.walletTransactions.length,signed);assert.equal(await countPurchases(),bought);
     await page.unroute(local.config.rpcURL+'/**',intercept);
-    evidence.mixedReads={automatic,afterRetry:{anchors,branches,histories},selection:previous,head:current,walletTransactionsUnchanged:signed};
+    evidence.mixedReads={automatic,afterRetry:{corruptedPairs:corrupted,anchors,branches,histories},selection:previous,head:current,walletTransactionsUnchanged:signed};
   });
   await record('Delayed preparation cancelled by close, account or network change before the selected wallet is called', async () => {
     const b=await createProject('Cancellation boundaries');await propose({target:'cancel',text:'No delayed wallet calls after cancellation'});

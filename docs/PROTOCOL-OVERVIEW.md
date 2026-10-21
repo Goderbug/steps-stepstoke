@@ -203,7 +203,7 @@ node frontend/scripts/local-deliver.mjs --branch ACTUAL_LOCAL_BRANCH --job LOCAL
 ```
 
 The command prints the original `result.json` path. Refresh progress, select that file in W1,
-and choose **提交原始结果绑定（不重新购买）**. Download/verify the actual asset bytes before a badge or
+and choose **Bind original result without purchase**. Download/verify the actual asset bytes before a badge or
 preview appears. `--file PATH` supplies real Markdown/HTML/PNG bytes matching the proposal;
 `--status 1` sends an authenticated mock refusal (explicit newly funded identical-body retry),
 and `--status 2` or `--status 7` demonstrates permanent freeze. These controls never purchase work.

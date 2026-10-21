@@ -1,4 +1,11 @@
 import type { RecoveryRecord } from "../domain/adapter";
+import type { Sponsorship } from "../domain/types";
+
+/** A local journal row whose purchase finally failed (reverted or replaced) never became an
+ *  on-chain attempt, so it cannot supersede the authenticated attempt that permits a retry. */
+export function isLatestAttempt(all: Sponsorship[] | undefined, sp: Sponsorship) {
+  return !all?.some((other) => other.proposalId === sp.proposalId && other.attempt > sp.attempt && other.stages.purchase !== "failed");
+}
 
 // Local storage only helps recovery after a reload: the chain state the adapter reports is the truth.
 const KEY = "w1.recovery.v1";

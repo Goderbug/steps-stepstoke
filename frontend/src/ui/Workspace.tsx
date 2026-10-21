@@ -59,7 +59,7 @@ export function Workspace({ adapter, branchId, account }: Props) {
   const view = cps.find(c => c.id === chosen) ?? latest;
   const wrongNet = !account.address || account.chainId !== caps.data.chainId;
   const fixture = adapter instanceof FixtureAdapter ? adapter : null;
-  const isLatestAttempt = (sp: Sponsorship) => !sponsorships.data?.some(other => other.proposalId === sp.proposalId && other.attempt > sp.attempt);
+  const isLatestAttempt = (sp: Sponsorship) => latestAttempt(sponsorships.data, sp);
   const outstanding = sponsorships.data?.some(sp => isLatestAttempt(sp) && (["unknown","pending"].includes(sp.stages.purchase) || ["pending","refused"].includes(sp.stages.callback) || ["pending","failed"].includes(sp.stages.binding)));
   const selectedProposal = proposals.data?.find(p => p.id === sponsorFor);
   const canFork = view.revision > 0 && view.createdBy === "round" && view.assets.length > 0;
@@ -71,12 +71,12 @@ export function Workspace({ adapter, branchId, account }: Props) {
     <SequenceRail adapter={adapter} caps={caps.data} checkpoints={cps} selectedId={view.id} latestId={latest.id} onSelect={setChosen} />
     {view.id !== latest.id && <p className="selection-note">Viewing history is read-only. Continue always prepares at the current checkpoint. <button className="btn btn-link" onClick={() => setChosen(latest.id)}>Select latest</button></p>}
     <ArtifactViewer key={view.id} checkpoint={view} adapter={adapter} caps={caps.data}>{canFork && <button className="btn btn-secondary" disabled={wrongNet} onClick={() => setForkFrom(view.id)}>Historical Fork</button>}</ArtifactViewer>
-    <section className="next-action" aria-labelledby="next-title"><div><h2 id="next-title">What comes next?</h2><p>{outstanding ? "An attempt is unresolved. Review its status before funding again." : "Prepare work at the current checkpoint, or fund an eligible contribution."}</p><p className="meta">Continue opens preparation only. Proposal, approval and payment stay separate.</p></div><div className="actions"><button className="btn btn-primary" disabled={b.frozen} onClick={() => { setResubmit(null); setPreparing(true); }}>Continue</button><a className="btn btn-secondary" href="#proposals" onClick={jump("proposals")}>View contributions ({proposals.data?.filter(p => p.status === "current").length ?? 0})</a></div></section>
+    <section className="next-action" aria-labelledby="next-title"><div><h2 id="next-title">What comes next?</h2><p>{outstanding ? "An attempt is unresolved. Review its status before funding again." : "Prepare work at the current checkpoint, or fund an eligible contribution."}</p><p className="meta">Continue opens preparation only. Proposal, approval and payment stay separate.</p></div><div className="actions"><button className="btn btn-primary" disabled={b.frozen} onClick={() => { setResubmit(null); setPreparing(true); }}>Continue</button><a className="btn btn-secondary" href="#proposals" onClick={jump("proposals")}>{proposals.isSuccess ? `View contributions (${proposals.data.filter(p => p.status === "current").length})` : "View contributions"}</a></div></section>
     <section id="proposals" className="work-section" aria-labelledby="contributions-title" tabIndex={-1}><div className="section-heading"><h2 id="contributions-title">Contributions</h2><span className="meta">Every eligible proposal can be funded</span></div>
       {outstanding && <p className="alert alert-warn" role="status">Wait for the original transaction or callback, or correct its binding. No automatic repurchase.</p>}
       {proposals.isPending && <p className="state-line">Reading proposals…</p>}
       {proposals.isError && <p role="alert">Proposal read failed. <button className="btn btn-link" onClick={() => proposals.refetch()}>Retry</button></p>}
-      {!proposals.data?.length && <p className="empty">No proposals yet. Continue opens the preparation form.</p>}
+      {proposals.isSuccess && proposals.data.length === 0 && <p className="empty">No proposals yet. Continue opens the preparation form.</p>}
       <ul className="list">{[...(proposals.data ?? [])].sort((a,b) => order(a)-order(b)).map(p => <li key={p.id}><ContributionCard proposal={p}>{p.status === "current" && <button className="btn btn-secondary" disabled={b.frozen || wrongNet || outstanding} onClick={() => setSponsorFor(p.id)}>Review funding</button>}{p.status === "stale" && <button className="btn btn-quiet" onClick={() => { setResubmit(p); setPreparing(true); }}>Prepare at current checkpoint</button>}</ContributionCard></li>)}</ul>
       {wrongNet && <p className="hint">Browse freely. Use Connect wallet in the header and select {caps.data.chainName} to sign.</p>}
     </section>
@@ -84,7 +84,7 @@ export function Workspace({ adapter, branchId, account }: Props) {
       {recovery && <p className="alert alert-warn" role="status">{recovery}</p>}
       {sponsorships.isPending && <p className="state-line">Reading attempts…</p>}
       {sponsorships.isError && <p role="alert">Attempt read failed. <button className="btn btn-link" onClick={() => sponsorships.refetch()}>Retry</button></p>}
-      {!sponsorships.data?.length && <p className="empty">No funding attempts recorded for this branch.</p>}
+      {sponsorships.isSuccess && sponsorships.data.length === 0 && <p className="empty">No funding attempts recorded for this branch.</p>}
       <ul className="list">{sponsorships.data?.slice().reverse().map(sp => <SponsorshipRow key={`${who}:${sp.id}`} {...{sp,adapter,account,fixture,wrongNet}} canRetry={isLatestAttempt(sp)} onChange={refresh} branch={b} latest={latest} cps={cps} chainId={caps.data.chainId} proposal={proposals.data?.find(p => p.id===sp.proposalId) ?? null} />)}</ul>
     </section>
     <EvidenceDisclosure title="Branch, network and execution identity"><dl className="facts"><div><dt>Chain</dt><dd>{caps.data.chainName} · {caps.data.chainId}</dd></div><div><dt>Branch / spender</dt><dd><CopyId value={b.address ?? b.id} label="Branch" /></dd></div><div><dt>Latest checkpoint</dt><dd><CopyId value={latest.id} label="latest checkpoint" /></dd></div><div><dt>Selected checkpoint</dt><dd><CopyId value={view.id} label="selected checkpoint" /></dd></div><div><dt>IMD project / latest execution</dt><dd>{b.imdProjectId ?? "None"} / {b.head ?? "None"}</dd></div>{b.parent && <div><dt>Fork provenance</dt><dd><a href={`#/${base}/b/${b.parent.branchId}`}>{b.parent.branchId}</a> · {b.parent.checkpointId}</dd></div>}</dl></EvidenceDisclosure>

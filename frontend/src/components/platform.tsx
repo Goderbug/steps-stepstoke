@@ -1,7 +1,7 @@
 import type { RelayAdapter } from "../domain/adapter";
 import type { Capabilities } from "../domain/types";
 import { VerifiedThumbnail } from "./VerifiedThumbnail";
-import type { ReactNode } from "react";
+import { useCallback, useEffect, useRef, useState, type ReactNode } from "react";
 import type { Branch, Checkpoint, Proposal, Sponsorship } from "../domain/types";
 import { STAGES } from "../domain/types";
 import { CopyId, KIND_LABEL, STAGE_LABEL, STATE_LABEL } from "../ui/format";
@@ -31,8 +31,33 @@ export function RoundItem({ checkpoint: cp, selected, latest, onSelect, thumbnai
 }
 
 export function SequenceRail({ checkpoints, selectedId, latestId, onSelect, adapter, caps }: { adapter?: RelayAdapter; caps?: Capabilities; checkpoints: Checkpoint[]; selectedId: string; latestId: string; onSelect: (id: string) => void }) {
-  return <section className="sequence" aria-labelledby="sequence-title"><div className="section-heading"><h2 id="sequence-title">Sequence</h2><span className="meta">Accepted checkpoints in chain order</span></div>
-    <ol className="sequence-rail">{[...checkpoints].sort((a,b) => a.revision-b.revision).map(cp => <RoundItem key={cp.id} checkpoint={cp} thumbnail={adapter && caps && cp.assets.find(a=>cp.changed.includes(a.assetKey)&&a.kind==="image") ? <VerifiedThumbnail asset={cp.assets.find(a=>cp.changed.includes(a.assetKey)&&a.kind==="image")!} adapter={adapter} caps={caps}/> : undefined} selected={cp.id===selectedId} latest={cp.id===latestId} onSelect={() => onSelect(cp.id)} />)}</ol>
+  const rail = useRef<HTMLOListElement>(null);
+  const [edges, setEdges] = useState({ overflow: false, start: true, end: true });
+  const ordered = [...checkpoints].sort((a,b) => a.revision-b.revision);
+  // Every checkpoint keeps a readable width; a long history scrolls inside the rail instead of shrinking.
+  const measure = useCallback(() => {
+    const el = rail.current; if (!el) return;
+    const overflow = el.scrollWidth > el.clientWidth + 1;
+    const next = { overflow, start: el.scrollLeft <= 1, end: el.scrollLeft + el.clientWidth >= el.scrollWidth - 1 };
+    setEdges(prev => prev.overflow === next.overflow && prev.start === next.start && prev.end === next.end ? prev : next);
+  }, []);
+  // Keep the selected round in view without moving the page vertically.
+  const reveal = useCallback(() => {
+    const el = rail.current; const item = el?.querySelector<HTMLElement>(".round-item.selected");
+    if (el && item && (item.offsetLeft < el.scrollLeft || item.offsetLeft + item.offsetWidth > el.scrollLeft + el.clientWidth)) el.scrollLeft = Math.max(0, item.offsetLeft + item.offsetWidth - el.clientWidth);
+    measure();
+  }, [measure]);
+  useEffect(() => {
+    const el = rail.current; if (!el) return;
+    reveal();
+    if (typeof ResizeObserver === "undefined") return;
+    const ro = new ResizeObserver(reveal); ro.observe(el);
+    return () => ro.disconnect();
+  }, [reveal, selectedId, checkpoints.length]);
+  const page = (dir: 1 | -1) => { const el = rail.current; if (!el) return; el.scrollBy({ left: dir * Math.max(el.clientWidth - 96, 160), behavior: matchMedia("(prefers-reduced-motion: reduce)").matches ? "auto" : "smooth" }); };
+  return <section className="sequence" aria-labelledby="sequence-title"><div className="section-heading"><h2 id="sequence-title">Sequence</h2><span className="meta">{ordered.length} accepted checkpoints in chain order</span></div>
+    {edges.overflow && <div className="rail-controls"><p className="meta" id="rail-hint">Scroll sideways to see all {ordered.length} checkpoints.</p><div className="actions"><button type="button" className="btn btn-quiet" aria-describedby="rail-hint" disabled={edges.start} onClick={() => page(-1)}>← Earlier</button><button type="button" className="btn btn-quiet" aria-describedby="rail-hint" disabled={edges.end} onClick={() => page(1)}>Later →</button></div></div>}
+    <ol ref={rail} className={edges.overflow ? "sequence-rail scrolls" : "sequence-rail"} onScroll={measure}>{ordered.map(cp => <RoundItem key={cp.id} checkpoint={cp} thumbnail={adapter && caps && cp.assets.find(a=>cp.changed.includes(a.assetKey)&&a.kind==="image") ? <VerifiedThumbnail asset={cp.assets.find(a=>cp.changed.includes(a.assetKey)&&a.kind==="image")!} adapter={adapter} caps={caps}/> : undefined} selected={cp.id===selectedId} latest={cp.id===latestId} onSelect={() => onSelect(cp.id)} />)}</ol>
   </section>;
 }
 

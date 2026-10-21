@@ -1,0 +1,16 @@
+{
+  "test": "live mode fails closed with explicit A1_INTEGRATION_PENDING, no fixtures, no connect wall",
+  "engine": "chromium-desktop",
+  "viewport": {
+    "width": 1440,
+    "height": 900
+  },
+  "status": "passed",
+  "horizontalOverflow": 0,
+  "pageErrors": [],
+  "externalAttempts": [],
+  "httpErrors": [],
+  "unexpectedConsoleErrors": [],
+  "expectedSecurityBlocks": [],
+  "console": []
+}

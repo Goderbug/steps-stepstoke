@@ -27,10 +27,14 @@ export function loadJournal(): Journal[] {
     return rows.filter((r) => validHex(r.hash, 32) && validHex(r.account, 20) && validHex(r.to, 20) && typeof r.data === "string" && Number.isSafeInteger(r.nonce) && Number.isSafeInteger(r.chainId) && typeof r.operation === "string" && typeof r.branch === "string").slice(-100);
   } catch { return []; }
 }
+/** One row per original hash. A later transaction that reuses a dropped nonce is a separate
+ *  record: the original hash stays so reconciliation can still report it as replaced. */
+export function mergeJournal(rows: Journal[], row: Journal): Journal[] {
+  return [...rows.filter((r) => !(r.hash !== null && row.hash !== null && eq(r.hash, row.hash))), row].slice(-100);
+}
 function persist(row: Journal) {
   try {
-    const rows = loadJournal().filter((r) => !(eq(r.account, row.account) && r.chainId === row.chainId && r.nonce === row.nonce));
-    localStorage.setItem(KEY, JSON.stringify([...rows, row].slice(-100)));
+    localStorage.setItem(KEY, JSON.stringify(mergeJournal(loadJournal(), row)));
   } catch { /* Storage is a hint. Every business read recovers contract state and authenticated logs. */ }
 }
 export function httpProvider(url: string): Provider {

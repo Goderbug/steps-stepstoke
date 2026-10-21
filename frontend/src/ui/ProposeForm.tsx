@@ -8,36 +8,46 @@ import { KIND_LABEL, short } from "./format";
 
 interface Props { adapter: RelayAdapter; account: Account; branch: Branch; latest: Checkpoint; caps: Capabilities; prefill: Proposal | null; onDone: () => void }
 
+type Draft = { kind: AssetKind; mode: ProposalMode; targetKey: string; inputKeys: string[]; requirement: string };
+export type DraftField = "kind" | "target" | "inputs" | "requirement";
+export interface DraftIssue { field: DraftField | null; text: string }
+
 /** Validates a draft against the capability budgets A1 reports. Returns problems in plain words. */
-export function draftProblems(caps: Capabilities, latest: Checkpoint, d: { kind: AssetKind; mode: ProposalMode; targetKey: string; inputKeys: string[]; requirement: string }): string[] {
-  const out: string[] = [];
-  if (!caps.enabledKinds.includes(d.kind)) out.push(`A1 configuration has disabled ${KIND_LABEL[d.kind]}`);
+export function draftProblems(caps: Capabilities, latest: Checkpoint, d: Draft): string[] {
+  return draftIssues(caps, latest, d).map((i) => i.text);
+}
+
+/** The same problems, each tied to the control that can fix it (null: the draft as a whole). */
+export function draftIssues(caps: Capabilities, latest: Checkpoint, d: Draft): DraftIssue[] {
+  const out: DraftIssue[] = [];
+  const push = (field: DraftField | null, text: string) => out.push({ field, text });
+  if (!caps.enabledKinds.includes(d.kind)) push("kind", `A1 configuration has disabled ${KIND_LABEL[d.kind]}`);
   if (caps.maxAssetNameBytes) {
-    if (!/^[a-zA-Z0-9_-]{1,64}$/.test(d.targetKey)) out.push("Use letters, numbers, underscores or hyphens, up to 64 bytes");
-  } else if (!/^[a-z0-9][a-z0-9-]{0,31}$/.test(d.targetKey)) out.push("Use lowercase letters, numbers and hyphens, up to 32 characters");
+    if (!/^[a-zA-Z0-9_-]{1,64}$/.test(d.targetKey)) push("target", "Use letters, numbers, underscores or hyphens, up to 64 bytes");
+  } else if (!/^[a-z0-9][a-z0-9-]{0,31}$/.test(d.targetKey)) push("target", "Use lowercase letters, numbers and hyphens, up to 32 characters");
   const existing = latest.assets.find((a) => a.assetKey === d.targetKey);
-  if (d.mode === "create" && existing) out.push(`Asset slot ${d.targetKey} already exists; choose Update`);
-  if (d.mode === "create" && latest.assets.length >= caps.maxAssets) out.push(`Asset capacity reached: ${caps.maxAssets}, only existing assets can be updated`);
-  if (d.mode === "update" && !existing) out.push("Select an existing asset to update");
-  if (d.mode === "update" && existing && existing.kind !== d.kind) out.push("The update type must match the target asset");
-  if (d.mode === "update" && !d.inputKeys.includes(d.targetKey)) out.push("The update target must be included as an input");
-  if (d.inputKeys.length > caps.maxInputs) out.push(`Maximum inputs: ${caps.maxInputs} items`);
-  if (new Set(d.inputKeys).size !== d.inputKeys.length) out.push("Input assets cannot be repeated");
-  if (d.inputKeys.some((key) => !latest.assets.some((a) => a.assetKey === key))) out.push("Inputs must come from the current checkpoint");
-  if (caps.maxOutputs < 1) out.push("A1 configuration does not allow output assets");
-  if (d.kind === "image" && d.mode === "update" && !caps.imageEditing) out.push("Image editing is disabled in A1");
-  if (d.kind === "image" && d.inputKeys.length > 0) out.push("Image inputs and editing are disabled in A1");
-  if (!d.requirement.trim()) out.push("Describe the work to propose");
+  if (d.mode === "create" && existing) push("target", `Asset slot ${d.targetKey} already exists; choose Update`);
+  if (d.mode === "create" && latest.assets.length >= caps.maxAssets) push(null, `Asset capacity reached: ${caps.maxAssets}, only existing assets can be updated`);
+  if (d.mode === "update" && !existing) push("target", "Select an existing asset to update");
+  if (d.mode === "update" && existing && existing.kind !== d.kind) push("target", "The update type must match the target asset");
+  if (d.mode === "update" && !d.inputKeys.includes(d.targetKey)) push("inputs", "The update target must be included as an input");
+  if (d.inputKeys.length > caps.maxInputs) push("inputs", `Maximum inputs: ${caps.maxInputs} items`);
+  if (new Set(d.inputKeys).size !== d.inputKeys.length) push("inputs", "Input assets cannot be repeated");
+  if (d.inputKeys.some((key) => !latest.assets.some((a) => a.assetKey === key))) push("inputs", "Inputs must come from the current checkpoint");
+  if (caps.maxOutputs < 1) push(null, "A1 configuration does not allow output assets");
+  if (d.kind === "image" && d.mode === "update" && !caps.imageEditing) push("kind", "Image editing is disabled in A1");
+  if (d.kind === "image" && d.inputKeys.length > 0) push("inputs", "Image inputs and editing are disabled in A1");
+  if (!d.requirement.trim()) push("requirement", "Describe the work to propose");
   const bytes = utf8Length(d.requirement);
-  if (bytes > (caps.maxTextBytes ?? caps.maxRequestBodyBytes)) out.push(`Requirement contains ${bytes} bytes, exceeds request text limit ${caps.maxTextBytes ?? caps.maxRequestBodyBytes} bytes`);
+  if (bytes > (caps.maxTextBytes ?? caps.maxRequestBodyBytes)) push("requirement", `Requirement contains ${bytes} bytes, exceeds request text limit ${caps.maxTextBytes ?? caps.maxRequestBodyBytes} bytes`);
   if (caps.maxTextBytes && d.mode === "create") {
     const kinds = new Set(latest.assets.map(a => a.kind)); kinds.add(d.kind);
-    if (latest.assets.length + 1 + 3 - kinds.size > caps.maxAssets) out.push("Reserve slots for the remaining asset types");
-    if (d.kind === "html" && latest.assets.some(a => a.kind === "html")) out.push("HTML output is fixed to dist/index.html. Update the existing HTML asset");
+    if (latest.assets.length + 1 + 3 - kinds.size > caps.maxAssets) push(null, "Reserve slots for the remaining asset types");
+    if (d.kind === "html" && latest.assets.some(a => a.kind === "html")) push("target", "HTML output is fixed to dist/index.html. Update the existing HTML asset");
   }
-  if (caps.maxTextBytes && d.kind === "document" && latest.assets.some(a => d.inputKeys.includes(a.assetKey) && a.kind !== "document")) out.push("Markdown accepts Markdown inputs only");
+  if (caps.maxTextBytes && d.kind === "document" && latest.assets.some(a => d.inputKeys.includes(a.assetKey) && a.kind !== "document")) push("inputs", "Markdown accepts Markdown inputs only");
   const inputBytes = latest.assets.filter((a) => d.inputKeys.includes(a.assetKey)).reduce((n, a) => n + a.descriptor.bytes, 0);
-  if (d.kind === "html" && inputBytes > caps.maxBytes.html) out.push(`Combined input size: ${inputBytes} bytes, exceeds HTML limit ${caps.maxBytes.html}`);
+  if (d.kind === "html" && inputBytes > caps.maxBytes.html) push("inputs", `Combined input size: ${inputBytes} bytes, exceeds HTML limit ${caps.maxBytes.html}`);
   return out;
 }
 
@@ -56,7 +66,28 @@ export function ProposeForm({ adapter, account, branch, latest, caps, prefill, o
 
   const effectiveInputs = mode === "update" && targetKey && !inputs.includes(targetKey) ? [...inputs, targetKey] : inputs;
   const effectivePublish = kind === "html" && caps.sitePublication && publish;
-  const problems = draftProblems(caps, latest, { kind, mode, targetKey, inputKeys: effectiveInputs, requirement });
+  const issues = draftIssues(caps, latest, { kind, mode, targetKey, inputKeys: effectiveInputs, requirement });
+  const problems = issues.map((i) => i.text);
+  const fieldErrors = (field: DraftField) => review ? issues.filter((i) => i.field === field).map((i) => i.text) : [];
+  const general = issues.filter((i) => i.field === null).map((i) => i.text);
+  const refs = useRef<Partial<Record<DraftField, HTMLElement | null>>>({});
+  /** Error text sits beside its control, is announced through aria-describedby and marks the control invalid. */
+  const invalid = (field: DraftField, describedBy?: string) => {
+    const errs = fieldErrors(field);
+    return { "aria-invalid": errs.length > 0 || undefined, "aria-describedby": [errs.length ? `${field}-err` : "", describedBy ?? ""].filter(Boolean).join(" ") || undefined };
+  };
+  const errorText = (field: DraftField) => {
+    const errs = fieldErrors(field);
+    return errs.length ? <span id={`${field}-err`} className="field-err">{errs.join(". ")}</span> : null;
+  };
+  /** Review moves keyboard focus to the first control that needs a change, in form order. */
+  const startReview = () => {
+    setReview(true);
+    const first = (["kind", "target", "inputs", "requirement"] as DraftField[]).find((f) => issues.some((i) => i.field === f));
+    const box = first ? refs.current[first] : null;
+    const target = box?.matches("input,select,textarea") ? box : box?.querySelector<HTMLElement>("input:not(:disabled),select,textarea");
+    (target ?? (first === "inputs" ? refs.current.kind : null))?.focus();
+  };
   const updatable = latest.assets.filter((a) => a.kind === kind);
   const wrongNet = !account.address || account.chainId !== caps.chainId;
   const edit = <T,>(f: (v: T) => void) => (v: T) => { f(v); setReview(false); setMsg(null); };
@@ -93,15 +124,16 @@ export function ProposeForm({ adapter, account, branch, latest, caps, prefill, o
   };
 
   return (
-    <form className="form" aria-labelledby="propose-title" onSubmit={(e) => { e.preventDefault(); setReview(true); }} noValidate>
+    <form className="form" aria-labelledby="propose-title" onSubmit={(e) => { e.preventDefault(); startReview(); }} noValidate>
       <h3 id="propose-title">{prefill ? "Resubmit proposal" : "Propose work"}</h3>
       <p className="hint">Proposing costs gas only. Funding is separate. Current checkpoint: {latest.id}. </p>
       <div className="field-row">
         <label className="field">
           <span>Type</span>
-          <select aria-label="Type" value={kind} onChange={(e) => edit(changeKind)(e.target.value as AssetKind)}>
+          <select aria-label="Type" ref={(el) => { refs.current.kind = el; }} {...invalid("kind")} value={kind} onChange={(e) => edit(changeKind)(e.target.value as AssetKind)}>
             {caps.enabledKinds.map((k) => <option key={k} value={k}>{KIND_LABEL[k]}</option>)}
           </select>
+          {errorText("kind")}
         </label>
         <fieldset className="field">
           <legend>Mode</legend>
@@ -114,18 +146,20 @@ export function ProposeForm({ adapter, account, branch, latest, caps, prefill, o
       {mode === "create" ? (
         <label className="field">
           <span>New asset name</span>
-          <input value={targetKey} onChange={(e) => edit(setTargetKey)(e.target.value.trim())} placeholder="e.g. intro" autoComplete="off" spellCheck={false} />
+          <input aria-label="New asset name" ref={(el) => { refs.current.target = el; }} {...invalid("target")} value={targetKey} onChange={(e) => edit(setTargetKey)(e.target.value.trim())} placeholder="e.g. intro" autoComplete="off" spellCheck={false} />
+          {errorText("target")}
         </label>
       ) : (
         <label className="field">
           <span>Target asset</span>
-          <select aria-label="Target asset" value={targetKey} onChange={(e) => edit(setTargetKey)(e.target.value)}>
+          <select aria-label="Target asset" ref={(el) => { refs.current.target = el; }} {...invalid("target")} value={targetKey} onChange={(e) => edit(setTargetKey)(e.target.value)}>
             <option value="">Select an asset</option>
             {updatable.map((a) => <option key={a.assetKey} value={a.assetKey}>{a.assetKey} (round {a.revision})</option>)}
           </select>
+          {errorText("target")}
         </label>
       )}
-      <fieldset className="field">
+      <fieldset className="field" ref={(el) => { refs.current.inputs = el; }} {...invalid("inputs")}>
         <legend>Input assets at the current checkpoint</legend>
         {latest.assets.length === 0 && <p className="hint">No input assets at this checkpoint.</p>}
         {latest.assets.map((a) => {
@@ -138,10 +172,12 @@ export function ProposeForm({ adapter, account, branch, latest, caps, prefill, o
             </label>
           );
         })}
+        {errorText("inputs")}
       </fieldset>
       <label className="field">
         <span>Requirement</span>
-        <textarea aria-label="Requirement" rows={3} value={requirement} onChange={(e) => edit(setRequirement)(e.target.value)} aria-describedby="req-len" />
+        <textarea aria-label="Requirement" ref={(el) => { refs.current.requirement = el; }} {...invalid("requirement", "req-len")} rows={3} value={requirement} onChange={(e) => edit(setRequirement)(e.target.value)} />
+        {errorText("requirement")}
         <span id="req-len" className="hint">{utf8Length(requirement)} / {caps.maxTextBytes ?? caps.maxRequestBodyBytes} bytes (complete request body limit {caps.maxRequestBodyBytes})</span>
       </label>
       {kind === "html" && caps.sitePublication && (
@@ -151,7 +187,10 @@ export function ProposeForm({ adapter, account, branch, latest, caps, prefill, o
         </label>
       )}
       {review && problems.length > 0 && (
-        <ul className="alert alert-error" role="alert">{problems.map((p) => <li key={p}>{p}</li>)}</ul>
+        <div className="alert alert-error" role="alert">
+          <p>{problems.length === general.length ? "This proposal cannot be submitted yet:" : `Fix ${problems.length - general.length === 1 ? "the highlighted field" : "the highlighted fields"} before signing.`}</p>
+          {general.length > 0 && <ul>{general.map((p) => <li key={p}>{p}</li>)}</ul>}
+        </div>
       )}
       {!(review && problems.length === 0) && <button className="btn btn-primary" type="submit">Review proposal</button>}
       {review && problems.length === 0 && (
