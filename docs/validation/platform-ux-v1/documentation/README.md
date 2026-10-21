@@ -8,7 +8,7 @@ Current operator/developer documentation: [root README](../../../../README.md), 
 
 **Recorded** below means the accepted final implementation-stage evidence, preserved unchanged under `../final/`. **Rerun** means this documentation pass's local command. Neither is independent certification. A byte comparison establishes which implementation those recorded results concern; it does not recertify behavior.
 
-Pinned repository: identity-md-launches/launch-2294-build-cto-relay-station, A1 commit `878ba4ba1cf7c601656f3a25d17546a425ba1207`, tree `c7838395fec7b493f61a1cf7a08cf5c9db6966b9`. The starting checkout `bb2a495491fac5b2c27bccd46c530f8290f84dd9` additionally contains accepted platform work. [byte-audit.json](byte-audit.json) compares 42 pinned protected core/build/dependency files, plus 120 final source-manifest entries outside README/docs and all eight export files: no mismatch. Historical README/docs hashes intentionally describe earlier prose.
+Pinned repository: identity-md-launches/launch-2294-build-cto-relay-station, A1 commit `878ba4ba1cf7c601656f3a25d17546a425ba1207`, tree `c7838395fec7b493f61a1cf7a08cf5c9db6966b9`. This documentation pass began at accepted checkout `c49a51b944cd77287b6584c8a0410ee46160c27d` (tree `8ceefebf4b56bd78e1ebabcb660d295e2c262b37`), which contains prior accepted platform work. The [byte audit](byte-audit.json) confirms the pinned A1/core/build/dependency comparison passes, but finds seven current frontend source/test files and four export paths that do not match the retained final manifests. [Current hashes](current-tree-hashes.json) records all tracked frontend/export bytes and both sides of each comparison. Historical README/docs hashes intentionally describe earlier prose and are excluded from this runtime identity finding.
 
 Reproduce this read-only byte audit from the root:
 
@@ -26,6 +26,9 @@ PASS means the indicated local/source scope only. FAIL means a known gap. NOT_RU
 | --- | --- | --- |
 | Read delivered project and verify pinned baseline | PASS | [byte audit](byte-audit.json), [baseline](../BASELINE.json); protected source compared to actual Git objects |
 | Preserve A1 src/sdk/cli/abi/config and root build/dependencies | PASS | [per-file hashes](byte-audit.json); no core/config mutation |
+| Current frontend source and root export match retained final acceptance hashes | FAIL | Seven frontend source/test files and four recorded export paths mismatch; see [current hash comparison](current-tree-hashes.json). Prior runtime results are historical for their recorded source, not accepted as current-tree runtime acceptance |
+| Rerun complete frontend type/unit/browser and local-chain acceptance against this exact source | NOT_RUN | No runtime suite was run in this documentation pass; do not attribute prior results to current bytes |
+| Current exact export route/gateway behavior and rendered contrast/focus review | NOT_RUN | Those browser and measurement reports use the retained prior source identity; current root `dist/` is present but was not behaviorally inspected in this pass |
 | Documentation write boundary README.md + docs/** | PASS | [documentation checks](documentation-checks.json); frontend/design replacement located under docs |
 | Planning and stage records retained | PASS | [plan](../PLAN.md), [planning checks](../planning-check-results.json), [final stage results](../final/check-results.json) |
 | Platform-only design; no Second Life artwork redesign | PASS | [source manifest](../final/source-sha256.json), [design](../../../DESIGN.md); authenticated output unchanged |
@@ -63,7 +66,7 @@ PASS means the indicated local/source scope only. FAIL means a known gap. NOT_RU
 | Preserve authenticated bytes/IDs/historical records | PASS | [source/export audit](byte-audit.json), [historical archive index](../final/history-traces-index.json); original validation evidence unmodified |
 | Labelled successful HTML → PNG → HTML default demo; secondary failures | PASS | [browser cases](../final/e2e-final.json), [demo captures](../final/screenshots/); simulated signatures and deterministic bytes |
 | Never fixtures on real routes | PASS | [public/local behavior](../../../frontend-README.md), [local negative configuration checks](../final/local/chromium/browser-chain.json) |
-| Source/root dist relative export/hash routes/gateway-like prefix | PASS | [hashes](../final/dist-sha256.json), [byte-identical rebuild](../final/export-rebuild.json), [browser report](../final/e2e-final.json) |
+| Historical source/root dist relative export/hash routes/gateway-like prefix | PASS | [historical hashes](../final/dist-sha256.json), [historical byte-identical rebuild](../final/export-rebuild.json), [historical browser report](../final/e2e-final.json); current identity mismatch is recorded above |
 | Frontend source ≤8MiB; no delivered dependencies/caches | PASS | [byte audit](byte-audit.json), [structural final audit](../final/structural-review.json) |
 | Logs/screenshots/receipts/hashes/open issues delivered | PASS | [raw](../final/raw/), [screenshots](../final/screenshots/), [four local runs](../final/local-run-results.json), [open gates](open-issues.md) |
 | Six-domain design/structural worker reviews | PASS | [review outcomes/corrections](../final/design-review.md), [structural report](../final/structural-review.json); not independent approval |
@@ -115,7 +118,7 @@ Additional local observations:
 | Rendered Chromium sample at 1440/390 | PASS | [observations](rendered-samples.json), [desktop capture](screenshots/chromium-workspace-1440.jpg), [mobile capture](screenshots/chromium-workspace-390.jpg); verified output loaded before capture, no page errors/host overflow |
 | Changed-document link/path/whitespace checks | PASS | [check record](documentation-checks.json); byte/path checks do not certify behavior |
 
-The full 175-case/four-chain-browser matrix above remains tied to its original source hashes, not relabelled as this pass's run. This pass does not clear independent review, native wallet/device, live compatibility or liveness gates. The initial root release-check failure is a missing-build precondition, not a core regression; its exact diagnostic is retained alongside the successful scratch check.
+The full 175-case/four-chain-browser matrix above is historical evidence; its retained manifest differs from the current frontend source/export at the paths listed in [current hashes](current-tree-hashes.json). It is not evidence that the current exact bytes pass those suites. This pass does not clear independent review, native wallet/device, live compatibility or liveness gates. The initial root release-check failure is a missing-build precondition, not a core regression; its exact diagnostic is retained alongside the successful scratch check.
 
 
 To reproduce the two documentation screenshots after the frontend install/build and Chromium installation, run:

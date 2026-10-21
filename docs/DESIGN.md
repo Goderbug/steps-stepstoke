@@ -25,7 +25,7 @@ All component CSS references semantic tokens in `:root`; there is no dark theme.
 | `--color-warning` / `--color-warning-bg` | `#795019` / `#FFF5DF` | Pending, unknown and refusal context |
 | `--color-error` | `#9D3028` | Failures and frozen state |
 
-State always has a text label. Measurement results are in `validation/platform-ux-v1/contrast.json`: body/canvas 14.493:1, secondary/canvas 5.122:1, white/action 5.058:1, control edge/surface 3.513:1. These are solid token pairs, not a claim about arbitrary artifact content.
+State always has a text label. Retained measurement results are in `validation/platform-ux-v1/contrast.json`: body/canvas 14.493:1, secondary/canvas 5.122:1, white/action 5.058:1, control edge/surface 3.513:1. They describe the earlier reviewed tree; because current frontend source hashes differ from that review, do not treat those ratios as remeasured for the exact current tree or as a claim about arbitrary artifact content.
 
 ## Typography
 

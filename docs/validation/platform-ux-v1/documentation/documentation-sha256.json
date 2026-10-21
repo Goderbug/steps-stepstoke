@@ -1,9 +1,9 @@
 {
-  "scope": "Changed/new documentation and this pass evidence; manifest excludes itself. Original runtime source/export manifests remain in ../final/.",
+  "scope": "Documentation/evidence hash snapshot for this pass; excludes itself and mutable check reports. Original runtime manifests remain historical under ../final/.",
   "files": {
     "README.md": {
-      "bytes": 6333,
-      "sha256": "e9a8ed2f7155c0d365df821fb42ea18845e4b784318646aac91208a8586dbf9a"
+      "bytes": 6651,
+      "sha256": "c660e3dbca6e68e3c9a12add54e6065d327ccfc65f8f70b90ffa90bb6252f4d0"
     },
     "docs/ACCEPTANCE.md": {
       "bytes": 1846,
@@ -14,16 +14,16 @@
       "sha256": "ffbea78697533efb73819d83618c123323c0cc6ace297b88b295c1e18c9643f4"
     },
     "docs/BUILD.md": {
-      "bytes": 13390,
-      "sha256": "b36fbc455e1c586c6f5fb7d71605bfb00d091b8b1b9902ca69007162aeb5d1ff"
+      "bytes": 13673,
+      "sha256": "0563666cbe9f90b4d071863493ff2cc641876eec91e7e10ab9f26eaff66471f2"
     },
     "docs/CONTRACTS.md": {
       "bytes": 16782,
       "sha256": "8a141621e435c81b7442221585d9d5345df0880782b8abdece03e1d6d5ec7451"
     },
     "docs/DESIGN.md": {
-      "bytes": 9896,
-      "sha256": "acb846b2d7ba25f7360caec4d661facf80c640644389056c89bf3255f84b74cc"
+      "bytes": 10050,
+      "sha256": "799c0e06d521538f0ba2c76c885bd7571dcf70e1a6c9f1525d13389c48009fcd"
     },
     "docs/FRONTEND.md": {
       "bytes": 5497,
@@ -46,28 +46,28 @@
       "sha256": "fe5b79f3ed137184c2f748232c7e48bf7328dda65db0e16d7d059dbcc4d592ba"
     },
     "docs/PROTOCOL-OVERVIEW.md": {
-      "bytes": 25191,
-      "sha256": "6525134d58732f9c4db0511e7e0b1d6bac33b4898d75fcf24e1fe8e4c0627ddc"
+      "bytes": 25183,
+      "sha256": "3be1c31c61791f41ae378c97ff03b3e31351cf3f26c975cdbada6ce2d51cfe1e"
     },
     "docs/REVIEW.md": {
       "bytes": 7479,
       "sha256": "b0aed87ca7d47c2afeca60e0a56d6e44becadf0fa5ef86f526cf19ddfe930ed8"
     },
     "docs/frontend-README.md": {
-      "bytes": 5888,
-      "sha256": "1b8bda0309ace5a4bde6fa64e96101e1ec952d9584fd8a39c5677f15b79cd943"
+      "bytes": 6056,
+      "sha256": "a99101c8639198ce00c67101237b64d434bb15ebc7793aae8182846d69aac612"
     },
     "docs/validation/platform-ux-v1/README.md": {
-      "bytes": 2314,
-      "sha256": "1469f82040d4e0c94e1ab39d801c74c185611656b5f3dca86c244d3fc75cb09b"
+      "bytes": 2733,
+      "sha256": "133242d6094a72a42a568a9cd3d652f24914728f94031fb8e8b053eba21c099e"
     },
     "docs/validation/platform-ux-v1/documentation/README.md": {
-      "bytes": 18458,
-      "sha256": "2631528b0a74d4ab94bad2dac38edb350877bc9e70604d396acb8257e74a25a6"
+      "bytes": 19773,
+      "sha256": "a939db6362678d8fb90626993313f0adcaff77aa3763e366028d647902dc58ba"
     },
     "docs/validation/platform-ux-v1/documentation/byte-audit.json": {
-      "bytes": 11802,
-      "sha256": "9dd30ffe0a1b656b0bbad2f4ba25da3f0e34e12d266e8bddba9c806ffa7e9403"
+      "bytes": 12273,
+      "sha256": "3004966a017e80ed4f046e5626df98fad446a4c1628c50c7cbf12bc7d5abac9c"
     },
     "docs/validation/platform-ux-v1/documentation/capture.mjs": {
       "bytes": 2188,
@@ -77,17 +77,13 @@
       "bytes": 122926,
       "sha256": "3996c3316e0166eec36518b15579d31c4de89d014b30e17cc83c93adace746ec"
     },
-    "docs/validation/platform-ux-v1/documentation/documentation-checks.json": {
-      "bytes": 3154,
-      "sha256": "4c1e0e9e813ec2af328ec71060bda9e7abfaa3c9229996f8a23c3d94e93fbd8b"
-    },
     "docs/validation/platform-ux-v1/documentation/environment.json": {
       "bytes": 703,
       "sha256": "03e4a043485a377a06879f723224f342bb06a5a59658de88005ef1b8969d2db6"
     },
     "docs/validation/platform-ux-v1/documentation/open-issues.md": {
-      "bytes": 3366,
-      "sha256": "b0fe974fa292d3c111585ffe4a6e6b8fad817481733d643ef90fbb6438243b0e"
+      "bytes": 4242,
+      "sha256": "b2f89e7a3a4894da22e8c1c6a104941647962a26cc8a07ffbdcc761e8cbefb87"
     },
     "docs/validation/platform-ux-v1/documentation/raw/browser-install.log": {
       "bytes": 14751,
@@ -172,6 +168,10 @@
     "docs/validation/platform-ux-v1/open-issues.md": {
       "bytes": 790,
       "sha256": "ac79cdd19a4c6a7552b777f1d85bb5ca6148d55b8b125744336a27cc4203378d"
+    },
+    "docs/validation/platform-ux-v1/documentation/current-tree-hashes.json": {
+      "bytes": 47130,
+      "sha256": "408945c8a7dd4ab5599c3fefcc8b1065ddcaa3494994ea1301490bea7b5e676b"
     }
   }
 }

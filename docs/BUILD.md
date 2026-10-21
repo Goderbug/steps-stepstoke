@@ -4,7 +4,7 @@ Run commands from the repository root. No public deployment, funded wallet, API 
 
 ## Prerequisites and dependencies
 
-Use Node.js ≥22 (the package engine), Foundry providing `forge` and `anvil`, and the native solc **0.8.26** compiler available to Foundry. Python 3 is optional for the independent image-fixture check. The original documentation reproduction used Node 22.23.3 and Forge 1.8.3; those observations belong to the original delivery. The local policy A1/2 candidate's toolchain and results are recorded in [current repair evidence](validation/review-fixes/README.md).
+Use Node.js ≥22 (the package engine), Foundry providing `forge` and `anvil`, and the native solc **0.8.26** compiler available to Foundry. Python 3 is optional for the independent image-fixture check. The documentation rerun used Node 24.21.0 and Forge 1.8.3; the delivered frontend acceptance used the environments recorded in [final evidence](validation/platform-ux-v1/final/README.md). Tool versions for the documentation rerun are in [its environment record](validation/platform-ux-v1/documentation/environment.json).
 
 ```sh
 node --version
@@ -95,7 +95,7 @@ npm run test:e2e --prefix frontend
 
 The build writes root `dist/` (not `frontend/dist/`). `npm run preview --prefix frontend` serves port 4173. `node frontend/scripts/static-preview.mjs` serves the committed export at `http://127.0.0.1:4175/preview/` using Node alone. The relative base and hash routes need no rewrite or backend. A public/IPFS deployment was not attempted.
 
-The complete fixture suite matches **all `tests/e2e/*.spec.ts`**, including 24 original cases, 10 platform cases and one reduced-motion regression in each of five configured projects. Chromium viewports are 1440×900, 390×844 and 320×844; WebKit is 1440×900 and 390×844. The final delivered-source report records 175 passes, not the earlier 50-case subset.
+The retained earlier integration report covers **all `tests/e2e/*.spec.ts`**, including 24 original cases, 10 platform cases and one reduced-motion regression in each of five configured projects. Chromium viewports are 1440×900, 390×844 and 320×844; WebKit is 1440×900 and 390×844. That historical report records 175 passes, not the earlier 50-case subset. Its source/export hashes differ from this checkout; see the [current comparison](validation/platform-ux-v1/documentation/current-tree-hashes.json). Re-run the suites above to establish results for the current exact bytes.
 
 Run the full actual-contract runner sequentially after `forge build`:
 

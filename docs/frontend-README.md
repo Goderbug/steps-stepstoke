@@ -46,7 +46,7 @@ One WalletButton supports named EIP-6963 extensions, mobile **Open in** links an
 
 ## Tests and evidence
 
-The full suite matches **every `tests/e2e/*.spec.ts`**: 35 cases in five configured projects. The full actual-chain runner is **`browser-chain.mjs`**. The narrower `platform-chain.mjs` remains available but does not replace it.
+The suite is configured for **every `tests/e2e/*.spec.ts`**: 35 cases in five browser projects. The recorded 175-pass run is historical; the current checkout differs from its source/export hashes, and the full suite has not been rerun against these exact bytes. The full actual-chain runner is **`browser-chain.mjs`**. The narrower `platform-chain.mjs` remains available but does not replace it.
 
 ```sh
 npm run test:e2e:install --prefix frontend

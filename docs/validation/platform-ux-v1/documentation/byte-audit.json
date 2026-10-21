@@ -1,7 +1,7 @@
 {
   "baselineCommit": "878ba4ba1cf7c601656f3a25d17546a425ba1207",
   "baselineTree": "c7838395fec7b493f61a1cf7a08cf5c9db6966b9",
-  "result": "PASS",
+  "result": "FAIL",
   "protectedFiles": [
     {
       "path": "abi/IIntake.json",
@@ -260,17 +260,30 @@
     {
       "manifest": "docs/validation/platform-ux-v1/final/source-sha256.json",
       "checked": 120,
-      "mismatches": []
+      "mismatches": [
+        "frontend/src/components/platform.tsx",
+        "frontend/src/domain/chainAdapter.ts",
+        "frontend/src/styles.css",
+        "frontend/src/ui/ProposeForm.tsx",
+        "frontend/src/ui/Workspace.tsx",
+        "frontend/src/ui/recovery.ts",
+        "frontend/tests/integration/browser-chain.mjs"
+      ]
     },
     {
       "manifest": "docs/validation/platform-ux-v1/final/dist-sha256.json",
       "checked": 8,
-      "mismatches": []
+      "mismatches": [
+        "dist/assets/dist-CeDfkjQv.js",
+        "dist/assets/index-C4GAZEYA.css",
+        "dist/assets/index-WCIPKFNk.js",
+        "dist/index.html"
+      ]
     }
   ],
   "trackedBytes": {
-    "frontend/": 663890,
-    "dist/": 878491
+    "frontend/": 671053,
+    "dist/": 881974
   },
   "combinedLimitBytes": 8388608,
   "readinessFlagsClosed": true,

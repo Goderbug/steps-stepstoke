@@ -1,12 +1,12 @@
 # PLATFORM-UX-V1 evidence index
 
-The delivered English platform source and root relative `dist/` are preserved. This documentation assignment makes no implementation or deployment changes.
+The delivered English platform source and root relative `dist/` are present. This documentation assignment makes no implementation or deployment changes. A read-only comparison found the current frontend/export differs from the earlier recorded final manifests; see [current hashes and mismatch list](documentation/current-tree-hashes.json). The earlier runtime acceptance is preserved as historical evidence and is not claimed for these exact bytes.
 
 `productionDeployment:null` · `liveCompatibility:NOT_RUN` · `productionReady:false`.
 
 Start with the [current requirement matrix and documentation reproduction](documentation/README.md), [current open gates](documentation/open-issues.md), and [read-only source/core/export comparison](documentation/byte-audit.json).
 
-The [final integration stage](final/README.md) supersedes earlier platform-stage counts: 43 frontend unit tests, 175 fixture-browser tests, 16 actual local-chain scenarios in each Chromium/WebKit desktop/mobile run, 125 Solidity tests and 39 SDK tests. Final [source hashes](final/source-sha256.json), [export hashes](final/dist-sha256.json), [raw logs](final/raw/), [screenshots](final/screenshots/), [receipts](final/local/), [review](final/design-review.md) and [open issues](final/open-issues.md) remain unchanged historical evidence for that source. Worker reports are not independent certification.
+The [recorded final integration stage](final/README.md) reports 43 frontend unit tests, 175 fixture-browser tests, 16 actual local-chain scenarios in each Chromium/WebKit desktop/mobile run, 125 Solidity tests and 39 SDK tests. Its [source hashes](final/source-sha256.json), [export hashes](final/dist-sha256.json), [raw logs](final/raw/), [screenshots](final/screenshots/), [receipts](final/local/), [review](final/design-review.md) and [open issues](final/open-issues.md) remain unchanged historical evidence. Seven frontend source/test files and four export paths differ from those hashes in the current tree. No current exact-source frontend or local-chain rerun is claimed. Worker reports are not independent certification.
 
 Earlier top-level JSON/raw reports, `receipts/`, planning [PLAN.md](PLAN.md) and [BASELINE.json](BASELINE.json) are retained. Their 41-unit/50-browser/eight-local-case counts and open WebKit diagnostics describe earlier revisions. The final transport repair and four clean local runs do not erase those failures. Use the [final review](final/design-review.md) for the resolved local regression and the [current gates](documentation/open-issues.md) for native-device and live limits.
 
