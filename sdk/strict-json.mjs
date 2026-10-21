@@ -1,6 +1,26 @@
 // General strict parser plus the metadata-tolerant binding projection.
 // Both validate the whole raw document; only the binding projection discards metadata.
+// Environment-neutral: shared verbatim by the Node and browser entrypoints (no Buffer).
 const numericToken = Symbol('strict JSON numeric token');
+// UTF-8 byte length of a JS string, counting an unpaired surrogate as its 3-byte U+FFFD
+// replacement exactly as Node's Buffer.byteLength and TextEncoder do.
+// Fatal UTF-8 decoding with one error message in every runtime (engines word theirs differently).
+export function decodeUTF8(raw, ignoreBOM = false) {
+  try { return new TextDecoder('utf-8', { fatal: true, ignoreBOM }).decode(raw); } catch { throw new Error('Invalid UTF-8'); }
+}
+export function utf8Length(value) {
+  let length = 0;
+  for (let i = 0; i < value.length; i++) {
+    const unit = value.charCodeAt(i);
+    if (unit < 0x80) length += 1;
+    else if (unit < 0x800) length += 2;
+    else if (unit >= 0xD800 && unit <= 0xDBFF && i + 1 < value.length) {
+      const next = value.charCodeAt(i + 1);
+      if (next >= 0xDC00 && next <= 0xDFFF) { length += 4; i++; } else length += 3;
+    } else length += 3;
+  }
+  return length;
+}
 export const MANIFEST_LIMITS = Object.freeze({ rawBytes: 32768, depth: 16, objectMembers: 128, keyBytes: 256, retainedTokens: 256, retainedStringBytes: 1024, totalValues: 512, totalKeyBytes: 2048, work: 65536 });
 export function strictJSON(raw, maxBytes = 8_192, maxString = 1024) {
   return parseJSON(raw, maxBytes, maxString, false);
@@ -12,7 +32,7 @@ function parseJSON(raw, maxBytes, maxString, manifest) {
   if (!(raw instanceof Uint8Array) || raw.length === 0 || raw.length > maxBytes) {
     throw new Error('Expected bounded raw UTF-8 bytes');
   }
-  const text = new TextDecoder('utf-8', { fatal: true, ignoreBOM: true }).decode(raw);
+  const text = decodeUTF8(raw, true);
   let pos = 0;
   let tokens = 0;
   let values = 0;
@@ -41,7 +61,7 @@ function parseJSON(raw, maxBytes, maxString, manifest) {
           const cp = char.codePointAt(0);
           if ((cp >= 0xD800 && cp <= 0xDFFF) || (cp >= 0xFDD0 && cp <= 0xFDEF) || (cp & 0xFFFF) >= 0xFFFE) fail();
         }
-        if (Buffer.byteLength(value) > limit) fail();
+        if (utf8Length(value) > limit) fail();
         return value;
       }
     }
@@ -64,10 +84,10 @@ function parseJSON(raw, maxBytes, maxString, manifest) {
       while (true) {
         space();
         const key = string(manifest ? 256 : maxString);
-        if (manifest && (keyBytes += Buffer.byteLength(key)) > 2048) fail();
+        if (manifest && (keyBytes += utf8Length(key)) > 2048) fail();
         if (manifest) comparisons += keys.size;
         work();
-        if ((!manifest && !key.length) || Buffer.byteLength(key) > (manifest ? 256 : 64) || keys.has(key) || keys.size >= (manifest ? 128 : 32)) fail();
+        if ((!manifest && !key.length) || utf8Length(key) > (manifest ? 256 : 64) || keys.has(key) || keys.size >= (manifest ? 128 : 32)) fail();
         let child = mode;
         if (manifest) {
           if (mode === 1) child = key === 'files' ? 2 : ['state', 'jobId', 'projectId'].includes(key) ? 4 : 0;
