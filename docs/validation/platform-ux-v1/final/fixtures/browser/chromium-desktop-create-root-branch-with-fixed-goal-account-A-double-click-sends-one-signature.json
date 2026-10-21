@@ -1,0 +1,16 @@
+{
+  "test": "create root branch with fixed goal (account A), double click sends one signature",
+  "engine": "chromium-desktop",
+  "viewport": {
+    "width": 1440,
+    "height": 900
+  },
+  "status": "passed",
+  "horizontalOverflow": 0,
+  "pageErrors": [],
+  "externalAttempts": [],
+  "httpErrors": [],
+  "unexpectedConsoleErrors": [],
+  "expectedSecurityBlocks": [],
+  "console": []
+}

@@ -1,0 +1,245 @@
+[
+  {
+    "type": "function",
+    "name": "policyId",
+    "inputs": [],
+    "outputs": [
+      {
+        "name": "",
+        "type": "bytes32",
+        "internalType": "bytes32"
+      }
+    ],
+    "stateMutability": "pure"
+  },
+  {
+    "type": "function",
+    "name": "verify",
+    "inputs": [
+      {
+        "name": "raw",
+        "type": "bytes",
+        "internalType": "bytes"
+      },
+      {
+        "name": "recordedHash",
+        "type": "bytes32",
+        "internalType": "bytes32"
+      },
+      {
+        "name": "proposal",
+        "type": "tuple",
+        "internalType": "struct RelayTypes.Proposal",
+        "components": [
+          {
+            "name": "anchor",
+            "type": "bytes32",
+            "internalType": "bytes32"
+          },
+          {
+            "name": "profile",
+            "type": "uint8",
+            "internalType": "enum RelayTypes.Profile"
+          },
+          {
+            "name": "target",
+            "type": "bytes32",
+            "internalType": "bytes32"
+          },
+          {
+            "name": "inputs",
+            "type": "bytes32[]",
+            "internalType": "bytes32[]"
+          },
+          {
+            "name": "outputName",
+            "type": "string",
+            "internalType": "string"
+          },
+          {
+            "name": "outputPath",
+            "type": "string",
+            "internalType": "string"
+          },
+          {
+            "name": "text",
+            "type": "string",
+            "internalType": "string"
+          },
+          {
+            "name": "publish",
+            "type": "bool",
+            "internalType": "bool"
+          }
+        ]
+      },
+      {
+        "name": "oldAssets",
+        "type": "tuple[]",
+        "internalType": "struct RelayTypes.Asset[]",
+        "components": [
+          {
+            "name": "key",
+            "type": "bytes32",
+            "internalType": "bytes32"
+          },
+          {
+            "name": "kind",
+            "type": "uint8",
+            "internalType": "enum RelayTypes.Kind"
+          },
+          {
+            "name": "name",
+            "type": "string",
+            "internalType": "string"
+          },
+          {
+            "name": "path",
+            "type": "string",
+            "internalType": "string"
+          },
+          {
+            "name": "fileHash",
+            "type": "bytes32",
+            "internalType": "bytes32"
+          },
+          {
+            "name": "mediaType",
+            "type": "string",
+            "internalType": "string"
+          },
+          {
+            "name": "size",
+            "type": "uint32",
+            "internalType": "uint32"
+          },
+          {
+            "name": "submissionHash",
+            "type": "bytes32",
+            "internalType": "bytes32"
+          },
+          {
+            "name": "producer",
+            "type": "address",
+            "internalType": "address"
+          },
+          {
+            "name": "jobId",
+            "type": "string",
+            "internalType": "string"
+          },
+          {
+            "name": "resultHash",
+            "type": "bytes32",
+            "internalType": "bytes32"
+          },
+          {
+            "name": "revision",
+            "type": "uint64",
+            "internalType": "uint64"
+          }
+        ]
+      },
+      {
+        "name": "branch",
+        "type": "address",
+        "internalType": "address"
+      },
+      {
+        "name": "revision",
+        "type": "uint64",
+        "internalType": "uint64"
+      }
+    ],
+    "outputs": [
+      {
+        "name": "job",
+        "type": "string",
+        "internalType": "string"
+      },
+      {
+        "name": "project",
+        "type": "string",
+        "internalType": "string"
+      },
+      {
+        "name": "next",
+        "type": "tuple[]",
+        "internalType": "struct RelayTypes.Asset[]",
+        "components": [
+          {
+            "name": "key",
+            "type": "bytes32",
+            "internalType": "bytes32"
+          },
+          {
+            "name": "kind",
+            "type": "uint8",
+            "internalType": "enum RelayTypes.Kind"
+          },
+          {
+            "name": "name",
+            "type": "string",
+            "internalType": "string"
+          },
+          {
+            "name": "path",
+            "type": "string",
+            "internalType": "string"
+          },
+          {
+            "name": "fileHash",
+            "type": "bytes32",
+            "internalType": "bytes32"
+          },
+          {
+            "name": "mediaType",
+            "type": "string",
+            "internalType": "string"
+          },
+          {
+            "name": "size",
+            "type": "uint32",
+            "internalType": "uint32"
+          },
+          {
+            "name": "submissionHash",
+            "type": "bytes32",
+            "internalType": "bytes32"
+          },
+          {
+            "name": "producer",
+            "type": "address",
+            "internalType": "address"
+          },
+          {
+            "name": "jobId",
+            "type": "string",
+            "internalType": "string"
+          },
+          {
+            "name": "resultHash",
+            "type": "bytes32",
+            "internalType": "bytes32"
+          },
+          {
+            "name": "revision",
+            "type": "uint64",
+            "internalType": "uint64"
+          }
+        ]
+      }
+    ],
+    "stateMutability": "pure"
+  },
+  {
+    "type": "error",
+    "name": "Invalid",
+    "inputs": []
+  },
+  {
+    "type": "error",
+    "name": "Limit",
+    "inputs": []
+  }
+]

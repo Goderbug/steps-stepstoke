@@ -1,0 +1,16 @@
+{
+  "test": "sponsorship progress shows the complete purchase hash and sponsor with copy controls",
+  "engine": "webkit-desktop",
+  "viewport": {
+    "width": 1440,
+    "height": 900
+  },
+  "status": "passed",
+  "horizontalOverflow": 0,
+  "pageErrors": [],
+  "externalAttempts": [],
+  "httpErrors": [],
+  "unexpectedConsoleErrors": [],
+  "expectedSecurityBlocks": [],
+  "console": []
+}

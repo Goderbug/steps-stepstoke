@@ -95,6 +95,8 @@
   "liveCompatibility": "NOT_RUN",
   "productionReady": false,
   "remainingReviewRisk": "Authenticated results outside the finite manifest envelope may remain unbindable; actual IMD compatibility remains unverified.",
+  "deploymentBlock": 8,
+  "deploymentBlockHash": "0x87d45e5c71aef733cd1abc9c832af0595cf19977afe2984763a89a44b86b7b75",
   "rpcURL": "http://127.0.0.1:8545",
   "artifactBase": "http://127.0.0.1:8546/artifacts/",
   "artifactPolicy": "TEST_ONLY_LOOPBACK_FIXTURE"

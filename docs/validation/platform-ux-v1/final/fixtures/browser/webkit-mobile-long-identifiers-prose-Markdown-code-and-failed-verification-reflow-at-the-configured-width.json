@@ -1,0 +1,16 @@
+{
+  "test": "long identifiers, prose, Markdown code and failed verification reflow at the configured width",
+  "engine": "webkit-mobile",
+  "viewport": {
+    "width": 390,
+    "height": 844
+  },
+  "status": "passed",
+  "horizontalOverflow": 0,
+  "pageErrors": [],
+  "externalAttempts": [],
+  "httpErrors": [],
+  "unexpectedConsoleErrors": [],
+  "expectedSecurityBlocks": [],
+  "console": []
+}

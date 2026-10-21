@@ -1,0 +1,16 @@
+{
+  "test": "workspace layout at this project's width has no horizontal scroll",
+  "engine": "chromium-narrow",
+  "viewport": {
+    "width": 320,
+    "height": 844
+  },
+  "status": "passed",
+  "horizontalOverflow": 0,
+  "pageErrors": [],
+  "externalAttempts": [],
+  "httpErrors": [],
+  "unexpectedConsoleErrors": [],
+  "expectedSecurityBlocks": [],
+  "console": []
+}

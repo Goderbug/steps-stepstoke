@@ -17,6 +17,8 @@ export interface Journal {
 }
 const KEY = "relay.local.transactions.v1"; // Existing journal retained; every lookup is chain-scoped.
 const now = () => new Date().toISOString();
+/** Journal outcomes that never became an on-chain attempt. They cannot supersede a refusal. */
+export const FINALLY_FAILED = ["REVERTED", "REPLACED_OTHER", "REPLACED_SAME_CALL_REVERTED"];
 const eq = (a: string, b: string) => a.toLowerCase() === b.toLowerCase();
 const address = (s: string) => getAddress(s) as Hex;
 const validHex = (s: any, bytes: number) => typeof s === "string" && new RegExp(`^0x[0-9a-f]{${bytes * 2}}$`, "i").test(s);
@@ -200,7 +202,7 @@ export class ChainAdapter implements RelayAdapter {
       if (rows.some(r => r.txHash === j.hash || (eq(r.sponsor, j.account) && r.nonce === j.nonce))) continue;
       const status = await this.reconcileJournal(j);
       const stages = Object.fromEntries(STAGES.map(k => [k, "not_started"])) as Sponsorship["stages"];
-      stages.purchase = status === "REVERTED" || status === "REPLACED_OTHER" ? "failed" : "unknown";
+      stages.purchase = FINALLY_FAILED.includes(status) ? "failed" : "unknown";
       rows.push({ id: `unknown:${j.hash}`, branchId: branch, proposalId: j.proposalId ?? "unknown", sponsor: j.account, maxFee: 0n, txHash: j.hash, nonce: j.nonce, attempt: Number(active) + 1, stages, note: `Original transaction reconciliation: ${status}. No automatic purchase. On-chain phase ${Number(phase)}. `, checkpointId: null, updatedAt: j.at });
     }
     // Without a journal, a connected account's pending nonce is still chain evidence of an
@@ -277,7 +279,7 @@ export class ChainAdapter implements RelayAdapter {
       throw new Error(`Transaction ${hash} outcome unknown. Original hash and nonce recorded; refresh to reconcile without repurchasing.`);
     } finally { this.locked = false; }
   }
-  private async reconcileJournal(j: Journal): Promise<string> {
+  async reconcileJournal(j: Journal): Promise<string> {
     const receipt = await this.provider.request({ method: "eth_getTransactionReceipt", params: [j.hash] });
     if (receipt) {
       if (this.config.chainId === 1) { const o = await sdk.observeTransaction(this.provider, j.hash); return o.state === "CONFIRMED" ? "MINED" : o.state; }
@@ -291,19 +293,25 @@ export class ChainAdapter implements RelayAdapter {
       for (let b = head; b >= Math.max(this.config.deploymentBlock ?? 0, head - 127); b--) {
         const block = await this.provider.request({ method: "eth_getBlockByNumber", params: [`0x${b.toString(16)}`, true] });
         const replacement = block.transactions.find((t: any) => eq(t.from, j.account) && Number(BigInt(t.nonce)) === j.nonce);
-        if (replacement) return eq(replacement.to ?? "", j.to) && eq(replacement.input, j.data) ? "REPLACED_SAME_CALL_READ_CHAIN" : "REPLACED_OTHER";
+        if (!replacement) continue;
+        if (!eq(replacement.to ?? "", j.to) || !eq(replacement.input, j.data)) return "REPLACED_OTHER";
+        // A same-call replacement that finally reverted never became an attempt; it must not
+        // block an authenticated status-1 retry forever, nor may an unfinalized one unblock it.
+        if (this.config.chainId === 1) return (await sdk.observeTransaction(this.provider, replacement.hash)).state === "REVERTED" ? "REPLACED_SAME_CALL_REVERTED" : "REPLACED_SAME_CALL_READ_CHAIN";
+        const r = await this.provider.request({ method: "eth_getTransactionReceipt", params: [replacement.hash] });
+        return r && BigInt(r.status) === 0n ? "REPLACED_SAME_CALL_REVERTED" : "REPLACED_SAME_CALL_READ_CHAIN";
       }
       return "NONCE_USED_UNKNOWN";
     }
     return "DROPPED_OR_UNKNOWN";
   }
-  private async unresolvedPurchase(branch: string, account: Account) {
+  async unresolvedPurchase(branch: string, account: Account) {
     const [latestNonce, pendingNonce] = await Promise.all(["latest", "pending"].map(tag => this.provider.request({ method: "eth_getTransactionCount", params: [account.address, tag] })));
     if (BigInt(pendingNonce) > BigInt(latestNonce)) throw new Error("An account transaction is pending. Reconcile it before another purchase, even if local records are missing");
     for (const j of [...loadJournal(), ...this.memory.values()]) {
       if (j.identity !== this.identity || !eq(j.branch, branch) || j.chainId !== this.config.chainId || !eq(j.account, account.address) || !["sponsor", "retry"].includes(j.operation)) continue;
       const status = await this.reconcileJournal(j);
-      if (!["MINED", "REVERTED", "REPLACED_OTHER", "REPLACED_SAME_CALL_READ_CHAIN"].includes(status)) throw new Error(`Original purchase status ${status}, reconcile first; no automatic or duplicate purchase`);
+      if (!["MINED", ...FINALLY_FAILED, "REPLACED_SAME_CALL_READ_CHAIN"].includes(status)) throw new Error(`Original purchase status ${status}, reconcile first; no automatic or duplicate purchase`);
     }
   }
   async createBranch(account: Account, input: { title: string; goal: string }) {
