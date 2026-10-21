@@ -63,8 +63,10 @@ npm run test:unit --prefix frontend
 npm run build --prefix frontend
 npx --prefix frontend playwright install chromium webkit
 npm run test:e2e --prefix frontend
-node frontend/tests/integration/platform-chain.mjs
-node frontend/tests/integration/platform-chain.mjs --webkit
+node frontend/tests/integration/browser-chain.mjs --browser chromium --group all
+node frontend/tests/integration/browser-chain.mjs --browser webkit --group all
+node frontend/tests/integration/browser-chain.mjs --browser chromium --group all --mobile
+node frontend/tests/integration/browser-chain.mjs --browser webkit --group all --mobile
 forge test
 forge fmt --check
 node --test test-sdk/*.test.mjs
@@ -74,7 +76,7 @@ python3 test/adversarial/check-inline-fixtures.py
 
 Browser runtimes and shared libraries must be available locally. `PLAYWRIGHT_BROWSERS_PATH`, `W1_CHROMIUM_EXECUTABLE` and `W1_WEBKIT_EXECUTABLE` can point to test runtimes outside the repository. The current Playwright suite checks the committed export at `/preview/`, in Chromium at 320/390/1440 and WebKit at 390/1440. The actual-chain runner starts and closes its own Anvil and static/artifact servers. It drives the production app through a named test wallet forwarding unsigned calls to disposable unlocked Anvil accounts; it records receipts rather than substituting fixture state.
 
-Fresh results, raw logs, screenshots, hashes, receipts, six-domain design review and limitations are in [PLATFORM-UX-V1 validation](docs/validation/platform-ux-v1/README.md). These are the worker's local observations, not independent certification or live acceptance. Earlier evidence is retained under `docs/validation/integration/` and `review-fixes/`; its counts and hashes describe earlier source. Original W1 selectors/tests remain historical, while `platform.spec.ts` and `platform-chain.mjs` are the current English acceptance entry points.
+Final results, raw logs, screenshots, hashes, receipts, six-domain design review and limitations are in [final integration validation](docs/validation/platform-ux-v1/final/README.md). These are the worker's local observations, not independent certification or live acceptance. Earlier evidence is retained under `docs/validation/integration/` and `review-fixes/`; its counts and hashes describe earlier source. All original scenario files now use English and the production composition. Playwright includes every spec across all five original configured projects. The full `browser-chain.mjs` runner retains the original contract assertions and adds mixed-read recovery, cancellation and non-square download checks. Run local contract suites sequentially: each owns the disposable ports and deployment configuration.
 
 ## Behavior and boundaries
 
@@ -94,3 +96,9 @@ The protocol has no new authority, asset type, governance, treasury, automatic s
 - [Interface and state guide](docs/FRONTEND.md), [future frontend authoring](docs/PLATFORM-AUTHORING.md), [core build](docs/BUILD.md), [operations](docs/OPERATIONS.md).
 - [Contract API](docs/CONTRACTS.md), [limits](docs/LIMITS.md), [CLI examples](docs/CLI.md), [browser SDK trust model](docs/SDK-BROWSER.md), [historical handoff](docs/HANDOFF.md).
 - [Current design](DESIGN.md), [current validation](docs/validation/platform-ux-v1/README.md), [baseline hashes](docs/validation/platform-ux-v1/BASELINE.json).
+
+## Submission storage
+
+Five large historical raw traces are stored without loss in `docs/validation/platform-ux-v1/final/history-traces.tar.xz`. Their original paths contain restoration instructions and original SHA-256 values; `history-traces-index.json` indexes every byte. All other historical evidence stays at its original path. The unused Noto UI font was removed; its historical license/provenance notices remain. Active typography uses the disclosed system fallbacks. No required runtime asset, root dependency, lockfile or authenticated output was removed.
+
+The final validation directory records the complete source snapshot Git bundle size against the 8 MiB budget. Temporary screenshots, browser runtimes and package caches stay outside the submission. No ignore file was changed.

@@ -1,0 +1,42 @@
+[
+  {
+    "path": "docs/validation/platform-ux-v1/final/e2e-chromium-intermediate.json",
+    "bytes": 78767,
+    "sha256": "006df821defcac5c2392e986ead5b8cac74ea7b3e803fda565ed9d3ab7461dd3"
+  },
+  {
+    "path": "docs/validation/platform-ux-v1/final/e2e-chromium-repair.json",
+    "bytes": 68790,
+    "sha256": "72be547e07a4c6d57ee042d0d77a3b3f7fdab4bf7b1b9fb64e7c6634c5238731"
+  },
+  {
+    "path": "docs/validation/platform-ux-v1/final/e2e-chromium-sixth.json",
+    "bytes": 64135,
+    "sha256": "be35604e1227957ce57d01b6be826558ed0cfc5269dec705e496f7b7a4f8d28d"
+  },
+  {
+    "path": "docs/validation/platform-ux-v1/final/e2e-current.json",
+    "bytes": 32425,
+    "sha256": "87d89ca79c7ca9aace7852a41bb5425f4171bb85fa9601d110cc90d105444529"
+  },
+  {
+    "path": "docs/validation/platform-ux-v1/final/e2e-matrix.json",
+    "bytes": 234274,
+    "sha256": "0c1ea57b50dab452ff4e57928f905553a24de9f5a4a7e8a5639f86381d39c57e"
+  },
+  {
+    "path": "docs/validation/platform-ux-v1/final/e2e-seventh.json",
+    "bytes": 49384,
+    "sha256": "d72468a4a0d0c3f8496077b0f412c323e4494fd95bc28b9e787e477ea31ae8a1"
+  },
+  {
+    "path": "docs/validation/platform-ux-v1/final/e2e-unknown.json",
+    "bytes": 29176,
+    "sha256": "5d43369e3254581865e1c08c563cb4ee6b9a3b00d40ed653d9dc2509e140475f"
+  },
+  {
+    "path": "docs/validation/platform-ux-v1/final/e2e.json",
+    "bytes": 122394,
+    "sha256": "50aa5bd0b41fbb822c50569eb1df7d1bcc4c227a9ed1936cf5b85127dd9e6c98"
+  }
+]

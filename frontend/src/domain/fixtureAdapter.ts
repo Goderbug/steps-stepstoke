@@ -65,7 +65,7 @@ interface State {
   branches: Branch[];
   checkpoints: Checkpoint[];
   proposals: Proposal[];
-  sponsorships: (Omit<Sponsorship, "maxFee"> & { maxFee: string; unknownResolves?: boolean; retriedBy?: string })[];
+  sponsorships: (Omit<Sponsorship, "maxFee"> & { maxFee: string; unknownResolves?: boolean; callbackOutcome?: CallbackOutcome; retriedBy?: string })[];
   files: Record<string, StoredFile>; // key: producerJobId:path
   allowances: Record<string, string>; // account:spender -> amount
 }
@@ -327,6 +327,7 @@ export class FixtureAdapter implements RelayAdapter {
       sp.stages.purchase = "unknown";
       sp.note = "Receipt missing. Reconcile the original hash and nonce after reload";
       sp.unknownResolves = true;
+      sp.callbackOutcome = this.controls.callbackOutcome;
     } else {
       await this.advance(sp, p);
     }
@@ -342,7 +343,7 @@ export class FixtureAdapter implements RelayAdapter {
     sp.stages.admission = "confirmed";
     sp.stages.execution = "pending";
     sp.updatedAt = now();
-    const outcome = this.controls.callbackOutcome;
+    const outcome = sp.callbackOutcome ?? this.controls.callbackOutcome;
     const b = this.branch(sp.branchId);
     if (outcome === "missing") {
       sp.stages.callback = "pending";
@@ -440,6 +441,7 @@ export class FixtureAdapter implements RelayAdapter {
       retry.stages.purchase = "unknown";
       retry.note = "Retry receipt missing. Reconcile this retry's original hash and nonce";
       retry.unknownResolves = true;
+      retry.callbackOutcome = this.controls.callbackOutcome;
     } else {
       await this.advance(retry, p);
     }

@@ -1,19 +1,20 @@
 import { defineConfig, devices } from "@playwright/test";
 
 // Browser tests run against the committed production export (dist/) served by `vite preview`.
+const port = process.env.W1_PREVIEW_PORT ?? "4175";
 export default defineConfig({
   testDir: "tests/e2e",
-  testMatch: "platform.spec.ts",
+  testMatch: "*.spec.ts",
   timeout: 45_000,
   expect: { timeout: 15_000 },
   retries: 0,
   workers: 2,
-  outputDir: "../test/scratch/platform-browser",
-  reporter: [["list"], ["json", { outputFile: process.env.W1_E2E_REPORT ?? "../docs/validation/platform-ux-v1/e2e.json" }]],
-  use: { baseURL: "http://127.0.0.1:4175/preview/", trace: "off", screenshot: "off" },
+  outputDir: process.env.W1_E2E_OUTPUT ?? "../test/scratch/platform-browser",
+  reporter: [["list"], ["json", { outputFile: process.env.W1_E2E_REPORT ?? "../docs/validation/platform-ux-v1/final/e2e.json" }]],
+  use: { baseURL: `http://127.0.0.1:${port}/preview/`, trace: "off", screenshot: "off" },
   webServer: {
     command: "node scripts/static-preview.mjs",
-    url: "http://127.0.0.1:4175/preview/",
+    url: `http://127.0.0.1:${port}/preview/`,
     reuseExistingServer: false,
     timeout: 60_000,
   },

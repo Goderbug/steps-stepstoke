@@ -2,8 +2,8 @@
 // The server is static, temporary and owned by this bounded foreground command.
 import assert from "node:assert/strict";
 import { createServer } from "node:http";
-import { readFile, writeFile } from "node:fs/promises";
-const { chromium } = await import(process.argv.includes("--imd-chromium")
+import { readFile, writeFile, mkdir } from "node:fs/promises";
+const { chromium, webkit } = await import(process.argv.includes("--imd-chromium")
   ? "/opt/imd-tools/playwright-mcp/node_modules/playwright/index.mjs" : "playwright");
 const server = createServer(async (req, res) => {
   const path = new URL(req.url, "http://static.test").pathname;
@@ -16,7 +16,8 @@ const server = createServer(async (req, res) => {
   } catch { res.writeHead(404).end(); }
 });
 await new Promise((resolve) => server.listen(0, "127.0.0.1", resolve));
-const browser = await chromium.launch();
+const engine=process.argv.includes("--webkit")?"webkit":"chromium";
+const browser = await ({chromium,webkit}[engine]).launch({executablePath:engine==="webkit"?process.env.W1_WEBKIT_EXECUTABLE:process.env.W1_CHROMIUM_EXECUTABLE});
 try {
   const page = await browser.newPage({ viewport: { width: 390, height: 844 } });
   const origin = `http://127.0.0.1:${server.address().port}`;
@@ -27,7 +28,7 @@ try {
     outside.push(route.request().url()); return route.abort();
   });
   await page.goto(`${origin}/#/demo/b/fx-branch-1`);
-  await page.locator("#ws-title").waitFor();
+  await page.locator("#project-title").waitFor();
   const measurements = [];
   const measure = async (name, selector) => {
     const value = await page.locator(selector).first().evaluate((element) => {
@@ -48,16 +49,18 @@ try {
   await measure("body", "body");
   await measure("primary button", ".btn-primary:not(:disabled)");
   await measure("secondary metadata", "#assets .meta");
-  await measure("demo warning", ".demo-bar");
-  const mobileInputSize = await page.getByLabel("演示签名账户").evaluate((el) => getComputedStyle(el).fontSize);
+  await measure("demo warning", ".mode-bar");
+  await page.getByText("Demo settings", {exact:true}).click();
+  const mobileInputSize = await page.getByLabel("Demo signing account").evaluate((el) => getComputedStyle(el).fontSize);
   assert.equal(mobileInputSize, "16px");
-  const jump = await page.locator(".jump").boundingBox();
+  await page.getByText("Demo settings", {exact:true}).click();
+  const jump = await page.locator(".sequence-rail").boundingBox();
   assert.ok(jump && jump.y + jump.height <= 844, "workspace shortcuts must fit the first phone screen");
   await page.goto(`${origin}/#/demo/b/fx-branch-sec`);
-  await page.locator("#assets > ul > li", { hasText: /^tampered / }).getByRole("button", { name: "下载并校验" }).click();
+  await page.locator('[data-asset-key="tampered"]').click();
   await page.locator(".alert-error").waitFor();
   await measure("file verification error", ".alert-error");
-  await page.locator("#assets > ul > li", { hasText: /^evil-notes / }).getByRole("button", { name: "下载并校验" }).click();
+  await page.locator('[data-asset-key="evil-notes"]').click();
   await page.locator(".badge-ok").waitFor();
   await measure("verified descriptor badge", ".badge-ok");
   await page.emulateMedia({ reducedMotion: "reduce" });
@@ -65,6 +68,7 @@ try {
   assert.equal(reducedMotion, "0s");
   assert.deepEqual(errors, []); assert.deepEqual(outside, []);
   const result = { status: "passed", mode: "fixture-only", viewport: { width: 390, height: 844 }, measurements, mobileInputSize, workspaceShortcuts: jump, reducedMotion, pageErrors: errors, externalRequests: outside, limitations: "Opaque preview content, disabled states, all interactive backgrounds, native zoom and physical screen readers are outside this targeted contrast sample." };
-  await writeFile("docs/validation/raw/design-measurements.json", JSON.stringify(result, null, 2));
+  await mkdir("docs/validation/platform-ux-v1/final",{recursive:true});
+  await writeFile(`docs/validation/platform-ux-v1/final/design-measurements-${engine}.json`, JSON.stringify({...result,engine}, null, 2));
   console.log(JSON.stringify(result, null, 2));
 } finally { await browser.close(); server.close(); }

@@ -35,3 +35,16 @@ it("uses A1 name limits for CLI-produced names rather than fixture slot restrict
   expect(draftProblems(caps, { assets: [] } as unknown as Checkpoint, draft)).toEqual([]);
   expect(draftProblems(caps, { assets: [] } as unknown as Checkpoint, { ...draft, targetKey: targetKey + "A" })).toContain("Use letters, numbers, underscores or hyphens, up to 64 bytes");
 });
+
+it("keeps only bounded public RPC reads alive across navigation and preserves large simulation bytes",async()=>{
+  const {httpProvider}=await import('../../src/domain/chainAdapter');
+  const fetch=vi.fn(async(_url: RequestInfo|URL,_init?: RequestInit)=>({ok:true,json:async()=>({result:'0x1'})}));vi.stubGlobal('fetch',fetch);
+  try {
+    const provider=httpProvider('http://127.0.0.1:8545');
+    await provider.request({method:'eth_getTransactionReceipt',params:['0x'+'12'.repeat(32)]});
+    expect(fetch.mock.calls[0][1]?.keepalive).toBe(true);
+    const data='0x'+'ab'.repeat(32768);await provider.request({method:'eth_call',params:[{data},'latest']});
+    expect(fetch.mock.calls[1][1]?.keepalive).toBe(false);expect(JSON.parse(String(fetch.mock.calls[1][1]?.body)).params[0].data).toBe(data);
+    await provider.request({method:'eth_sendTransaction',params:[{}]});expect(fetch.mock.calls[2][1]?.keepalive).toBe(false);
+  }finally{vi.unstubAllGlobals();}
+});

@@ -1,0 +1,47 @@
+{
+  "mode": "fixture-only",
+  "realWalletRequests": [],
+  "checks": "Six flows; four executed rounds; exact retained HTML/PNG; historical R1 fork; independent Node SHA-256 checks",
+  "files": [
+    {
+      "file": "../docs/validation/platform-ux-v1/final/fixtures/files/chromium-desktop-landing-r1.html",
+      "sha256": "0xe91dbc2486a2761c7e30faa3548edbcab931509ac4e56aa53596afd38998559c",
+      "bytes": 192,
+      "producerJob": "fx-job-fx-branch-101-1",
+      "assetRevision": 1,
+      "provenance": "fx-branch-101:1"
+    },
+    {
+      "file": "../docs/validation/platform-ux-v1/final/fixtures/files/chromium-desktop-cover-r2.png",
+      "sha256": "0x5262c767feabb1e32d31dc9497bb9abc3dee7eb60ace19910aed6d8ab4f4571f",
+      "bytes": 87,
+      "producerJob": "fx-job-fx-branch-101-2",
+      "assetRevision": 2,
+      "provenance": "fx-branch-101:2"
+    },
+    {
+      "file": "../docs/validation/platform-ux-v1/final/fixtures/files/chromium-desktop-landing-r3.html",
+      "sha256": "0x94679b63036f2f1a28fc65d894e7b577b6a542b1c329f3e16a70d5fb52be9bb4",
+      "bytes": 446,
+      "producerJob": "fx-job-fx-branch-101-3",
+      "assetRevision": 3,
+      "provenance": "fx-branch-101:3"
+    },
+    {
+      "file": "../docs/validation/platform-ux-v1/final/fixtures/files/chromium-desktop-guide-r4.md",
+      "sha256": "0x5948b0abd321d30c1ba11c0fb465edff487600cc56fd445911e4fe17fa642450",
+      "bytes": 50,
+      "producerJob": "fx-job-fx-branch-101-4",
+      "assetRevision": 4,
+      "provenance": "fx-branch-101:4"
+    },
+    {
+      "file": "../docs/validation/platform-ux-v1/final/fixtures/files/chromium-desktop-landing-r0.html",
+      "sha256": "0xe91dbc2486a2761c7e30faa3548edbcab931509ac4e56aa53596afd38998559c",
+      "bytes": 192,
+      "producerJob": "fx-job-fx-branch-101-1",
+      "assetRevision": 1,
+      "provenance": "fx-branch-101:1"
+    }
+  ]
+}

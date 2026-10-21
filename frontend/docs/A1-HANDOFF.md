@@ -1,4 +1,6 @@
-# A1 integration handoff
+# A1 integration handoff (archived W1 stage)
+
+This document records the earlier W1 boundary. The current browser SDK and actual local-contract acceptance are documented in [the root README](../../README.md) and [final validation](../../docs/validation/platform-ux-v1/final/README.md). Historical assertions below describe their own revision.
 
 Status: **A1_INTEGRATION_PENDING**. W1-to-A1 local-chain integration: **NOT_RUN**. The unmodified A1 dependency harness was separately replayed with local mocks; that is not a W1 browser bridge. Mainnet compatibility/consumption: **NOT_RUN**. No real key, paid job, public deployment or production hosting was used.
 

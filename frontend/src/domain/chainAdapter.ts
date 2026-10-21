@@ -36,7 +36,13 @@ function persist(row: Journal) {
 export function httpProvider(url: string): Provider {
   let id = 0;
   return { async request({ method, params = [] }) {
-    const res = await fetch(url, { method: "POST", headers: { "content-type": "application/json" }, body: JSON.stringify({ jsonrpc: "2.0", id: ++id, method, params }), signal: AbortSignal.timeout(15000) });
+    const bodyText = JSON.stringify({ jsonrpc: "2.0", id: ++id, method, params });
+    // WebKit can reject a small in-flight read during document replacement as a CORS error.
+    // Let bounded public reads finish across navigation. Wallet writes never use this policy;
+    // large simulations keep their full bytes and use ordinary fetch (no keepalive quota).
+    const keepalive = (method === "eth_call" || method.startsWith("eth_get") || method === "eth_chainId")
+      && new TextEncoder().encode(bodyText).byteLength <= 16384;
+    const res = await fetch(url, { method: "POST", headers: { "content-type": "application/json" }, body: bodyText, keepalive, signal: AbortSignal.timeout(15000) });
     if (!res.ok) throw new Error(`RPC HTTP ${res.status}`);
     const body = await res.json();
     if (body.error) throw new Error(`${method}: ${body.error.message}`);

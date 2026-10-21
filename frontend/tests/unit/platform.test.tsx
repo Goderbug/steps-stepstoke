@@ -75,3 +75,14 @@ it("never carries verification across different origin branches or versions",asy
   clearVerifications();const a=await FixtureAdapter.create({latency:0,reset:true});const asset=(await a.getHistory("fx-branch-1"))[0].assets[0];recordVerification(asset,"verified");
   for(const changed of [{...asset,originBranchId:"another-producer"},{...asset,revision:asset.revision+1},{...asset,originCheckpoint:"another-checkpoint"}]){expect(verificationKey(changed)).not.toBe(verificationKey(asset));expect(verificationOf(changed)).toBeNull();}
 });
+
+it("reload reconciliation preserves a missing callback outcome instead of applying the new demo success default",async()=>{
+  const a=await FixtureAdapter.create({latency:0,reset:true});a.controls.callbackOutcome="missing";a.controls.txOutcome="unknown";
+  const q=await a.quoteFee("fx-prop-1");await a.approve(DEMO_ACCOUNTS[0],q,q.price);
+  const sp=await a.sponsor(DEMO_ACCOUNTS[0],"fx-prop-1",q.price,q);
+  const reloaded=await FixtureAdapter.create({latency:0});
+  expect(reloaded.controls.callbackOutcome).toBe("accepted");
+  const result=await reloaded.reconcile({sponsorshipId:sp.id,branchId:sp.branchId,proposalId:sp.proposalId,account:sp.sponsor,chainId:31337,adapterKind:"fixture",txHash:sp.txHash,nonce:sp.nonce,savedAt:new Date().toISOString()});
+  expect(result?.stages.purchase).toBe("confirmed");expect(result?.stages.callback).toBe("pending");expect(result?.checkpointId).toBeNull();
+  expect(await reloaded.getSponsorships(sp.branchId)).toHaveLength(1);
+});

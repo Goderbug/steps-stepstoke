@@ -46,5 +46,5 @@ let frontendBytes = 0, distBytes = 0;
 for (const p of paths) { if (!p.startsWith('frontend/') && !p.startsWith('dist/')) continue; const s = await stat(resolve(root, p)).catch(error => { if (error.code === 'ENOENT') return null; throw error; }); if (s?.isFile()) { if (p.startsWith('dist/')) distBytes += s.size; else frontendBytes += s.size; } }
 check('Frontend source plus export <= 8 MiB', frontendBytes + distBytes <= 8388608, { frontendBytes, distBytes, combinedBytes: frontendBytes + distBytes, limit: 8388608 });
 report.result = report.checks.some(c => c.status === 'FAIL') ? 'FAIL' : 'PASS';
-await writeFile(resolve(root, 'docs/validation/integration/acceptance/structural-review.json'), JSON.stringify(report, null, 2) + '\n');
+await writeFile(resolve(root, 'docs/validation/platform-ux-v1/final/structural-review.json'), JSON.stringify(report, null, 2) + '\n');
 console.log(JSON.stringify({ result: report.result, checks: report.checks.length, frontendBytes, distBytes, independentContributorReview: 'NOT_RUN' }));

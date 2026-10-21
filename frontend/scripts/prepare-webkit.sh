@@ -9,7 +9,7 @@ export PLAYWRIGHT_BROWSERS_PATH="${PLAYWRIGHT_BROWSERS_PATH:-/tmp/cto-relay-brow
 "$frontend_dir/node_modules/.bin/playwright" install webkit
 (
   cd "$tools_dir/debs"
-  apt-get download libgtk-4-1 libpangocairo-1.0-0 libgdk-pixbuf-2.0-0 libcairo-gobject2 \
+  apt-get -o APT::Sandbox::User=root download libgtk-4-1 libpangocairo-1.0-0 libgdk-pixbuf-2.0-0 libcairo-gobject2 \
     libgraphene-1.0-0 liblcms2-2 libevent-2.1-7t64 libopus0 libgstreamer-plugins-base1.0-0 \
     libgstreamer-plugins-bad1.0-0 libgstreamer-gl1.0-0 libflite1 libwebpdemux2 libavif16 \
     libharfbuzz-icu0 libepoxy0 libwebpmux3 libwayland-server0 libwayland-egl1 libwayland-client0 \

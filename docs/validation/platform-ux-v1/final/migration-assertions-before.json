@@ -1,0 +1,10 @@
+{
+  "frontend/tests/e2e/revision.spec.ts": 64,
+  "frontend/tests/e2e/journey.spec.ts": 60,
+  "frontend/tests/e2e/wallet.spec.ts": 20,
+  "frontend/tests/e2e/layout.spec.ts": 15,
+  "frontend/tests/e2e/harness.ts": 5,
+  "frontend/tests/e2e/w1.spec.ts": 98,
+  "frontend/tests/e2e/platform.spec.ts": 64,
+  "frontend/tests/integration/browser-chain.mjs": 127
+}

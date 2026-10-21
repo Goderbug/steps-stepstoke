@@ -1,0 +1,10 @@
+# Open issues and explicit limits
+
+- **Live compatibility and deployment: NOT_RUN.** `productionDeployment:null`, `liveCompatibility:NOT_RUN`, `productionReady:false`. Existing external manifest/callback liveness acceptance remains unchanged. MockIntake callbacks and local receipts do not prove external worker execution, Git delivery, publication, or production readiness.
+- **Independent contributor review: NOT_RUN.** This stage's structural review and reported tests are worker observations with no independent authority.
+- **Native-device accessibility/wallet checks: NOT_RUN.** Chromium/WebKit desktop/mobile are emulated browser coverage. No physical phone, native Safari certification, physical screen reader, native 200% zoom, live extension/passkey signing or mobile wallet-app journey was performed. Browser wallet discovery/switching/rejection and keyboard paths use named test providers; real local transactions use disposable unlocked accounts.
+- **Finite authenticated manifest envelope: retained protocol limit.** Oversized authenticated manifests may remain unbindable. The frontend does not rewrite bytes, repurchase, refund, settle over HTTP or unlock. No core changes were needed or made.
+- **Transport scope.** The WebKit navigation regression is repaired and full local rechecks pass. Keepalive applies only to public read request bodies at most 16,384 bytes. Larger simulations preserve full bytes and normal transport. This is not a claim of universal browser/network reliability.
+- **Typography.** Active faces are disclosed local system fallbacks; no branded font files or remote font service are claimed. The unused historical Noto subset was removed; attribution records remain.
+
+Earlier FAIL/NOT_RUN results remain explicit in historical evidence, raw intermediate logs, the compressed intermediate report archive, and pre-repair WebKit diagnostics. They describe their respective source/harness revisions. Final results are separately indexed in `check-results.json`; successful fixtures or a structural check never substitute for actual local signing or live acceptance.

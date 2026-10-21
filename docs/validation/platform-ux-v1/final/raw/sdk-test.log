@@ -1,0 +1,47 @@
+✔ browser entrypoint import graph avoids node:*, fs, DNS, HTTPS, process and implicit Buffer (48.86205ms)
+✔ embedded ABI module matches the exported abi/*.json byte hashes (126.698088ms)
+✔ Node and browser entrypoints produce identical calldata, witness, hashes and rejections (122.815419ms)
+✔ browser entrypoint runs in a Node process with Buffer, process.binding and require removed (471.469373ms)
+✔ utf8Length matches Buffer.byteLength, including unpaired surrogates (0.440037ms)
+✔ HTML export check matches the Node dist check for embedded images and refuses tampering (22.500437ms)
+✔ browser artifact fetch: configured location, credential-free request, verified bytes (10.107506ms)
+✔ browser artifact fetch refuses untrusted, redirected, oversized, tampered and failed responses (11.017255ms)
+✔ artifact policies: HTTPS hostnames only; loopback fixture policy is test-only (1.140403ms)
+✔ readBlobBounded reads a File/Blob up to the bound only (12.437086ms)
+✔ wallet request carries only the prepared unsigned transaction (9.577025ms)
+✔ config generation stays closed without a public deployment and refuses non-local chains (5.91836ms)
+✔ actual HTML directory rejects symlinks/extras and verifies exact inline image bytes without execution (89.710983ms)
+✔ public artifact fetcher rejects local, credentialed and unsupported sources before any artifact is read (38.950918ms)
+✔ artifact address admission rejects private, mapped and transition IPv6 forms (7.214456ms)
+✔ artifact address admission rejects private and special IPv4 ranges (4.860039ms)
+✔ actual fetch path rejects mapped-private DNS answers before HTTPS and pins public answers (145.259753ms)
+✔ vendored ethers is exactly 6.17.0 and every locked dependency is present offline (24.039445ms)
+✔ all six functions have unsigned ABI transaction/read preparation (53.217095ms)
+✔ proposal zero, unsigned funding caps, publishing and invalid inputs are rejected (8.057775ms)
+✔ client rejects fixed-profile violations before it prepares a purchaseable proposal (1.042687ms)
+✔ raw binding preserves exact bytes and refuses a reserialization with a different digest (2.168158ms)
+✔ canonical witnesses sort, retain provenance, detect duplication and encode deterministically (13.332694ms)
+✔ SDK golden witness and calldata are shared with executed Solidity tests (6.438197ms)
+✔ history is recoverable from full witness logs and permanent checkpoint reads (18.212463ms)
+✔ optional EIP-1193 querying makes eth_call only and decodes the prepared ABI read (5.636729ms)
+✔ actual Markdown, HTML and PNG bytes verify length, SHA-256 and MIME signature (46.624359ms)
+✔ strict raw parser rejects Unicode, duplicates, trailing content and excessive resources (1.367612ms)
+✔ unknown transactions never trigger an automatic rebuy; stages remain separate (0.248611ms)
+✔ lifecycle status never treats a receipt as admission, execution, file, Git or publication proof (3.350003ms)
+✔ CLI prepares calldata without any RPC, key or signer (640.949392ms)
+✔ CLI recovers authenticated checkpoint history from explicit local evidence only (313.031609ms)
+✔ review: new writes cannot reuse a different slot name or path (17.894027ms)
+✔ review: file and directory prefix collisions are rejected in both directions (1.982891ms)
+✔ review: top-level dist is reserved for the single HTML slot (7.559491ms)
+✔ review: authenticated metadata does not exhaust output parser budgets (81.925826ms)
+✔ review: skipped metadata still rejects malformed JSON, duplicate keys and invalid Unicode (9.710154ms)
+✔ review: manifest envelope and required output limits remain explicit (18.307264ms)
+✔ review: combined manifest work budget accepts the boundary and rejects one byte over (10.593082ms)
+ℹ tests 39
+ℹ suites 0
+ℹ pass 39
+ℹ fail 0
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 1828.260958

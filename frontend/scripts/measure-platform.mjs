@@ -27,7 +27,7 @@ try {
   execFileSync('git', ['bundle', 'verify', bundle], { cwd: work, stdio: 'pipe' });
   const bytes = (await stat(bundle)).size;
   const report = { method: 'Fresh Git repository containing every deliverable file from git ls-files --cached --others --exclude-standard, excluding only removed .imd inputs. Single-commit complete source snapshot bundle, verified with git bundle verify. Temporary repository and bundle are not submitted.', fileCount, rawBytes, sourceSnapshotGitBundleBytes: bytes, limit: 8388608, reserveForFinalReportBytes: 0, status: bytes <= 8388608 ? 'PASS' : 'FAIL', originalRepositoryHistory: 'NOT_MEASURED: shared repository is read-only and has missing promisor history; no original .git mutation or history truncation performed' };
-  await writeFile(resolve(root, 'docs/validation/platform-ux-v1/submission-size.json'), JSON.stringify(report, null, 2) + '\n');
+  await writeFile(resolve(root, process.argv[2] ?? 'docs/validation/platform-ux-v1/submission-size.json'), JSON.stringify(report, null, 2) + '\n');
   console.log(JSON.stringify(report));
   if (report.status !== 'PASS') process.exitCode = 1;
 } finally { await rm(work, { recursive: true, force: true }); }

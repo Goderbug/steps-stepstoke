@@ -1,0 +1,5 @@
+{
+  "state": "Final target width correction: Demo navigation now has both dimensions >=44px",
+  "source": "frontend/src/styles.css:.main-nav a",
+  "evidence": "Pinned taste targets identified one comfortable-size exception by width; source review showed the Demo text link was narrower than 44px. Applied min-width:44px without suppressing checks."
+}

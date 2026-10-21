@@ -1,0 +1,62 @@
+{
+  "result": "PASS",
+  "countsAreNotSemanticProof": true,
+  "files": [
+    {
+      "path": "frontend/tests/e2e/revision.spec.ts",
+      "assertionsBefore": 64,
+      "assertionsAfter": 64,
+      "originalScenarioNamesRetained": true
+    },
+    {
+      "path": "frontend/tests/e2e/journey.spec.ts",
+      "assertionsBefore": 60,
+      "assertionsAfter": 60,
+      "originalScenarioNamesRetained": true
+    },
+    {
+      "path": "frontend/tests/e2e/wallet.spec.ts",
+      "assertionsBefore": 20,
+      "assertionsAfter": 20,
+      "originalScenarioNamesRetained": true
+    },
+    {
+      "path": "frontend/tests/e2e/layout.spec.ts",
+      "assertionsBefore": 15,
+      "assertionsAfter": 15,
+      "originalScenarioNamesRetained": true
+    },
+    {
+      "path": "frontend/tests/e2e/harness.ts",
+      "assertionsBefore": 5,
+      "assertionsAfter": 5
+    },
+    {
+      "path": "frontend/tests/e2e/w1.spec.ts",
+      "assertionsBefore": 98,
+      "assertionsAfter": 98,
+      "originalScenarioNamesRetained": true
+    },
+    {
+      "path": "frontend/tests/e2e/platform.spec.ts",
+      "assertionsBefore": 64,
+      "assertionsAfter": 70,
+      "originalScenarioNamesRetained": true
+    },
+    {
+      "path": "frontend/tests/integration/browser-chain.mjs",
+      "assertionsBefore": 127,
+      "assertionsAfter": 155
+    }
+  ],
+  "allOriginalScenariosRetained": true,
+  "testMatch": "*.spec.ts",
+  "presentationMappings": {
+    "inline proposal": "Continue preparation dialog; immutable eligible ContributionCard",
+    "inline sponsor": "FundingSheet with disabled purchase before approval",
+    "asset rows": "selected complete ArtifactViewer plus full provenance table",
+    "history rows": "numeric SequenceRail and Historical Fork beside selected output",
+    "version dropdown": "read-only sequence selection; current head unchanged",
+    "journal selection": "original hash/nonce AND matching branch identity"
+  }
+}

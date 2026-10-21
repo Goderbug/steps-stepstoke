@@ -1,0 +1,12 @@
+{
+  "result": "PASS",
+  "records": 175,
+  "allStatus": "passed",
+  "unexpectedPageErrors": 0,
+  "unexpectedConsoleErrors": 0,
+  "horizontalOverflow": 0,
+  "archive": "browser-runtime-audits.tar.xz",
+  "archiveSHA256": "405b302b4677b6121e566ebc9e561edbf3c745c5ab3990f5e3530543fdeeda85",
+  "restore": "tar -xJf docs/validation/platform-ux-v1/final/browser-runtime-audits.tar.xz -C .",
+  "originalPathsRetainedInTar": true
+}

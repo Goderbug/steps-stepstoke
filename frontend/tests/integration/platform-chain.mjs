@@ -10,7 +10,7 @@ import { startPreview } from '../../scripts/static-preview.mjs';
 import * as sdk from '../../../sdk/browser.mjs';
 const root=resolve(dirname(fileURLToPath(import.meta.url)),'../../..');
 const engine=process.argv.includes('--webkit')?'webkit':'chromium';
-const out=resolve(root,'docs/validation/platform-ux-v1/receipts',engine+(process.argv.includes('--diagnostic-confirmation')?'-diagnostic-confirmation':process.argv.includes('--diagnostic')?'-diagnostic':''));
+const out=resolve(root,'docs/validation/platform-ux-v1/final/platform-receipts',engine+(process.argv.includes('--diagnostic-confirmation')?'-diagnostic-confirmation':process.argv.includes('--diagnostic')?'-diagnostic':''));
 await mkdir(out,{recursive:true});
 const expect=baseExpect.configure({timeout:30000});
 const local=await startLocal();

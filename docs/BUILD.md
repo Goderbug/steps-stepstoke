@@ -85,3 +85,11 @@ If a build is unable to find solc or Anvil, provision the documented toolchain; 
 The PLATFORM-UX-V1 frontend is separate from the protected root build. From the repository root run `npm ci --prefix frontend`, `npm run typecheck --prefix frontend`, `npm run test:unit --prefix frontend`, and `npm run build --prefix frontend`. The last command writes root `dist/` using relative assets and hash routes. `npm run preview --prefix frontend` serves it on port 4173. `node frontend/scripts/static-preview.mjs` serves the same bytes at `/preview/` on port 4175.
 
 `npm run test:e2e --prefix frontend` runs the current English `platform.spec.ts` in the five configured browser/viewport projects. `node frontend/tests/integration/platform-chain.mjs` drives actual disposable contracts through the production browser UI; `--webkit` selects WebKit. Browser runtimes/shared libraries may be installed outside the repository. Original W1 selectors remain historical source; the current suite and its results are explained in [PLATFORM-UX-V1 validation](validation/platform-ux-v1/README.md).
+
+## PLATFORM-UX-V1 final regression stage
+
+All 24 original fixture scenarios and the 10 platform scenarios run together through `frontend/playwright.config.ts`; a reduced-motion regression adds one more scenario per configured project. Nothing is skipped. Use `npm run test:e2e --prefix frontend` after rebuilding the committed root export. The five projects remain Chromium 1440/390/320 and WebKit 1440/390. Optional `W1_PREVIEW_PORT`, `W1_E2E_OUTPUT` and `W1_E2E_REPORT` isolate a diagnostic run without changing the browser matrix.
+
+`node frontend/tests/integration/browser-chain.mjs --browser chromium --group all` and `--browser webkit` run every original local-contract assertion plus the final regressions. Add `--mobile` for actual signing at 390px. These runners own Anvil, the static preview and the artifact server, and must run sequentially because they generate the local deployment configuration. No source address is guessed or replaced.
+
+Final evidence is under `docs/validation/platform-ux-v1/final/`. Large historical raw traces have lossless restoration instructions at their original paths. Root offline dependencies remain intact.

@@ -29,7 +29,7 @@ State always has a text label. Measurement results are in `docs/validation/platf
 
 ## Typography
 
-The disclosed local fallback is Arial, Helvetica, sans-serif for interface text and Courier New, Courier, monospace for identifiers. These are system fonts; no font service, remote font request or font installation is required. Space Grotesk and IBM Plex Mono are not bundled. The historical licensed Noto subset and its notices remain in source, but are not requested or exported by the current CSS.
+The disclosed local fallback is Arial, Helvetica, sans-serif for interface text and Courier New, Courier, monospace for identifiers. These are system fonts; no font service, remote font request or font installation is required. Space Grotesk and IBM Plex Mono are not bundled. The unused historical Noto subset was removed from source; its license and provenance notices remain. The export requests no font file.
 
 The scale is 13px metadata, 16px body and controls, 20px subheadings, 24px section headings, and 36px page titles changing to 28px at 640px and below. Body line height is 1.5; metadata 1.55; titles 1.15. Weights are 400 and 600. Headings use modest negative tracking; body text has natural tracking. Identifiers and numeric data use tabular numbers. Full critical IDs wrap and have copy controls in disclosures; shortened wallet addresses have full title text. Authenticated file typography remains inside its isolated preview.
 
@@ -73,3 +73,15 @@ Controls use 6px radii, previews/sheets 8px, badges 4px. The app favicon is a lo
 - Do not translate authenticated outputs, infer relationships, simulate live projects, change protocol limits, introduce a dark theme, or execute artifact scripts.
 
 Rendered coverage, fixes, screenshots and limitations are recorded in `docs/validation/platform-ux-v1/design-review.md`. Better Interface guidance is adapted from Jakub Krehel (MIT); documentation method from Paul Bakaus / Impeccable (Apache-2.0). Retained notices are in `frontend/docs/licenses/`.
+
+## Final integration refinements
+
+At 320px, the brand uses the 16px body step with a 24px mark so the wallet control remains beside it. Closed demo settings share a compact row with the mode label, with the fixture explanation beneath. This keeps the whole sequence reachable on the first phone screen without clipping text or hiding controls. Open settings remain in normal flow.
+
+Unbroken project names and goals wrap with `overflow-wrap:anywhere`; flex heading children allow shrinking. Failed verification checks also wrap long actual digests. Wide Markdown/provenance tables scroll in their own named, keyboard-focusable regions while the host document reflows.
+
+The funding sheet shows both approval and purchase controls throughout. Purchase is disabled before confirmed approval; approval is disabled after confirmation. Only the available next action has the primary fill. A price change returns to exact approval. Closing any preparation restores its opener's focus and invalidates delayed signing work.
+
+Final rendered observations, contrast measurements, six-domain coverage and browser limits: [integration review](docs/validation/platform-ux-v1/final/design-review.md).
+
+Inputs, selects and textareas use the 16px body token even inside 13px metadata containers. Main navigation links have minimum 44px width and height. These values are verified by the final rendered review.

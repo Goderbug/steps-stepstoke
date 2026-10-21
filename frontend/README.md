@@ -29,3 +29,5 @@ node frontend/tests/integration/platform-chain.mjs --webkit
 The local-chain runner starts and closes its own disposable Anvil and artifact/static servers. It records actual wallet submissions and receipts under `docs/validation/platform-ux-v1/receipts/`. No key or public RPC is required. See the root [README](../README.md), [interface guide](../docs/FRONTEND.md), [authoring guide](../docs/PLATFORM-AUTHORING.md) and [current validation](../docs/validation/platform-ux-v1/README.md).
 
 System Arial/Helvetica and Courier New are the disclosed local font fallbacks. The old Noto subset/license remains in source for historical continuity; the current bundle does not load it.
+
+Final integration uses every `tests/e2e/*.spec.ts` file and the full English `tests/integration/browser-chain.mjs` runner. See [final results](../docs/validation/platform-ux-v1/final/README.md) for commands, separate functional/runtime outcomes, actual receipts, and limits. `--browser chromium|webkit --group all --mobile` runs the local signing suite at 390px; omit `--mobile` for desktop. Run these suites sequentially.
