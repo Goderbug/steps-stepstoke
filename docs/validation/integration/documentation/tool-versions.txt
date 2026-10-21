@@ -1,0 +1,7 @@
+node v22.23.2
+npm 10.9.8
+forge Version: 1.8.3
+anvil Version: 1.8.3
+playwright Version 1.64.1
+chromium-headless-shell build 1248 (Playwright download), system libraries supplied via LD_LIBRARY_PATH wrapper
+starting HEAD 28fbb8a98ec54757b9f503ac3cd85f4ae75fa70a
