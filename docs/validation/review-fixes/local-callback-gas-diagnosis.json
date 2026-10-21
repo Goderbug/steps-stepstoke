@@ -1,0 +1,10 @@
+{
+  "scope": "Read-only estimate on stopped local mock flow",
+  "rawBytes": 12128,
+  "calldataBytes": 12228,
+  "oldOuterGasLimit": 500000,
+  "estimatedOuterGas": "508290",
+  "callbackStipend": 200000,
+  "change": "Raise only outer mock completion transaction gas; preserve 200000 callback stipend",
+  "rpc": "temporary loopback Anvil"
+}

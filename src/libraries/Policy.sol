@@ -9,12 +9,12 @@ library Policy {
     address internal constant IMD = 0xD34a99Bc0f67aE1bbd63C660e6d0b0dd03E263B7;
     bytes32 internal constant OPEN = bytes32("job.open@job-1");
     bytes32 internal constant CONTINUE = bytes32("job.continue@job-1");
-    bytes32 internal constant ID = keccak256("CTO-Relay-A1/1/fixed-profiles/unpublished");
+    bytes32 internal constant ID = keccak256("CTO-Relay-A1/2/fixed-profiles/unpublished");
     uint256 internal constant MAX_ASSETS = 16;
     uint256 internal constant MAX_INPUTS = 8;
     uint256 internal constant MAX_BODY = 16_384;
-    // Measured with a full 16-asset witness. A smaller raw-document cap leaves binding gas headroom.
-    uint256 internal constant MAX_MANIFEST = 8_192;
+    // Metadata is validated without retaining it; bind measurements include the full asset witness.
+    uint256 internal constant MAX_MANIFEST = 32_768;
     uint256 internal constant MAX_DOCUMENT = 65_536;
     uint256 internal constant MAX_HTML = 2_097_152;
     uint256 internal constant MAX_IMAGE = 262_144;

@@ -2,7 +2,9 @@
 
 A public project has a fixed goal, immutable execution policy, an independent Intake payer, and a permanent history of accepted asset checkpoints. Anyone can propose work, explicitly fund a current proposal, bind its authenticated result, or fork an accepted historical checkpoint.
 
-This delivery integrates the Solidity core, Node ESM SDK/CLI, adversarial tests and an actual SDK-to-contract local chain flow. **This is not ready for real funds.** Local deployments and tests use mocks at the supplied Intake and IMD addresses. **Live compatibility, real IMD consumption and public deployment are `NOT_RUN`; production readiness is false.** An independent agent review and replay are recorded in [final validation](docs/validation/README.md); this is not an external audit. Missing callbacks or incompatible authenticated manifests can permanently stop purchases on a Branch. Documentation does not repair code or close findings. See [A1 → W1 handoff and missing work](docs/HANDOFF.md).
+This checkout is a local repair candidate built on the [original IMD A1 delivery at `9b0294e7ab19060bd00c489fbe032cf248528e0d`](https://github.com/identity-md-launches/launch-2294-build-cto-relay-station/tree/9b0294e7ab19060bd00c489fbe032cf248528e0d). The candidate uses policy `CTO-Relay-A1/2/fixed-profiles/unpublished` and changes contracts, SDK/CLI and tests to address the later asset-mapping, manifest-envelope and `dist/` findings. [Current repair evidence](docs/validation/review-fixes/README.md) records results against this source; older validation logs describe the original delivery. This local candidate is not a new IMD delivery or a public deployment.
+
+**Production readiness remains false.** Local deployments use mock Intake/IMD. Live profile compatibility, real IMD runtime consumption and public deployment remain `NOT_RUN`. Finite parser limits and missing callbacks can still stop purchases; the larger metadata-aware envelope does not guarantee every future IMD manifest is bindable. See [handoff and remaining acceptance work](docs/HANDOFF.md).
 
 ## Build and check offline
 
@@ -14,8 +16,8 @@ FOUNDRY_FUZZ_SEED=0x146644c630d7548a74d043e2779607ab2def960ac3890b548af84b4eb4db
 forge fmt --check
 node --test test-sdk/*.test.mjs
 python3 test/adversarial/check-inline-fixtures.py
-node tools/local-integration.mjs > /tmp/relay-a1-local.json
-node tools/measure-release.mjs
+node tools/local-integration.mjs --review-fixes > /tmp/relay-a1-local.json
+node tools/measure-release.mjs --review-fixes
 node cli/relay.mjs help
 ```
 
@@ -101,7 +103,7 @@ Forks authenticate the registered parent and chosen nonzero accepted revision ag
 
 Anyone calls `bind(exactRawManifest, oldAssetWitness)` after a success callback. The verifier checks the callback's **keccak256 of the original bytes**, a complete strict JSON document, `state: "completed"`, bounded job/project identity, and exactly one declared `files[]` output. The output must match the committed name/path and profile MIME/size rules. Continuations must keep the Branch's own project and use a new job identity. A child's first project cannot copy its source checkpoint's project.
 
-The parser decodes keys and strings, rejects duplicate decoded keys at every depth, invalid UTF-8 and escapes, unpaired surrogates, noncharacters, invalid paths, trailing data, and resource excess. Unknown metadata is parsed under the same bounds. `source[]`, Git commits and later metadata cannot replace `files[]`.
+The binding parser validates the entire authenticated document, including unknown metadata, while retaining only the fields needed for acceptance. It rejects duplicate decoded keys at every depth, invalid UTF-8/escapes, unpaired surrogates, noncharacters, trailing data and resource excess. The raw manifest cap is 32,768 bytes; retained strings and total document complexity have separate limits in [LIMITS.md](docs/LIMITS.md). SDK binding uses `strictManifestJSON`; the general `strictJSON` helper keeps its 8,192-byte default. Unknown metadata is never truncated or substituted for `files[]`.
 
 File **SHA-256** and manifest **keccak256** are different commitments. The contracts authenticate the writer's descriptors, not remote file availability, file quality, HTML behavior, or actual input consumption. The writer/runtime must truthfully expose the accepted bytes and honor the fixed profile. The SDK checks actual downloaded-or-operator-supplied bytes for SHA-256, length and MIME signatures without executing them. The optional `fetch-check` command downloads only explicit public HTTPS artifacts with checked, pinned DNS addresses; private, mapped and transition addresses are rejected. No browser preview is included.
 
@@ -121,8 +123,10 @@ All profiles request `github:true, ipfs:false`. Publishing defaults to false and
 
 Every selected input appears explicitly in `steps[].inputs` with its complete descriptor (`name,path,hash,mediaType,bytes,submissionHash`) and the unique alias `as: "asset-N"`, materialized at `.imd/reads/artifacts/asset-N`. Alias order follows sorted selected keys. `steps[].outputs` declares the single output mapping. These immutable runtime shapes/skill names must be checked against the live catalog before a paid release; the supplied protocol reference does not itself certify these three profiles. **Live compatibility remains `NOT_RUN`.**
 
+Proposals cannot reuse another current slot's name, use the same path, or make one file path an ancestor of another. Updates retain their own mapping and must also avoid other slots. Historical independent descriptors remain readable without rewriting provenance. The fixed HTML path permits one HTML slot per Branch; update that slot or fork its accepted history. Non-HTML outputs cannot occupy top-level `dist/`.
+
 HTML instructions require restoring the selected HTML, inline CSS/JS, exact selected image bytes as data URIs, no symlinks, and `dist` containing only `index.html`. Before payment the encoder rejects known image-size/aggregate excess and includes Base64/data-URI overhead in its conservative HTML input budget. The integration fixture demonstrates HTML → image → HTML: the third execution parent is job two, while inputs are HTML from job one and PNG from job two.
 
-See [measured limits](docs/LIMITS.md), [operating procedure](docs/OPERATIONS.md), [review record](docs/REVIEW.md), and [final integrated evidence](docs/validation/README.md). Earlier contributor evidence remains in [evidence/](evidence/README.md). The [documentation reproduction record](docs/validation/documentation-pass/README.md) is a separate local check, not a new independent audit.
+See [current repair evidence](docs/validation/review-fixes/README.md), [limits](docs/LIMITS.md), [operating procedure](docs/OPERATIONS.md) and [review record](docs/REVIEW.md). Original [integrated evidence](docs/validation/README.md), [contributor evidence](evidence/README.md) and [documentation reproduction](docs/validation/documentation-pass/README.md) remain unchanged historical records; their source hashes, counts and gas figures are not measurements of this candidate.
 
-The [future IMD request/observer procedure](docs/LIVE-VALIDATION.md) is concrete guidance for a separately authorized future run; none of it was executed here. The [A1 → W1 handoff](docs/HANDOFF.md) identifies delivered work and missing validation. Local test success, independent review, real IMD execution, Git delivery and production readiness remain separate. No Git remote delivery or final submission commit is asserted by this README.
+The [future IMD request/observer procedure](docs/LIVE-VALIDATION.md) describes a separately authorized runtime test; that test has not run. W1 was delivered separately with fixture-based browser flows and awaits integration with the accepted A1 candidate. W1 integration is outside this repair. Local tests, review, original IMD source delivery, real runtime execution and production readiness are separate evidence categories.

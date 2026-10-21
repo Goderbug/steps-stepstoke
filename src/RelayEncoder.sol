@@ -107,6 +107,17 @@ contract RelayEncoder {
             }
             if (current.length + 1 + missing > Policy.MAX_ASSETS) revert Policy.Limit();
         }
+        // Inputs retain immutable per-submission provenance, but a new write must not
+        // reuse another accepted slot's public name or collide with its file path,
+        // including file/directory ancestor conflicts.
+        // Do not impose this on historical witness reads: only the proposed write.
+        for (uint256 i; i < current.length; ++i) {
+            if (
+                current[i].key != p.target
+                    && (Text.equal(current[i].name, p.outputName)
+                        || Assets.pathsConflict(current[i].path, p.outputPath))
+            ) revert Policy.Invalid();
+        }
         if (kind == T.Kind.Image && p.inputs.length != 0) revert Policy.Invalid();
         bool selectedTarget;
         bytes32 last;

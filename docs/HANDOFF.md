@@ -1,62 +1,45 @@
-# A1 → W1 handoff and readiness
+# A1 and W1 handoff and readiness
 
-**A1 is delivered local source and tooling; production readiness is false.** This documentation pass changes README/docs only. It does not change contracts, SDK, CLI, dependencies, configuration, ABIs or tests, repair code, or erase an open finding. Live catalog/Intake compatibility, actual IMD consumption and public deployment remain **`NOT_RUN`**. Publication is disabled. No Git remote delivery or final upload commit is established by a local test result.
+**This checkout is a local A1 repair candidate; production readiness remains false.** It builds on the original IMD-delivered commit [`9b0294e7ab19060bd00c489fbe032cf248528e0d`](https://github.com/identity-md-launches/launch-2294-build-cto-relay-station/tree/9b0294e7ab19060bd00c489fbe032cf248528e0d), with revised contracts, SDK/CLI and regression tests under policy A1/2. It is not a new IMD delivery or a public deployment. Use [current repair evidence](validation/review-fixes/README.md) for source-specific results. Older validation logs remain historical.
 
-W1 below names a future work stage, not an existing implementation or a promise that missing core work can be moved into a frontend. No frontend is delivered or needed for the six A1 operations. A1 already contains actual file descriptors/provenance, selected asset inputs and authenticated historical forks; their live behavior still needs validation.
+W1 was delivered separately at [`d48bc2117a06c79c3b8545d15eeff2675da94a31`](https://github.com/identity-md-launches/launch-2297-build-cto-relay-station/tree/d48bc2117a06c79c3b8545d15eeff2675da94a31). Its working interactions use fixtures and its real A1 interface remains `A1_INTEGRATION_PENDING`. Connecting and testing that webpage against accepted A1 contracts/SDK is outside this repair. A1's asset, history and payment correctness cannot be deferred to the webpage.
 
-## Delivered A1 surface
+## A1 surface and remaining boundaries
 
-| Requirement | Delivered implementation / local evidence | Remaining boundary |
+| Surface | Implementation | Remaining boundary |
 | --- | --- | --- |
-| Create fixed public project | Factory creates and registers initialized root clone with fixed goal | No public deployment/code verification |
-| Propose work | Current-anchor immutable proposals with one target, selected inputs, output mapping, text and publish flag | Live runtime schema/catalog acceptance unverified |
-| Explicit sponsor | Nonzero selectable proposal, no FIFO, exact runtime fee/maxFee, Branch payer, guarded payment | Local mocked token/Intake only; no real IMD consumption |
-| Read files/state/history | Public reads/events, exact raw manifests, witness recovery and actual fixture file checks | Public availability, RPC/log completeness and real artifacts unverified |
-| Continue | Own latest job, one target per revision, no two-round limit; root has five local bound rounds | External continuation admission and Git prerequisites unverified |
-| Historical fork | Permanent source checkpoint, full inherited table/provenance, child opens own project then continues | Local root-1 fork after root-5 and two child rounds; no live fork run |
-| Markdown create/update | Fixed build-document profile; actual Markdown fixtures; both modes execute locally | Live skill/output contract unverified |
-| HTML create/update | Fixed build-website profile; actual HTML → PNG → HTML, exact PNG embedding/marker check | Model restoration, dist equality and self-contained behavior are runtime/off-chain obligations |
-| Single image generation | Fixed imagegen, no references/edits, actual PNG fixture and hashes | No AI generation performed; PNG signature check is not a full decoder audit |
-| Failure/binding lifecycle | Stipend callbacks, pending indefinitely, same-body explicit refused retry, freeze otherwise, bad-bind preservation | No lost-callback recovery or incompatible-manifest repair by design |
-| SDK/CLI | Unsigned operations/previews, canonical witnesses, history and file checks, optional restricted artifact fetch | No signer, broadcaster, approval/deploy command, mandatory service or complete live observer harness |
+| Create / propose / sponsor | Fixed goal, registered independent Branch payer, current-anchor immutable proposals, exact fee/maxFee, no FIFO | Public deployment and actual runtime request acceptance unverified |
+| Read / continue / historical fork | Public state/events, exact raw result commitment, complete asset provenance, independent child job/project identity | Real file availability, runtime restoration and continuation admission unverified |
+| Markdown / HTML / image | Fixed create/update profiles, one declared target, explicit authenticated selected inputs, real local file checks | Local fixtures are not AI-generated live deliveries; profile compliance remains to be checked |
+| Callback / binding | Authenticated callback; permissionless exact-byte binding; finite metadata-aware parser | Missing callback or incompatible authenticated result can still stop purchases |
+| SDK / CLI | Unsigned operations/read preparation, witnesses, local file checks, optional guarded download | No signer, public deployment command, automatic purchase or complete live observer |
 
-Root/child creation, proposals and forks never implicitly buy AI. Local fixtures simulate results, not model execution. A successful mock request, compiled ABI or accepted JSON shape is not proof of real protocol acceptance.
+Creation, proposals and forks do not buy AI. No frontend or centralized service is required for those A1 operations. Local mock successes do not prove live protocol acceptance.
 
-## Findings and repair status
+## Current review repairs
 
-These are **preexisting source repairs** recorded by earlier contributors, not fixes made by this documentation assignment. Read the original reports and raw checks before relying on their conclusions.
-
-| Record | Finding and status | Evidence / qualification |
+| Finding | Candidate repair | Evidence boundary |
 | --- | --- | --- |
-| Implementer review | Initial large-manifest candidate exceeded conservative gas headroom; reduced to 8,192 bytes and measured full bindings | [REVIEW.md](REVIEW.md), [LIMITS.md](LIMITS.md), original diagnostic traces under `evidence/`. Initial defect was not silently relabelled PASS |
-| Implementer review | Invalid PNG fixture CRC; replaced fixture, regenerated manifests/inline HTML and checked CRC/decompression | [Review](REVIEW.md), Python fixture check; fixture repair, not proof of arbitrary image validity |
-| Implementer review | Incorrect newline golden expectation and getter consuming a revert expectation; corrected tests | [Review](REVIEW.md); test repairs do not themselves establish external behavior |
-| Implementer review | SDK numeric wrapper impersonation; private Symbol branding and regression added | [Review](REVIEW.md), Node suite; Solidity parser unaffected |
-| Independent agent review, **High** | Hexadecimal IPv4-mapped IPv6 DNS answers bypassed private-network guard; final positive global-unicast admission/exclusions and regressions repaired it | [Independent report](validation/independent-review.md), `test-sdk/network-address.test.mjs`. First attempted repair still allowed NaN bypass and was caught; final regression/replay passes |
+| Medium: different slots could claim the same public mapping | Reject cross-slot names, equal paths and file/directory ancestor paths before payment; updates preserve their own mapping; historical provenance remains readable | Pre-fix failures and positive/negative regression controls in [review-fixes](validation/review-fixes/README.md) |
+| Medium: unrelated metadata exhausted the retained JSON parser envelope | Validate the full raw document while retaining only acceptance fields; 32 KiB raw limit with strict total-value/key/depth budgets; matching SDK binding parser | Bounded compatibility repair, not guaranteed acceptance of every IMD result |
+| Low: Markdown/PNG could occupy `dist/` | Reserve top-level `dist/` for the HTML profile's `dist/index.html` | On-chain/SDK proposal checks; actual runtime directory and HTML bytes still need file checks |
+| Review follow-up: retained parser work and duplicate-key cost need bounds | Cap whole-document values and aggregate decoded key bytes, preserving strict malformed/duplicate rejection | Current worst-shape measurements and tests are indexed with the repair evidence |
 
-The earlier independent agent report identifies **no unresolved Critical/High or concrete core failure after its final repair**. This is that report's scoped conclusion, not a certification of absence. It is a separate agent review with local replay, not an external human audit. Adversarial contributor tests separately cover contracts; no Slither/Mythril or external human audit result is delivered. `config/release.json` preserves `independentAgentReview:"PASS_WITH_REPAIRS"` alongside `independentContributorReview:"NOT_RUN"`; do not flatten these into an unqualified audit PASS. This documentation pass is not another independent review.
+The original implementing/independent review reports and earlier repairs, including the artifact-fetcher address guard, are preserved in [REVIEW.md](REVIEW.md) and [original validation](validation/README.md). A later Swarm review did execute and reported the three findings above; the original handoff's `independentContributorReview: NOT_RUN` narrative was incomplete. The current record distinguishes that review from local repair validation and from an external audit.
 
-## Fixed restrictions and trust assumptions
+## Restrictions that remain
 
-The [measured envelope](LIMITS.md) is 16 current assets, 8 selected inputs, 1 output, ≤16,384-byte request, ≤8,192-byte manifest, ≤64 KiB Markdown, ≤2 MiB HTML, ≤256 KiB PNG and ≤512 KiB aggregate selected images. Parser/field bounds and reserved type slots apply in addition. Some theoretically valid edits can fail the conservative HTML-plus-Base64 budget or exactly-one-output rule. Image editing/reference/variation and publishing remain disabled; changing fixed release policy requires new reviewed code/deployment rather than a setter.
+The [current envelope](LIMITS.md) limits assets, selected inputs, exactly one output, raw request/result bytes and parser complexity. The fixed HTML path means one HTML slot per Branch; update it or fork history. Image editing/reference/variation and publishing remain disabled.
 
-Writer/runtime honesty, actual artifact availability, input consumption, output quality, completion/project/job identity and profile compliance remain external assumptions. Hashes commit bytes/descriptors, not those semantic properties. Contracts do not fetch files or enforce HTML behavior/dist layout. SDK `verifyHTMLDist` checks local shape/bytes and optional PNG inclusion, not arbitrary JS safety or all remote references. `html-check` CLI omits the selected-image list. PNG verification checks the signature; the independent fixture checker only validates its fixture. The artifact-fetch guard is conservative and has no overall elapsed-time deadline across DNS/redirects/slow responses. Explicit local file checks are not a complete filesystem sandbox. See [CLI details](CLI.md).
+The writer/runtime must truthfully report and retain accepted bytes, honor selected inputs and output profiles, and preserve job/project identity. Hashes do not prove quality, input consumption or safe HTML behavior. SDK `verifyHTMLDist` checks actual local shape/bytes and optional selected PNG inclusion; it does not certify arbitrary JavaScript safety. File/network checks are not a complete filesystem sandbox or end-to-end availability guarantee.
 
-Missing callback keeps Pending forever; invalid authenticated manifests can keep ResultRecorded forever; non-refusal failures freeze purchases. No administrator can repair these states, and there is no automatic refund. Anyone may fork an earlier accepted revision, if one exists, but that does not recover a spent fee or make the failed run accepted. Fixed client dependencies also cannot repair a future incompatible external protocol change.
+Missing callbacks leave `Pending`; incompatible authenticated documents can leave `ResultRecorded`; non-refusal failures freeze purchases. Status 1 allows only a separately funded retry of the same active proposal. No refund, timeout/admin unlock or automatic rebuy exists. Forking earlier accepted history, when available, does not recover the spent fee or accept a failed result.
 
-## W1 work still required
+## Remaining acceptance work
 
-1. **Validate protocol and profile compatibility.** Verify chain/code/token/action prices and exact body/schema/catalog acceptance for all enabled create/update/open/continue/inherited-input cases. Use [the future request/observer procedure](LIVE-VALIDATION.md). Local mocks do not check the runtime catalog or execute skills.
-2. **Record separately authorized deployment and consumption evidence.** No public deployment script/address or live paid run is delivered. Only a future explicitly approved operator should handle deployment/signing/spending. Retain deployment/code verification, exact requests, receipts, admission/execution, callbacks and accepted raw results separately. Never use local fixture IDs as live parents.
-3. **Validate real files, continuation and historical child identity.** Obtain actual returned file bytes; verify SHA-256/length/MIME, exact HTML dist/named bytes and image embedding, old-input restoration, untouched provenance and independent job/project identities. Exercise the full planned root and historical-child sequence. Do not defer asset/history correctness to a frontend.
-4. **Observe external Git delivery.** `github:true` requests delivery; local mocks prove no Git push. Retain the actual delivered repository/commit and its relationship to accepted bytes. Do not claim that a manifest repo URL or a local `git rev-parse` proves remote delivery. Publication stays disabled; no publication-mode validation is supplied.
-5. **Complete security review and address new findings.** External human audit and additional analysis are still owed before production claims. Confirmed unresolved Critical/High or core failures block readiness. Record failing inputs and expected/actual results, implement/review repairs in an appropriately scoped code task, then rerun relevant checks. Documentation cannot discharge this gate.
-6. **Improve operator tooling only where needed.** Live observation/reorg-aware log retrieval, receipt reconciliation and exact approval preparation are manual/integrator responsibilities today. A future tool must preserve unsigned defaults, separate observations and never automatically rebuy. No server, signer service, frontend, governance, treasury or autonomous spending is required to close A1 correctness gaps.
+1. Complete source-specific local repair checks and independent review using [current evidence](validation/review-fixes/README.md); do not reuse original test counts or artifact hashes as current proof.
+2. Integrate the separately delivered W1 with the accepted A1 ABI/SDK and test the actual local flow. Fixture/browser success alone is insufficient.
+3. Under separate runtime-test authorization, verify live protocol/profile/schema acceptance, actual result envelopes and files, root continuation and historical-child identity. Follow [LIVE-VALIDATION.md](LIVE-VALIDATION.md); local mocks are not live compatibility evidence.
+4. Treat public deployment, paid runtime requests, callbacks, binding, actual artifact checks and external Git delivery as separate observations. The original A1 source delivery is established; this repair and future runtime jobs require their own evidence.
 
-If exact live bodies or accepted manifests are incompatible with fixed A1 policy, record a core failure and design a reviewed successor. Do not enable unsupported publishing/image modes, widen caps, substitute source metadata or add admin repair merely to force a success label.
-
-## Evidence handoff
-
-Use [the integrated evidence index](validation/README.md), [independent review](validation/independent-review.md), [implementer review](REVIEW.md), [source SHA-256 inventory](validation/source-sha256.json) and [documentation reproduction record](validation/documentation-pass/README.md). Earlier `evidence/` and `test/adversarial/evidence/` logs are historical records with their own scopes/test counts. `docs/agent/sdk-cli-checks.md` records an earlier 17-test SDK stage; the integrated suite has 20 tests after network regressions.
-
-Keep these fields distinct in any W1 report: local checks, independent review, free preflight, chain reads/fork testing, public deployment, real IMD paid execution, callback, binding, actual files, Git delivery, publication and production readiness. Unknown stays unknown; `NOT_RUN` never means an implicit PASS. A source hash/commit is evidence only when actually observed and tied to the tested files; no final delivery commit is guessed in this documentation.
+Confirmed Critical/High findings or core failures block readiness. If an actual runtime result lies outside fixed candidate policy, record that incompatibility and design a reviewed successor rather than adding privileged repair or substituting manifest bytes. Live compatibility, real IMD runtime consumption and public deployment remain `NOT_RUN`.

@@ -21,8 +21,8 @@ contract ProfileBoundarySpecTest is SpecSetup {
         T.Asset[] memory assets = empty();
         for (uint256 i = 1; i <= 8; ++i) {
             T.Proposal memory documentProposal = proposal(parent, T.Profile.MarkdownCreate, i);
-            documentProposal.outputName = string(D.repeat("n", 64));
-            documentProposal.outputPath = string(bytes.concat(D.repeat("p", 125), ".md"));
+            documentProposal.outputName = string(D.repeat(bytes1(uint8(65 + i)), 64));
+            documentProposal.outputPath = string(bytes.concat(D.repeat(bytes1(uint8(97 + i)), 125), ".md"));
             assets = accept(
                 parent,
                 documentProposal,
@@ -215,6 +215,10 @@ contract ProfileBoundarySpecTest is SpecSetup {
         assets = new T.Asset[](n);
         for (uint256 i; i < n; ++i) {
             T.Proposal memory p = proposal(root, T.Profile.MarkdownCreate, i + 1);
+            if (i != 0) {
+                p.outputName = string.concat("notes-", D.decimal(i + 1));
+                p.outputPath = string.concat("docs/notes-", D.decimal(i + 1), ".md");
+            }
             bytes memory raw = D.manifest(p, "descriptor-job", "descriptor-project", D.document());
             assets[i] = D.output(p, "descriptor-job", D.document(), raw, address(root), 1);
         }

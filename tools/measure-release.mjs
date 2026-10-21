@@ -4,8 +4,10 @@ import assert from 'node:assert/strict';
 import { readFile, writeFile } from 'node:fs/promises';
 import { keccak256 } from '../vendor/ethers/ethers.mjs';
 const root = new URL('../', import.meta.url);
+// Candidate evidence stays separate from the original immutable delivery logs.
 const read = async path => readFile(new URL(path, root), 'utf8');
 const config = JSON.parse(await read('config/release.json'));
+const evidenceDir = config.validationReport === 'docs/validation/review-fixes/README.md' || process.argv.includes('--review-fixes') ? 'docs/validation/review-fixes' : 'docs/validation';
 const contracts = {};
 for (const name of ['RelayFactory', 'RelayBranch', 'RelayEncoder', 'RelayVerifier']) {
   const artifact = JSON.parse(await read(`out/${name}.sol/${name}.json`));
@@ -21,22 +23,22 @@ for (const name of ['RelayFactory', 'RelayBranch', 'RelayEncoder', 'RelayVerifie
   assert.ok(size(creation) <= 49152, `${name} EIP-3860`);
 }
 assert.deepEqual(config.contracts, contracts, 'Fixed release config artifact drift');
-const trace = await read('docs/validation/maximum-binding-trace.txt');
+const trace = await read(`${evidenceDir}/maximum-binding-trace.txt`);
 const metrics = [...trace.matchAll(/emit Metric\(name: "([^"]+)", value: (\d+)/gu)].map(m => ({ name: m[1], value: Number(m[2]) }));
 assert.equal(metrics.length, 9);
-const bodyTrace = await read('docs/validation/worst-body-trace.txt');
+const bodyTrace = await read(`${evidenceDir}/worst-body-trace.txt`);
 assert.match(bodyTrace, /independent exact runtime request UTF-8 bytes", value: 16384/u);
 assert.match(bodyTrace, /1 passed; 0 failed/u);
-const flow = JSON.parse(await read('docs/validation/local-integration.json'));
+const flow = JSON.parse(await read(`${evidenceDir}/local-integration.json`));
 assert.equal(flow.rounds.length, 7);
 assert.equal(flow.compatibility, 'LOCAL_MOCK_ONLY');
 const measurements = {
-  scope: 'Final integrated source: local EVM and mock Intake/IMD only', contracts,
+  scope: 'Local source candidate: local EVM and mock Intake/IMD only', policyId: config.policyId, contracts,
   bindingExecution: metrics,
   requestBoundary: { acceptedUTF8Bytes: 16384, rejectedUTF8Bytes: 16385, prepaymentRejection: true },
   localChainTransactions: flow.transactions,
   localChainMaximumScenarioBodyBytes: Math.max(...flow.rounds.map(r => r.bodyBytes)),
   liveCompatibility: 'NOT_RUN', publicDeployment: 'NOT_RUN', paidConsumption: 'NOT_RUN'
 };
-await writeFile(new URL('docs/validation/measurements.json', root), JSON.stringify(measurements, null, 2) + '\n');
+await writeFile(new URL(`${evidenceDir}/measurements.json`, root), JSON.stringify(measurements, null, 2) + '\n');
 console.log(JSON.stringify({ ok: true, ABI: 'MATCH', fixedConfig: 'MATCH', contracts, requestBoundary: measurements.requestBoundary }, null, 2));

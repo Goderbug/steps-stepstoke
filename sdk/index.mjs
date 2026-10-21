@@ -3,14 +3,14 @@ import { readFileSync } from 'node:fs';
 import {
   AbiCoder, Interface, getAddress, getBytes, hexlify, isHexString, keccak256, version
 } from '../vendor/ethers/ethers.mjs';
-import { strictJSON, unsignedJSONInteger } from './strict-json.mjs';
+import { strictJSON, strictManifestJSON, unsignedJSONInteger, MANIFEST_LIMITS } from './strict-json.mjs';
 
 // No dependency installation, keys, wallet, signer, HTTP client, indexer or browser is required.
 export const ethersVersion = version;
 export const ASSET_TYPE = 'tuple(bytes32 key,uint8 kind,string name,string path,bytes32 fileHash,string mediaType,uint32 size,bytes32 submissionHash,address producer,string jobId,bytes32 resultHash,uint64 revision)[]';
 export const PHASES = Object.freeze(['READY', 'PURCHASING', 'PENDING', 'RESULT_RECORDED', 'REFUSED', 'FROZEN']);
 export const PROFILES = Object.freeze({ MarkdownCreate: 0, MarkdownUpdate: 1, HTMLCreate: 2, HTMLUpdate: 3, ImageCreate: 4 });
-export const LIMITS = Object.freeze({ assets: 16, inputs: 8, body: 16384, manifest: 8192, document: 65536, html: 2097152, image: 262144, imagesTotal: 524288 });
+export const LIMITS = Object.freeze({ assets: 16, inputs: 8, body: 16384, manifest: 32768, document: 65536, html: 2097152, image: 262144, imagesTotal: 524288 });
 const coder = AbiCoder.defaultAbiCoder();
 const loadABI = name => JSON.parse(readFileSync(new URL(`../abi/${name}.json`, import.meta.url), 'utf8'));
 export const interfaces = Object.freeze({
@@ -67,7 +67,7 @@ export function canonicalWitness(assets) {
     if (!Number.isInteger(kind) || kind < 0 || kind > 2) throw new Error('Invalid asset kind');
     const size = positive(a.size);
     if (size > BigInt(caps[kind]) || a.mediaType !== mime[kind]) throw new Error('Invalid file type or size');
-    const filePath = path(a.path);
+    const filePath = outputPath(kind, a.path);
     if ((kind === 0 && !filePath.endsWith('.md')) || (kind === 1 && filePath !== 'dist/index.html') || (kind === 2 && !filePath.endsWith('.png'))) throw new Error('Invalid output path');
     const revision = positive(a.revision);
     if (revision > (1n << 64n) - 1n) throw new Error('Revision overflow');
@@ -97,6 +97,7 @@ const profileRule = profile => {
 };
 const outputPath = (kind, value) => {
   const checked = path(value);
+  if (kind !== 1 && checked.startsWith('dist/')) throw new Error('dist is reserved for the HTML export');
   if ((kind === 0 && !checked.endsWith('.md')) || (kind === 1 && checked !== 'dist/index.html') || (kind === 2 && !checked.endsWith('.png'))) throw new Error('Invalid output path');
   return checked;
 };
@@ -127,6 +128,7 @@ export function validateProposal(proposal, witness) {
     kinds.add(rule.kind);
     if (current.length + 1 + 3 - kinds.size > LIMITS.assets) throw new Error('Reserved asset slots exhausted');
   }
+  if (current.some(a => a.key !== p.target && (a.name === p.outputName || a.path === p.outputPath || a.path.startsWith(p.outputPath + '/') || p.outputPath.startsWith(a.path + '/')))) throw new Error('Output name or path conflicts with another asset');
   if (rule.kind === 2 && p.inputs.length !== 0) throw new Error('Image references are disabled');
   let imageBytes = 0;
   let htmlBytes = 0;
@@ -163,7 +165,7 @@ export function retryRefused(branch, maxFee, witness) {
 }
 export function bindResult(branch, raw, recordedHash, witness) {
   if (!(raw instanceof Uint8Array) || raw.length > LIMITS.manifest || keccak256(raw) !== hash(recordedHash)) throw new Error('Raw manifest digest mismatch');
-  strictJSON(raw);
+  strictManifestJSON(raw);
   return transaction(interfaces.branch, branch, 'bind', [raw, canonicalWitness(witness)]);
 }
 export function forkHistory(factory, parent, revision, witness, direction) {
@@ -238,7 +240,7 @@ export function recoverHistory(branch, logs, checkpoints) {
 
 export function verifyManifest(raw, recordedHash) {
   if (!(raw instanceof Uint8Array) || keccak256(raw) !== hash(recordedHash)) throw new Error('Raw manifest digest mismatch');
-  const manifest = strictJSON(raw);
+  const manifest = strictManifestJSON(raw);
   if (manifest.state !== 'completed') throw new Error('Incomplete result');
   identifier(manifest.jobId);
   identifier(manifest.projectId);
@@ -248,7 +250,7 @@ export function verifyManifest(raw, recordedHash) {
   path(file.path);
   const kind = mime.indexOf(file.mediaType);
   if (kind < 0) throw new Error('Unsupported MIME');
-  if ((kind === 0 && !file.path.endsWith('.md')) || (kind === 1 && file.path !== 'dist/index.html') || (kind === 2 && !file.path.endsWith('.png'))) throw new Error('Invalid output mapping');
+  outputPath(kind, file.path);
   const bytes = unsignedJSONInteger(file.bytes, caps[kind]);
   if (!bytes) throw new Error('Empty file');
   const sha = hexDigest(file.hash, 'file');
@@ -316,4 +318,4 @@ export function lifecycleStatus({ receipt, phase, checkpointVerified = false, fi
   });
 }
 
-export { strictJSON, unsignedJSONInteger };
+export { strictJSON, strictManifestJSON, unsignedJSONInteger, MANIFEST_LIMITS };

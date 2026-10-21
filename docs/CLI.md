@@ -1,5 +1,7 @@
 # Unsigned CLI and Node SDK
 
+This describes the local policy A1/2 repair candidate atop original IMD commit `9b0294e7ab19060bd00c489fbe032cf248528e0d`. See [current repair evidence](validation/review-fixes/README.md). The walkthrough below deliberately reads historical local fixtures; its sample addresses are not deployed services.
+
 Use Node ≥22 from the repository root. `node cli/relay.mjs help` lists every CLI command. No npm installation, RPC, wallet, signer, server or indexer is required for preparation. Only the optional `fetch-check` command performs an artifact download. There is no send, deploy, approve, browser-preview or automatic retry command.
 
 Preparation does not establish that a transaction is currently admissible. A Branch's phase/anchor, runtime price, allowance or another sponsor's transaction can change before submission. All examples below are **offline preparations against recorded local test state**, not authorizations to send live transactions.
@@ -159,7 +161,7 @@ Every command is public local tooling; no role or credentials are required to pr
 | `decode-checkpoint` | `--log`; decoded canonical event | Wrong event or noncanonical/invalid witness |
 | `recover-history` | `--branch --logs --checkpoints`; sorted authenticated comparisons | Wrong/removed/duplicate log, missing or mismatched checkpoint |
 
-Options are `--name value` pairs; duplicates/missing values fail. Use only documented options: unused options are not all rejected by this implementation. JSON argument files are bounded regular files: ordinary inputs up to 65,536 bytes, history JSON up to 2 MiB, raw manifests up to 8,192 bytes; actual artifact caps depend on type. Integers are safest as decimal strings. Output represents BigInts as decimal strings.
+Options are `--name value` pairs; duplicates/missing values fail. Use only documented options: unused options are not all rejected by this implementation. JSON argument files are bounded regular files: ordinary inputs up to 65,536 bytes, history JSON up to 2 MiB, raw manifests up to 32,768 bytes; actual artifact caps depend on type. Integers are safest as decimal strings. Output represents BigInts as decimal strings.
 
 Successful commands emit JSON except help. Failures exit nonzero and emit `{"ok":false,"error":{"code":"…","message":"…"}}` on stderr. Most validation/file errors use `INVALID_INPUT`; fetch errors include `INVALID_DESCRIPTOR`, `INVALID_URL`, `UNSAFE_URL`, `DNS_FAILED`, `PRIVATE_NETWORK`, `ENCODED_RESPONSE`, `TOO_LARGE`, `TIMEOUT`, `NETWORK_ERROR`, `BAD_REDIRECT`, `TOO_MANY_REDIRECTS`, `HTTP_STATUS`. Post-fetch file verification can still throw a generic validation error. CLI output does not include `ArtifactFetchError.details` even though the SDK error carries it.
 
@@ -169,9 +171,9 @@ Import core exports from `./sdk/index.mjs` and file/network helpers separately f
 
 | Exports | Purpose / limits |
 | --- | --- |
-| `ethersVersion`, `ASSET_TYPE`, `PHASES`, `PROFILES`, `LIMITS`, `interfaces` | Pinned bundle version, ABI tuple, enum/limit tables and Factory/Branch/encoder/verifier ethers Interfaces; ABI encoding available without a provider |
+| `ethersVersion`, `ASSET_TYPE`, `PHASES`, `PROFILES`, `LIMITS`, `MANIFEST_LIMITS`, `interfaces` | Pinned bundle version, ABI tuple, enum/limit tables and Factory/Branch/encoder/verifier ethers Interfaces; ABI encoding available without a provider |
 | `canonicalWitness(assets)`, `witnessHash(assets)` | Validate/copy/sort a table, reject duplicate keys, hash canonical ABI; preserves provenance, does not retrieve or authenticate source |
-| `validateProposal(proposal,witness)` | Fixed local profile checks; defaults missing publish to false; does not read current anchor or encode the complete runtime request size |
+| `validateProposal(proposal,witness)` | Fixed profile and mapping checks, including cross-slot name/equal-path/file-directory-prefix conflicts and non-HTML top-level `dist/`; defaults missing publish to false. Does not read current anchor or encode the complete runtime request size |
 | `createProject`, `proposeWork`, `sponsorProposal`, `retryRefused`, `bindResult`, `forkHistory` | Corresponding unsigned transactions; see command examples. Bind preparation validates digest/syntax, not all contract semantics |
 | `previewProposal(branch,id,witness)`, `readState(branch,method,args)` | Prepare read requests. Allowed reads: `goal`, `direction`, `source`, `revision`, `assetsHash`, `latestJobId`, `projectId`, `phase`, `proposalCount`, `attemptCount`, `activeProposal`, `activeAttempt`, `proposal`, `attempt`, `checkpoint`, `anchor`, `factory`, `encoder`, `verifier`. Other public getters use `interfaces.branch` directly |
 | `decodeRead(method,result)`, `decodePreview(result)` | Decode ABI response; preview retains exact raw request bytes/action/hash/length |
@@ -179,7 +181,8 @@ Import core exports from `./sdk/index.mjs` and file/network helpers separately f
 | `decodeCheckpoint(log)`, `recoverHistory(branch,logs,checkpoints)` | Decode canonical witness events and compare with supplied reads; no automatic fetching/indexer/ancestry walk |
 | `verifyManifest(raw,recordedHash)` | Strict raw digest, completed job/project and one enabled file descriptor; no comparison against a particular proposal or Branch history |
 | `verifyFile(descriptor,bytes)` | Actual SHA-256/length/MIME signature checks as above |
-| `strictJSON(raw,maxBytes=8192,maxString=1024)`, `unsignedJSONInteger(value,max)` | Resource-bounded strict parser; number tokens preserve original grammar via a private Symbol. Do not treat numeric wrappers as ordinary JavaScript numbers; use `unsignedJSONInteger` |
+| `strictJSON(raw,maxBytes=8192,maxString=1024)`, `unsignedJSONInteger(value,max)` | General strict parser with unchanged defaults; number tokens preserve original grammar via a private Symbol. Use `unsignedJSONInteger` rather than treating wrappers as ordinary numbers |
+| `strictManifestJSON(raw)` | Binding-specific strict parser: 32,768 raw bytes, validates all metadata and returns the acceptance-field projection. Retained strings, decoded keys, per-object/depth/total-value/aggregate-key/combined-work limits are listed in [LIMITS.md](LIMITS.md). Used by `bindResult` and `verifyManifest`; does not authenticate the hash source or replace contract semantic checks |
 | `reconcileTransaction({receipt,phase})` | Unknown receipt → look up original hash; reverted → review; mined → separate observations; always `purchase:false` |
 | `lifecycleStatus({receipt,phase,checkpointVerified,fileVerified,git,publication})` | Observation formatting only; caller-provided flags are not independently verified; always `automaticPurchase:"NEVER"` |
 | `readArtifactFile(filename,maximum)` | Explicit bounded regular-file read; default/max 2 MiB |

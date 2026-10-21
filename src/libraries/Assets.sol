@@ -39,9 +39,29 @@ library Assets {
 
     function outputPath(T.Kind kind, string memory path) internal pure {
         Text.path(path);
+        // The website profile requires the top-level dist directory to contain
+        // exactly index.html. Other asset types must never occupy that directory.
+        bytes memory b = bytes(path);
+        if (
+            kind != T.Kind.HTML && b.length >= 5 && b[0] == "d" && b[1] == "i" && b[2] == "s" && b[3] == "t"
+                && b[4] == "/"
+        ) revert Policy.Invalid();
         if (kind == T.Kind.Markdown && !Text.suffix(path, ".md")) revert Policy.Invalid();
         if (kind == T.Kind.HTML && !Text.equal(path, "dist/index.html")) revert Policy.Invalid();
         if (kind == T.Kind.Image && !Text.suffix(path, ".png")) revert Policy.Invalid();
+    }
+
+    /// @dev Two files conflict if identical, or either would have to be a
+    /// directory for the other. Shared directories and mere text prefixes are safe.
+    function pathsConflict(string memory first, string memory second) internal pure returns (bool) {
+        bytes memory a = bytes(first);
+        bytes memory b = bytes(second);
+        uint256 common = a.length < b.length ? a.length : b.length;
+        for (uint256 i; i < common; ++i) {
+            if (a[i] != b[i]) return false;
+        }
+        if (a.length == b.length) return true;
+        return a.length < b.length ? b[common] == "/" : a[common] == "/";
     }
 
     function hash(T.Asset[] memory assets) internal pure returns (bytes32) {

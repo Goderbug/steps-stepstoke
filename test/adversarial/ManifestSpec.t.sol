@@ -225,8 +225,8 @@ contract ManifestSpecTest is SpecSetup {
     function test_exactManifestAndStringByteLimitsAcceptBoundaryRejectOneMore() public {
         T.Proposal memory p = proposal(root, T.Profile.MarkdownCreate, 1);
         bytes memory raw = D.manifest(p, "limit-job", "limit-project", D.document());
-        raw = bytes.concat(raw, D.repeat(" ", 8192 - raw.length));
-        assertEq(raw.length, 8192);
+        raw = bytes.concat(raw, D.repeat(" ", Policy.MAX_MANIFEST - raw.length));
+        assertEq(raw.length, Policy.MAX_MANIFEST);
         (,, T.Asset[] memory assets) = verifier.verify(raw, keccak256(raw), p, empty(), address(root), 1);
         assertEq(assets[0].fileHash, sha256(D.document()));
         bytes memory tooLong = bytes.concat(raw, " ");

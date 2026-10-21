@@ -279,7 +279,7 @@ contract ContinuationSpecTest is SpecSetup {
                     block.chainid,
                     address(factory),
                     address(branch),
-                    keccak256("CTO-Relay-A1/1/fixed-profiles/unpublished"),
+                    keccak256("CTO-Relay-A1/2/fixed-profiles/unpublished"),
                     address(factory.encoder()),
                     address(factory.verifier()),
                     keccak256(bytes(branch.goal())),

@@ -1,0 +1,21 @@
+{
+  "purpose": "Reviewed source inputs for one CTO Relay A1 fixes plus W1 local integration development order",
+  "a1": {
+    "repository": "https://github.com/identity-md-launches/launch-2294-build-cto-relay-station",
+    "commit": "9b0294e7ab19060bd00c489fbe032cf248528e0d",
+    "patchFile": "a1-review-fixes.patch",
+    "patchBytes": 194891,
+    "patchSha256": "3028547365dae0b93d9a6191f15b9023fd59821c791d205e8c79cc16375a2989"
+  },
+  "w1": {
+    "repository": "https://github.com/identity-md-launches/launch-2297-build-cto-relay-station",
+    "commit": "d48bc2117a06c79c3b8545d15eeff2675da94a31",
+    "target": "frontend/"
+  },
+  "instructions": [
+    "Verify exact patch and baseline file hashes before further integration.",
+    "Preserve source provenance and historical validation evidence.",
+    "No public deployment or real IMD runtime purchase in the development job.",
+    "Finite-manifest liveness risk remains; productionReady remains false."
+  ]
+}

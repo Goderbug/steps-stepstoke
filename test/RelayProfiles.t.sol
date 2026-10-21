@@ -16,8 +16,8 @@ contract RelayProfilesTest is RelaySetup {
             a[i] = T.Asset(
                 bytes32(i + 1),
                 T.Kind.Markdown,
-                "main",
-                "docs/main.md",
+                i == 0 ? "main" : string.concat("main-", Text.decimal(i + 1)),
+                i == 0 ? "docs/main.md" : string.concat("docs/main-", Text.decimal(i + 1), ".md"),
                 sha256(F.document()),
                 "text/markdown",
                 uint32(F.document().length),
@@ -150,12 +150,16 @@ contract RelayProfilesTest is RelaySetup {
         for (uint256 i = 1; i <= 16; ++i) {
             T.Profile profile =
                 i <= 14 ? T.Profile.MarkdownCreate : i == 15 ? T.Profile.HTMLCreate : T.Profile.ImageCreate;
-            current = _accept(
-                branch,
-                _proposal(branch, profile, i),
-                current,
-                _manifest(string.concat("capacity-job-", Text.decimal(i)), Policy.kind(profile), 32)
-            );
+            T.Proposal memory created = _proposal(branch, profile, i);
+            bytes memory raw =
+                _manifest(string.concat("capacity-job-", Text.decimal(i)), Policy.kind(profile), 32);
+            if (i > 1 && i <= 14) {
+                created.outputName = string.concat("main-", Text.decimal(i));
+                created.outputPath = string.concat("docs/main-", Text.decimal(i), ".md");
+                raw = replace(raw, '"main"', Text.quote(created.outputName));
+                raw = replace(raw, '"docs/main.md"', Text.quote(created.outputPath));
+            }
+            current = _accept(branch, created, current, raw);
         }
         assertEq(current.length, 16);
         T.Proposal memory p = _proposal(branch, T.Profile.MarkdownCreate, 17);
@@ -318,8 +322,9 @@ contract RelayProfilesTest is RelaySetup {
             T.Proposal memory p = _proposal(branch, profile, i);
             string memory shortName = p.outputName;
             string memory shortPath = p.outputPath;
-            p.outputName = _repeat(64, "n");
-            if (i <= 14) p.outputPath = string.concat(_repeat(125, "a"), ".md");
+            // Keep maximum lengths while using a distinct public mapping per slot.
+            p.outputName = _repeat(64, bytes1(uint8(65 + i)));
+            if (i <= 14) p.outputPath = string.concat(_repeat(125, bytes1(uint8(97 + i))), ".md");
             if (i == 16) p.outputPath = string.concat(_repeat(124, "a"), ".png");
             bytes memory raw = _manifest(Text.hex32(keccak256(abi.encode(i))), Policy.kind(profile), 32);
             raw = replace(raw, Text.quote(shortName), Text.quote(p.outputName));

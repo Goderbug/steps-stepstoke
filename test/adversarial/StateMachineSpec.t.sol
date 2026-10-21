@@ -391,7 +391,7 @@ contract SpecStateHandler is TestBase {
                 block.chainid,
                 address(factory),
                 address(b),
-                keccak256("CTO-Relay-A1/1/fixed-profiles/unpublished"),
+                keccak256("CTO-Relay-A1/2/fixed-profiles/unpublished"),
                 address(factory.encoder()),
                 address(factory.verifier()),
                 keccak256(bytes(m.goal)),

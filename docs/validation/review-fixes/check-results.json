@@ -1,0 +1,32 @@
+{
+  "checkedAt": "2026-10-21T03:33:39.877559+00:00",
+  "scope": "Local repair candidate; mock Intake/token only",
+  "baselineCommit": "9b0294e7ab19060bd00c489fbe032cf248528e0d",
+  "contractTests": {
+    "passed": 125,
+    "failed": 0
+  },
+  "sdkTests": {
+    "passed": 27,
+    "failed": 0
+  },
+  "independentScannerTests": {
+    "passed": 6,
+    "fuzzRuns": 3000
+  },
+  "localFlow": {
+    "boundRounds": 7,
+    "mockPurchases": 8,
+    "recordedTransactions": 33,
+    "expandedManifestBytes": 12128
+  },
+  "originalEvidenceFilesUnchanged": 51,
+  "sourceFilesHashed": 70,
+  "parserSha256": "b6d567634c20a7aaeb58ba496f648233ea417b2107aa37fbfa09b30f0afec409",
+  "reviewDisposition": "Code regressions repaired; bounded-manifest liveness retains medium residual",
+  "publicDeployment": "NOT_RUN",
+  "liveImdCompatibility": "NOT_RUN",
+  "newPaidOrders": 0,
+  "remoteSourceUpdated": false,
+  "productionReady": false
+}

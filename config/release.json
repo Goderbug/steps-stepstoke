@@ -1,7 +1,7 @@
 {
   "name": "CTO Relay Station A1",
-  "version": "0.1.0",
-  "policyId": "0x52152ca7fa11d1153bd1cce4f2f5b5716c5d21845e04f76ca1d39e07fe42c44e",
+  "version": "0.1.1-local-review",
+  "policyId": "0x98360971ff8aeee2617322ba7ccbb1b51b318fb6e47f39129464eb5fd2f2e19b",
   "intendedChainId": 1,
   "intake": "0xa43e6f75ee006411f79ac1c84120606c2330de82",
   "imd": "0xd34a99bc0f67ae1bbd63c660e6d0b0dd03e263b7",
@@ -13,7 +13,7 @@
   "ethers": "6.17.0",
   "productionDeployment": null,
   "liveCompatibility": "NOT_RUN",
-  "independentContributorReview": "NOT_RUN",
+  "independentContributorReview": "ORIGINAL_SWARM_REVIEW_COMPLETED",
   "productionReady": false,
   "publishing": false,
   "github": true,
@@ -23,7 +23,7 @@
     "inputs": 8,
     "outputs": 1,
     "requestBytes": 16384,
-    "manifestBytes": 8192,
+    "manifestBytes": 32768,
     "markdownBytes": 65536,
     "htmlBytes": 2097152,
     "imageBytes": 262144,
@@ -71,26 +71,46 @@
   ],
   "contracts": {
     "RelayFactory": {
-      "creationCodeHash": "0xbf72076c8e8528eaeed936dcaa2b6523ce3594a967020c472de1c240b59ba6ab",
+      "creationCodeHash": "0xb3e401d6af73c59c91280e30399f37cd38ac747ef635c294fc9242e4a9319f4a",
       "runtimeBytesBeforeImmutablePatching": 4249,
-      "initcodeBytes": 41221
+      "initcodeBytes": 45535
     },
     "RelayBranch": {
-      "creationCodeHash": "0xc9ee5e4948ad57e58ea129c36fc5eb537ef21bc9ad2b24f652d05f4b62baf655",
+      "creationCodeHash": "0x0a1f39641064ab3d3c4bfbd7702546639f5cad35844a729d17f2416574ec644e",
       "runtimeBytesBeforeImmutablePatching": 15472,
       "initcodeBytes": 15724
     },
     "RelayEncoder": {
-      "creationCodeHash": "0x31601b14e0df2dc0350b2195bcb1c0b95f2b355096b9f82573b68d670eba726a",
-      "runtimeBytesBeforeImmutablePatching": 10310,
-      "initcodeBytes": 10336
+      "creationCodeHash": "0x6bce140fb6cda3b9b1613bca7066df1d6a55765426f93b56d0337ddc9fa762f4",
+      "runtimeBytesBeforeImmutablePatching": 10842,
+      "initcodeBytes": 10868
     },
     "RelayVerifier": {
-      "creationCodeHash": "0xe345cccab68e4c76ed8e5ae56051d5823d0c3795a449d1525816ba919bce04a3",
-      "runtimeBytesBeforeImmutablePatching": 10590,
-      "initcodeBytes": 10616
+      "creationCodeHash": "0x0692ebf17ab1ea93ba54988a5dae61b35fce086f777c8feea5f7776ce6757dd4",
+      "runtimeBytesBeforeImmutablePatching": 14372,
+      "initcodeBytes": 14398
     }
   },
-  "independentAgentReview": "PASS_WITH_REPAIRS",
-  "validationReport": "docs/validation/README.md"
+  "independentAgentReview": "LOCAL_REPAIRS_REVIEWED_WITH_RESIDUAL_MEDIUM",
+  "validationReport": "docs/validation/review-fixes/README.md",
+  "sourceBaseline": {
+    "repository": "https://github.com/identity-md-launches/launch-2294-build-cto-relay-station",
+    "commit": "9b0294e7ab19060bd00c489fbe032cf248528e0d",
+    "scope": "Local repair candidate; not a new Swarm delivery or public deployment"
+  },
+  "manifestParser": {
+    "depth": 16,
+    "objectMembers": 128,
+    "keyBytes": 256,
+    "retainedTokens": 256,
+    "retainedStringBytes": 1024,
+    "totalValues": 512,
+    "totalKeyBytes": 2048,
+    "combinedWork": {
+      "maximum": 65536,
+      "formula": "rawBytes + 96 * totalValues + 8 * totalDecodedKeyBytes + 4 * priorKeyComparisons",
+      "comparisonCount": "sum(0+1+...+(memberCount-1)) for each object, including skipped metadata"
+    }
+  },
+  "remainingReviewRisk": "Authenticated results outside the finite manifest envelope may remain unbindable; actual IMD compatibility remains unverified."
 }

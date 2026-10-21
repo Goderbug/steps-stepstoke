@@ -6,6 +6,7 @@ import {Policy} from "./libraries/Policy.sol";
 import {Text} from "./libraries/Text.sol";
 import {Assets} from "./libraries/Assets.sol";
 import {StrictJSON as J} from "./libraries/StrictJSON.sol";
+import {ManifestJSON} from "./libraries/ManifestJSON.sol";
 
 /// @notice Verifies the exact result bytes, never a JSON reserialization or later Git state.
 contract RelayVerifier {
@@ -19,7 +20,7 @@ contract RelayVerifier {
     ) external pure returns (string memory job, string memory project, T.Asset[] memory next) {
         if (raw.length > Policy.MAX_MANIFEST || keccak256(raw) != recordedHash) revert Policy.Invalid();
         Assets.validate(oldAssets);
-        J.Token[] memory t = J.parse(raw);
+        J.Token[] memory t = ManifestJSON.parse(raw);
         if (!Text.equal(_string(t, 0, "state"), "completed")) revert Policy.Invalid();
         job = _string(t, 0, "jobId");
         project = _string(t, 0, "projectId");

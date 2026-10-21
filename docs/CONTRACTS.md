@@ -1,6 +1,6 @@
 # Public contracts, ABI and configuration
 
-The public source is in [`src/`](../src/), ABI JSON in [`abi/`](../abi/) and fixed build metadata in [`config/release.json`](../config/release.json). This page describes the delivered implementation. **No public deployment is recorded; live compatibility is `NOT_RUN`.** There are no web pages or frontend routes. Test mocks and test harnesses are not release contracts.
+The public source is in [`src/`](../src/), ABI JSON in [`abi/`](../abi/) and fixed build metadata in [`config/release.json`](../config/release.json). This page describes the local A1/2 repair candidate atop the pinned IMD delivery. **No public deployment is recorded; live compatibility is `NOT_RUN`.** There are no web pages or frontend routes. Test mocks and test harnesses are not release contracts.
 
 ## Deployment and fixed authority
 
@@ -8,7 +8,7 @@ Anyone can deploy `RelayFactory()` with no arguments. Its constructor deploys a 
 
 `RelayBranch(encoder_,verifier_)` is the implementation constructor, called by the Factory. It fixes `factory = msg.sender`, encoder and verifier as immutables and locks its own initializer. Directly deploying another Branch implementation does not register it with this Factory and gives it no authority over registered Branches. Public deployment instructions and authorization are outside the local demonstration; [future validation](LIVE-VALIDATION.md) describes the evidence needed first.
 
-The fixed addresses are Intake v2 `0xa43e6f75ee006411f79ac1c84120606c2330de82` and Ethereum IMD `0xd34a99bc0f67ae1bbd63c660e6d0b0dd03e263b7`. The policy ID is `0x52152ca7fa11d1153bd1cce4f2f5b5716c5d21845e04f76ca1d39e07fe42c44e` (`keccak256("CTO-Relay-A1/1/fixed-profiles/unpublished")`). Chain 1 is intended, but the constructor does **not** enforce chain ID. Identical addresses on another network are not a compatibility guarantee.
+The fixed addresses are Intake v2 `0xa43e6f75ee006411f79ac1c84120606c2330de82` and Ethereum IMD `0xd34a99bc0f67ae1bbd63c660e6d0b0dd03e263b7`. The policy ID is `0x98360971ff8aeee2617322ba7ccbb1b51b318fb6e47f39129464eb5fd2f2e19b` (`keccak256("CTO-Relay-A1/2/fixed-profiles/unpublished")`). Chain 1 is intended, but the constructor does **not** enforce chain ID. Identical addresses on another network are not a compatibility guarantee.
 
 | Action | Exact bytes32 ID (UTF-8, right padded; not a hash) |
 | --- | --- |
@@ -107,7 +107,7 @@ These public helpers are callable by anyone without state changes or payment. Ca
 | `IIntake.priceOf(action,asset)` | External protocol read used on every purchase; zero means not sold to this client |
 | `IIntake.requestWithFailure(action,body,Callback{target,selector},onFailure,asset,amount)` | External payable protocol interface; Branch supplies its own address and fixed callback selectors, exact IMD amount and zero native value. Not a Relay user entry point. Protocol reverts roll back the purchase; later refusal/failure callbacks do not refund it |
 
-The strict parser validates ignored metadata too. It rejects decoded duplicates, malformed UTF-8/escapes/Unicode/numbers, trailing data and depth/count/length excess. The verifier accepts exactly one `files[]` object with the committed output name/path/MIME, nonzero SHA-256 and submission hash and bounded nonzero integer byte length. It does not fetch bytes, compare repo commits or prove file content/quality. See [limits](LIMITS.md) and [trust assumptions](OPERATIONS.md).
+The binding parser validates the whole raw manifest and retains only acceptance fields. Ignored metadata is still authenticated by the original digest and checked for decoded duplicates, malformed UTF-8/escapes/Unicode/numbers, trailing data and the measured byte/structure/work envelope. Metadata arrays and strings do not consume the retained-field token/string budget. The verifier accepts exactly one `files[]` object with the committed output name/path/MIME, nonzero SHA-256 and submission hash and bounded nonzero integer byte length. Cross-slot name and equal or file/directory-prefix path conflicts are rejected during proposal admission; top-level `dist/` is reserved for HTML `dist/index.html`. It does not fetch bytes, compare repo commits or prove file content/quality. See [limits](LIMITS.md), [current repair evidence](validation/review-fixes/README.md) and [trust assumptions](OPERATIONS.md).
 
 ## Errors and events for observers
 
