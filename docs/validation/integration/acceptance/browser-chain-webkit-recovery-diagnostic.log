@@ -1,0 +1,3 @@
+PASS Public config closed; local reads without wallet; EIP-6963 selected provider
+PASS Multiple current proposals, explicit older selection, missing callback, reload with corrupt/missing journal
+PASS Authenticated status1 explicit identical-body paid retry; corrected raw binding without repurchase; stale anchors

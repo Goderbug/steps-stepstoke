@@ -1,0 +1,25 @@
+
+> cto-relay-station-w1@0.1.0 test:e2e
+> playwright test --project=webkit-desktop tests/e2e/revision.spec.ts --workers=1
+
+[WebServer] (node:29) Warning: The 'NO_COLOR' env is ignored due to the 'FORCE_COLOR' env being set.
+[WebServer] (Use `node --trace-warnings ...` to show where the warning was created)
+[WebServer] (node:42) Warning: The 'NO_COLOR' env is ignored due to the 'FORCE_COLOR' env being set.
+[WebServer] (Use `node --trace-warnings ...` to show where the warning was created)
+
+Running 5 tests using 1 worker
+
+(node:65) Warning: The 'NO_COLOR' env is ignored due to the 'FORCE_COLOR' env being set.
+(Use `node --trace-warnings ...` to show where the warning was created)
+  ✓  1 [webkit-desktop] › tests/e2e/revision.spec.ts:17:1 › refused retry goes through a fresh fee/spender review and the new account's exact allowance; an unknown retry is journaled by its own hash/nonce (16.7s)
+  ✓  2 [webkit-desktop] › tests/e2e/revision.spec.ts:81:1 › sponsorship progress shows the complete purchase hash and sponsor with copy controls (7.5s)
+  ✓  3 [webkit-desktop] › tests/e2e/revision.spec.ts:99:1 › switching a populated draft to image yields a create draft with no inputs (18.5s)
+  ✓  4 [webkit-desktop] › tests/e2e/revision.spec.ts:129:1 › a verified single output updates the file stage; a wide Markdown table stays readable in its own scroll region (23.4s)
+  ✓  5 [webkit-desktop] › tests/e2e/revision.spec.ts:210:1 › an unavailable output marks the file stage failed without a verified badge (11.0s)
+
+  5 passed (1.3m)
+npm notice
+npm notice New major version of npm available! 11.19.0 -> 12.2.0
+npm notice Changelog: https://github.com/npm/cli/releases/tag/v12.2.0
+npm notice To update run: npm install -g npm@12.2.0
+npm notice

@@ -1,0 +1,22 @@
+
+> cto-relay-station-w1@0.1.0 test:e2e
+> playwright test --project=webkit-mobile tests/e2e/wallet.spec.ts --workers=1
+
+[WebServer] (node:29) Warning: The 'NO_COLOR' env is ignored due to the 'FORCE_COLOR' env being set.
+[WebServer] (Use `node --trace-warnings ...` to show where the warning was created)
+[WebServer] (node:42) Warning: The 'NO_COLOR' env is ignored due to the 'FORCE_COLOR' env being set.
+[WebServer] (Use `node --trace-warnings ...` to show where the warning was created)
+
+Running 2 tests using 1 worker
+
+(node:65) Warning: The 'NO_COLOR' env is ignored due to the 'FORCE_COLOR' env being set.
+(Use `node --trace-warnings ...` to show where the warning was created)
+  ✓  1 [webkit-mobile] › tests/e2e/wallet.spec.ts:42:1 › EIP-6963 named browser wallet connects on desktop and phone, switches chain and observes account changes (5.3s)
+  ✓  2 [webkit-mobile] › tests/e2e/wallet.spec.ts:67:1 › wallet rejection leaves reads available; dialog wraps focus and restores it (3.6s)
+
+  2 passed (12.7s)
+npm notice
+npm notice New major version of npm available! 11.19.0 -> 12.2.0
+npm notice Changelog: https://github.com/npm/cli/releases/tag/v12.2.0
+npm notice To update run: npm install -g npm@12.2.0
+npm notice

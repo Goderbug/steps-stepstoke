@@ -2,9 +2,9 @@
 // Acceptance signs through a named EIP-6963 provider in the built W1 UI. The provider forwards
 // unsigned transactions to two disposable unlocked Anvil accounts. It holds no key and never
 // substitutes an adapter, calldata, fixture state or a CLI replay for a browser action.
-import { chromium, expect } from '@playwright/test';
+import { chromium, webkit, expect as playwrightExpect } from '@playwright/test';
 import { spawn } from 'node:child_process';
-import { readFile, writeFile, mkdir, copyFile } from 'node:fs/promises';
+import { readFile, writeFile, mkdir, copyFile, cp } from 'node:fs/promises';
 import { resolve, dirname } from 'node:path';
 import { createHash } from 'node:crypto';
 import { fileURLToPath } from 'node:url';
@@ -12,12 +12,34 @@ import assert from 'node:assert/strict';
 import { startLocal } from '../../scripts/local-setup.mjs';
 import * as sdk from '../../../sdk/browser.mjs';
 const root = resolve(dirname(fileURLToPath(import.meta.url)), '../../..');
-const out = resolve(root, 'docs/validation/integration/frontend');
+// Software-rendered WebKit and RPC-heavy history verification need a bounded allowance for
+// slow CI. This changes assertion patience only; no timer can unlock or resubmit an operation.
+const expect = playwrightExpect.configure({ timeout: 30000 });
+const option = name => { const i = process.argv.indexOf(`--${name}`); return i < 0 ? undefined : process.argv[i + 1]; };
+const engine = option('browser') ?? 'chromium';
+assert.ok(['chromium', 'webkit'].includes(engine), 'Use --browser chromium or webkit');
+const group = option('group') ?? 'all';
+const groups = { all: null, flow: [0, 1, 2, 3], recovery: [0, 4, 5], payments: [0, 6, 7, 8], failures: [0, 9, 10, 11], files: [0, 12] };
+assert.ok(group in groups, 'Use --group all|flow|recovery|payments|failures|files');
+const out = resolve(root, option('out') ?? `docs/validation/integration/acceptance/${engine}${group === 'all' ? '' : '-' + group}`);
 await mkdir(resolve(out, 'screenshots'), { recursive: true });
-const evidence = { classification: 'ACTUAL_LOCAL_CONTRACT_WITH_MOCK_INTAKE', productionDeployment: null, liveCompatibility: 'NOT_RUN', productionReady: false, matrix: [], transactions: [], walletTransactions: [], browserErrors: [], unexpectedRequests: [] };
+const evidence = { classification: 'ACTUAL_LOCAL_CONTRACT_WITH_MOCK_INTAKE', engine, group, productionDeployment: null, liveCompatibility: 'NOT_RUN', productionReady: false, matrix: [], transactions: [], walletTransactions: [], browserErrors: [], unexpectedRequests: [] };
+// Preserve navigation/RPC context for browser diagnostics without treating a successful
+// transaction matrix as proof of a clean browser console.
+evidence.browserDiagnostics = [];
+let currentCase = null;
+const allCases = [...(await readFile(fileURLToPath(import.meta.url), 'utf8')).matchAll(/await record\('([^']+)',/g)].map(m => m[1]);
+const planned = allCases.filter((_, i) => !groups[group] || groups[group].includes(i));
+const saveProgress = async () => {
+  const matrix = [...evidence.matrix, ...planned.filter(name => !evidence.matrix.some(r => r.name === name)).map(name => ({ name, status: 'NOT_RUN' }))];
+  await writeFile(resolve(out, 'progress.json'), JSON.stringify({ ...evidence, matrix, transactions: local.trace }, (_, v) => typeof v === 'bigint' ? v.toString() : v, 2) + '\n');
+};
 const record = async (name, fn) => {
-  try { const detail = await fn(); evidence.matrix.push({ name, status: 'PASS', detail }); console.log('PASS', name); }
-  catch (e) { evidence.matrix.push({ name, status: 'FAIL', error: e.stack }); console.error('FAIL', name, e.message); throw e; }
+  if (!planned.includes(name)) return;
+  currentCase = name;
+  const before = { walletTransactions: evidence.walletTransactions.length, purchases: await countPurchases() };
+  try { const detail = await fn(); evidence.matrix.push({ name, status: 'PASS', detail, before, after: { walletTransactions: evidence.walletTransactions.length, purchases: await countPurchases() } }); await saveProgress(); console.log('PASS', name); }
+  catch (e) { evidence.matrix.push({ name, status: 'FAIL', error: e.stack }); await saveProgress(); console.error('FAIL', name, e.message); throw e; }
 };
 const local = await startLocal();
 await copyFile(resolve(root, 'frontend/public/local-config.json'), resolve(root, 'dist/local-config.json'));
@@ -144,9 +166,9 @@ async function filePreview(name) {
 }
 try {
   for (let n = 0; ; n++) { try { const res = await fetch('http://127.0.0.1:4174/'); if (res.ok) break; } catch {} if (n > 100) throw new Error('Preview failed'); await new Promise(r => setTimeout(r, 50)); }
-  browser = await chromium.launch({ executablePath: process.env.W1_CHROMIUM_EXECUTABLE, headless: true });
+  browser = await ({ chromium, webkit }[engine]).launch({ executablePath: engine === 'chromium' ? process.env.W1_CHROMIUM_EXECUTABLE : process.env.W1_WEBKIT_EXECUTABLE, headless: true });
   const context = await browser.newContext({ viewport: { width: 1440, height: 900 } });
-  await initWallet(context); page = await context.newPage(); page.setDefaultTimeout(10000);
+  await initWallet(context); page = await context.newPage(); page.setDefaultTimeout(30000);
   const captures = [];
   page.on('response', response => {
     if (response.url() !== local.config.rpcURL + '/' && response.url() !== local.config.rpcURL) return;
@@ -154,7 +176,12 @@ try {
     if (request?.method !== 'eth_sendTransaction') return;
     captures.push((async () => { const body = await response.json(); if (body.result) evidence.walletTransactions.push({ hash: body.result, ...request.params[0] }); })());
   });
-  page.on('pageerror', e => evidence.browserErrors.push(e.stack));
+  page.on('pageerror', e => {
+    evidence.browserErrors.push(e.stack);
+    evidence.browserDiagnostics.push({ event: 'pageerror', at: new Date().toISOString(), case: currentCase, url: page.url(), message: e.stack });
+  });
+  page.on('framenavigated', frame => { if (frame === page.mainFrame()) evidence.browserDiagnostics.push({ event: 'navigation', at: new Date().toISOString(), case: currentCase, url: frame.url() }); });
+  page.on('requestfailed', request => evidence.browserDiagnostics.push({ event: 'requestfailed', at: new Date().toISOString(), case: currentCase, url: request.url(), failure: request.failure()?.errorText }));
   page.on('request', r => { if (/^https?:/.test(r.url()) && !['127.0.0.1', 'localhost'].includes(new URL(r.url()).hostname)) evidence.unexpectedRequests.push(r.url()); });
   await record('Public config closed; local reads without wallet; EIP-6963 selected provider', async () => {
     await page.goto('http://127.0.0.1:4174/#/');
@@ -174,11 +201,12 @@ try {
     await propose(); assert.equal(await countPurchases(), 0);
     await sponsor(markdown, 1, 1);
     const first = await deliver(markdown, { job: 'markdown-create' }); await bind(markdown, first);
-    await filePreview('main');
+    await expect((await filePreview('main')).locator('.md').getByText('markdown-create', { exact: true })).toBeVisible();
     await propose({ mode: 'update', target: 'main', inputs: ['main'], text: '更新本地文档' });
     await sponsor(markdown, 2, 0);
     const second = await deliver(markdown, { job: 'markdown-update' }); await bind(markdown, second);
     assert.equal(await read(markdown, 'latestJobId'), 'markdown-update');
+    await expect((await filePreview('main')).locator('.md').getByText('markdown-update', { exact: true })).toBeVisible();
     await page.screenshot({ path: resolve(out, 'screenshots/actual-markdown.jpg'), type: 'jpeg', quality: 50, fullPage: false });
   });
   await record('HTML R1 -> PNG R2 -> HTML R3 continues R2, selected exact bytes and retained provenance', async () => {
@@ -210,6 +238,8 @@ try {
     const row = await filePreview('site');
     const frame = row.locator('iframe'); await expect(frame).toHaveAttribute('sandbox', '');
     await expect(frame.contentFrame().getByText('HTML-R3-CONTINUES-PNG-R2')).toBeVisible();
+    await expect(frame.contentFrame().getByRole('heading', { name: 'HTML-R1-EXACT' })).toBeVisible();
+    assert.equal(await frame.contentFrame().locator('img').getAttribute('src'), `data:image/png;base64,${Buffer.from(png).toString('base64')}`);
     await page.screenshot({ path: resolve(out, 'screenshots/actual-web.jpg'), type: 'jpeg', quality: 50, fullPage: false });
     evidence.web = { branch: web, r1: r1Witness, r2: r2Witness, r3: r3Witness, r3RequestBody: new TextDecoder().decode(preview3.raw), pngSHA256: sha(png) };
   });
@@ -336,6 +366,30 @@ try {
     assert.equal(await countPurchases(), spent);
     await page.getByRole('button', { name: /^切换到 /  }).click();
   });
+  await record('Purchase signature rejection and double-click send exactly one explicit paid attempt', async () => {
+    const branch = await createProject('购买拒签与双击');
+    await propose({ target: 'single', text: '只允许一次明确购买' });
+    const row = page.locator('#proposals > ul > li').filter({ hasText: '只允许一次明确购买' });
+    await row.getByRole('button', { name: '资助此提案', exact: true }).click();
+    const panel = row.getByLabel('资助预览');
+    await expect(panel.locator('textarea')).toHaveCount(0);
+    await expect(panel.locator('input')).toHaveCount(1); // Only maxFee is editable by a sponsor.
+    await row.getByRole('button', { name: '1. 授权精确额度', exact: true }).click();
+    await expect(row.getByRole('button', { name: '1. 已授权' })).toBeVisible();
+    const before = await countPurchases();
+    await page.evaluate(() => window.relayTestWallet.reject());
+    await row.getByRole('button', { name: '2. 购买执行', exact: true }).click();
+    await expect(row.locator('[role=alert]')).toContainText('User rejected');
+    assert.equal(await countPurchases(), before);
+    assert.equal(Number(await read(branch, 'attemptCount')), 0);
+    await row.getByRole('button', { name: '2. 购买执行', exact: true }).dblclick();
+    await expect.poll(() => read(branch, 'attemptCount').then(Number)).toBe(1);
+    assert.equal(await countPurchases(), before + 1);
+    const allowance = (await sdk.queryState(local.provider, sdk.readAllowance(local.release.imd, local.accounts[0], branch)))[0];
+    assert.equal(allowance, 0n, 'purchase consumes the exact Branch allowance');
+    await page.reload(); await expect(page.locator('#progress')).toContainText('缺失回调保持等待');
+    assert.equal(await countPurchases(), before + 1);
+  });
   await record('Authenticated status2 and unknown failure freeze permanently', async () => {
     for (const status of [2, 7, 0]) {
       const branch = await createProject(`冻结状态 ${status}`);
@@ -423,8 +477,18 @@ try {
     evidence.sameCallReplacement = { original, replacement, firstBodyHash: first.bodyHash, retriedBodyHash: retried.bodyHash };
   });
   await record('Actual local file tampering/unavailability/stream bound; malicious preview and mobile keyboard/focus', async () => {
+    let artifactJob = 'html-r3';
+    // The independent files shard seeds its own accepted HTML through the same actual UI.
+    // The complete three-round retention sequence remains together in the flow shard.
+    if (!web) {
+      web = await createProject('文件验证本地项目');
+      await propose({ kind: 'html', target: 'site', text: '文件校验的真实链上描述' });
+      await sponsor(web, 1, 0);
+      artifactJob = 'files-target';
+      await bind(web, await deliver(web, { job: artifactJob, project: 'local-files-project' }));
+    }
     await page.goto(`http://127.0.0.1:4174/#/local/b/${web}`);
-    const assetPath = resolve(local.artifacts, 'html-r3/dist/index.html');
+    const assetPath = resolve(local.artifacts, `${artifactJob}/dist/index.html`);
     const original = await readFile(assetPath);
     for (const content of [Buffer.from('tampered'), Buffer.alloc(2097153, 120)]) {
       await writeFile(assetPath, content); await page.reload();
@@ -434,11 +498,11 @@ try {
       await expect(row.getByText('已校验：与 A1 描述一致')).toHaveCount(0);
     }
     await writeFile(assetPath, original);
-    await page.route('**/artifacts/html-r3/dist/index.html', r => r.fulfill({ status: 503, body: 'unavailable' }));
+    await page.route(`**/artifacts/${artifactJob}/dist/index.html`, r => r.fulfill({ status: 503, body: 'unavailable' }));
     await page.reload();
     await page.locator('#assets > ul > li').filter({ hasText: /^site / }).getByRole('button', { name: '下载并校验', exact: true }).click();
     await expect(page.getByText('无法获取文件：', { exact: false })).toBeVisible();
-    await page.unroute('**/artifacts/html-r3/dist/index.html');
+    await page.unroute(`**/artifacts/${artifactJob}/dist/index.html`);
     const evil = await createProject('隔离预览测试');
     await propose({ kind: 'html', target: 'evil', text: '恶意 HTML 测试' }); await sponsor(evil, 1, 0);
     const html = '<!doctype html><html><body><h1>SAFE-MARKER</h1><script>top.localStorage.setItem("pwned","1");parent.ethereum.request({method:"eth_sendTransaction"});</script><img src="https://evil.invalid/pixel"><a href="https://evil.invalid" target="_top">bad</a><form action="https://evil.invalid"><button>submit</button></form><iframe src="https://evil.invalid"></iframe></body></html>';
@@ -447,6 +511,14 @@ try {
     await expect(row.locator('iframe')).toHaveAttribute('sandbox', '');
     await expect(row.locator('iframe').contentFrame().getByText('SAFE-MARKER')).toBeVisible();
     await expect(row.locator('iframe').contentFrame().locator('script,form,iframe,[href],[src^="http"]')).toHaveCount(0);
+    assert.equal(await page.evaluate(() => localStorage.getItem('pwned')), null);
+    const notes = await createProject('Markdown 隔离测试');
+    await propose({ target: 'notes', text: 'Markdown 必须消毒' }); await sponsor(notes, 1, 1);
+    const maliciousMarkdown = '# SAFE-MARKDOWN\n<script>localStorage.setItem("pwned","1")</script>\n![remote](https://evil.invalid/pixel)\n<a href="javascript:alert(1)">bad link</a>\n<form><input autofocus></form>';
+    await bind(notes, await deliver(notes, { job: 'malicious-markdown', project: 'local-project-markdown-security', text: maliciousMarkdown }));
+    const notesRow = await filePreview('notes');
+    await expect(notesRow.locator('.md').getByRole('heading', { name: 'SAFE-MARKDOWN' })).toBeVisible();
+    await expect(notesRow.locator('.md script,.md img,.md form,.md input,.md [href^="javascript:"]')).toHaveCount(0);
     assert.equal(await page.evaluate(() => localStorage.getItem('pwned')), null);
     for (const width of [320, 390, 1440]) {
       await page.setViewportSize({ width, height: 844 });
@@ -469,7 +541,7 @@ try {
   });
 
   await Promise.all(captures);
-  assert.ok(evidence.walletTransactions.length > 50, 'retain actual W1 wallet transactions across reloads');
+  assert.ok(evidence.walletTransactions.length > (group === 'all' ? 50 : 0), 'retain actual W1 wallet transactions across reloads');
   evidence.branches = { markdown, web };
 } catch (e) {
   evidence.error = e.stack;
@@ -482,6 +554,12 @@ try {
   evidence.receipts = [];
   for (const t of evidence.walletTransactions ?? []) evidence.receipts.push({ hash: t.hash, receipt: await local.provider.request({ method: 'eth_getTransactionReceipt', params: [t.hash] }) });
   evidence.generatedConfig = local.config;
+  await cp(local.artifacts, resolve(out, 'files'), { recursive: true });
+  for (const name of planned) if (!evidence.matrix.some(r => r.name === name)) evidence.matrix.push({ name, status: 'NOT_RUN' });
+  evidence.functionalResult = evidence.matrix.every(r => r.status === 'PASS') && !evidence.error ? 'PASS' : 'FAIL';
+  evidence.browserRuntimeStatus = evidence.browserErrors.length || evidence.unexpectedRequests.length ? 'FAIL' : 'PASS';
+  evidence.result = evidence.functionalResult === 'PASS' && evidence.browserRuntimeStatus === 'PASS' ? 'PASS' : 'FAIL';
+  if (evidence.result !== 'PASS') process.exitCode = 1;
   await writeFile(resolve(out, 'browser-chain.json'), JSON.stringify(evidence, (_, v) => typeof v === 'bigint' ? v.toString() : v, 2) + '\n');
   await browser?.close(); preview.kill(); await local.close();
 }

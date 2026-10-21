@@ -26,7 +26,7 @@ test("first screen at phone width shows the product and its main action", async 
   await expect(page.getByRole("link", { name: "中继站示例项目", exact: true })).toBeVisible();
   const overflow = await page.evaluate(() => document.documentElement.scrollWidth - innerWidth);
   expect(overflow).toBeLessThanOrEqual(0);
-  await page.screenshot({ type: "jpeg", quality: 45, scale: "css", path: `../docs/validation/integration/frontend/screenshots/${test.info().project.name}-demo-home.jpg` });
+  await page.screenshot({ type: "jpeg", quality: 45, scale: "css", path: `../docs/validation/integration/acceptance/fixtures/screenshots/${test.info().project.name}-demo-home.jpg` });
 });
 
 test("create root branch with fixed goal (account A), double click sends one signature", async ({ page }) => {
@@ -207,11 +207,11 @@ test("workspace layout at this project's width has no horizontal scroll", async 
   await page.evaluate(() => scrollTo(0, 0));
   await expect(page.getByRole("link", { name: "提案", exact: true })).toBeInViewport({ ratio: 1 });
   await expect(page.getByText("演示模式").first()).toBeInViewport();
-  await page.screenshot({ type: "jpeg", quality: 45, scale: "css", path: `../docs/validation/integration/frontend/screenshots/${test.info().project.name}-workspace-first.jpg` });
+  await page.screenshot({ type: "jpeg", quality: 45, scale: "css", path: `../docs/validation/integration/acceptance/fixtures/screenshots/${test.info().project.name}-workspace-first.jpg` });
   expect(await page.evaluate(() => document.documentElement.scrollWidth - innerWidth)).toBeLessThanOrEqual(0);
   await page.locator("#assets li", { hasText: "site" }).getByRole("button", { name: "下载并校验" }).click();
   await expect(page.getByText("已校验：与 A1 描述一致")).toBeVisible();
-  await page.screenshot({ scale: "css", path: `../docs/validation/integration/frontend/screenshots/${test.info().project.name}-workspace.jpg`, type: "jpeg", quality: 55, fullPage: false });
+  await page.screenshot({ scale: "css", path: `../docs/validation/integration/acceptance/fixtures/screenshots/${test.info().project.name}-workspace.jpg`, type: "jpeg", quality: 55, fullPage: false });
 });
 
 test("malicious files stay isolated and broken files never get a verified badge", async ({ page }) => {
@@ -254,7 +254,7 @@ test("malicious files stay isolated and broken files never get a verified badge"
   const oversized = page.locator("#assets > ul > li", { hasText: /^oversized-png / });
   await expect(oversized).toContainText("图片资源上限：不通过");
   await expect(oversized.locator("img, a[download]")).toHaveCount(0);
-  await page.screenshot({ scale: "css", path: `../docs/validation/integration/frontend/screenshots/${test.info().project.name}-security.jpg`, type: "jpeg", quality: 55, fullPage: false });
+  await page.screenshot({ scale: "css", path: `../docs/validation/integration/acceptance/fixtures/screenshots/${test.info().project.name}-security.jpg`, type: "jpeg", quality: 55, fullPage: false });
 });
 
 test("keyboard: skip link, focus ring, connect sheet traps and restores focus", async ({ page }) => {
@@ -272,5 +272,5 @@ test("keyboard: skip link, focus ring, connect sheet traps and restores focus", 
   await page.keyboard.press("Escape");
   await expect(dialog).toHaveCount(0);
   await expect(connect).toBeFocused();
-  await page.screenshot({ type: "jpeg", quality: 45, scale: "css", path: `../docs/validation/integration/frontend/screenshots/${test.info().project.name}-live.jpg` });
+  await page.screenshot({ type: "jpeg", quality: 45, scale: "css", path: `../docs/validation/integration/acceptance/fixtures/screenshots/${test.info().project.name}-live.jpg` });
 });

@@ -1,0 +1,1 @@
+PASS: protected root/config/dependency paths, W1 dependency lock, ignore files and historical evidence unchanged; no submodules or generated dependency/cache directories in submission paths.

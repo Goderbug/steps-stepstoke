@@ -1,0 +1,22 @@
+
+> cto-relay-station-w1@0.1.0 test:unit
+> vitest run
+
+
+ RUN  v5.0.5 /home/imd-worker/.identitymd/work/5b630958-5d27-4b47-bebf-4e682a6d2ab7/6255fe16-391f-45a6-8048-78a54410f3a2/frontend
+
+
+ Test Files  3 passed (3)
+      Tests  30 passed (30)
+   Start at  09:22:32
+   Duration  9.65s (environment 38%, import 34%, tests 19%, transform 5%, setup 4%)
+
+Environment  jsdom was created 3 times · 3.42s total, 38% of tracked time
+             create it once per worker with pool: 'vmThreads' (keeps per-file isolation) or isolate: false (shares it across files)
+             learn more: https://vitest.dev/guide/improving-performance#test-environments
+
+npm notice
+npm notice New major version of npm available! 11.19.0 -> 12.2.0
+npm notice Changelog: https://github.com/npm/cli/releases/tag/v12.2.0
+npm notice To update run: npm install -g npm@12.2.0
+npm notice

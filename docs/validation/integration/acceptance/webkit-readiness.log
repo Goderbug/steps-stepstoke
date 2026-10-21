@@ -1,0 +1,23 @@
+node:internal/modules/run_main:107
+    triggerUncaughtException(
+    ^
+
+browserType.launch: 
+╔══════════════════════════════════════════════════════╗
+║ Host system is missing dependencies to run browsers. ║
+║ Missing libraries:                                   ║
+║     libpangoft2-1.0.so.0                             ║
+║     libXcursor.so.1                                  ║
+║     libXinerama.so.1                                 ║
+║     libcairo-script-interpreter.so.2                 ║
+║     libabsl_synchronization.so.20220623              ║
+║     libGLESv2.so.2                                   ║
+║     libx264.so                                       ║
+╚══════════════════════════════════════════════════════╝
+    at /home/imd-worker/.identitymd/work/5b630958-5d27-4b47-bebf-4e682a6d2ab7/6255fe16-391f-45a6-8048-78a54410f3a2/[eval1]:2:22
+    at async node:internal/modules/esm/loader:223:26 {
+  log: [],
+  name: 'Error'
+}
+
+Node.js v24.21.0

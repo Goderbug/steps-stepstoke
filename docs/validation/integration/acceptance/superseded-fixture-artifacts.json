@@ -1,0 +1,650 @@
+{
+  "reason": "The final two-engine rerun supersedes these temporary duplicated fixture captures. Original historical evidence remains unchanged; raw first-run log remains fixture-chromium.log.",
+  "files": [
+    {
+      "path": "docs/validation/integration/acceptance/fixtures-chromium/e2e.json",
+      "bytes": 89418,
+      "sha256": "3f2d88b8a453c4f5deb59d4575df66dcde715513e10bbd515d0e9c0c917e193b"
+    },
+    {
+      "path": "docs/validation/integration/acceptance/fixtures-chromium/raw/chromium-narrow-table-measurements.json",
+      "bytes": 832,
+      "sha256": "d367d0e48048b86fe224a45ad8b830b93e6aceab427cb8fd3beb8d3d1c992da5"
+    },
+    {
+      "path": "docs/validation/integration/acceptance/fixtures-chromium/raw/chromium-desktop-table-measurements.json",
+      "bytes": 842,
+      "sha256": "cf9222ddb5f9ea092b5c13c42cbb67ae079c69a5cb328c2b951c6c980f89e66d"
+    },
+    {
+      "path": "docs/validation/integration/acceptance/fixtures-chromium/raw/chromium-mobile-table-measurements.json",
+      "bytes": 832,
+      "sha256": "b7f2628878c9f02a9ba07b173a555a17f161540b1fe9540941c4ea74136b5e56"
+    },
+    {
+      "path": "docs/validation/integration/acceptance/fixtures-chromium/screenshots/actual-local-home-390.jpg",
+      "bytes": 29422,
+      "sha256": "3a0d6e439ba4de3083e8cffa45871f957da822ccee09140d30012a075cb7b24c"
+    },
+    {
+      "path": "docs/validation/integration/acceptance/fixtures-chromium/screenshots/chromium-narrow-wide-table.jpg",
+      "bytes": 23504,
+      "sha256": "c7c35dce0e215c10bb2295ab1ad1b9852ede23b6be89c8a4ca12b373952880aa"
+    },
+    {
+      "path": "docs/validation/integration/acceptance/fixtures-chromium/screenshots/chromium-mobile-historical-fork.jpg",
+      "bytes": 27738,
+      "sha256": "efdc1e50aff35039d3b773a835c863f46a6d10fe87f2381c4eba0d86f64c76e5"
+    },
+    {
+      "path": "docs/validation/integration/acceptance/fixtures-chromium/screenshots/chromium-narrow-historical-fork.jpg",
+      "bytes": 24340,
+      "sha256": "452a703438bba991c05a8c9052e69d08da55c61e10d7818671a751671bd72f2b"
+    },
+    {
+      "path": "docs/validation/integration/acceptance/fixtures-chromium/screenshots/actual-local-320.jpg",
+      "bytes": 26758,
+      "sha256": "8684e3fb050958b06f8dca5e6eb73229f41c94923f8711bd8d0791aedf1155c1"
+    },
+    {
+      "path": "docs/validation/integration/acceptance/fixtures-chromium/screenshots/chromium-mobile-security.jpg",
+      "bytes": 32711,
+      "sha256": "9e995757377b022cd12da9f3dd46e13ecdf86fa84949ee14d29a6c782bd5c2e3"
+    },
+    {
+      "path": "docs/validation/integration/acceptance/fixtures-chromium/screenshots/actual-markdown.jpg",
+      "bytes": 66628,
+      "sha256": "e60656b32546b80bee0265ee96b8fcd77631d8b99a58e93e8c08e5fafa049bf1"
+    },
+    {
+      "path": "docs/validation/integration/acceptance/fixtures-chromium/screenshots/chromium-desktop-workspace.jpg",
+      "bytes": 80200,
+      "sha256": "5fecaeae459609db8f45c6ed27fe19528202b85b5fde209506fbe51c35640238"
+    },
+    {
+      "path": "docs/validation/integration/acceptance/fixtures-chromium/screenshots/actual-local-390.jpg",
+      "bytes": 32676,
+      "sha256": "44db9ed96a8445eeb497d45d2a21996cd5287c7da3ef3eede29212061ac76352"
+    },
+    {
+      "path": "docs/validation/integration/acceptance/fixtures-chromium/screenshots/chromium-desktop-historical-fork.jpg",
+      "bytes": 78606,
+      "sha256": "25800f7249d5f623d357d14ca0994ad066e252ef941983a3df4f654a1b3e982c"
+    },
+    {
+      "path": "docs/validation/integration/acceptance/fixtures-chromium/screenshots/chromium-mobile-long-values.jpg",
+      "bytes": 32812,
+      "sha256": "826a31f58557dfa741dc8f7e494f13928f98a15a1328667b4558e02a1f307c56"
+    },
+    {
+      "path": "docs/validation/integration/acceptance/fixtures-chromium/screenshots/chromium-desktop-security.jpg",
+      "bytes": 58633,
+      "sha256": "569b14bd8cc646dcfeab5a04133d35a0262ed3abd3bbd0ba6d1978292bb2c288"
+    },
+    {
+      "path": "docs/validation/integration/acceptance/fixtures-chromium/screenshots/actual-web.jpg",
+      "bytes": 59920,
+      "sha256": "346dafcf36b1ad468b0e37a3cded8e239aeb2dfaec018421c5d4d762566c0dc3"
+    },
+    {
+      "path": "docs/validation/integration/acceptance/fixtures-chromium/screenshots/chromium-desktop-demo-home.jpg",
+      "bytes": 37969,
+      "sha256": "39fe43c945461643b6c3faa228a0ac54dbdf2fb78269554a7a626e10728690a8"
+    },
+    {
+      "path": "docs/validation/integration/acceptance/fixtures-chromium/screenshots/chromium-mobile-demo-home.jpg",
+      "bytes": 30195,
+      "sha256": "296c5b6dfbf2a18934d3dbe0a5323c011cdac348da8a3ba9e3ae0c9ec22391ae"
+    },
+    {
+      "path": "docs/validation/integration/acceptance/fixtures-chromium/screenshots/chromium-narrow-demo-home.jpg",
+      "bytes": 27374,
+      "sha256": "4c65c5134bb25dfe234bdce319f1df674a43af6a989c2f6b3f9cbbf744ad956d"
+    },
+    {
+      "path": "docs/validation/integration/acceptance/fixtures-chromium/screenshots/actual-local-1440.jpg",
+      "bytes": 72341,
+      "sha256": "0331d34b28200f696b9e3d28e883df13b6bb2935777bd70c0429eb0c8037aab6"
+    },
+    {
+      "path": "docs/validation/integration/acceptance/fixtures-chromium/screenshots/chromium-narrow-long-values.jpg",
+      "bytes": 22747,
+      "sha256": "94630e84315da6b2076aae06d5a612df62536fbe00403b6169013955cde44f25"
+    },
+    {
+      "path": "docs/validation/integration/acceptance/fixtures-chromium/screenshots/chromium-desktop-wide-table.jpg",
+      "bytes": 27980,
+      "sha256": "3c66a9a01ec7cee02f4935224615e36662d0e3a4ebaa0a67b3ed595e2f29f221"
+    },
+    {
+      "path": "docs/validation/integration/acceptance/fixtures-chromium/screenshots/chromium-mobile-workspace.jpg",
+      "bytes": 28215,
+      "sha256": "9e4a13c777521e2f66772c6661190823d9d9408a9c7ff851408bbbbcefd062cd"
+    },
+    {
+      "path": "docs/validation/integration/acceptance/fixtures-chromium/screenshots/chromium-mobile-wide-table.jpg",
+      "bytes": 23953,
+      "sha256": "d3ba0f82ae5d835a072c20a88fe9fb6d2675cb6ef49fce5f72d2df9eca706e8a"
+    },
+    {
+      "path": "docs/validation/integration/acceptance/fixtures-chromium/screenshots/taste-public-390.png",
+      "bytes": 206878,
+      "sha256": "87d246f5b5b47a9d3f3e79f7dae938370c041f2c90a10715dc262cdd3c3f3694"
+    },
+    {
+      "path": "docs/validation/integration/acceptance/fixtures-chromium/screenshots/chromium-mobile-live.jpg",
+      "bytes": 33525,
+      "sha256": "917671fb537318759d2287913a593e5304765595e184e220a2529a99f63c5dbe"
+    },
+    {
+      "path": "docs/validation/integration/acceptance/fixtures-chromium/screenshots/chromium-mobile-retry-review.jpg",
+      "bytes": 30990,
+      "sha256": "e7ba484caf46921eb587c12bdc710e1d5af093c8e29329b6876ba1171313504b"
+    },
+    {
+      "path": "docs/validation/integration/acceptance/fixtures-chromium/screenshots/chromium-desktop-retry-review.jpg",
+      "bytes": 66540,
+      "sha256": "7146beb79d1c19acf72554b743b0db2ba67a6d9b844cc0250a534ce907843fd8"
+    },
+    {
+      "path": "docs/validation/integration/acceptance/fixtures-chromium/screenshots/chromium-narrow-workspace-first.jpg",
+      "bytes": 24174,
+      "sha256": "529ba9c94182a7c09ff5e129ab34ebeb84899c0df3fdc2da572269a210c075b6"
+    },
+    {
+      "path": "docs/validation/integration/acceptance/fixtures-chromium/screenshots/actual-failure.jpg",
+      "bytes": 48199,
+      "sha256": "af7f1a149db6d4062014867f5378b2ab6ee5ced1929b802fb81198d58817f71e"
+    },
+    {
+      "path": "docs/validation/integration/acceptance/fixtures-chromium/screenshots/chromium-narrow-retry-review.jpg",
+      "bytes": 24233,
+      "sha256": "b6858a3018f64899af4ae7ef564c6b7801475ade2701babea440d68f4aa7cea5"
+    },
+    {
+      "path": "docs/validation/integration/acceptance/fixtures-chromium/screenshots/chromium-desktop-long-values.jpg",
+      "bytes": 165788,
+      "sha256": "5090b08be865521e76373bd19beaf8e185b1d97e61389fd23a1639fdb9fa907c"
+    },
+    {
+      "path": "docs/validation/integration/acceptance/fixtures-chromium/screenshots/chromium-desktop-workspace-first.jpg",
+      "bytes": 62458,
+      "sha256": "baa29c85d6ab942eb495b6f0c53eeb652c078af97e09e530689b139318fb843b"
+    },
+    {
+      "path": "docs/validation/integration/acceptance/fixtures-chromium/screenshots/chromium-narrow-security.jpg",
+      "bytes": 28136,
+      "sha256": "6a2c600d2a2c4edaee2084015a8a89b5a33eb195738e0710eb4601e52cd6254e"
+    },
+    {
+      "path": "docs/validation/integration/acceptance/fixtures-chromium/screenshots/chromium-desktop-live.jpg",
+      "bytes": 47132,
+      "sha256": "33df905b3dc3c06da74b95cccc65a00090c111a723d7b660c7c4acd591ef5218"
+    },
+    {
+      "path": "docs/validation/integration/acceptance/fixtures-chromium/screenshots/chromium-narrow-workspace.jpg",
+      "bytes": 25317,
+      "sha256": "0f1faf5d5f96d6558ea17cb7421cda527e9ba5e68fed6a490361685e6da6ec3c"
+    },
+    {
+      "path": "docs/validation/integration/acceptance/fixtures-chromium/screenshots/chromium-narrow-live.jpg",
+      "bytes": 28030,
+      "sha256": "42296095b84673803bef7c79e6ee08cc61b10f95ce5f17d265b434a2c74ea238"
+    },
+    {
+      "path": "docs/validation/integration/acceptance/fixtures-chromium/screenshots/chromium-mobile-workspace-first.jpg",
+      "bytes": 30947,
+      "sha256": "aa17a275f5d65d9df95cac1ab1f186e31e8b21a59e5512990e37a0106daddd3e"
+    },
+    {
+      "path": "docs/validation/integration/acceptance/fixtures-chromium/files/chromium-narrow-landing-r0.html",
+      "bytes": 192,
+      "sha256": "03cca05a49fe1cae485d86bc6ee8c3973d7e30fd57d67cba3737cf467df021af"
+    },
+    {
+      "path": "docs/validation/integration/acceptance/fixtures-chromium/files/chromium-mobile-landing-r0.html",
+      "bytes": 192,
+      "sha256": "03cca05a49fe1cae485d86bc6ee8c3973d7e30fd57d67cba3737cf467df021af"
+    },
+    {
+      "path": "docs/validation/integration/acceptance/fixtures-chromium/files/chromium-narrow-guide-r4.md",
+      "bytes": 54,
+      "sha256": "2b27a44f189add637a9e6368d4b801c87ca102c915d944e1023227ff3270c0ab"
+    },
+    {
+      "path": "docs/validation/integration/acceptance/fixtures-chromium/files/chromium-desktop-cover-r2.png",
+      "bytes": 87,
+      "sha256": "5262c767feabb1e32d31dc9497bb9abc3dee7eb60ace19910aed6d8ab4f4571f"
+    },
+    {
+      "path": "docs/validation/integration/acceptance/fixtures-chromium/files/chromium-mobile-landing-r1.html",
+      "bytes": 192,
+      "sha256": "03cca05a49fe1cae485d86bc6ee8c3973d7e30fd57d67cba3737cf467df021af"
+    },
+    {
+      "path": "docs/validation/integration/acceptance/fixtures-chromium/files/chromium-mobile-journey.json",
+      "bytes": 1814,
+      "sha256": "c2883def8a67375ae8b79f651c8515b981ed9112aacba83b8c40ff014db1d959"
+    },
+    {
+      "path": "docs/validation/integration/acceptance/fixtures-chromium/files/chromium-narrow-journey.json",
+      "bytes": 1814,
+      "sha256": "da7fa18b30e76bb0f0338336cc435020eb6571f7aef0ac191493b4899a3c5182"
+    },
+    {
+      "path": "docs/validation/integration/acceptance/fixtures-chromium/files/chromium-desktop-landing-r0.html",
+      "bytes": 192,
+      "sha256": "03cca05a49fe1cae485d86bc6ee8c3973d7e30fd57d67cba3737cf467df021af"
+    },
+    {
+      "path": "docs/validation/integration/acceptance/fixtures-chromium/files/chromium-desktop-landing-r1.html",
+      "bytes": 192,
+      "sha256": "03cca05a49fe1cae485d86bc6ee8c3973d7e30fd57d67cba3737cf467df021af"
+    },
+    {
+      "path": "docs/validation/integration/acceptance/fixtures-chromium/files/chromium-desktop-guide-r4.md",
+      "bytes": 54,
+      "sha256": "2b27a44f189add637a9e6368d4b801c87ca102c915d944e1023227ff3270c0ab"
+    },
+    {
+      "path": "docs/validation/integration/acceptance/fixtures-chromium/files/chromium-mobile-cover-r2.png",
+      "bytes": 87,
+      "sha256": "5262c767feabb1e32d31dc9497bb9abc3dee7eb60ace19910aed6d8ab4f4571f"
+    },
+    {
+      "path": "docs/validation/integration/acceptance/fixtures-chromium/files/chromium-narrow-cover-r2.png",
+      "bytes": 87,
+      "sha256": "5262c767feabb1e32d31dc9497bb9abc3dee7eb60ace19910aed6d8ab4f4571f"
+    },
+    {
+      "path": "docs/validation/integration/acceptance/fixtures-chromium/files/chromium-desktop-journey.json",
+      "bytes": 1819,
+      "sha256": "a1ffd670693feb3c3ffe0a968051f70c5c9445ff5a7251fa242314674e127061"
+    },
+    {
+      "path": "docs/validation/integration/acceptance/fixtures-chromium/files/chromium-desktop-landing-r3.html",
+      "bytes": 442,
+      "sha256": "7ec05883739fa27990e8cbe747e8993b92fe0421d6a104155d9b57f3a2fe2e08"
+    },
+    {
+      "path": "docs/validation/integration/acceptance/fixtures-chromium/files/chromium-mobile-guide-r4.md",
+      "bytes": 54,
+      "sha256": "2b27a44f189add637a9e6368d4b801c87ca102c915d944e1023227ff3270c0ab"
+    },
+    {
+      "path": "docs/validation/integration/acceptance/fixtures-chromium/files/chromium-mobile-landing-r3.html",
+      "bytes": 442,
+      "sha256": "7ec05883739fa27990e8cbe747e8993b92fe0421d6a104155d9b57f3a2fe2e08"
+    },
+    {
+      "path": "docs/validation/integration/acceptance/fixtures-chromium/files/chromium-narrow-landing-r3.html",
+      "bytes": 442,
+      "sha256": "7ec05883739fa27990e8cbe747e8993b92fe0421d6a104155d9b57f3a2fe2e08"
+    },
+    {
+      "path": "docs/validation/integration/acceptance/fixtures-chromium/files/chromium-narrow-landing-r1.html",
+      "bytes": 192,
+      "sha256": "03cca05a49fe1cae485d86bc6ee8c3973d7e30fd57d67cba3737cf467df021af"
+    },
+    {
+      "path": "docs/validation/integration/acceptance/fixtures-chromium/browser/chromium-narrow-preview-navigation-forms-wallet-messages-and-storage-are-inert-version-changes-do-not-reuse-verified-bytes.json",
+      "bytes": 410,
+      "sha256": "f163f8c39bc203ae04b0a2bd38d32fc7273ad02fd3fef58286e3549801ac1842"
+    },
+    {
+      "path": "docs/validation/integration/acceptance/fixtures-chromium/browser/chromium-desktop-first-screen-at-phone-width-shows-the-product-and-its-main-action.json",
+      "bytes": 368,
+      "sha256": "7dc95d89eacd1fd0b209d341bf9b17282f8b30d6afe6f966b2ccef02f532eea9"
+    },
+    {
+      "path": "docs/validation/integration/acceptance/fixtures-chromium/browser/chromium-desktop-sponsorship-progress-shows-the-complete-purchase-hash-and-sponsor-with-copy-controls.json",
+      "bytes": 387,
+      "sha256": "862d8355f97134474a07eaf18484b1b66c0bcaa07846ae953494012401e4cd62"
+    },
+    {
+      "path": "docs/validation/integration/acceptance/fixtures-chromium/browser/chromium-narrow-keyboard-skip-link-focus-ring-connect-sheet-traps-and-restores-focus.json",
+      "bytes": 372,
+      "sha256": "667c07cac1e84eac97ed3d19d9b4c4e299b3f97f08f319d03f7f4ebebdc73362"
+    },
+    {
+      "path": "docs/validation/integration/acceptance/fixtures-chromium/browser/chromium-mobile-sponsorship-progress-shows-the-complete-purchase-hash-and-sponsor-with-copy-controls.json",
+      "bytes": 385,
+      "sha256": "8095f3fa4ee4f56e9200a67956b8fe0d4b298895a0487c1d377810efdc6e5432"
+    },
+    {
+      "path": "docs/validation/integration/acceptance/fixtures-chromium/browser/chromium-desktop-preview-navigation-forms-wallet-messages-and-storage-are-inert-version-changes-do-not-reuse-verified-bytes.json",
+      "bytes": 412,
+      "sha256": "02a85ca95b399f3d03d0490a763f42454e8be7cdeedf5c8b6b71c4876b9ddba6"
+    },
+    {
+      "path": "docs/validation/integration/acceptance/fixtures-chromium/browser/chromium-narrow-long-identifiers-prose-Markdown-code-and-failed-verification-reflow-at-the-configured-width.json",
+      "bytes": 394,
+      "sha256": "cab6ceea51698ddf0e8028f67331b59dbebe9689a2da70b0b514cc12ae6cafe9"
+    },
+    {
+      "path": "docs/validation/integration/acceptance/fixtures-chromium/browser/chromium-narrow-fork-an-accepted-historical-checkpoint-copies-that-asset-set-only.json",
+      "bytes": 366,
+      "sha256": "2aaa18a20af2d62631ce6dfbcc5e34226a127792225eab56b16129dd6b9a05f8"
+    },
+    {
+      "path": "docs/validation/integration/acceptance/fixtures-chromium/browser/chromium-mobile-first-screen-at-phone-width-shows-the-product-and-its-main-action.json",
+      "bytes": 366,
+      "sha256": "a6970eee7c94495742e630aad4213f528f8511a6c263e16dcf0a107c9aff6d33"
+    },
+    {
+      "path": "docs/validation/integration/acceptance/fixtures-chromium/browser/chromium-mobile-static-export-works-beneath-a-gateway-subpath-with-local-metadata-and-assets.json",
+      "bytes": 377,
+      "sha256": "1c8c172a869bed6ba5b4e63aa839ed299eb5a16552bc3ed82b306724731d4a38"
+    },
+    {
+      "path": "docs/validation/integration/acceptance/fixtures-chromium/browser/chromium-narrow-static-export-works-beneath-a-gateway-subpath-with-local-metadata-and-assets.json",
+      "bytes": 377,
+      "sha256": "90cd15fb252036b0b9a37308539171f6a94859e5dd0e8ac0126e7a1487a3b340"
+    },
+    {
+      "path": "docs/validation/integration/acceptance/fixtures-chromium/browser/chromium-narrow-unknown-purchase-reconciles-by-original-hash-nonce-after-reload-never-repurchases.json",
+      "bytes": 383,
+      "sha256": "c0f6b7ee91abf4450727447c08f25534607ca471938979c19d65d07c1ab1eb43"
+    },
+    {
+      "path": "docs/validation/integration/acceptance/fixtures-chromium/browser/chromium-desktop-static-export-works-beneath-a-gateway-subpath-with-local-metadata-and-assets.json",
+      "bytes": 379,
+      "sha256": "02b96e04cd14ff09f53e2faeba9ffa5154931ee39ca2e94d4f3d64f2a87ba150"
+    },
+    {
+      "path": "docs/validation/integration/acceptance/fixtures-chromium/browser/chromium-desktop-account-and-network-changes-invalidate-proposal-and-create-confirmations.json",
+      "bytes": 375,
+      "sha256": "d14c3cec60506f487706f77013924dfe5041bd735839dc3cea2546f9c820ddb1"
+    },
+    {
+      "path": "docs/validation/integration/acceptance/fixtures-chromium/browser/chromium-desktop-long-identifiers-prose-Markdown-code-and-failed-verification-reflow-at-the-configured-width.json",
+      "bytes": 396,
+      "sha256": "bd852d13284da2ca7bc5cd365ab0dc2dd1d645b0ebecb3c45385d24bb08e384c"
+    },
+    {
+      "path": "docs/validation/integration/acceptance/fixtures-chromium/browser/chromium-narrow-create-root-branch-with-fixed-goal-account-A-double-click-sends-one-signature.json",
+      "bytes": 381,
+      "sha256": "4829e1d3423019095b30f6600e18f86c0b85b64ac0b5f2cf7a2bf438af2e92ff"
+    },
+    {
+      "path": "docs/validation/integration/acceptance/fixtures-chromium/browser/chromium-desktop-two-accounts-execute-all-six-functions-with-downloaded-HTML-image-HTML-retention-and-a-historical-fork.json",
+      "bytes": 405,
+      "sha256": "e32d60fbce7ea7815fd95fb6d88a63ae2ce197ffc669390a4d78c33310958d69"
+    },
+    {
+      "path": "docs/validation/integration/acceptance/fixtures-chromium/browser/chromium-desktop-live-mode-fails-closed-with-explicit-A1-INTEGRATION-PENDING-no-fixtures-no-connect-wall.json",
+      "bytes": 392,
+      "sha256": "3c53ec88394968b6e1ff8f496bc9383e74b75d331c5665d825e1750224cedefd"
+    },
+    {
+      "path": "docs/validation/integration/acceptance/fixtures-chromium/browser/chromium-narrow-first-screen-at-phone-width-shows-the-product-and-its-main-action.json",
+      "bytes": 366,
+      "sha256": "61becc26480a6f238208bdd1526ba347ae10030f6dab0e74d01fc5e60719d722"
+    },
+    {
+      "path": "docs/validation/integration/acceptance/fixtures-chromium/browser/chromium-narrow-refused-retry-goes-through-a-fresh-fee-spender-review-and-the-new-account-s-exact-allowance-an-unknown-retry-i.json",
+      "bytes": 445,
+      "sha256": "35ce138e133fb5cc2116d4b2f60d9b365d88d6eb34671bf5af9d12806c599b1e"
+    },
+    {
+      "path": "docs/validation/integration/acceptance/fixtures-chromium/browser/chromium-narrow-EIP-6963-named-browser-wallet-connects-on-desktop-and-phone-switches-chain-and-observes-account-changes.json",
+      "bytes": 405,
+      "sha256": "21b0b224e2edebcf7e4404d8b3d614b77da5dbfffa147f3452ded1397c5c7773"
+    },
+    {
+      "path": "docs/validation/integration/acceptance/fixtures-chromium/browser/chromium-mobile-account-and-network-changes-invalidate-proposal-and-create-confirmations.json",
+      "bytes": 373,
+      "sha256": "fb8849dc726b4dd44db8864745452713c5a02610510c2a313ffab541ce7e9c05"
+    },
+    {
+      "path": "docs/validation/integration/acceptance/fixtures-chromium/browser/chromium-narrow-resetting-the-demo-clears-cached-projects-and-prepared-forms-from-the-project-list.json",
+      "bytes": 383,
+      "sha256": "20134980cd495da180981ff0dbda1c66ead629145237c5095346f2072cdd7feb"
+    },
+    {
+      "path": "docs/validation/integration/acceptance/fixtures-chromium/browser/chromium-mobile-stale-proposal-resubmission-sign-rejection-account-and-network-change.json",
+      "bytes": 372,
+      "sha256": "869971e41b9ca24a1688c0fce14d48bf4dadbdd5e0f8595dab0e8f92fa9d6204"
+    },
+    {
+      "path": "docs/validation/integration/acceptance/fixtures-chromium/browser/chromium-narrow-wallet-rejection-leaves-reads-available-dialog-wraps-focus-and-restores-it.json",
+      "bytes": 376,
+      "sha256": "e92e07a1032cc40e82d207ba723bcd05c8e0e60cbc141704e81bf449dc2e6caf"
+    },
+    {
+      "path": "docs/validation/integration/acceptance/fixtures-chromium/browser/chromium-narrow-malicious-files-stay-isolated-and-broken-files-never-get-a-verified-badge.json",
+      "bytes": 374,
+      "sha256": "d18a196519a48498596606702554edb9857bc9c42ea5e162b1d94f94820e6735"
+    },
+    {
+      "path": "docs/validation/integration/acceptance/fixtures-chromium/browser/chromium-mobile-wallet-rejection-leaves-reads-available-dialog-wraps-focus-and-restores-it.json",
+      "bytes": 376,
+      "sha256": "4bde55a8c39e63fa73cb4cdd2bd652e32680595b7b5339918de18a8b48d6b420"
+    },
+    {
+      "path": "docs/validation/integration/acceptance/fixtures-chromium/browser/chromium-narrow-missing-callback-stays-pending-refused-retry-bad-binding-resubmits-without-repurchase-status-2-freezes.json",
+      "bytes": 406,
+      "sha256": "84e852ce77c186a4e4d5b6fdd8246d91449993cfd8541d9d3e46dc52f022c753"
+    },
+    {
+      "path": "docs/validation/integration/acceptance/fixtures-chromium/browser/chromium-desktop-switching-a-populated-draft-to-image-yields-a-create-draft-with-no-inputs.json",
+      "bytes": 376,
+      "sha256": "962e2c87c932c0a1c2b2a8691439aaaf0f4e2bce549a60a950d78149fdfb2d99"
+    },
+    {
+      "path": "docs/validation/integration/acceptance/fixtures-chromium/browser/chromium-desktop-fork-an-accepted-historical-checkpoint-copies-that-asset-set-only.json",
+      "bytes": 368,
+      "sha256": "aa885adc74b0aed7299adaa82119ba736ecb01cdd2618f4b475a16742e471244"
+    },
+    {
+      "path": "docs/validation/integration/acceptance/fixtures-chromium/browser/chromium-mobile-preview-navigation-forms-wallet-messages-and-storage-are-inert-version-changes-do-not-reuse-verified-bytes.json",
+      "bytes": 410,
+      "sha256": "5ab99ac1d570079ef89c94f77f6ade56e28fc2cab7b2a461e154d4f1a55dcb40"
+    },
+    {
+      "path": "docs/validation/integration/acceptance/fixtures-chromium/browser/chromium-mobile-refused-retry-goes-through-a-fresh-fee-spender-review-and-the-new-account-s-exact-allowance-an-unknown-retry-i.json",
+      "bytes": 445,
+      "sha256": "c0ce883a8721ca7740e266e625507b44119285771f215d76942f8051b148ed9f"
+    },
+    {
+      "path": "docs/validation/integration/acceptance/fixtures-chromium/browser/chromium-narrow-an-unavailable-output-marks-the-file-stage-failed-without-a-verified-badge.json",
+      "bytes": 375,
+      "sha256": "cebce153d70c334b9158c37593f51d069c5af1a0e90810f6d851f843da344ea0"
+    },
+    {
+      "path": "docs/validation/integration/acceptance/fixtures-chromium/browser/chromium-narrow-propose-sponsor-with-exact-allowance-account-B-callback-binding-retained-assets.json",
+      "bytes": 386,
+      "sha256": "dbd239d0117ca6aed77c40cf94aa97d47179d0b6d952f207655312a05f509f42"
+    },
+    {
+      "path": "docs/validation/integration/acceptance/fixtures-chromium/browser/chromium-mobile-workspace-layout-at-this-project-s-width-has-no-horizontal-scroll.json",
+      "bytes": 366,
+      "sha256": "5d36661437e6e848647d3867526e29f25e3da5102f186a1fc2400244becdd041"
+    },
+    {
+      "path": "docs/validation/integration/acceptance/fixtures-chromium/browser/chromium-desktop-propose-sponsor-with-exact-allowance-account-B-callback-binding-retained-assets.json",
+      "bytes": 388,
+      "sha256": "83bb15424dde434cb897ce76e9b401e0b2447cc77450301fa3ce6234e666a519"
+    },
+    {
+      "path": "docs/validation/integration/acceptance/fixtures-chromium/browser/chromium-mobile-EIP-6963-named-browser-wallet-connects-on-desktop-and-phone-switches-chain-and-observes-account-changes.json",
+      "bytes": 405,
+      "sha256": "2b98d092788fdc7bf4f86e96ceaf7ee95bc2aabbe3f5f39bebe1d52a58a79a15"
+    },
+    {
+      "path": "docs/validation/integration/acceptance/fixtures-chromium/browser/chromium-mobile-keyboard-skip-link-focus-ring-connect-sheet-traps-and-restores-focus.json",
+      "bytes": 372,
+      "sha256": "10bd0dafbb33ad80fa81b96fc89d8ecb0eafc177e0137add04efc2d1952d7e16"
+    },
+    {
+      "path": "docs/validation/integration/acceptance/fixtures-chromium/browser/chromium-narrow-switching-a-populated-draft-to-image-yields-a-create-draft-with-no-inputs.json",
+      "bytes": 374,
+      "sha256": "738ef2b92df78cfd0528bcc513f289c0e9832be83e3810c4caacfd669fc28fed"
+    },
+    {
+      "path": "docs/validation/integration/acceptance/fixtures-chromium/browser/chromium-narrow-two-accounts-execute-all-six-functions-with-downloaded-HTML-image-HTML-retention-and-a-historical-fork.json",
+      "bytes": 403,
+      "sha256": "b88de9ff60ad00a299641d635862eaf0cb87d83b6c0732bdb7ff194a1f118d4f"
+    },
+    {
+      "path": "docs/validation/integration/acceptance/fixtures-chromium/browser/chromium-mobile-propose-sponsor-with-exact-allowance-account-B-callback-binding-retained-assets.json",
+      "bytes": 386,
+      "sha256": "d69d6a281be757397c14a117663dae1badff24f11b5750515494d8130f211542"
+    },
+    {
+      "path": "docs/validation/integration/acceptance/fixtures-chromium/browser/chromium-mobile-live-mode-fails-closed-with-explicit-A1-INTEGRATION-PENDING-no-fixtures-no-connect-wall.json",
+      "bytes": 390,
+      "sha256": "af2351bfab3020c3a7e8f44147672a0a40a4be3d2b1842d70ae2f0b163951504"
+    },
+    {
+      "path": "docs/validation/integration/acceptance/fixtures-chromium/browser/chromium-mobile-two-accounts-execute-all-six-functions-with-downloaded-HTML-image-HTML-retention-and-a-historical-fork.json",
+      "bytes": 403,
+      "sha256": "f23c1255650a9508b201a26715a7f1960cd9d8a3386ad064d7febad511102690"
+    },
+    {
+      "path": "docs/validation/integration/acceptance/fixtures-chromium/browser/chromium-desktop-a-verified-single-output-updates-the-file-stage-a-wide-Markdown-table-stays-readable-in-its-own-scroll-region.json",
+      "bytes": 413,
+      "sha256": "d9fd5a88ec97edf365c04c81bab0df2596a05a036d5330680218bf1998c525d6"
+    },
+    {
+      "path": "docs/validation/integration/acceptance/fixtures-chromium/browser/chromium-desktop-keyboard-skip-link-focus-ring-connect-sheet-traps-and-restores-focus.json",
+      "bytes": 374,
+      "sha256": "d02682a33a10ce885d09d5777adaf816288989bc38a12f1b582e6be92626b3b2"
+    },
+    {
+      "path": "docs/validation/integration/acceptance/fixtures-chromium/browser/chromium-mobile-missing-callback-stays-pending-refused-retry-bad-binding-resubmits-without-repurchase-status-2-freezes.json",
+      "bytes": 406,
+      "sha256": "9979b07870154b23c11f2ead8c475a90eb626eda301fbd413a756a15a5f1a5db"
+    },
+    {
+      "path": "docs/validation/integration/acceptance/fixtures-chromium/browser/chromium-mobile-an-unavailable-output-marks-the-file-stage-failed-without-a-verified-badge.json",
+      "bytes": 375,
+      "sha256": "6bacbfa9544d4d4c30b000841ab4e408dbd3fe7c3c19474347c2ebcf6b55f6c0"
+    },
+    {
+      "path": "docs/validation/integration/acceptance/fixtures-chromium/browser/chromium-desktop-resetting-the-demo-clears-cached-projects-and-prepared-forms-from-the-project-list.json",
+      "bytes": 385,
+      "sha256": "2edafad2d106696083473a9cd44405f7e1257d4e166be2411887f30fd906288c"
+    },
+    {
+      "path": "docs/validation/integration/acceptance/fixtures-chromium/browser/chromium-narrow-stale-proposal-resubmission-sign-rejection-account-and-network-change.json",
+      "bytes": 372,
+      "sha256": "06da2bfcd00ac413be69c8b77c8a4fda5565e0d93d6c51db08f0c5199e6acbbb"
+    },
+    {
+      "path": "docs/validation/integration/acceptance/fixtures-chromium/browser/chromium-mobile-create-root-branch-with-fixed-goal-account-A-double-click-sends-one-signature.json",
+      "bytes": 381,
+      "sha256": "a079806b5f75b0b3d9c07d944ac5e9798acc014c031e9e303a04753203aef110"
+    },
+    {
+      "path": "docs/validation/integration/acceptance/fixtures-chromium/browser/chromium-mobile-long-identifiers-prose-Markdown-code-and-failed-verification-reflow-at-the-configured-width.json",
+      "bytes": 394,
+      "sha256": "76be1bb1a0d2463eaef449ab9535414ff87135dd9112ebb347050406bfa7b7ab"
+    },
+    {
+      "path": "docs/validation/integration/acceptance/fixtures-chromium/browser/chromium-mobile-a-verified-single-output-updates-the-file-stage-a-wide-Markdown-table-stays-readable-in-its-own-scroll-region.json",
+      "bytes": 411,
+      "sha256": "fd355ec06497430417f74d50f2ccae0430249eb35b74cbd3f6459d1644a964b3"
+    },
+    {
+      "path": "docs/validation/integration/acceptance/fixtures-chromium/browser/chromium-desktop-malicious-files-stay-isolated-and-broken-files-never-get-a-verified-badge.json",
+      "bytes": 376,
+      "sha256": "ed20244099ea4e59a7e103eccf8e26e6fc2a7a9d404feadcaa9e1e0161560496"
+    },
+    {
+      "path": "docs/validation/integration/acceptance/fixtures-chromium/browser/chromium-narrow-sponsorship-progress-shows-the-complete-purchase-hash-and-sponsor-with-copy-controls.json",
+      "bytes": 385,
+      "sha256": "0a14c232404c60035df8d35c503e92e4963da00e5be2b4002ac7a70b93bb7f12"
+    },
+    {
+      "path": "docs/validation/integration/acceptance/fixtures-chromium/browser/chromium-desktop-EIP-6963-named-browser-wallet-connects-on-desktop-and-phone-switches-chain-and-observes-account-changes.json",
+      "bytes": 407,
+      "sha256": "fa8eafb15dc992beb09b186d10e0282ceec86cf82e5290de7f1a142a2cb17af0"
+    },
+    {
+      "path": "docs/validation/integration/acceptance/fixtures-chromium/browser/chromium-desktop-wallet-rejection-leaves-reads-available-dialog-wraps-focus-and-restores-it.json",
+      "bytes": 378,
+      "sha256": "c0164b40e75c393766361a68072daf0c9b47018921403edee61d79acf64d165a"
+    },
+    {
+      "path": "docs/validation/integration/acceptance/fixtures-chromium/browser/chromium-narrow-workspace-layout-at-this-project-s-width-has-no-horizontal-scroll.json",
+      "bytes": 366,
+      "sha256": "54dfc7b470ba4425545b0a53cd96457deca614f217a7c9484b9c4938c3895ed7"
+    },
+    {
+      "path": "docs/validation/integration/acceptance/fixtures-chromium/browser/chromium-desktop-an-unavailable-output-marks-the-file-stage-failed-without-a-verified-badge.json",
+      "bytes": 377,
+      "sha256": "10ef1dc48e7f444e00c854a18e96aca01c5f0cb37db0f0d5265a782e50f147e4"
+    },
+    {
+      "path": "docs/validation/integration/acceptance/fixtures-chromium/browser/chromium-mobile-switching-a-populated-draft-to-image-yields-a-create-draft-with-no-inputs.json",
+      "bytes": 374,
+      "sha256": "04d4173c92c70ab80eda4fcecb3aea2dee7ba30c31b861ce33e124300aff9087"
+    },
+    {
+      "path": "docs/validation/integration/acceptance/fixtures-chromium/browser/chromium-desktop-missing-callback-stays-pending-refused-retry-bad-binding-resubmits-without-repurchase-status-2-freezes.json",
+      "bytes": 408,
+      "sha256": "138b0120532be6a9396bd6b43ddef2209ca0c42913beaf55722941d339d10536"
+    },
+    {
+      "path": "docs/validation/integration/acceptance/fixtures-chromium/browser/chromium-desktop-refused-retry-goes-through-a-fresh-fee-spender-review-and-the-new-account-s-exact-allowance-an-unknown-retry-i.json",
+      "bytes": 447,
+      "sha256": "d16656965fe39f185f2375e666da2b5d32cabeb8c027c323c11caf3a0b4fff04"
+    },
+    {
+      "path": "docs/validation/integration/acceptance/fixtures-chromium/browser/chromium-desktop-workspace-layout-at-this-project-s-width-has-no-horizontal-scroll.json",
+      "bytes": 368,
+      "sha256": "16b2155343ca99de440fc36c6307fed0b5f4f8b2ff3ff03c1a390e3d257cc596"
+    },
+    {
+      "path": "docs/validation/integration/acceptance/fixtures-chromium/browser/chromium-desktop-stale-proposal-resubmission-sign-rejection-account-and-network-change.json",
+      "bytes": 374,
+      "sha256": "1a7567da08424cf8ff3a4686f10fb805d5aaa5f83b8343d38fe69342c6de1c50"
+    },
+    {
+      "path": "docs/validation/integration/acceptance/fixtures-chromium/browser/chromium-mobile-unknown-purchase-reconciles-by-original-hash-nonce-after-reload-never-repurchases.json",
+      "bytes": 383,
+      "sha256": "a0691939cf178557bc0aafa0fc49418f610d6d110aab687d0baab570e482e3b5"
+    },
+    {
+      "path": "docs/validation/integration/acceptance/fixtures-chromium/browser/chromium-mobile-fork-an-accepted-historical-checkpoint-copies-that-asset-set-only.json",
+      "bytes": 366,
+      "sha256": "8d3facb535e46c66b3576e85ffbd0250397962b05a73aeb1b433b9fd6461ac98"
+    },
+    {
+      "path": "docs/validation/integration/acceptance/fixtures-chromium/browser/chromium-mobile-resetting-the-demo-clears-cached-projects-and-prepared-forms-from-the-project-list.json",
+      "bytes": 383,
+      "sha256": "5bf949583d7ced1331148f15f02e24a69f68881e3dbd2d34dbc8400ce55c6a80"
+    },
+    {
+      "path": "docs/validation/integration/acceptance/fixtures-chromium/browser/chromium-narrow-live-mode-fails-closed-with-explicit-A1-INTEGRATION-PENDING-no-fixtures-no-connect-wall.json",
+      "bytes": 390,
+      "sha256": "d3aaa79da291fac171075fdd5ecc47de0c88f514508e1f36e8152c6119d63375"
+    },
+    {
+      "path": "docs/validation/integration/acceptance/fixtures-chromium/browser/chromium-desktop-create-root-branch-with-fixed-goal-account-A-double-click-sends-one-signature.json",
+      "bytes": 383,
+      "sha256": "f76b63f3425ee51683004709790ebb68be08cee072cb0a4b687ef14c87bfc462"
+    },
+    {
+      "path": "docs/validation/integration/acceptance/fixtures-chromium/browser/chromium-mobile-malicious-files-stay-isolated-and-broken-files-never-get-a-verified-badge.json",
+      "bytes": 374,
+      "sha256": "2af09ed2c90131c6607fe8c58dd215266c0eb4c4770a25a4cb7f3e70ddb09daa"
+    },
+    {
+      "path": "docs/validation/integration/acceptance/fixtures-chromium/browser/chromium-narrow-account-and-network-changes-invalidate-proposal-and-create-confirmations.json",
+      "bytes": 373,
+      "sha256": "7598e820109ce81900901a52a78d22fd2b5139e0472d76c0ccffdbc8dc526161"
+    },
+    {
+      "path": "docs/validation/integration/acceptance/fixtures-chromium/browser/chromium-desktop-unknown-purchase-reconciles-by-original-hash-nonce-after-reload-never-repurchases.json",
+      "bytes": 385,
+      "sha256": "618715d0de0356bd8ecfa681b4ca3b2e9430593b8fb4ed666be561919f7c3501"
+    },
+    {
+      "path": "docs/validation/integration/acceptance/fixtures-chromium/browser/chromium-narrow-a-verified-single-output-updates-the-file-stage-a-wide-Markdown-table-stays-readable-in-its-own-scroll-region.json",
+      "bytes": 411,
+      "sha256": "f50cfa620e29e52da15710fabebe156bcf60c79415854ca91767df0ef65214f4"
+    }
+  ]
+}

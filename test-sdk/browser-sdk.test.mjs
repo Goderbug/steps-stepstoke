@@ -131,6 +131,8 @@ test('browser artifact fetch refuses untrusted, redirected, oversized, tampered 
     await code(browser.fetchTrustedArtifact(url, markdown, { policy, fetch: never }), 'UNTRUSTED_LOCATION');
   }
   await code(browser.fetchTrustedArtifact('https://artifacts.example/ipfs/doc', markdown, { policy, fetch: async () => respond(fx.document, { redirected: true }, 'https://evil.example/x') }), 'BAD_REDIRECT');
+  // A permitted final URL cannot prove that every intermediate hop stayed on approved hosts.
+  await code(browser.fetchTrustedArtifact('https://artifacts.example/ipfs/doc', markdown, { policy, fetch: async () => respond(fx.document, { redirected: true }) }), 'BAD_REDIRECT');
   await code(browser.fetchTrustedArtifact('https://artifacts.example/ipfs/doc', markdown, { policy, fetch: async () => { throw new TypeError('redirect'); } }), 'NETWORK_ERROR');
   await code(browser.fetchTrustedArtifact('https://artifacts.example/ipfs/doc', markdown, { policy, fetch: async () => respond(fx.document, { headers: { 'content-length': '70000' } }) }), 'TOO_LARGE');
   let pulled = 0;
@@ -144,6 +146,7 @@ test('browser artifact fetch refuses untrusted, redirected, oversized, tampered 
 });
 
 test('artifact policies: HTTPS hostnames only; loopback fixture policy is test-only', () => {
+  assert.throws(() => browser.createArtifactPolicy({ locations: [{ origin: 'https://artifacts.example' }], allowRedirects: true }), /redirect hops cannot be inspected/u);
   for (const origin of ['http://a.example', 'https://127.0.0.1', 'https://[::1]', 'https://localhost', 'https://u:p@a.example', 'https://a.example/path']) {
     assert.throws(() => browser.createArtifactPolicy({ locations: [{ origin }] }), /./u, origin);
   }

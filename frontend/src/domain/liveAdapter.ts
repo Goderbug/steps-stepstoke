@@ -4,8 +4,8 @@ import { A1_SOURCE } from "../config";
 
 /**
  * A1 source/Node SDK is delivered, but its release has no product deployment and is not
- * production-ready. W1's browser bridge is unvalidated, so operations fail closed. No selector,
- * address or transaction is synthesized here (see docs/A1-HANDOFF.md).
+ * production-ready. The tested local browser bridge lives in ChainAdapter. Public operations
+ * fail closed until a verified public deployment is supplied; no address is synthesized here.
  */
 const pending = (what: string) => () => Promise.reject(new IntegrationPendingError(what));
 

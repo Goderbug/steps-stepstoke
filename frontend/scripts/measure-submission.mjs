@@ -14,7 +14,8 @@ try {
   for (const p of files) {
     if (/(^|\/)(\.git|node_modules|\.cache|\.vite)(\/|$)/.test(p)) throw new Error(`Generated/forbidden source path ${p}`);
     const source = resolve(root, p), target = resolve(work, p);
-    const s = await stat(source); if (!s.isFile()) continue;
+    const s = await stat(source).catch(error => { if (error.code === 'ENOENT') return null; throw error; });
+    if (!s?.isFile()) continue; // Rebuilt hashed export assets may be deleted from the old index.
     await mkdir(dirname(target), { recursive: true }); await copyFile(source, target);
     rawBytes += s.size; fileCount++;
   }
@@ -26,7 +27,7 @@ try {
   execFileSync('git', ['bundle', 'verify', bundle], { cwd: work, stdio: 'pipe' });
   const bytes = (await stat(bundle)).size;
   const report = { method: 'Fresh Git repository containing every deliverable file from git ls-files --cached --others --exclude-standard, excluding only removed .imd inputs. Single-commit complete source snapshot bundle, verified with git bundle verify. Temporary repository and bundle are not submitted.', fileCount, rawBytes, sourceSnapshotGitBundleBytes: bytes, limit: 8388608, reserveForFinalReportBytes: 65536, status: bytes + 65536 <= 8388608 ? 'PASS' : 'FAIL', originalRepositoryHistory: 'NOT_MEASURED: shared repository is read-only and has missing promisor history; no original .git mutation or history truncation performed' };
-  await writeFile(resolve(root, 'docs/validation/integration/frontend/submission-size.json'), JSON.stringify(report, null, 2) + '\n');
+  await writeFile(resolve(root, 'docs/validation/integration/acceptance/submission-size.json'), JSON.stringify(report, null, 2) + '\n');
   console.log(JSON.stringify(report));
   if (report.status !== 'PASS') process.exitCode = 1;
 } finally { await rm(work, { recursive: true, force: true }); }

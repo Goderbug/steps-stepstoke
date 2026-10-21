@@ -43,8 +43,8 @@ const paths = execFileSync('git', ['ls-files', '--cached', '--others', '--exclud
 check('No dependency/cache artifacts in source set', !paths.some(p => /(^|\/)(node_modules|\.vite|\.cache|playwright-report|test-results)(\/|$)/.test(p)), 'Generated paths excluded at every nesting level');
 check('No frontend npm archives', !paths.some(p => p.startsWith('frontend/') && /\.(tgz|tar\.gz)$/.test(p)), 'Inherited root offline dependencies are preserved');
 let frontendBytes = 0, distBytes = 0;
-for (const p of paths) { if (!p.startsWith('frontend/') && !p.startsWith('dist/')) continue; const s = await stat(resolve(root, p)); if (s.isFile()) { if (p.startsWith('dist/')) distBytes += s.size; else frontendBytes += s.size; } }
+for (const p of paths) { if (!p.startsWith('frontend/') && !p.startsWith('dist/')) continue; const s = await stat(resolve(root, p)).catch(error => { if (error.code === 'ENOENT') return null; throw error; }); if (s?.isFile()) { if (p.startsWith('dist/')) distBytes += s.size; else frontendBytes += s.size; } }
 check('Frontend source plus export <= 8 MiB', frontendBytes + distBytes <= 8388608, { frontendBytes, distBytes, combinedBytes: frontendBytes + distBytes, limit: 8388608 });
 report.result = report.checks.some(c => c.status === 'FAIL') ? 'FAIL' : 'PASS';
-await writeFile(resolve(root, 'docs/validation/integration/frontend/structural-review.json'), JSON.stringify(report, null, 2) + '\n');
+await writeFile(resolve(root, 'docs/validation/integration/acceptance/structural-review.json'), JSON.stringify(report, null, 2) + '\n');
 console.log(JSON.stringify({ result: report.result, checks: report.checks.length, frontendBytes, distBytes, independentContributorReview: 'NOT_RUN' }));

@@ -1,0 +1,4 @@
+PASS Public config closed; local reads without wallet; EIP-6963 selected provider
+PASS Create / propose / explicit sponsor / bind / read Markdown, alternate funder update
+PASS HTML R1 -> PNG R2 -> HTML R3 continues R2, selected exact bytes and retained provenance
+PASS Fork non-head accepted R1 exactly; child opens then continues with separate sponsorship

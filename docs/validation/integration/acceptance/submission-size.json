@@ -1,0 +1,10 @@
+{
+  "method": "Fresh Git repository containing every deliverable file from git ls-files --cached --others --exclude-standard, excluding only removed .imd inputs. Single-commit complete source snapshot bundle, verified with git bundle verify. Temporary repository and bundle are not submitted.",
+  "fileCount": 969,
+  "rawBytes": 33690060,
+  "sourceSnapshotGitBundleBytes": 7859229,
+  "limit": 8388608,
+  "reserveForFinalReportBytes": 65536,
+  "status": "PASS",
+  "originalRepositoryHistory": "NOT_MEASURED: shared repository is read-only and has missing promisor history; no original .git mutation or history truncation performed"
+}

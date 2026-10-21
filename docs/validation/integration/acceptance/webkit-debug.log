@@ -1,0 +1,19 @@
+2026-10-21T07:18:17.801Z pw:browser <launching> /tmp/cto-relay-webkit/webkit-headless --inspector-pipe --headless --no-startup-window
+2026-10-21T07:18:17.811Z pw:browser <launched> pid=15
+2026-10-21T07:18:17.999Z pw:browser [pid=15][err] 
+2026-10-21T07:18:17.999Z pw:browser [pid=15][err] ** (MiniBrowser:15): CRITICAL **: 09:18:17.997: WebKitWebView is-controlled-by-automation set but automation is not allowed in the context, falling back to default session.
+2026-10-21T07:18:18.310Z pw:browser [pid=15][err] Could not create EGL display: no supported platform available. Aborting...
+2026-10-21T07:18:18.584Z pw:browser [pid=15] <kill>
+2026-10-21T07:18:18.584Z pw:browser [pid=15] <will force kill>
+2026-10-21T07:18:18.585Z pw:browser [pid=15] starting temporary directories cleanup
+2026-10-21T07:18:18.586Z pw:browser [pid=15] finished temporary directories cleanup
+node:internal/modules/run_main:107
+    triggerUncaughtException(
+    ^
+
+browser.newPage: Target page, context or browser has been closed
+    at /home/imd-worker/.identitymd/work/5b630958-5d27-4b47-bebf-4e682a6d2ab7/6255fe16-391f-45a6-8048-78a54410f3a2/[eval1]:2:96 {
+  log: []
+}
+
+Node.js v24.21.0

@@ -29,7 +29,7 @@ test("long identifiers, prose, Markdown code and failed verification reflow at t
   await page.locator("#assets > ul > li", { hasText: /^notes / }).getByRole("button", { name: "下载并校验" }).click();
   await expect(page.locator(".md pre")).toContainText("long-code-token".repeat(512));
   expect(await page.evaluate(() => document.documentElement.scrollWidth - document.documentElement.clientWidth)).toBe(0);
-  await page.screenshot({ scale: "css", path: `../docs/validation/integration/frontend/screenshots/${info.project.name}-long-values.jpg`, type: "jpeg", quality: 50 });
+  await page.screenshot({ scale: "css", path: `../docs/validation/integration/acceptance/fixtures/screenshots/${info.project.name}-long-values.jpg`, type: "jpeg", quality: 50 });
   await page.goto("./#/demo/b/fx-branch-sec");
   await page.locator("#assets > ul > li", { hasText: /^tampered / }).getByRole("button", { name: "下载并校验" }).click();
   await expect(page.getByText("SHA-256：不通过", { exact: false })).toBeVisible();

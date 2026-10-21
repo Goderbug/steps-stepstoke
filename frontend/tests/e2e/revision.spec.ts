@@ -75,7 +75,7 @@ test("refused retry goes through a fresh fee/spender review and the new account'
   const settled = await fixtureState(page);
   expect(settled.sponsorships).toHaveLength(after.sponsorships.length);
   expect(settled.nonces[bAddr]).toBe(2);
-  await page.screenshot({ type: "jpeg", quality: 45, scale: "css", path: `../docs/validation/integration/frontend/screenshots/${test.info().project.name}-retry-review.jpg`, fullPage: false });
+  await page.screenshot({ type: "jpeg", quality: 45, scale: "css", path: `../docs/validation/integration/acceptance/fixtures/screenshots/${test.info().project.name}-retry-review.jpg`, fullPage: false });
 });
 
 test("sponsorship progress shows the complete purchase hash and sponsor with copy controls", async ({ page }) => {
@@ -189,7 +189,7 @@ test("a verified single output updates the file stage; a wide Markdown table sta
   await expect(region).toBeFocused();
   await page.keyboard.press("ArrowRight");
   await expect.poll(() => region.evaluate((el) => el.scrollLeft)).toBeGreaterThan(0);
-  await asset.screenshot({ type: "jpeg", quality: 45, scale: "css", path: `../docs/validation/integration/frontend/screenshots/${test.info().project.name}-wide-table.jpg` });
+  await asset.screenshot({ type: "jpeg", quality: 45, scale: "css", path: `../docs/validation/integration/acceptance/fixtures/screenshots/${test.info().project.name}-wide-table.jpg` });
 
   const link = asset.getByRole("link", { name: "下载已校验文件" });
   await link.scrollIntoViewIfNeeded();
@@ -199,7 +199,7 @@ test("a verified single output updates the file stage; a wide Markdown table sta
     return !!hit && el.contains(hit);
   });
   expect(clickable).toBe(true);
-  await writeFile(`../docs/validation/integration/frontend/raw/${test.info().project.name}-table-measurements.json`, JSON.stringify({ ...m, clickable, scrollLeft: await region.evaluate((el) => el.scrollLeft) }, null, 2));
+  await writeFile(`../docs/validation/integration/acceptance/fixtures/raw/${test.info().project.name}-table-measurements.json`, JSON.stringify({ ...m, clickable, scrollLeft: await region.evaluate((el) => el.scrollLeft) }, null, 2));
 
   const downloaded = page.waitForEvent("download");
   await link.click();

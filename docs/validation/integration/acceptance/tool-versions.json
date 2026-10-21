@@ -1,0 +1,47 @@
+[
+  {
+    "command": [
+      "node",
+      "--version"
+    ],
+    "exitCode": 0,
+    "stdout": "v24.21.0\n",
+    "stderr": ""
+  },
+  {
+    "command": [
+      "npm",
+      "--version"
+    ],
+    "exitCode": 0,
+    "stdout": "11.19.0\n",
+    "stderr": ""
+  },
+  {
+    "command": [
+      "forge",
+      "--version"
+    ],
+    "exitCode": 0,
+    "stdout": "forge Version: 1.8.3\nCommit SHA: cae51ad458f6abb64852b7709eb784352429825d\nBuild Timestamp: 2026-09-15T10:46:16.519267388Z (1789469176)\nBuild Profile: dist\n",
+    "stderr": ""
+  },
+  {
+    "command": [
+      "anvil",
+      "--version"
+    ],
+    "exitCode": 0,
+    "stdout": "anvil Version: 1.8.3\nCommit SHA: cae51ad458f6abb64852b7709eb784352429825d\nBuild Timestamp: 2026-09-15T10:46:16.519267388Z (1789469176)\nBuild Profile: dist\n",
+    "stderr": ""
+  },
+  {
+    "command": [
+      "frontend/node_modules/.bin/playwright",
+      "--version"
+    ],
+    "exitCode": 0,
+    "stdout": "Version 1.64.1\n",
+    "stderr": ""
+  }
+]

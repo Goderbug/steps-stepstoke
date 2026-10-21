@@ -1,0 +1,44 @@
+
+> cto-relay-station-w1@0.1.0 test:e2e
+> playwright test --project=chromium-desktop --workers=1
+
+[WebServer] (node:29) Warning: The 'NO_COLOR' env is ignored due to the 'FORCE_COLOR' env being set.
+[WebServer] (Use `node --trace-warnings ...` to show where the warning was created)
+[WebServer] (node:42) Warning: The 'NO_COLOR' env is ignored due to the 'FORCE_COLOR' env being set.
+[WebServer] (Use `node --trace-warnings ...` to show where the warning was created)
+
+Running 24 tests using 1 worker
+
+(node:65) Warning: The 'NO_COLOR' env is ignored due to the 'FORCE_COLOR' env being set.
+(Use `node --trace-warnings ...` to show where the warning was created)
+  ✓   1 [chromium-desktop] › tests/e2e/journey.spec.ts:39:1 › two accounts execute all six functions with downloaded HTML-image-HTML retention and a historical fork (20.3s)
+  ✓   2 [chromium-desktop] › tests/e2e/journey.spec.ts:144:1 › account and network changes invalidate proposal and create confirmations (3.7s)
+  ✓   3 [chromium-desktop] › tests/e2e/journey.spec.ts:162:1 › resetting the demo clears cached projects and prepared forms from the project list (4.6s)
+  ✓   4 [chromium-desktop] › tests/e2e/journey.spec.ts:177:1 › preview navigation, forms, wallet messages and storage are inert; version changes do not reuse verified bytes (6.3s)
+  ✓   5 [chromium-desktop] › tests/e2e/layout.spec.ts:4:1 › long identifiers, prose, Markdown code and failed verification reflow at the configured width (4.8s)
+  ✓   6 [chromium-desktop] › tests/e2e/layout.spec.ts:39:1 › static export works beneath a gateway subpath with local metadata and assets (2.5s)
+  ✓   7 [chromium-desktop] › tests/e2e/revision.spec.ts:17:1 › refused retry goes through a fresh fee/spender review and the new account's exact allowance; an unknown retry is journaled by its own hash/nonce (8.2s)
+  ✓   8 [chromium-desktop] › tests/e2e/revision.spec.ts:81:1 › sponsorship progress shows the complete purchase hash and sponsor with copy controls (4.1s)
+  ✓   9 [chromium-desktop] › tests/e2e/revision.spec.ts:99:1 › switching a populated draft to image yields a create draft with no inputs (5.6s)
+  ✓  10 [chromium-desktop] › tests/e2e/revision.spec.ts:129:1 › a verified single output updates the file stage; a wide Markdown table stays readable in its own scroll region (6.7s)
+  ✓  11 [chromium-desktop] › tests/e2e/revision.spec.ts:210:1 › an unavailable output marks the file stage failed without a verified badge (5.1s)
+  ✓  12 [chromium-desktop] › tests/e2e/w1.spec.ts:12:1 › live mode fails closed with explicit A1_INTEGRATION_PENDING, no fixtures, no connect wall (1.6s)
+  ✓  13 [chromium-desktop] › tests/e2e/w1.spec.ts:22:1 › first screen at phone width shows the product and its main action (2.7s)
+  ✓  14 [chromium-desktop] › tests/e2e/w1.spec.ts:32:1 › create root branch with fixed goal (account A), double click sends one signature (3.3s)
+  ✓  15 [chromium-desktop] › tests/e2e/w1.spec.ts:49:1 › propose, sponsor with exact allowance (account B), callback, binding, retained assets (5.0s)
+  ✓  16 [chromium-desktop] › tests/e2e/w1.spec.ts:92:1 › stale proposal resubmission, sign rejection, account and network change (2.9s)
+  ✓  17 [chromium-desktop] › tests/e2e/w1.spec.ts:120:1 › missing callback stays pending; refused retry; bad binding resubmits without repurchase; status 2 freezes (10.3s)
+  ✓  18 [chromium-desktop] › tests/e2e/w1.spec.ts:171:1 › unknown purchase reconciles by original hash/nonce after reload, never repurchases (5.3s)
+  ✓  19 [chromium-desktop] › tests/e2e/w1.spec.ts:184:1 › fork an accepted historical checkpoint copies that asset set only (4.9s)
+  ✓  20 [chromium-desktop] › tests/e2e/w1.spec.ts:204:1 › workspace layout at this project's width has no horizontal scroll (5.4s)
+  ✓  21 [chromium-desktop] › tests/e2e/w1.spec.ts:217:1 › malicious files stay isolated and broken files never get a verified badge (8.4s)
+  ✓  22 [chromium-desktop] › tests/e2e/w1.spec.ts:260:1 › keyboard: skip link, focus ring, connect sheet traps and restores focus (2.5s)
+  ✓  23 [chromium-desktop] › tests/e2e/wallet.spec.ts:42:1 › EIP-6963 named browser wallet connects on desktop and phone, switches chain and observes account changes (2.5s)
+  ✓  24 [chromium-desktop] › tests/e2e/wallet.spec.ts:67:1 › wallet rejection leaves reads available; dialog wraps focus and restores it (1.9s)
+
+  24 passed (2.3m)
+npm notice
+npm notice New major version of npm available! 11.19.0 -> 12.2.0
+npm notice Changelog: https://github.com/npm/cli/releases/tag/v12.2.0
+npm notice To update run: npm install -g npm@12.2.0
+npm notice

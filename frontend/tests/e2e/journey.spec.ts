@@ -63,7 +63,7 @@ test("two accounts execute all six functions with downloaded HTML-image-HTML ret
   await expect(page.getByRole("heading", { name: "资产 · 第 1 轮（当前）", exact: true })).toBeVisible();
 
   const evidence: object[] = [];
-  await mkdir("../docs/validation/integration/frontend/files", { recursive: true });
+  await mkdir("../docs/validation/integration/acceptance/fixtures/files", { recursive: true });
   const download = async (key: string, revision: number, ext: string) => {
     const row = page.locator("#assets > ul > li", { hasText: new RegExp(`^${key} `) });
     await row.getByRole("button", { name: "下载并校验" }).click();
@@ -71,7 +71,7 @@ test("two accounts execute all six functions with downloaded HTML-image-HTML ret
     const pending = page.waitForEvent("download");
     await row.getByRole("link", { name: "下载已校验文件" }).click();
     const d = await pending;
-    const path = `../docs/validation/integration/frontend/files/${info.project.name}-${key}-r${revision}.${ext}`;
+    const path = `../docs/validation/integration/acceptance/fixtures/files/${info.project.name}-${key}-r${revision}.${ext}`;
     await d.saveAs(path);
     const bytes = await readFile(path);
     const sha256 = `0x${createHash("sha256").update(bytes).digest("hex")}`;
@@ -137,8 +137,8 @@ test("two accounts execute all six functions with downloaded HTML-image-HTML ret
   await childRow.getByRole("button", { name: "资助此提案" }).click();
   await expect(childRow).toContainText("job.open（分支首次执行）");
   expect(await page.evaluate(() => (window as unknown as { __walletCalls: string[] }).__walletCalls)).toEqual([]);
-  await writeFile(`../docs/validation/integration/frontend/files/${info.project.name}-journey.json`, JSON.stringify({ mode: "fixture-only", realWalletRequests: [], checks: "Six flows; four executed rounds; exact retained HTML/PNG; historical R1 fork; independent Node SHA-256 checks", files: evidence }, null, 2));
-  await page.screenshot({ scale: "css", path: `../docs/validation/integration/frontend/screenshots/${info.project.name}-historical-fork.jpg`, type: "jpeg", quality: 50 });
+  await writeFile(`../docs/validation/integration/acceptance/fixtures/files/${info.project.name}-journey.json`, JSON.stringify({ mode: "fixture-only", realWalletRequests: [], checks: "Six flows; four executed rounds; exact retained HTML/PNG; historical R1 fork; independent Node SHA-256 checks", files: evidence }, null, 2));
+  await page.screenshot({ scale: "css", path: `../docs/validation/integration/acceptance/fixtures/screenshots/${info.project.name}-historical-fork.jpg`, type: "jpeg", quality: 50 });
 });
 
 test("account and network changes invalidate proposal and create confirmations", async ({ page }) => {

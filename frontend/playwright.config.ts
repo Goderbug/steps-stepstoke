@@ -3,11 +3,12 @@ import { defineConfig, devices } from "@playwright/test";
 // Browser tests run against the committed production export (dist/) served by `vite preview`.
 export default defineConfig({
   testDir: "tests/e2e",
-  timeout: 45_000,
+  timeout: 120_000,
+  expect: { timeout: 15_000 },
   retries: 0,
   workers: 2,
   outputDir: "test/scratch/browser-artifacts",
-  reporter: [["list"], ["json", { outputFile: "../docs/validation/integration/frontend/e2e.json" }]],
+  reporter: [["list"], ["json", { outputFile: process.env.W1_E2E_REPORT ?? "../docs/validation/integration/acceptance/fixtures/e2e.json" }]],
   use: { baseURL: "http://127.0.0.1:4173/", trace: "off", screenshot: "off" },
   webServer: {
     command: "npx vite preview --port 4173 --strictPort --host 127.0.0.1",

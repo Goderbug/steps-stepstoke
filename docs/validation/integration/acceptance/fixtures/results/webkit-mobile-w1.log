@@ -1,0 +1,31 @@
+
+> cto-relay-station-w1@0.1.0 test:e2e
+> playwright test --project=webkit-mobile tests/e2e/w1.spec.ts --workers=1
+
+[WebServer] (node:29) Warning: The 'NO_COLOR' env is ignored due to the 'FORCE_COLOR' env being set.
+[WebServer] (Use `node --trace-warnings ...` to show where the warning was created)
+[WebServer] (node:42) Warning: The 'NO_COLOR' env is ignored due to the 'FORCE_COLOR' env being set.
+[WebServer] (Use `node --trace-warnings ...` to show where the warning was created)
+
+Running 11 tests using 1 worker
+
+(node:65) Warning: The 'NO_COLOR' env is ignored due to the 'FORCE_COLOR' env being set.
+(Use `node --trace-warnings ...` to show where the warning was created)
+  ✓   1 [webkit-mobile] › tests/e2e/w1.spec.ts:12:1 › live mode fails closed with explicit A1_INTEGRATION_PENDING, no fixtures, no connect wall (1.4s)
+  ✓   2 [webkit-mobile] › tests/e2e/w1.spec.ts:22:1 › first screen at phone width shows the product and its main action (3.1s)
+  ✓   3 [webkit-mobile] › tests/e2e/w1.spec.ts:32:1 › create root branch with fixed goal (account A), double click sends one signature (5.6s)
+  ✓   4 [webkit-mobile] › tests/e2e/w1.spec.ts:49:1 › propose, sponsor with exact allowance (account B), callback, binding, retained assets (14.0s)
+  ✓   5 [webkit-mobile] › tests/e2e/w1.spec.ts:92:1 › stale proposal resubmission, sign rejection, account and network change (12.0s)
+  ✓   6 [webkit-mobile] › tests/e2e/w1.spec.ts:120:1 › missing callback stays pending; refused retry; bad binding resubmits without repurchase; status 2 freezes (38.1s)
+  ✓   7 [webkit-mobile] › tests/e2e/w1.spec.ts:171:1 › unknown purchase reconciles by original hash/nonce after reload, never repurchases (11.5s)
+  ✓   8 [webkit-mobile] › tests/e2e/w1.spec.ts:184:1 › fork an accepted historical checkpoint copies that asset set only (12.2s)
+  ✓   9 [webkit-mobile] › tests/e2e/w1.spec.ts:204:1 › workspace layout at this project's width has no horizontal scroll (5.9s)
+  ✓  10 [webkit-mobile] › tests/e2e/w1.spec.ts:217:1 › malicious files stay isolated and broken files never get a verified badge (17.1s)
+  ✓  11 [webkit-mobile] › tests/e2e/w1.spec.ts:260:1 › keyboard: skip link, focus ring, connect sheet traps and restores focus (2.8s)
+
+  11 passed (2.1m)
+npm notice
+npm notice New major version of npm available! 11.19.0 -> 12.2.0
+npm notice Changelog: https://github.com/npm/cli/releases/tag/v12.2.0
+npm notice To update run: npm install -g npm@12.2.0
+npm notice

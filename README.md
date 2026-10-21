@@ -6,7 +6,7 @@ A public project has a fixed goal, immutable execution policy, an independent In
 
 This checkout is a local repair candidate built on the [original IMD A1 delivery at `9b0294e7ab19060bd00c489fbe032cf248528e0d`](https://github.com/identity-md-launches/launch-2294-build-cto-relay-station/tree/9b0294e7ab19060bd00c489fbe032cf248528e0d). The candidate uses policy `CTO-Relay-A1/2/fixed-profiles/unpublished` and changes contracts, SDK/CLI and tests to address the later asset-mapping, manifest-envelope and `dist/` findings. [Current repair evidence](docs/validation/review-fixes/README.md) records results against this source; older validation logs describe the original delivery. This local candidate is not a new IMD delivery or a public deployment.
 
-**Production readiness remains false.** Local deployments use mock Intake/IMD. Live profile compatibility, real IMD runtime consumption and public deployment remain `NOT_RUN`. Finite parser limits and missing callbacks can still stop purchases; the larger metadata-aware envelope does not guarantee every future IMD manifest is bindable. See [handoff and remaining acceptance work](docs/HANDOFF.md).
+**Production readiness remains false.** Local deployments use mock Intake/IMD. Live profile compatibility, real IMD runtime consumption and public deployment remain `NOT_RUN`. Finite parser limits and missing callbacks can still stop purchases; the larger metadata-aware envelope does not guarantee every future IMD manifest is bindable. The [A1 handoff](docs/HANDOFF.md) is historical; see [current acceptance and remaining findings](docs/validation/integration/acceptance/README.md) for this integration.
 
 ## Build and check offline
 
@@ -53,7 +53,7 @@ Follow the [runnable CLI walkthrough](docs/CLI.md) to prepare **every operation*
 
 `retry` and `bind` are explicit recovery/settlement operations. Contract use does not require this SDK, a browser, a server, an indexer or a signer service. All transaction arguments can be ABI-encoded directly using `abi/`.
 
-The [public contract reference](docs/CONTRACTS.md) describes every deployed entry point and getter, permissions, events and failure modes. There is no frontend, hosted page or browser UI in this repository.
+The [public contract reference](docs/CONTRACTS.md) describes every entry point and getter, permissions, events and failure modes. The W1 browser UI and committed static export are described below; no public deployment or hosting is performed.
 
 Adding a proposal does not change the anchor or invalidate other current proposals. Any current proposal can win the next funded execution; there is no FIFO. A completed binding changes the anchor, making proposals against the prior checkpoint stale. Sponsors cannot edit a proposal.
 
@@ -107,7 +107,7 @@ Anyone calls `bind(exactRawManifest, oldAssetWitness)` after a success callback.
 
 The binding parser validates the entire authenticated document, including unknown metadata, while retaining only the fields needed for acceptance. It rejects duplicate decoded keys at every depth, invalid UTF-8/escapes, unpaired surrogates, noncharacters, trailing data and resource excess. The raw manifest cap is 32,768 bytes; retained strings and total document complexity have separate limits in [LIMITS.md](docs/LIMITS.md). SDK binding uses `strictManifestJSON`; the general `strictJSON` helper keeps its 8,192-byte default. Unknown metadata is never truncated or substituted for `files[]`.
 
-File **SHA-256** and manifest **keccak256** are different commitments. The contracts authenticate the writer's descriptors, not remote file availability, file quality, HTML behavior, or actual input consumption. The writer/runtime must truthfully expose the accepted bytes and honor the fixed profile. The SDK checks actual downloaded-or-operator-supplied bytes for SHA-256, length and MIME signatures without executing them. The optional `fetch-check` command downloads only explicit public HTTPS artifacts with checked, pinned DNS addresses; private, mapped and transition addresses are rejected. No browser preview is included.
+File **SHA-256** and manifest **keccak256** are different commitments. The contracts authenticate the writer's descriptors, not remote file availability, file quality, HTML behavior, or actual input consumption. The writer/runtime must truthfully expose the accepted bytes and honor the fixed profile. The SDK checks actual downloaded-or-operator-supplied bytes for SHA-256, length and MIME signatures without executing them. The optional `fetch-check` command downloads only explicit public HTTPS artifacts with checked, pinned DNS addresses; private, mapped and transition addresses are rejected. The separate browser adapter uses an explicit trusted-origin policy and isolated, sanitized previews; its DNS limitations are documented below.
 
 A bad binding reverts without erasing the result or changing the prior checkpoint. Anyone may submit the correct raw bytes and witness again without purchasing. If the writer's actual hashed manifest violates the fixed policy, there is no alternative rewritten JSON or repair authority; that Branch remains at `ResultRecorded`. Its earlier accepted history can still be forked.
 
@@ -131,7 +131,7 @@ HTML instructions require restoring the selected HTML, inline CSS/JS, exact sele
 
 See [current repair evidence](docs/validation/review-fixes/README.md), [limits](docs/LIMITS.md), [operating procedure](docs/OPERATIONS.md) and [review record](docs/REVIEW.md). Original [integrated evidence](docs/validation/README.md), [contributor evidence](evidence/README.md) and [documentation reproduction](docs/validation/documentation-pass/README.md) remain unchanged historical records; their source hashes, counts and gas figures are not measurements of this candidate.
 
-The [future IMD request/observer procedure](docs/LIVE-VALIDATION.md) describes a separately authorized runtime test; that test has not run. W1 was delivered separately with fixture-based browser flows and awaits integration with the accepted A1 candidate. W1 integration is outside this repair. Local tests, review, original IMD source delivery, real runtime execution and production readiness are separate evidence categories.
+The [future IMD request/observer procedure](docs/LIVE-VALIDATION.md) describes a separately authorized runtime test; that test has not run. W1's originally separate fixture interface is now integrated with the accepted A1 candidate as described below. Historical repair reports retain their original scope. Local tests, review, original IMD source delivery, real runtime execution and production readiness are separate evidence categories.
 
 ## W1 browser integration and static export
 
@@ -217,13 +217,22 @@ transactions are reconciled by their original hash/nonce without automatic purch
 ### Worker validation
 
 ```sh
-# Browser binaries are local testing tools, never submission assets.
-cd frontend
-npx playwright install chromium
-npm run test:e2e -- --project=chromium-desktop --project=chromium-mobile --project=chromium-narrow
-npm run test:local
-cd ..
-IMD_PLAYWRIGHT="$PWD/frontend/node_modules/playwright/index.mjs" node .imd/reads/skills/design-critic/scripts/taste.mjs --out test/scratch/taste
+# Run from the repository root. Browser tools/caches stay outside the submission.
+export PLAYWRIGHT_BROWSERS_PATH=/tmp/cto-relay-browsers
+frontend/node_modules/.bin/playwright install chromium webkit
+# On a minimal Ubuntu 24.04 runner without WebKit libraries (no sudo needed):
+bash frontend/scripts/prepare-webkit.sh /tmp/cto-relay-webkit
+export W1_WEBKIT_EXECUTABLE=/tmp/cto-relay-webkit/webkit-headless
+npm run test:e2e --prefix frontend
+node frontend/tests/integration/browser-chain.mjs --browser chromium
+# On a runner with a per-process time limit, run each WebKit group separately:
+node frontend/tests/integration/browser-chain.mjs --browser webkit --group flow
+node frontend/tests/integration/browser-chain.mjs --browser webkit --group recovery
+node frontend/tests/integration/browser-chain.mjs --browser webkit --group payments
+node frontend/tests/integration/browser-chain.mjs --browser webkit --group failures
+node frontend/tests/integration/browser-chain.mjs --browser webkit --group files
+node tools/check-release.mjs
+node tools/generate-sdk-abi.mjs --check
 ```
 
 `W1_CHROMIUM_EXECUTABLE` may select an already installed Chromium. `test:local` starts its own
@@ -231,9 +240,24 @@ Anvil/artifact server, serves the actual production export, and signs W1 interac
 a named EIP-6963 provider using two disposable unlocked accounts. It does not replace the UI
 adapter, synthesize state or replay CLI transactions. Stop a manual local setup first because
 these tests reserve the same loopback ports. `test/scratch/` is disposable and is not submitted.
+Browser-chain commands must run sequentially. Each group starts a fresh disposable chain; the
+`flow` group keeps Markdown, HTML → PNG → HTML and the historical fork/child sequence together.
+The other groups cover independent payment, recovery and file scenarios. Chromium accepts the
+same groups. `--out RELATIVE_DIRECTORY` selects an evidence directory; the default is
+`docs/validation/integration/acceptance/<browser>[-<group>]/`.
+Fixture tests can also be split with `--project=webkit-desktop tests/e2e/journey.spec.ts
+--workers=1` (and the other files/projects in `frontend/tests/e2e/`). Set `W1_E2E_REPORT` to a
+distinct output path relative to `frontend/` to retain each separate JSON report.
+`prepare-webkit.sh` downloads ordinary Ubuntu library packages into its temporary directory and
+creates a headless wrapper, including Mesa software rendering; it does not install system packages
+or alter project dependencies. On a machine with supported browser libraries, omit that helper
+and `W1_WEBKIT_EXECUTABLE`. The pinned worker-only taste probe is not a clean-checkout dependency;
+its raw results and representative screenshots are retained in the acceptance report.
 
 Actual results, matrix coverage, limitations, commands, screenshots, traces, input hashes and
-release hashes are in [the integration report](docs/validation/integration/frontend/README.md).
+release hashes are in [the dedicated acceptance report](docs/validation/integration/acceptance/README.md).
+The [prior integration report](docs/validation/integration/frontend/README.md) is preserved as
+historical evidence, including its then-unavailable WebKit checks.
 Historical W1 evidence is referenced at its immutable commit instead of duplicated binaries.
 `productionDeployment:null`, `liveCompatibility:NOT_RUN`, `productionReady:false` remain in force.
 Authenticated oversized manifests can remain permanently unbindable. No administrator/timeout

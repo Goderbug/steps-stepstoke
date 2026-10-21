@@ -1,0 +1,1044 @@
+{
+  "config": {
+    "argv": [
+      "/opt/imd-worker/node-v24.21.0-linux-x64/bin/node",
+      "/home/imd-worker/.identitymd/work/5b630958-5d27-4b47-bebf-4e682a6d2ab7/6255fe16-391f-45a6-8048-78a54410f3a2/frontend/node_modules/.bin/playwright",
+      "test",
+      "--project=chromium-narrow",
+      "--workers=1"
+    ],
+    "configFile": "/home/imd-worker/.identitymd/work/5b630958-5d27-4b47-bebf-4e682a6d2ab7/6255fe16-391f-45a6-8048-78a54410f3a2/frontend/playwright.config.ts",
+    "rootDir": "/home/imd-worker/.identitymd/work/5b630958-5d27-4b47-bebf-4e682a6d2ab7/6255fe16-391f-45a6-8048-78a54410f3a2/frontend/tests/e2e",
+    "failOnFlakyTests": false,
+    "forbidOnly": false,
+    "fullyParallel": false,
+    "globalSetup": null,
+    "globalTeardown": null,
+    "globalTimeout": 0,
+    "grep": {},
+    "grepInvert": null,
+    "maxFailures": 0,
+    "metadata": {
+      "actualWorkers": 1
+    },
+    "preserveOutput": "always",
+    "projects": [
+      {
+        "outputDir": "/home/imd-worker/.identitymd/work/5b630958-5d27-4b47-bebf-4e682a6d2ab7/6255fe16-391f-45a6-8048-78a54410f3a2/frontend/test/scratch/browser-artifacts",
+        "repeatEach": 1,
+        "retries": 0,
+        "metadata": {
+          "actualWorkers": 1
+        },
+        "id": "chromium-desktop",
+        "name": "chromium-desktop",
+        "testDir": "/home/imd-worker/.identitymd/work/5b630958-5d27-4b47-bebf-4e682a6d2ab7/6255fe16-391f-45a6-8048-78a54410f3a2/frontend/tests/e2e",
+        "testIgnore": [],
+        "testMatch": [
+          "**/*.@(spec|test).?(c|m)[jt]s?(x)"
+        ],
+        "timeout": 120000
+      },
+      {
+        "outputDir": "/home/imd-worker/.identitymd/work/5b630958-5d27-4b47-bebf-4e682a6d2ab7/6255fe16-391f-45a6-8048-78a54410f3a2/frontend/test/scratch/browser-artifacts",
+        "repeatEach": 1,
+        "retries": 0,
+        "metadata": {
+          "actualWorkers": 1
+        },
+        "id": "chromium-mobile",
+        "name": "chromium-mobile",
+        "testDir": "/home/imd-worker/.identitymd/work/5b630958-5d27-4b47-bebf-4e682a6d2ab7/6255fe16-391f-45a6-8048-78a54410f3a2/frontend/tests/e2e",
+        "testIgnore": [],
+        "testMatch": [
+          "**/*.@(spec|test).?(c|m)[jt]s?(x)"
+        ],
+        "timeout": 120000
+      },
+      {
+        "outputDir": "/home/imd-worker/.identitymd/work/5b630958-5d27-4b47-bebf-4e682a6d2ab7/6255fe16-391f-45a6-8048-78a54410f3a2/frontend/test/scratch/browser-artifacts",
+        "repeatEach": 1,
+        "retries": 0,
+        "metadata": {
+          "actualWorkers": 1
+        },
+        "id": "chromium-narrow",
+        "name": "chromium-narrow",
+        "testDir": "/home/imd-worker/.identitymd/work/5b630958-5d27-4b47-bebf-4e682a6d2ab7/6255fe16-391f-45a6-8048-78a54410f3a2/frontend/tests/e2e",
+        "testIgnore": [],
+        "testMatch": [
+          "**/*.@(spec|test).?(c|m)[jt]s?(x)"
+        ],
+        "timeout": 120000
+      },
+      {
+        "outputDir": "/home/imd-worker/.identitymd/work/5b630958-5d27-4b47-bebf-4e682a6d2ab7/6255fe16-391f-45a6-8048-78a54410f3a2/frontend/test/scratch/browser-artifacts",
+        "repeatEach": 1,
+        "retries": 0,
+        "metadata": {
+          "actualWorkers": 1
+        },
+        "id": "webkit-desktop",
+        "name": "webkit-desktop",
+        "testDir": "/home/imd-worker/.identitymd/work/5b630958-5d27-4b47-bebf-4e682a6d2ab7/6255fe16-391f-45a6-8048-78a54410f3a2/frontend/tests/e2e",
+        "testIgnore": [],
+        "testMatch": [
+          "**/*.@(spec|test).?(c|m)[jt]s?(x)"
+        ],
+        "timeout": 120000
+      },
+      {
+        "outputDir": "/home/imd-worker/.identitymd/work/5b630958-5d27-4b47-bebf-4e682a6d2ab7/6255fe16-391f-45a6-8048-78a54410f3a2/frontend/test/scratch/browser-artifacts",
+        "repeatEach": 1,
+        "retries": 0,
+        "metadata": {
+          "actualWorkers": 1
+        },
+        "id": "webkit-mobile",
+        "name": "webkit-mobile",
+        "testDir": "/home/imd-worker/.identitymd/work/5b630958-5d27-4b47-bebf-4e682a6d2ab7/6255fe16-391f-45a6-8048-78a54410f3a2/frontend/tests/e2e",
+        "testIgnore": [],
+        "testMatch": [
+          "**/*.@(spec|test).?(c|m)[jt]s?(x)"
+        ],
+        "timeout": 120000
+      }
+    ],
+    "filteredProjects": [
+      {
+        "grep": {},
+        "grepInvert": null,
+        "outputDir": "/home/imd-worker/.identitymd/work/5b630958-5d27-4b47-bebf-4e682a6d2ab7/6255fe16-391f-45a6-8048-78a54410f3a2/frontend/test/scratch/browser-artifacts",
+        "repeatEach": 1,
+        "retries": 0,
+        "metadata": {
+          "actualWorkers": 1
+        },
+        "name": "chromium-narrow",
+        "testDir": "/home/imd-worker/.identitymd/work/5b630958-5d27-4b47-bebf-4e682a6d2ab7/6255fe16-391f-45a6-8048-78a54410f3a2/frontend/tests/e2e",
+        "snapshotDir": "/home/imd-worker/.identitymd/work/5b630958-5d27-4b47-bebf-4e682a6d2ab7/6255fe16-391f-45a6-8048-78a54410f3a2/frontend/tests/e2e",
+        "testIgnore": [],
+        "testMatch": "**/*.@(spec|test).?(c|m)[jt]s?(x)",
+        "timeout": 120000,
+        "use": {
+          "baseURL": "http://127.0.0.1:4173/",
+          "trace": "off",
+          "screenshot": "off",
+          "userAgent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/156.0.8078.4 Safari/537.36",
+          "viewport": {
+            "width": 320,
+            "height": 844
+          },
+          "screen": {
+            "width": 1920,
+            "height": 1080
+          },
+          "deviceScaleFactor": 1,
+          "isMobile": false,
+          "hasTouch": false,
+          "defaultBrowserType": "chromium",
+          "launchOptions": {}
+        },
+        "dependencies": [],
+        "ignoreSnapshots": false,
+        "__projectId": "chromium-narrow"
+      }
+    ],
+    "quiet": false,
+    "reporter": [
+      [
+        "list",
+        null
+      ],
+      [
+        "json",
+        {
+          "outputFile": "../docs/validation/integration/acceptance/fixtures/results/chromium-narrow-all.json"
+        }
+      ]
+    ],
+    "reportSlowTests": {
+      "max": 5,
+      "threshold": 300000
+    },
+    "shard": null,
+    "tags": [],
+    "updateSnapshots": "default",
+    "updateSourceMethod": "patch",
+    "version": "1.64.1",
+    "workers": 1,
+    "webServer": {
+      "command": "npx vite preview --port 4173 --strictPort --host 127.0.0.1",
+      "url": "http://127.0.0.1:4173/",
+      "reuseExistingServer": false,
+      "timeout": 60000
+    }
+  },
+  "suites": [
+    {
+      "title": "journey.spec.ts",
+      "file": "journey.spec.ts",
+      "column": 0,
+      "line": 0,
+      "specs": [
+        {
+          "title": "two accounts execute all six functions with downloaded HTML-image-HTML retention and a historical fork",
+          "ok": true,
+          "tags": [],
+          "tests": [
+            {
+              "timeout": 120000,
+              "annotations": [],
+              "expectedStatus": "passed",
+              "projectId": "chromium-narrow",
+              "projectName": "chromium-narrow",
+              "results": [
+                {
+                  "workerIndex": 0,
+                  "parallelIndex": 0,
+                  "status": "passed",
+                  "duration": 15429,
+                  "errors": [],
+                  "stdout": [],
+                  "stderr": [],
+                  "retry": 0,
+                  "startTime": "2026-10-21T07:51:43.899Z",
+                  "annotations": [],
+                  "attachments": []
+                }
+              ],
+              "status": "expected"
+            }
+          ],
+          "id": "bf222bad70f76648f722-3caaedcd826ab0b456f3",
+          "file": "journey.spec.ts",
+          "line": 39,
+          "column": 1
+        },
+        {
+          "title": "account and network changes invalidate proposal and create confirmations",
+          "ok": true,
+          "tags": [],
+          "tests": [
+            {
+              "timeout": 120000,
+              "annotations": [],
+              "expectedStatus": "passed",
+              "projectId": "chromium-narrow",
+              "projectName": "chromium-narrow",
+              "results": [
+                {
+                  "workerIndex": 0,
+                  "parallelIndex": 0,
+                  "status": "passed",
+                  "duration": 2289,
+                  "errors": [],
+                  "stdout": [],
+                  "stderr": [],
+                  "retry": 0,
+                  "startTime": "2026-10-21T07:52:00.630Z",
+                  "annotations": [],
+                  "attachments": []
+                }
+              ],
+              "status": "expected"
+            }
+          ],
+          "id": "bf222bad70f76648f722-aaa148b41ec68c037e75",
+          "file": "journey.spec.ts",
+          "line": 144,
+          "column": 1
+        },
+        {
+          "title": "resetting the demo clears cached projects and prepared forms from the project list",
+          "ok": true,
+          "tags": [],
+          "tests": [
+            {
+              "timeout": 120000,
+              "annotations": [],
+              "expectedStatus": "passed",
+              "projectId": "chromium-narrow",
+              "projectName": "chromium-narrow",
+              "results": [
+                {
+                  "workerIndex": 0,
+                  "parallelIndex": 0,
+                  "status": "passed",
+                  "duration": 2069,
+                  "errors": [],
+                  "stdout": [],
+                  "stderr": [],
+                  "retry": 0,
+                  "startTime": "2026-10-21T07:52:02.938Z",
+                  "annotations": [],
+                  "attachments": []
+                }
+              ],
+              "status": "expected"
+            }
+          ],
+          "id": "bf222bad70f76648f722-f7af9952c77b3d18ee38",
+          "file": "journey.spec.ts",
+          "line": 162,
+          "column": 1
+        },
+        {
+          "title": "preview navigation, forms, wallet messages and storage are inert; version changes do not reuse verified bytes",
+          "ok": true,
+          "tags": [],
+          "tests": [
+            {
+              "timeout": 120000,
+              "annotations": [],
+              "expectedStatus": "passed",
+              "projectId": "chromium-narrow",
+              "projectName": "chromium-narrow",
+              "results": [
+                {
+                  "workerIndex": 0,
+                  "parallelIndex": 0,
+                  "status": "passed",
+                  "duration": 2422,
+                  "errors": [],
+                  "stdout": [],
+                  "stderr": [],
+                  "retry": 0,
+                  "startTime": "2026-10-21T07:52:05.051Z",
+                  "annotations": [],
+                  "attachments": []
+                }
+              ],
+              "status": "expected"
+            }
+          ],
+          "id": "bf222bad70f76648f722-81e3a8e1e44160d72782",
+          "file": "journey.spec.ts",
+          "line": 177,
+          "column": 1
+        }
+      ]
+    },
+    {
+      "title": "layout.spec.ts",
+      "file": "layout.spec.ts",
+      "column": 0,
+      "line": 0,
+      "specs": [
+        {
+          "title": "long identifiers, prose, Markdown code and failed verification reflow at the configured width",
+          "ok": true,
+          "tags": [],
+          "tests": [
+            {
+              "timeout": 120000,
+              "annotations": [],
+              "expectedStatus": "passed",
+              "projectId": "chromium-narrow",
+              "projectName": "chromium-narrow",
+              "results": [
+                {
+                  "workerIndex": 0,
+                  "parallelIndex": 0,
+                  "status": "passed",
+                  "duration": 2101,
+                  "errors": [],
+                  "stdout": [],
+                  "stderr": [],
+                  "retry": 0,
+                  "startTime": "2026-10-21T07:52:07.521Z",
+                  "annotations": [],
+                  "attachments": []
+                }
+              ],
+              "status": "expected"
+            }
+          ],
+          "id": "9f98fd8c8d1538f5ebbb-fe7499b06b3a3ffcbe7a",
+          "file": "layout.spec.ts",
+          "line": 4,
+          "column": 1
+        },
+        {
+          "title": "static export works beneath a gateway subpath with local metadata and assets",
+          "ok": true,
+          "tags": [],
+          "tests": [
+            {
+              "timeout": 120000,
+              "annotations": [],
+              "expectedStatus": "passed",
+              "projectId": "chromium-narrow",
+              "projectName": "chromium-narrow",
+              "results": [
+                {
+                  "workerIndex": 0,
+                  "parallelIndex": 0,
+                  "status": "passed",
+                  "duration": 848,
+                  "errors": [],
+                  "stdout": [],
+                  "stderr": [],
+                  "retry": 0,
+                  "startTime": "2026-10-21T07:52:09.642Z",
+                  "annotations": [],
+                  "attachments": []
+                }
+              ],
+              "status": "expected"
+            }
+          ],
+          "id": "9f98fd8c8d1538f5ebbb-d85a1428d67cd9211a08",
+          "file": "layout.spec.ts",
+          "line": 39,
+          "column": 1
+        }
+      ]
+    },
+    {
+      "title": "revision.spec.ts",
+      "file": "revision.spec.ts",
+      "column": 0,
+      "line": 0,
+      "specs": [
+        {
+          "title": "refused retry goes through a fresh fee/spender review and the new account's exact allowance; an unknown retry is journaled by its own hash/nonce",
+          "ok": true,
+          "tags": [],
+          "tests": [
+            {
+              "timeout": 120000,
+              "annotations": [],
+              "expectedStatus": "passed",
+              "projectId": "chromium-narrow",
+              "projectName": "chromium-narrow",
+              "results": [
+                {
+                  "workerIndex": 0,
+                  "parallelIndex": 0,
+                  "status": "passed",
+                  "duration": 3917,
+                  "errors": [],
+                  "stdout": [],
+                  "stderr": [],
+                  "retry": 0,
+                  "startTime": "2026-10-21T07:52:10.530Z",
+                  "annotations": [],
+                  "attachments": []
+                }
+              ],
+              "status": "expected"
+            }
+          ],
+          "id": "6220a107f9fc0395c360-a7c221d9d9ce0a9c5117",
+          "file": "revision.spec.ts",
+          "line": 17,
+          "column": 1
+        },
+        {
+          "title": "sponsorship progress shows the complete purchase hash and sponsor with copy controls",
+          "ok": true,
+          "tags": [],
+          "tests": [
+            {
+              "timeout": 120000,
+              "annotations": [],
+              "expectedStatus": "passed",
+              "projectId": "chromium-narrow",
+              "projectName": "chromium-narrow",
+              "results": [
+                {
+                  "workerIndex": 0,
+                  "parallelIndex": 0,
+                  "status": "passed",
+                  "duration": 2567,
+                  "errors": [],
+                  "stdout": [],
+                  "stderr": [],
+                  "retry": 0,
+                  "startTime": "2026-10-21T07:52:14.472Z",
+                  "annotations": [],
+                  "attachments": []
+                }
+              ],
+              "status": "expected"
+            }
+          ],
+          "id": "6220a107f9fc0395c360-656409bb78ee834f1ad6",
+          "file": "revision.spec.ts",
+          "line": 81,
+          "column": 1
+        },
+        {
+          "title": "switching a populated draft to image yields a create draft with no inputs",
+          "ok": true,
+          "tags": [],
+          "tests": [
+            {
+              "timeout": 120000,
+              "annotations": [],
+              "expectedStatus": "passed",
+              "projectId": "chromium-narrow",
+              "projectName": "chromium-narrow",
+              "results": [
+                {
+                  "workerIndex": 0,
+                  "parallelIndex": 0,
+                  "status": "passed",
+                  "duration": 1956,
+                  "errors": [],
+                  "stdout": [],
+                  "stderr": [],
+                  "retry": 0,
+                  "startTime": "2026-10-21T07:52:17.061Z",
+                  "annotations": [],
+                  "attachments": []
+                }
+              ],
+              "status": "expected"
+            }
+          ],
+          "id": "6220a107f9fc0395c360-e011bba3f4d2dc2e01cc",
+          "file": "revision.spec.ts",
+          "line": 99,
+          "column": 1
+        },
+        {
+          "title": "a verified single output updates the file stage; a wide Markdown table stays readable in its own scroll region",
+          "ok": true,
+          "tags": [],
+          "tests": [
+            {
+              "timeout": 120000,
+              "annotations": [],
+              "expectedStatus": "passed",
+              "projectId": "chromium-narrow",
+              "projectName": "chromium-narrow",
+              "results": [
+                {
+                  "workerIndex": 0,
+                  "parallelIndex": 0,
+                  "status": "passed",
+                  "duration": 4337,
+                  "errors": [],
+                  "stdout": [],
+                  "stderr": [],
+                  "retry": 0,
+                  "startTime": "2026-10-21T07:52:19.044Z",
+                  "annotations": [],
+                  "attachments": []
+                }
+              ],
+              "status": "expected"
+            }
+          ],
+          "id": "6220a107f9fc0395c360-59cc28bb6837b01b2868",
+          "file": "revision.spec.ts",
+          "line": 129,
+          "column": 1
+        },
+        {
+          "title": "an unavailable output marks the file stage failed without a verified badge",
+          "ok": true,
+          "tags": [],
+          "tests": [
+            {
+              "timeout": 120000,
+              "annotations": [],
+              "expectedStatus": "passed",
+              "projectId": "chromium-narrow",
+              "projectName": "chromium-narrow",
+              "results": [
+                {
+                  "workerIndex": 0,
+                  "parallelIndex": 0,
+                  "status": "passed",
+                  "duration": 3166,
+                  "errors": [],
+                  "stdout": [],
+                  "stderr": [],
+                  "retry": 0,
+                  "startTime": "2026-10-21T07:52:23.417Z",
+                  "annotations": [],
+                  "attachments": []
+                }
+              ],
+              "status": "expected"
+            }
+          ],
+          "id": "6220a107f9fc0395c360-f2120ecf208c4143fd87",
+          "file": "revision.spec.ts",
+          "line": 210,
+          "column": 1
+        }
+      ]
+    },
+    {
+      "title": "w1.spec.ts",
+      "file": "w1.spec.ts",
+      "column": 0,
+      "line": 0,
+      "specs": [
+        {
+          "title": "live mode fails closed with explicit A1_INTEGRATION_PENDING, no fixtures, no connect wall",
+          "ok": true,
+          "tags": [],
+          "tests": [
+            {
+              "timeout": 120000,
+              "annotations": [],
+              "expectedStatus": "passed",
+              "projectId": "chromium-narrow",
+              "projectName": "chromium-narrow",
+              "results": [
+                {
+                  "workerIndex": 0,
+                  "parallelIndex": 0,
+                  "status": "passed",
+                  "duration": 691,
+                  "errors": [],
+                  "stdout": [],
+                  "stderr": [],
+                  "retry": 0,
+                  "startTime": "2026-10-21T07:52:26.632Z",
+                  "annotations": [],
+                  "attachments": []
+                }
+              ],
+              "status": "expected"
+            }
+          ],
+          "id": "e1d52bdcc4ad05ff7426-1591bc923727203bca1d",
+          "file": "w1.spec.ts",
+          "line": 12,
+          "column": 1
+        },
+        {
+          "title": "first screen at phone width shows the product and its main action",
+          "ok": true,
+          "tags": [],
+          "tests": [
+            {
+              "timeout": 120000,
+              "annotations": [],
+              "expectedStatus": "passed",
+              "projectId": "chromium-narrow",
+              "projectName": "chromium-narrow",
+              "results": [
+                {
+                  "workerIndex": 0,
+                  "parallelIndex": 0,
+                  "status": "passed",
+                  "duration": 1108,
+                  "errors": [],
+                  "stdout": [],
+                  "stderr": [],
+                  "retry": 0,
+                  "startTime": "2026-10-21T07:52:27.346Z",
+                  "annotations": [],
+                  "attachments": []
+                }
+              ],
+              "status": "expected"
+            }
+          ],
+          "id": "e1d52bdcc4ad05ff7426-9100953e0fc788b5878c",
+          "file": "w1.spec.ts",
+          "line": 22,
+          "column": 1
+        },
+        {
+          "title": "create root branch with fixed goal (account A), double click sends one signature",
+          "ok": true,
+          "tags": [],
+          "tests": [
+            {
+              "timeout": 120000,
+              "annotations": [],
+              "expectedStatus": "passed",
+              "projectId": "chromium-narrow",
+              "projectName": "chromium-narrow",
+              "results": [
+                {
+                  "workerIndex": 0,
+                  "parallelIndex": 0,
+                  "status": "passed",
+                  "duration": 1964,
+                  "errors": [],
+                  "stdout": [],
+                  "stderr": [],
+                  "retry": 0,
+                  "startTime": "2026-10-21T07:52:28.487Z",
+                  "annotations": [],
+                  "attachments": []
+                }
+              ],
+              "status": "expected"
+            }
+          ],
+          "id": "e1d52bdcc4ad05ff7426-a417d89a55c0593d5f64",
+          "file": "w1.spec.ts",
+          "line": 32,
+          "column": 1
+        },
+        {
+          "title": "propose, sponsor with exact allowance (account B), callback, binding, retained assets",
+          "ok": true,
+          "tags": [],
+          "tests": [
+            {
+              "timeout": 120000,
+              "annotations": [],
+              "expectedStatus": "passed",
+              "projectId": "chromium-narrow",
+              "projectName": "chromium-narrow",
+              "results": [
+                {
+                  "workerIndex": 0,
+                  "parallelIndex": 0,
+                  "status": "passed",
+                  "duration": 3582,
+                  "errors": [],
+                  "stdout": [],
+                  "stderr": [],
+                  "retry": 0,
+                  "startTime": "2026-10-21T07:52:30.470Z",
+                  "annotations": [],
+                  "attachments": []
+                }
+              ],
+              "status": "expected"
+            }
+          ],
+          "id": "e1d52bdcc4ad05ff7426-0593d6f537deb1aad501",
+          "file": "w1.spec.ts",
+          "line": 49,
+          "column": 1
+        },
+        {
+          "title": "stale proposal resubmission, sign rejection, account and network change",
+          "ok": true,
+          "tags": [],
+          "tests": [
+            {
+              "timeout": 120000,
+              "annotations": [],
+              "expectedStatus": "passed",
+              "projectId": "chromium-narrow",
+              "projectName": "chromium-narrow",
+              "results": [
+                {
+                  "workerIndex": 0,
+                  "parallelIndex": 0,
+                  "status": "passed",
+                  "duration": 1991,
+                  "errors": [],
+                  "stdout": [],
+                  "stderr": [],
+                  "retry": 0,
+                  "startTime": "2026-10-21T07:52:34.071Z",
+                  "annotations": [],
+                  "attachments": []
+                }
+              ],
+              "status": "expected"
+            }
+          ],
+          "id": "e1d52bdcc4ad05ff7426-447641ca5a5859bb112d",
+          "file": "w1.spec.ts",
+          "line": 92,
+          "column": 1
+        },
+        {
+          "title": "missing callback stays pending; refused retry; bad binding resubmits without repurchase; status 2 freezes",
+          "ok": true,
+          "tags": [],
+          "tests": [
+            {
+              "timeout": 120000,
+              "annotations": [],
+              "expectedStatus": "passed",
+              "projectId": "chromium-narrow",
+              "projectName": "chromium-narrow",
+              "results": [
+                {
+                  "workerIndex": 0,
+                  "parallelIndex": 0,
+                  "status": "passed",
+                  "duration": 7667,
+                  "errors": [],
+                  "stdout": [],
+                  "stderr": [],
+                  "retry": 0,
+                  "startTime": "2026-10-21T07:52:36.086Z",
+                  "annotations": [],
+                  "attachments": []
+                }
+              ],
+              "status": "expected"
+            }
+          ],
+          "id": "e1d52bdcc4ad05ff7426-2252f78a7fdde192163f",
+          "file": "w1.spec.ts",
+          "line": 120,
+          "column": 1
+        },
+        {
+          "title": "unknown purchase reconciles by original hash/nonce after reload, never repurchases",
+          "ok": true,
+          "tags": [],
+          "tests": [
+            {
+              "timeout": 120000,
+              "annotations": [],
+              "expectedStatus": "passed",
+              "projectId": "chromium-narrow",
+              "projectName": "chromium-narrow",
+              "results": [
+                {
+                  "workerIndex": 0,
+                  "parallelIndex": 0,
+                  "status": "passed",
+                  "duration": 2663,
+                  "errors": [],
+                  "stdout": [],
+                  "stderr": [],
+                  "retry": 0,
+                  "startTime": "2026-10-21T07:52:43.770Z",
+                  "annotations": [],
+                  "attachments": []
+                }
+              ],
+              "status": "expected"
+            }
+          ],
+          "id": "e1d52bdcc4ad05ff7426-8a2d5ceea8e2d9070aff",
+          "file": "w1.spec.ts",
+          "line": 171,
+          "column": 1
+        },
+        {
+          "title": "fork an accepted historical checkpoint copies that asset set only",
+          "ok": true,
+          "tags": [],
+          "tests": [
+            {
+              "timeout": 120000,
+              "annotations": [],
+              "expectedStatus": "passed",
+              "projectId": "chromium-narrow",
+              "projectName": "chromium-narrow",
+              "results": [
+                {
+                  "workerIndex": 0,
+                  "parallelIndex": 0,
+                  "status": "passed",
+                  "duration": 1630,
+                  "errors": [],
+                  "stdout": [],
+                  "stderr": [],
+                  "retry": 0,
+                  "startTime": "2026-10-21T07:52:46.448Z",
+                  "annotations": [],
+                  "attachments": []
+                }
+              ],
+              "status": "expected"
+            }
+          ],
+          "id": "e1d52bdcc4ad05ff7426-c3edaf3648aeb2725f27",
+          "file": "w1.spec.ts",
+          "line": 184,
+          "column": 1
+        },
+        {
+          "title": "workspace layout at this project's width has no horizontal scroll",
+          "ok": true,
+          "tags": [],
+          "tests": [
+            {
+              "timeout": 120000,
+              "annotations": [],
+              "expectedStatus": "passed",
+              "projectId": "chromium-narrow",
+              "projectName": "chromium-narrow",
+              "results": [
+                {
+                  "workerIndex": 0,
+                  "parallelIndex": 0,
+                  "status": "passed",
+                  "duration": 1256,
+                  "errors": [],
+                  "stdout": [],
+                  "stderr": [],
+                  "retry": 0,
+                  "startTime": "2026-10-21T07:52:48.093Z",
+                  "annotations": [],
+                  "attachments": []
+                }
+              ],
+              "status": "expected"
+            }
+          ],
+          "id": "e1d52bdcc4ad05ff7426-237b6fd5e6436e8e5e69",
+          "file": "w1.spec.ts",
+          "line": 204,
+          "column": 1
+        },
+        {
+          "title": "malicious files stay isolated and broken files never get a verified badge",
+          "ok": true,
+          "tags": [],
+          "tests": [
+            {
+              "timeout": 120000,
+              "annotations": [],
+              "expectedStatus": "passed",
+              "projectId": "chromium-narrow",
+              "projectName": "chromium-narrow",
+              "results": [
+                {
+                  "workerIndex": 0,
+                  "parallelIndex": 0,
+                  "status": "passed",
+                  "duration": 3332,
+                  "errors": [],
+                  "stdout": [],
+                  "stderr": [],
+                  "retry": 0,
+                  "startTime": "2026-10-21T07:52:49.368Z",
+                  "annotations": [],
+                  "attachments": []
+                }
+              ],
+              "status": "expected"
+            }
+          ],
+          "id": "e1d52bdcc4ad05ff7426-4347ee062b26560ca318",
+          "file": "w1.spec.ts",
+          "line": 217,
+          "column": 1
+        },
+        {
+          "title": "keyboard: skip link, focus ring, connect sheet traps and restores focus",
+          "ok": true,
+          "tags": [],
+          "tests": [
+            {
+              "timeout": 120000,
+              "annotations": [],
+              "expectedStatus": "passed",
+              "projectId": "chromium-narrow",
+              "projectName": "chromium-narrow",
+              "results": [
+                {
+                  "workerIndex": 0,
+                  "parallelIndex": 0,
+                  "status": "passed",
+                  "duration": 960,
+                  "errors": [],
+                  "stdout": [],
+                  "stderr": [],
+                  "retry": 0,
+                  "startTime": "2026-10-21T07:52:52.721Z",
+                  "annotations": [],
+                  "attachments": []
+                }
+              ],
+              "status": "expected"
+            }
+          ],
+          "id": "e1d52bdcc4ad05ff7426-474c9f45e86d380bf4d9",
+          "file": "w1.spec.ts",
+          "line": 260,
+          "column": 1
+        }
+      ]
+    },
+    {
+      "title": "wallet.spec.ts",
+      "file": "wallet.spec.ts",
+      "column": 0,
+      "line": 0,
+      "specs": [
+        {
+          "title": "EIP-6963 named browser wallet connects on desktop and phone, switches chain and observes account changes",
+          "ok": true,
+          "tags": [],
+          "tests": [
+            {
+              "timeout": 120000,
+              "annotations": [],
+              "expectedStatus": "passed",
+              "projectId": "chromium-narrow",
+              "projectName": "chromium-narrow",
+              "results": [
+                {
+                  "workerIndex": 0,
+                  "parallelIndex": 0,
+                  "status": "passed",
+                  "duration": 991,
+                  "errors": [],
+                  "stdout": [],
+                  "stderr": [],
+                  "retry": 0,
+                  "startTime": "2026-10-21T07:52:53.740Z",
+                  "annotations": [],
+                  "attachments": []
+                }
+              ],
+              "status": "expected"
+            }
+          ],
+          "id": "27e87c8ff6887d69f80e-e4068f4af3e6770a6533",
+          "file": "wallet.spec.ts",
+          "line": 42,
+          "column": 1
+        },
+        {
+          "title": "wallet rejection leaves reads available; dialog wraps focus and restores it",
+          "ok": true,
+          "tags": [],
+          "tests": [
+            {
+              "timeout": 120000,
+              "annotations": [],
+              "expectedStatus": "passed",
+              "projectId": "chromium-narrow",
+              "projectName": "chromium-narrow",
+              "results": [
+                {
+                  "workerIndex": 0,
+                  "parallelIndex": 0,
+                  "status": "passed",
+                  "duration": 962,
+                  "errors": [],
+                  "stdout": [],
+                  "stderr": [],
+                  "retry": 0,
+                  "startTime": "2026-10-21T07:52:54.753Z",
+                  "annotations": [],
+                  "attachments": []
+                }
+              ],
+              "status": "expected"
+            }
+          ],
+          "id": "27e87c8ff6887d69f80e-8efa23d18b720694792f",
+          "file": "wallet.spec.ts",
+          "line": 67,
+          "column": 1
+        }
+      ]
+    }
+  ],
+  "errors": [],
+  "stats": {
+    "startTime": "2026-10-21T07:51:38.866Z",
+    "duration": 77094.18100000001,
+    "expected": 24,
+    "skipped": 0,
+    "unexpected": 0,
+    "flaky": 0
+  }
+}

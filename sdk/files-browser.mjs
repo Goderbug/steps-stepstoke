@@ -5,7 +5,8 @@
 // DNS disclosure: a browser exposes neither DNS answers nor the connected IP address, so this
 // adapter cannot repeat the Node adapter's public-address/pinned-IP check. It instead admits only
 // operator-configured HTTPS origins and path prefixes, sends no credentials or referrer, refuses
-// redirects unless the policy allows them, and re-checks the final response URL. DNS rebinding
+// every redirect, and re-checks the final response URL. Browser fetch cannot expose intermediate
+// redirect destinations, so a final-URL allowlist alone cannot constrain their network access. DNS rebinding
 // of a configured hostname is outside what browser code can detect; trust in the configured
 // artifact hosts is therefore an explicit configuration decision, not a property proved here.
 import { sha256 } from '../vendor/ethers/ethers.mjs';
@@ -45,6 +46,7 @@ function location(entry, allowLoopback) {
 export function createArtifactPolicy({ locations, allowRedirects = false } = {}) {
   if (!Array.isArray(locations) || locations.length === 0 || locations.length > 16) fail('INVALID_POLICY', 'Configure one to sixteen trusted artifact locations');
   if (typeof allowRedirects !== 'boolean') fail('INVALID_POLICY', 'allowRedirects must be boolean');
+  if (allowRedirects) fail('INVALID_POLICY', 'Browser redirect hops cannot be inspected; configure the final trusted artifact URL');
   return Object.freeze({ kind: 'TRUSTED_HTTPS', locations: Object.freeze(locations.map(entry => location(entry, false))), allowRedirects, dns: 'NOT_OBSERVABLE_IN_BROWSER' });
 }
 
@@ -104,13 +106,14 @@ export async function fetchTrustedArtifact(url, descriptor, { policy, fetch: fet
     try {
       response = await fetchImpl(url, {
         method: 'GET', mode: 'cors', credentials: 'omit', referrerPolicy: 'no-referrer', cache: 'no-store',
-        redirect: policy.allowRedirects ? 'follow' : 'error', signal: controller.signal
+        redirect: 'error', signal: controller.signal
       });
     } catch (error) {
       fail(controller.signal.aborted ? 'TIMEOUT' : 'NETWORK_ERROR', 'Artifact request failed or was redirected without permission', { cause: error?.name });
     }
     if (response.type === 'opaque' || response.type === 'opaqueredirect') fail('OPAQUE_RESPONSE', 'Artifact response is not readable');
     const finalURL = response.url || url;
+    if (response.redirected) fail('BAD_REDIRECT', 'Browser artifact redirects are refused; configure the final trusted URL');
     if (!isAllowedArtifactURL(policy, finalURL)) fail('BAD_REDIRECT', 'Artifact redirected outside the configured locations', { finalURL });
     if (response.status < 200 || response.status >= 300) fail('HTTP_STATUS', 'Artifact server returned a non-success status', { status: response.status });
     const length = response.headers.get('content-length');

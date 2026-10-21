@@ -1,0 +1,24 @@
+
+> cto-relay-station-w1@0.1.0 test:e2e
+> playwright test --project=webkit-mobile tests/e2e/journey.spec.ts --workers=1
+
+[WebServer] (node:29) Warning: The 'NO_COLOR' env is ignored due to the 'FORCE_COLOR' env being set.
+[WebServer] (Use `node --trace-warnings ...` to show where the warning was created)
+[WebServer] (node:42) Warning: The 'NO_COLOR' env is ignored due to the 'FORCE_COLOR' env being set.
+[WebServer] (Use `node --trace-warnings ...` to show where the warning was created)
+
+Running 4 tests using 1 worker
+
+(node:65) Warning: The 'NO_COLOR' env is ignored due to the 'FORCE_COLOR' env being set.
+(Use `node --trace-warnings ...` to show where the warning was created)
+  ✓  1 [webkit-mobile] › tests/e2e/journey.spec.ts:39:1 › two accounts execute all six functions with downloaded HTML-image-HTML retention and a historical fork (1.2m)
+  ✓  2 [webkit-mobile] › tests/e2e/journey.spec.ts:144:1 › account and network changes invalidate proposal and create confirmations (6.1s)
+  ✓  3 [webkit-mobile] › tests/e2e/journey.spec.ts:162:1 › resetting the demo clears cached projects and prepared forms from the project list (6.0s)
+  ✓  4 [webkit-mobile] › tests/e2e/journey.spec.ts:177:1 › preview navigation, forms, wallet messages and storage are inert; version changes do not reuse verified bytes (7.2s)
+
+  4 passed (1.6m)
+npm notice
+npm notice New major version of npm available! 11.19.0 -> 12.2.0
+npm notice Changelog: https://github.com/npm/cli/releases/tag/v12.2.0
+npm notice To update run: npm install -g npm@12.2.0
+npm notice

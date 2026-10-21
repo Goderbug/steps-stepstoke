@@ -1,0 +1,22 @@
+
+> cto-relay-station-w1@0.1.0 test:e2e
+> playwright test --project=webkit-mobile tests/e2e/layout.spec.ts --workers=1
+
+[WebServer] (node:29) Warning: The 'NO_COLOR' env is ignored due to the 'FORCE_COLOR' env being set.
+[WebServer] (Use `node --trace-warnings ...` to show where the warning was created)
+[WebServer] (node:42) Warning: The 'NO_COLOR' env is ignored due to the 'FORCE_COLOR' env being set.
+[WebServer] (Use `node --trace-warnings ...` to show where the warning was created)
+
+Running 2 tests using 1 worker
+
+(node:65) Warning: The 'NO_COLOR' env is ignored due to the 'FORCE_COLOR' env being set.
+(Use `node --trace-warnings ...` to show where the warning was created)
+  ✓  1 [webkit-mobile] › tests/e2e/layout.spec.ts:4:1 › long identifiers, prose, Markdown code and failed verification reflow at the configured width (8.8s)
+  ✓  2 [webkit-mobile] › tests/e2e/layout.spec.ts:39:1 › static export works beneath a gateway subpath with local metadata and assets (3.6s)
+
+  2 passed (17.3s)
+npm notice
+npm notice New major version of npm available! 11.19.0 -> 12.2.0
+npm notice Changelog: https://github.com/npm/cli/releases/tag/v12.2.0
+npm notice To update run: npm install -g npm@12.2.0
+npm notice

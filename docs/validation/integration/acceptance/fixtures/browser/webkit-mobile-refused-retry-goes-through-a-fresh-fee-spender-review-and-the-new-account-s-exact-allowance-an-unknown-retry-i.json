@@ -1,0 +1,16 @@
+{
+  "test": "refused retry goes through a fresh fee/spender review and the new account's exact allowance; an unknown retry is journaled by its own hash/nonce",
+  "engine": "webkit-mobile",
+  "viewport": {
+    "width": 390,
+    "height": 844
+  },
+  "status": "passed",
+  "horizontalOverflow": 0,
+  "pageErrors": [],
+  "externalAttempts": [],
+  "httpErrors": [],
+  "unexpectedConsoleErrors": [],
+  "expectedSecurityBlocks": [],
+  "console": []
+}

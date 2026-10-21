@@ -35,8 +35,9 @@ in real Chromium.
 - URL must sit under an operator-configured HTTPS origin + path prefix (`createArtifactPolicy`); no
   IP literals, loopback, credentials or fragments.
 - `credentials: 'omit'`, `referrerPolicy: 'no-referrer'`, `cache: 'no-store'`, `mode: 'cors'`.
-- Redirects are refused (`redirect: 'error'`) unless the policy sets `allowRedirects`; then the final
-  `response.url` must still be inside the configured locations.
+- Every redirect is refused (`redirect: 'error'`). Configure the final artifact URL directly.
+  `allowRedirects:true` is rejected: browser fetch hides intermediate hops, so checking only the
+  final `response.url` cannot prove that all contacted hosts were approved.
 - Content-Length checked against the MIME cap; the body is read as a stream and cancelled as soon as
   it exceeds the cap; then SHA-256, exact length, UTF-8/PNG/HTML signature are checked on the bytes.
 - **DNS limit (disclosed):** browsers expose neither DNS answers nor the connected IP, so the Node

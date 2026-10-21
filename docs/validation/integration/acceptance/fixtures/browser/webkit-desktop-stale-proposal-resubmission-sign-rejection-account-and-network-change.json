@@ -1,0 +1,16 @@
+{
+  "test": "stale proposal resubmission, sign rejection, account and network change",
+  "engine": "webkit-desktop",
+  "viewport": {
+    "width": 1440,
+    "height": 900
+  },
+  "status": "passed",
+  "horizontalOverflow": 0,
+  "pageErrors": [],
+  "externalAttempts": [],
+  "httpErrors": [],
+  "unexpectedConsoleErrors": [],
+  "expectedSecurityBlocks": [],
+  "console": []
+}

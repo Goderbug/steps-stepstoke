@@ -1,6 +1,7 @@
 #!/usr/bin/env node
 // Actual-local-contract check of the browser SDK entrypoint. Needs `forge build` output and anvil.
-//   node tools/sdk-local-check.mjs [--out FILE] [--chrome EXECUTABLE --playwright PATH_TO_playwright-core]
+//   node tools/sdk-local-check.mjs [--out FILE] [--browser chromium|webkit --executable PATH --playwright PATH_TO_playwright]
+// --chrome EXECUTABLE remains supported for the original Chromium command.
 // Starts a disposable anvil, places MockToken/MockIntake at the release's IMD/Intake addresses
 // (LOCAL MOCKS), deploys the actual RelayFactory, generates the local config from deployed code,
 // then runs tools/sdk-local-scenario.mjs with sdk/browser.mjs in Node and, when --chrome is given,
@@ -21,6 +22,9 @@ import * as nodeSdk from '../sdk/index.mjs';
 const root = new URL('../', import.meta.url);
 const args = process.argv.slice(2);
 const option = name => { const i = args.indexOf(`--${name}`); return i >= 0 ? args[i + 1] : undefined; };
+const engine = option('browser') ?? 'chromium';
+if (!['chromium', 'webkit'].includes(engine)) throw new Error('Use --browser chromium or webkit');
+const executable = option('executable') ?? option('chrome');
 const freePort = async () => { const s = createServer(); s.listen(0, '127.0.0.1'); await once(s, 'listening'); const { port } = s.address(); await new Promise(r => s.close(r)); return port; };
 const artifact = async name => JSON.parse(await readFile(new URL(`out/${name}.sol/${name}.json`, root)));
 const u8 = b => new Uint8Array(b.buffer, b.byteOffset, b.byteLength);
@@ -69,8 +73,8 @@ try {
   const scenario = { config, accounts: [deployer, funderA, funderB], writer, fixtures };
   evidence.runs.push(await runLocalScenario({ sdk, provider, intakeInterface: intakeI, label: 'node-browser-entrypoint', ...scenario }));
 
-  if (option('chrome')) {
-    const { chromium } = await import(option('playwright'));
+  if (executable) {
+    const browserTypes = await import(option('playwright'));
     const types = { '.mjs': 'text/javascript', '.js': 'text/javascript', '.json': 'application/json', '.html': 'text/html', '.md': 'text/markdown', '.png': 'image/png' };
     const allowed = ['sdk/', 'vendor/ethers/', 'tools/sdk-local-scenario.mjs', 'test-sdk/parity-vectors.mjs', 'test/fixtures/'];
     server = createHTTPServer(async (req, res) => {
@@ -84,12 +88,12 @@ try {
     server.listen(0, '127.0.0.1');
     await once(server, 'listening');
     const origin = `http://127.0.0.1:${server.address().port}`;
-    const browser = await chromium.launch({ executablePath: option('chrome') });
+    const browser = await browserTypes[engine].launch({ executablePath: executable });
     try {
       const page = await browser.newPage();
       await page.goto(origin + '/');
       const plain = Object.fromEntries(Object.entries(fixtures).map(([k, v]) => [k, Array.from(v)]));
-      const browserRun = await page.evaluate(async ({ origin, rpcURL, scenario, plain, intakeAbi }) => {
+      const browserRun = await page.evaluate(async ({ origin, rpcURL, scenario, plain, intakeAbi, engine }) => {
         const sdk = await import(`${origin}/sdk/browser.mjs`);
         const { runLocalScenario } = await import(`${origin}/tools/sdk-local-scenario.mjs`);
         const { parityVectors } = await import(`${origin}/test-sdk/parity-vectors.mjs`);
@@ -101,7 +105,7 @@ try {
           const body = await r.json(); if (body.error) throw new Error(`${method}: ${body.error.message}`); return body.result;
         } };
         const out = { environment: { userAgent: navigator.userAgent, bufferType: typeof Buffer, processType: typeof process, secureContext: isSecureContext } };
-        out.scenario = await runLocalScenario({ sdk, provider, intakeInterface: new Interface(intakeAbi), label: 'chromium-browser-entrypoint', ...scenario, fixtures });
+        out.scenario = await runLocalScenario({ sdk, provider, intakeInterface: new Interface(intakeAbi), label: `${engine}-browser-entrypoint`, ...scenario, fixtures });
         const image = new Uint8Array(await (await fetch(`${origin}/test/fixtures/image-2.png`)).arrayBuffer());
         out.vectors = parityVectors(sdk, { documentResult: fixtures.documentResult, document: fixtures.document, image, imageSha: sha256(image), documentSha: sha256(fixtures.document), keccak: keccak256 });
         out.webCrypto = { png: await sdk.webCryptoSha256(image), ethers: sdk.browserSha256(image) };
@@ -120,24 +124,24 @@ try {
           productionPolicyRefusesLoopback: (() => { try { sdk.createArtifactPolicy({ locations: [{ origin }] }); return 'ACCEPTED'; } catch (e) { return e.code; } })()
         };
         return out;
-      }, { origin, rpcURL, scenario: { config, accounts: scenario.accounts, writer }, plain, intakeAbi: intake.abi });
+      }, { origin, rpcURL, scenario: { config, accounts: scenario.accounts, writer }, plain, intakeAbi: intake.abi, engine });
       evidence.runs.push(browserRun.scenario);
-      evidence.chromium = { environment: browserRun.environment, webCrypto: browserRun.webCrypto, fetch: browserRun.fetch };
+      evidence[engine] = { environment: browserRun.environment, webCrypto: browserRun.webCrypto, fetch: browserRun.fetch };
       const nodeVectors = parityVectors(nodeSdk, { documentResult: fixtures.documentResult, document: fixtures.document, image: await fixture('image-2.png'), imageSha: sdk.browserSha256(await fixture('image-2.png')), documentSha: sdk.browserSha256(fixtures.document), keccak: sdk.keccak256Bytes });
-      evidence.chromium.parity = {
+      evidence[engine].parity = {
         okEqual: JSON.stringify(nodeVectors.ok) === JSON.stringify(browserRun.vectors.ok),
         rejectedEqual: JSON.stringify(nodeVectors.rejected) === JSON.stringify(browserRun.vectors.rejected),
         vectors: Object.keys(nodeVectors.ok).length, rejections: Object.keys(nodeVectors.rejected).length,
         mismatches: [...Object.keys(nodeVectors.ok).filter(k => JSON.stringify(nodeVectors.ok[k]) !== JSON.stringify(browserRun.vectors.ok[k])), ...Object.keys(nodeVectors.rejected).filter(k => nodeVectors.rejected[k] !== browserRun.vectors.rejected[k])]
       };
       const f = browserRun.fetch;
-      const ok = evidence.chromium.parity.okEqual && evidence.chromium.parity.rejectedEqual && browserRun.environment.bufferType === 'undefined'
+      const ok = evidence[engine].parity.okEqual && evidence[engine].parity.rejectedEqual && browserRun.environment.bufferType === 'undefined'
         && browserRun.webCrypto.png === browserRun.webCrypto.ethers && f.ok.status === 'VERIFIED' && f.tampered === 'VERIFY_FAILED'
         && f.oversized === 'TOO_LARGE' && f.redirect === 'NETWORK_ERROR' && f.outsidePolicy === 'UNTRUSTED_LOCATION' && f.productionPolicyRefusesLoopback === 'INVALID_POLICY';
-      evidence.chromium.result = ok ? 'PASS' : 'FAIL';
+      evidence[engine].result = ok ? 'PASS' : 'FAIL';
       if (!ok) process.exitCode = 1;
     } finally { await browser.close(); }
-  } else evidence.chromium = { result: 'NOT_RUN', reason: 'no --chrome executable supplied' };
+  } else evidence[engine] = { result: 'NOT_RUN', reason: 'no browser executable supplied' };
   evidence.result = process.exitCode ? 'FAIL' : 'PASS';
 } catch (error) {
   evidence.result = 'FAIL';

@@ -4,7 +4,7 @@
 
 CTO 中继站 is a Chinese-first project workspace. The accepted stone/green interface is preserved: a compact product/wallet header, explicit amber demo/pending status, project rows, branch facts, assets, proposals, progress and checkpoint history. This integration preserves W1’s visual direction and adds actual local contract behavior, explicit raw-result binding and a separate local mode. Workspace shortcuts follow the fixed goal so a phone user can reach the relevant work before the full identifier details.
 
-The source of truth is `frontend/src/styles.css`, with component markup in `frontend/src/App.tsx`, `frontend/src/ui/` and `frontend/src/wallet/ConnectSheet.tsx`. Observed layouts/screenshots and limitations are recorded in `docs/validation/integration/frontend/README.md` and `docs/validation/integration/frontend/review.md`.
+The source of truth is `frontend/src/styles.css`, with component markup in `frontend/src/App.tsx`, `frontend/src/ui/` and `frontend/src/wallet/ConnectSheet.tsx`. Current observed layouts/screenshots and limitations are recorded in `docs/validation/integration/acceptance/README.md` and `docs/validation/integration/acceptance/review.md`. The prior integration review is preserved under `docs/validation/integration/frontend/`.
 
 ## Colors
 
@@ -37,7 +37,7 @@ Spacing tokens are 4, 8, 12, 16 and 24px. `.page` is centered at max-width 1240p
 
 The workspace is one column below 1024px and two `minmax(0, 1fr)` columns at/above 1024px; history spans both. Below/equal to 640px, facts stack label/value, rows become vertical and fact grids use one column. Desktop fact groups use auto-fit columns with 300px minimums. Critical values remain selectable and copyable rather than ellipsized.
 
-The demo header is sticky at z-index 10; jump targets have an 88px scroll margin. The wallet overlay is z-index 30. Its sheet is bottom-aligned below 640px and centered above; it is capped at 90dvh with internal scrolling. Current Chromium checks and screenshots are recorded at 320, 390 and 1440 CSS pixels, including long values and a gateway subpath. Native zoom, physical devices and RTL are not claimed as tested.
+The demo header is sticky at z-index 10; jump targets have an 88px scroll margin. The wallet overlay is z-index 30. Its sheet is bottom-aligned below 640px and centered above; it is capped at 90dvh with internal scrolling. Current Chromium and Playwright WebKit checks and screenshots are recorded at 320, 390 and 1440 CSS pixels, including long values and a gateway subpath. Native zoom, physical devices and RTL are not claimed as tested.
 
 ## Elevation & Depth
 

@@ -1,0 +1,15 @@
+{
+  "result": "PASS",
+  "method": "Second production Vite build into test/scratch/export-check; exact filename and SHA-256 comparison against dist",
+  "files": {
+    "favicon.svg": "9e50a368b5ae8bf334623d3f2870ac64b034d2fca55ceb622d6bef4c09df6e01",
+    "og.png": "4d38b6ec170bd3749f6c2d8d125683f10a98943617e756be4132a0bd33a62004",
+    "local-config.json": "260ac4a7231a260c303fb4b7a4259dc43b3085df5753175b133b42e314f262ec",
+    "index.html": "987f24a6381d430584d7421bb1da73ae45d8f2b0eadfe4269428484144792023",
+    "assets/index-Bo5Bb0eM.js": "2588e37391957d37145941fb23eafdb1863a046df7c117bc2fc8b785517f482d",
+    "assets/noto-sans-sc-ui-fXkFpRb6.woff2": "4156bbd1f97e634db3e5490a06026dbb70e3ad51cf0d24812db9e5096f34ade3",
+    "assets/index-BfbCmzIF.css": "ab2903994c4d4b405d6664cecc8d2f1bdf143eaadcb17564a3f9b1660b1d85c4",
+    "assets/dist-BHR24uuW.js": "ed4cdab38a8b9e7f8e50a7ba78587331b27291283ee694325d692f911fe795cb"
+  },
+  "differences": []
+}

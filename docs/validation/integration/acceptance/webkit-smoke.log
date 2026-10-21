@@ -1,0 +1,10 @@
+node:internal/modules/run_main:107
+    triggerUncaughtException(
+    ^
+
+browser.newPage: Target page, context or browser has been closed
+    at /home/imd-worker/.identitymd/work/5b630958-5d27-4b47-bebf-4e682a6d2ab7/6255fe16-391f-45a6-8048-78a54410f3a2/[eval1]:2:108 {
+  log: []
+}
+
+Node.js v24.21.0

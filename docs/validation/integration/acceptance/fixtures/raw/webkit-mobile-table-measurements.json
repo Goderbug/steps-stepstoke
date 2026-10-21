@@ -1,0 +1,58 @@
+{
+  "minCell": 60,
+  "glyph": 15.000106811523438,
+  "overlap": 0,
+  "region": {
+    "left": 52,
+    "right": 338,
+    "width": 286
+  },
+  "preview": {
+    "left": 40,
+    "right": 350,
+    "width": 310
+  },
+  "panel": {
+    "left": 12,
+    "right": 378,
+    "width": 366
+  },
+  "download": {
+    "left": 40,
+    "right": 350,
+    "width": 310
+  },
+  "children": [
+    {
+      "left": 40,
+      "right": 350,
+      "width": 310
+    },
+    {
+      "left": 40,
+      "right": 350,
+      "width": 310
+    },
+    {
+      "left": 40,
+      "right": 206.4375,
+      "width": 166.4375
+    },
+    {
+      "left": 40,
+      "right": 350,
+      "width": 310
+    },
+    {
+      "left": 40,
+      "right": 350,
+      "width": 310
+    }
+  ],
+  "clientWidth": 286,
+  "scrollWidth": 1201,
+  "hostOverflow": 0,
+  "vw": 390,
+  "clickable": true,
+  "scrollLeft": 43
+}
