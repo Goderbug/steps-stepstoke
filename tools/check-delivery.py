@@ -1,6 +1,6 @@
 #!/usr/bin/env python3
 """Offline candidate integrity/size check. --write refreshes two delivered evidence reports."""
-import hashlib,json,pathlib,subprocess,sys,tarfile,collections
+import hashlib,json,pathlib,subprocess,sys,tarfile,collections,lzma
 root=pathlib.Path(__file__).resolve().parent.parent
 folder=root/'docs/validation/rc-v1'
 protected=['foundry.toml','foundry.lock','remappings.txt','.gitmodules','lib','package.json','package-lock.json','frontend/package.json','frontend/package-lock.json','.github','.env','node_modules']
@@ -15,19 +15,28 @@ release=json.loads((root/'config/release.json').read_text())
 gate=json.loads((root/'config/production-gate.json').read_text())
 for value in [release,gate]:
  assert value['productionDeployment'] is None and value['liveCompatibility']=='NOT_RUN' and value['productionReady'] is False
-assert json.loads((root/'dist/ethereum-config.json').read_text())['productionDeployment'] is None
+assert not (root/'dist/imd-deployment.json').exists(),'Undeployed candidate cannot invent a handoff'
+assert not (root/'dist/ethereum-config.json').exists(),'No independent public deployment configuration'
 assert json.loads((root/'frontend/public/local-config.json').read_text())==json.loads((root/'dist/local-config.json').read_text())
-index=json.loads((folder/'archive-index.json').read_text());archive=folder/index['archive']
-assert hashlib.sha256(archive.read_bytes()).hexdigest()==index['sha256'] and archive.stat().st_size==index['bytes']
-with tarfile.open(archive) as tar:
- assert sorted(tar.getnames())==sorted(r['path'] for r in index['entries'])
- for row in index['entries']:
-  data=tar.extractfile(row['path']).read();assert len(data)==row['bytes'] and hashlib.sha256(data).hexdigest()==row['sha256'],row['path']
-manifestPath=folder/'source-manifest.json'
+for evidenceFolder in [folder,root/'docs/validation/integration-v1']:
+ index=json.loads((evidenceFolder/'archive-index.json').read_text());archive=evidenceFolder/index['archive']
+ if archive.exists(): archiveBytes=archive.read_bytes()
+ else:
+  references=json.loads((root/'docs/history/integration-predecessor.json').read_text())['entries']
+  ref=next(r for r in references if r['path']==str(archive.relative_to(root)))
+  assert ref['storage']=='verified-immutable-predecessor' and ref['sha256']==index['sha256'] and ref['bytes']==index['bytes']
+  archiveBytes=subprocess.check_output(['git','show',ref['commit']+':'+ref['path']],cwd=root)
+ assert hashlib.sha256(archiveBytes).hexdigest()==index['sha256'] and len(archiveBytes)==index['bytes']
+ import io
+ with tarfile.open(fileobj=io.BytesIO(archiveBytes)) as tar:
+  assert sorted(tar.getnames())==sorted(r['path'] for r in index['entries'])
+  for row in index['entries']:
+   data=tar.extractfile(row['path']).read();assert len(data)==row['bytes'] and hashlib.sha256(data).hexdigest()==row['sha256'],row['path']
+manifestPath=folder/'source-manifest.json.xz'
 sourcePaths=[p for p in paths if not p.startswith(('docs/validation/','docs/history/'))]
 manifest={'baseline':'d29eedf8e7d6608ed109972c179b367ac07ce91f','algorithm':'SHA-256','scope':'All delivered source, tests, dependencies, ABI, config, tools and static export; evidence/history archives have separate indexes.','files':[{'path':p,'bytes':(root/p).stat().st_size,'sha256':hashlib.sha256((root/p).read_bytes()).hexdigest()} for p in sourcePaths]}
-if '--write' in sys.argv:manifestPath.write_text(json.dumps(manifest,separators=(',',':'))+'\n')
-else:assert json.loads(manifestPath.read_text())==manifest,'Source/export manifest drift'
+if '--write' in sys.argv:manifestPath.write_bytes(lzma.compress((json.dumps(manifest,separators=(',',':'))+'\n').encode()))
+else:assert json.loads(lzma.decompress(manifestPath.read_bytes()))==manifest,'Source/export manifest drift'
 reportPath=folder/'delivery-size.json';reportRelative=str(reportPath.relative_to(root));manifestRelative=str(manifestPath.relative_to(root))
 paths=sorted(set(paths+[reportRelative,manifestRelative]));groups=collections.Counter()
 for p in paths:

@@ -18,7 +18,7 @@ export function SponsorPanel({ adapter, account, branch, proposal, latest, onDon
   const [err, setErr] = useState<string | null>(null);
   const lock = useRef(false);
   const approvedAmount = useRef<bigint | null>(null);
-  const assertActive = useActionScope(`${account.address}:${account.chainId}:${proposal.id}:${latest.id}`);
+  const assertActive = useActionScope(`${adapter.identity ?? adapter.kind}:${account.address}:${account.chainId}:${proposal.id}:${latest.id}`);
   useEffect(() => {
     let active = true;
     adapter.quoteFee(proposal.id).then(q => { if (active) { setQuote(q); setMaxFee(formatUnits(q.price, q.decimals)); setBusy(null); } }, (e: Error) => { if (active) { setErr(`Unable to read price: ${e.message}`); setBusy(null); } });
@@ -42,7 +42,7 @@ export function SponsorPanel({ adapter, account, branch, proposal, latest, onDon
         if (approvedAmount.current !== q.price) { setStep("review"); throw new Error("Price differs from the confirmed approval. Approve the exact current price again."); }
         const signer = signingAccount(account, assertActive);
         const sp = retryOf ? await adapter.retryRefused(signer, retryOf.id, maxFeeWei, q) : await adapter.sponsor(signer, proposal.id, maxFeeWei, q);
-        if (account.address) saveRecovery({ sponsorshipId: sp.id, branchId: branch.id, proposalId: proposal.id, account: account.address, txHash: sp.txHash, nonce: sp.nonce, savedAt: new Date().toISOString(), chainId: account.chainId, adapterKind: adapter.kind });
+        if (account.address) saveRecovery({ sponsorshipId: sp.id, branchId: branch.id, proposalId: proposal.id, account: account.address, txHash: sp.txHash, nonce: sp.nonce, savedAt: new Date().toISOString(), chainId: account.chainId, adapterKind: adapter.kind, identity: adapter.identity });
         onDone();
       }
     } catch (e) { setErr((e as Error).message); }

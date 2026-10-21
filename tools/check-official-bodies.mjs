@@ -22,15 +22,16 @@ try {
  // Public latest parent observed as blocked at the checked source date; never an invented ID.
  const parent='baa5160f-9f52-4da3-b570-dde53dfa845b';
  const rows=[];
- for(const continuing of [false,true])for(let profile=0;profile<5;profile++) {
+ for(const scenario of ['root-open','root-continue','historical-child-open','historical-child-continue'])for(let profile=0;profile<5;profile++) {
+  const continuing=scenario.endsWith('continue'),child=scenario.startsWith('historical');
   const update=profile===1||profile===3, kind=profile<2?0:profile<4?1:2;
-  const current=update?[profile===1?asset(md,mdRaw,0):asset(html,htmlRaw,1)]:[];
-  const p={anchor:toBeHex(0,32),profile,target:toBeHex(1,32),inputs:update?[toBeHex(1,32)]:[],outputName:update?current[0].name:kind===0?'notes':kind===1?'site':'illustration',outputPath:update?current[0].path:kind===0?'artifacts/notes.md':kind===1?'artifacts/index.html':'artifacts/illustration.png',text:profile===4?'Generate one square PNG showing a green tree.':kind===0?'Write a concise Markdown report on the project goal.':'Create a self-contained project introduction page.',publish:false};
-  const [action,body]=await e.encode('Maintain a public relay project.','',continuing?parent:'',p,current);
+  const current=update?[profile===1?asset(md,mdRaw,0):asset(html,htmlRaw,1)]:child?[asset(md,mdRaw,0)]:[];
+  const p={anchor:toBeHex(0,32),profile,target:toBeHex(child&&!update?2:1,32),inputs:update?[toBeHex(1,32)]:child&&profile!==4?[toBeHex(1,32)]:[],outputName:update?current[0].name:kind===0?'notes':kind===1?'site':'illustration',outputPath:update?current[0].path:kind===0?'artifacts/notes.md':kind===1?'artifacts/index.html':'artifacts/illustration.png',text:profile===4?'Generate one square PNG showing a green tree.':kind===0?'Write a concise Markdown report on the project goal.':'Create a self-contained project introduction page.',publish:false};
+  const [action,body]=await e.encode('Maintain a public relay project.',child?'Continue from the explicitly selected historical checkpoint.':'',continuing?parent:'',p,current);
   const raw=Buffer.from(body.slice(2),'hex');const input=JSON.parse(raw.toString('utf8'));
   assert.ok(raw.length<=16384);assert.equal(input.shape,'chain');
   const packet={action:continuing?'job.continue':'job.open',input};
-  const row={profile,action,bodyHash:keccak256(raw),bodyBytes:raw.length,rawBodyHex:raw.toString('hex'),packet,inputEvidence:profile===1?'public observed accepted Markdown descriptor; no callback authentication claimed':profile===3?'LOCAL HTML FIXTURE ONLY; invalid_artifacts expected from official API':'no selected inputs',parentEvidence:continuing?'public blocked latest parent; free syntax check does not authenticate the candidate payer':'new project'};
+  const row={scenario,classification:'EXACT_ENCODER_VECTOR; selected descriptors do not prove a live STEPS callback',historicalChild:child,independentProjectFirstOpen:child&&!continuing,profile,action,bodyHash:keccak256(raw),bodyBytes:raw.length,rawBodyHex:raw.toString('hex'),packet,inputEvidence:profile===1||(child&&profile!==3)?'public observed accepted Markdown descriptor; no callback authentication claimed':profile===3?'LOCAL HTML FIXTURE ONLY; invalid_artifacts expected from official API':'no selected inputs',parentEvidence:continuing?'public blocked latest parent; free syntax check does not authenticate the candidate payer':'new project'};
   if(process.argv.includes('--free-check')) {
    const sent=JSON.stringify(packet);const res=await fetch('https://api.imd.fun/requests/check',{method:'POST',headers:{'content-type':'application/json'},body:sent,signal:AbortSignal.timeout(30000)});
    row.freeCheck={url:'https://api.imd.fun/requests/check',sent,status:res.status,rawResponse:await res.text()};

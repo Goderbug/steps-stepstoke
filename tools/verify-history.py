@@ -13,3 +13,13 @@ with tarfile.open(root/'docs/history'/index['archive'],'r:xz') as archive:
    blob=subprocess.check_output(['git','rev-parse',index['commit']+':'+row['path']],cwd=root).decode().strip()
    assert blob==row['gitBlob'],row['path']
 print('PASS: archive bytes'+(' and every predecessor blob' if '--predecessor' in sys.argv else '')+' match the recorded immutable index')
+
+extra=root/'docs/history/integration-predecessor.json'
+if extra.exists():
+ for row in json.loads(extra.read_text())['entries']:
+  assert row['storage']=='verified-immutable-predecessor' and len(row['commit'])==40
+  if '--predecessor' in sys.argv:
+   data=subprocess.check_output(['git','show',row['commit']+':'+row['path']],cwd=root)
+   assert len(data)==row['bytes'] and hashlib.sha256(data).hexdigest()==row['sha256']
+   assert subprocess.check_output(['git','rev-parse',row['commit']+':'+row['path']],cwd=root).decode().strip()==row['gitBlob']
+ print('PASS: integration predecessor references'+(' independently byte-verified' if '--predecessor' in sys.argv else ' indexed; use --predecessor for object verification'))

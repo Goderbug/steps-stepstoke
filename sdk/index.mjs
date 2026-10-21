@@ -10,3 +10,7 @@ export const nodeSha256 = bytes => `0x${createHash('sha256').update(bytes).diges
 export const verifyFile = createFileVerifier(nodeSha256);
 
 export * from './public.mjs';
+
+export * from './handoff.mjs';
+export * from './observation.mjs';
+export * from './gates.mjs';

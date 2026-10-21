@@ -2,7 +2,7 @@ import { getAddress, keccak256, toUtf8Bytes } from "ethers";
 import type { RelayAdapter, RecoveryRecord } from "./adapter";
 import type { Account, AssetVersion, Branch, Capabilities, Checkpoint, FeeQuote, FileDescriptor, Hex, Proposal, ProposalDraft, Sponsorship } from "./types";
 import { STAGES, StaleProposalError } from "./types";
-import { sdk, deployment, release } from "./sdk";
+import { sdk, deployment, release, verifyBranchRuntime } from "./sdk";
 
 export interface Provider { request(a: { method: string; params?: any[] }): Promise<any> }
 export interface LocalConfig {
@@ -12,7 +12,7 @@ export interface LocalConfig {
 }
 export type WalletGetter = () => Promise<Provider | null>;
 export interface Journal {
-  hash: Hex | null; nonce: number; account: Hex; chainId: number; operation: string;
+  identity?: string; hash: Hex | null; nonce: number; account: Hex; chainId: number; operation: string;
   branch: string; proposalId?: string; data: string; to: string; state: string; at: string;
 }
 const KEY = "relay.local.transactions.v1"; // Existing journal retained; every lookup is chain-scoped.
@@ -20,17 +20,17 @@ const now = () => new Date().toISOString();
 const eq = (a: string, b: string) => a.toLowerCase() === b.toLowerCase();
 const address = (s: string) => getAddress(s) as Hex;
 const validHex = (s: any, bytes: number) => typeof s === "string" && new RegExp(`^0x[0-9a-f]{${bytes * 2}}$`, "i").test(s);
-export function loadJournal(): Journal[] {
+export function loadJournal(identity?: string): Journal[] {
   try {
     const rows = JSON.parse(localStorage.getItem(KEY) ?? "[]");
     if (!Array.isArray(rows)) return [];
-    return rows.filter((r) => validHex(r.hash, 32) && validHex(r.account, 20) && validHex(r.to, 20) && typeof r.data === "string" && Number.isSafeInteger(r.nonce) && Number.isSafeInteger(r.chainId) && typeof r.operation === "string" && typeof r.branch === "string").slice(-100);
+    return rows.filter((r) => (!identity || r.identity === identity) && validHex(r.hash, 32) && validHex(r.account, 20) && validHex(r.to, 20) && typeof r.data === "string" && Number.isSafeInteger(r.nonce) && Number.isSafeInteger(r.chainId) && typeof r.operation === "string" && typeof r.branch === "string").slice(-100);
   } catch { return []; }
 }
 /** One row per original hash. A later transaction that reuses a dropped nonce is a separate
  *  record: the original hash stays so reconciliation can still report it as replaced. */
 export function mergeJournal(rows: Journal[], row: Journal): Journal[] {
-  return [...rows.filter((r) => !(r.hash !== null && row.hash !== null && eq(r.hash, row.hash))), row].slice(-100);
+  return [...rows.filter((r) => !(r.identity === row.identity && r.hash !== null && row.hash !== null && eq(r.hash, row.hash))), row].slice(-100);
 }
 function persist(row: Journal) {
   try {
@@ -73,21 +73,26 @@ export class ChainAdapter implements RelayAdapter {
   readonly kind = "live" as const;
   get label() { return this.config.chainId === 1 ? "STEPS · Ethereum mainnet" : "Local contracts with MockToken / MockIntake (not live IMD)"; }
   get routeBase() { return this.config.chainId === 1 ? "ethereum" : "local"; }
-  readonly capabilities = { read: true, createBranch: true, propose: true, sponsor: true, fork: true, bindingRetry: true, realWalletSigning: true };
+  private verified = false;
+  get identity() { return this.config.chainId === 1 ? sdk.deploymentIdentity(this.config.handoff) : `local:31337:${this.config.contracts.factory.toLowerCase()}:${this.config.deploymentBlockHash ?? "legacy-local"}`; }
+  get capabilities() { return this.config.chainId === 31337 ? { read: true, createBranch: true, propose: true, sponsor: true, fork: true, bindingRetry: true, realWalletSigning: true } : sdk.uiCapabilities({ verified: this.verified, gate: this.config.productionGate, config: this.config }); }
+  private logCache: any;
   readonly provider: Provider;
   private locked = false;
   private memory = new Map<string, Journal>();
-  constructor(readonly config: LocalConfig, private wallet: WalletGetter) { assertChainConfig(config); this.provider = httpProvider(config.rpcURL); }
+  constructor(readonly config: LocalConfig, private wallet: WalletGetter) { assertChainConfig(config); this.provider = httpProvider(config.rpcURL); this.logCache = new sdk.EventLogCache({ identity: this.identity, deploymentBlock: config.deploymentBlock ?? 0 }); }
   async verify() {
     const problems = await deployment.verifyDeploymentConfig(this.provider, this.config, release);
     if (problems.length) throw new Error(`Deployment verification failed: ${problems.join(", ")}`);
+    this.verified = true;
   }
   status() { return { state: "ready" as const, summary: this.label, missing: [], a1: { jobId: "d5530989-b886-4f9d-80dd-44d26d85ffd2", submittedBodySha256: "", checkedAt: "2026-10-21", observedState: `Candidate runtime verified on chain ${this.config.chainId}`, delivery: null } }; }
   private read = async (branch: string, method: string, args: any[] = []) => (await sdk.queryState(this.provider, sdk.readState(branch, method, args)))[0];
   private factoryRead = async (method: string, args: any[] = []) => (await sdk.queryState(this.provider, sdk.readFactory(this.config.contracts.factory, method, args)))[0];
   private async logs(at: string, iface = sdk.interfaces.branch) {
-    const head = Number(BigInt(await this.provider.request({ method: "eth_blockNumber" })));
-    const raw = await sdk.readLogs(this.provider, { address: at, fromBlock: this.config.deploymentBlock ?? 0, toBlock: head });
+    const page = await this.logCache.read(this.provider, at);
+    if (!page.complete) throw new Error(`History catch-up reached block ${page.cursor} of ${page.head}. Refresh to read the next bounded page; incomplete history cannot authorize actions.`);
+    const raw = page.logs;
     return raw.map((log: any) => { try { return { ...log, parsed: iface.parseLog(log) }; } catch { return { ...log, parsed: null }; } });
   }
   private async checkBranch(branch: string) {
@@ -95,7 +100,7 @@ export class ChainAdapter implements RelayAdapter {
     if (!await this.factoryRead("registered", [branch])) throw new Error("Branch is not registered by this Factory");
     for (const name of ["factory", "encoder", "verifier"]) if (!eq(await this.read(branch, name), this.config.contracts[name])) throw new Error(`Branch ${name} verification failed`);
     const code = await this.provider.request({ method: "eth_getCode", params: [branch, "latest"] });
-    deployment.verifyRuntime(code, "RelayBranch", release);
+    verifyBranchRuntime(code, "RelayBranch", release, this.config.contracts);
   }
   async getCapabilities(): Promise<Capabilities> {
     return { source: `A1 ${release.version} · policy ${release.policyId}`, chainId: this.config.chainId, chainName: this.config.chainId === 1 ? "Ethereum" : "Local contract chain", enabledKinds: ["document", "html", "image"], maxAssets: release.limits.assets, maxInputs: release.limits.inputs, maxOutputs: release.limits.outputs, maxBytes: { document: release.limits.markdownBytes, html: release.limits.htmlBytes, image: release.limits.imageBytes }, maxRequestBodyBytes: release.limits.requestBytes, maxTextBytes: 1024, maxGoalBytes: 512, maxAssetNameBytes: 64, sitePublication: release.publishing, imageEditing: false, mediaTypes: { document: ["text/markdown"], html: ["text/html"], image: ["image/png"] } };
@@ -103,6 +108,7 @@ export class ChainAdapter implements RelayAdapter {
   async listBranches() {
     const count = Number(await this.factoryRead("branchCount"));
     const rows: Branch[] = [];
+    if (count > 200) throw new Error("Project list exceeds the 200-item window; open a known deployment-scoped Branch route or use SDK pagination");
     for (let n = 1; n <= count; n++) rows.push(await this.getBranch(await this.factoryRead("branches", [n])));
     return rows;
   }
@@ -169,6 +175,7 @@ export class ChainAdapter implements RelayAdapter {
     const [count, phase, active, logs] = await Promise.all([this.read(branch, "attemptCount"), this.read(branch, "phase"), this.read(branch, "activeAttempt"), this.logs(branch)]);
     const rows: Sponsorship[] = [];
     const perProposal = new Map<string, number>();
+    const observedHead = this.config.chainId === 1 ? Number(BigInt(await this.provider.request({ method:"eth_blockNumber" }))) : null;
     for (let n = 1; n <= Number(count); n++) {
       const a = await this.read(branch, "attempt", [n]);
       const log = logs.find((l: any) => l.parsed?.name === "Purchased" && Number(l.parsed.args.attempt) === n);
@@ -184,10 +191,11 @@ export class ChainAdapter implements RelayAdapter {
       const result = a.delivered && !failed;
       const stages = Object.fromEntries(STAGES.map(k => [k, "not_started"])) as Sponsorship["stages"];
       Object.assign(stages, { approval: "confirmed", purchase: "confirmed", admission: failed ? Number(a.status) === 1 ? "refused" : "unknown" : result ? "confirmed" : "unknown", execution: result ? "confirmed" : failed ? "unknown" : "pending", callback: frozen ? "frozen" : failed ? "refused" : result ? "confirmed" : "pending", binding: bound ? "confirmed" : result ? "pending" : "not_started", files: bound ? "pending" : "not_started", git: "unknown", publication: "not_applicable" });
+      if (observedHead !== null && observedHead - Number(BigInt(log.blockNumber)) + 1 < 12) stages.purchase = "pending";
       const key = String(a.proposalId), attempt = (perProposal.get(key) ?? 0) + 1; perProposal.set(key, attempt);
-      rows.push({ id: `${address(branch)}:${n}`, branchId: address(branch), proposalId: `${address(branch)}:${a.proposalId}`, sponsor: a.sponsor, maxFee: a.fee, txHash: log.transactionHash, nonce: Number(BigInt(tx.nonce)), attempt, stages, note: frozen ? `Authenticated failure status ${a.status}, Branch permanently frozen. ` : result && !bound ? "Result hash authenticated. Bind the original result.json without repurchasing. A result outside the manifest limits may remain permanently unbindable." : !a.delivered ? "Purchase confirmed. Admission is separate; a missing callback remains pending. HTTP cannot settle or unlock it." : bound ? "Binding, files, Git and publication are observed separately." : "Authenticated status 1 permits an explicit paid retry with the identical body. No refund.", checkpointId: cp?.digest ?? null, updatedAt: await this.time(log.blockNumber) });
+      rows.push({ id: `${address(branch)}:${n}`, branchId: address(branch), proposalId: `${address(branch)}:${a.proposalId}`, sponsor: a.sponsor, maxFee: a.fee, txHash: log.transactionHash, nonce: Number(BigInt(tx.nonce)), attempt, stages, note: stages.purchase === "pending" ? "Purchase is mined but awaits 12 canonical Ethereum confirmations. No automatic resubmission or repurchase." : frozen ? `Authenticated failure status ${a.status}, Branch permanently frozen. ` : result && !bound ? "Result hash authenticated. Bind the original result.json without repurchasing. A result outside the manifest limits may remain permanently unbindable." : !a.delivered ? "Purchase confirmed. Admission is separate; a missing callback remains pending. HTTP cannot settle or unlock it." : bound ? "Binding, files, Git and publication are observed separately." : "Authenticated status 1 permits an explicit paid retry with the identical body. No refund.", checkpointId: cp?.digest ?? null, updatedAt: await this.time(log.blockNumber) });
     }
-    const journals = [...loadJournal(), ...this.memory.values()].filter(r => eq(r.branch, branch) && r.chainId === this.config.chainId && ["sponsor", "retry"].includes(r.operation));
+    const journals = [...loadJournal(), ...this.memory.values()].filter(r => eq(r.branch, branch) && r.chainId === this.config.chainId && r.identity === this.identity && ["sponsor", "retry"].includes(r.operation));
     for (const j of journals) {
       if (rows.some(r => r.txHash === j.hash || (eq(r.sponsor, j.account) && r.nonce === j.nonce))) continue;
       const status = await this.reconcileJournal(j);
@@ -254,23 +262,27 @@ export class ChainAdapter implements RelayAdapter {
       // Use the nonce actually submitted. Save the original hash before ANY receipt wait.
       account.assertActive?.();
       const hash = await wallet.request({ method: request.method, params: [{ ...request.params[0], nonce: `0x${nonce.toString(16)}` }] }) as Hex;
-      const row: Journal = { hash, nonce, account: account.address, chainId: account.chainId, operation, branch, proposalId, data: prepared.data, to: prepared.to, state: "SUBMITTED", at: now() };
+      const row: Journal = { identity: this.identity, hash, nonce, account: account.address, chainId: account.chainId, operation, branch, proposalId, data: prepared.data, to: prepared.to, state: "SUBMITTED", at: now() };
       persist(row); this.memory.set(hash, row);
-      for (let n = 0; n < 60; n++) {
-        const receipt = await this.provider.request({ method: "eth_getTransactionReceipt", params: [hash] });
+      for (let n = 0; n < (this.config.chainId === 1 ? 30 : 60); n++) {
+        const observation = this.config.chainId === 1 ? await sdk.observeTransaction(this.provider, hash) : null;
+        const receipt = observation ? (["CONFIRMED", "REVERTED"].includes(observation.state) ? observation.receipt : null) : await this.provider.request({ method: "eth_getTransactionReceipt", params: [hash] });
         if (receipt) {
           row.state = BigInt(receipt.status) === 1n ? "MINED" : "REVERTED"; persist(row);
           if (row.state === "REVERTED") throw new Error(`Transaction reverted: ${hash}`);
           return receipt;
         }
-        await new Promise(r => setTimeout(r, 150));
+        await new Promise(r => setTimeout(r, this.config.chainId === 1 ? Math.min(12000, 2000 * 2 ** Math.min(n, 3)) : 150));
       }
       throw new Error(`Transaction ${hash} outcome unknown. Original hash and nonce recorded; refresh to reconcile without repurchasing.`);
     } finally { this.locked = false; }
   }
   private async reconcileJournal(j: Journal): Promise<string> {
     const receipt = await this.provider.request({ method: "eth_getTransactionReceipt", params: [j.hash] });
-    if (receipt) return BigInt(receipt.status) === 1n ? "MINED" : "REVERTED";
+    if (receipt) {
+      if (this.config.chainId === 1) { const o = await sdk.observeTransaction(this.provider, j.hash); return o.state === "CONFIRMED" ? "MINED" : o.state; }
+      return BigInt(receipt.status) === 1n ? "MINED" : "REVERTED";
+    }
     const tx = await this.provider.request({ method: "eth_getTransactionByHash", params: [j.hash] });
     if (tx) return "PENDING";
     const minedNonce = Number(BigInt(await this.provider.request({ method: "eth_getTransactionCount", params: [j.account, "latest"] })));
@@ -289,7 +301,7 @@ export class ChainAdapter implements RelayAdapter {
     const [latestNonce, pendingNonce] = await Promise.all(["latest", "pending"].map(tag => this.provider.request({ method: "eth_getTransactionCount", params: [account.address, tag] })));
     if (BigInt(pendingNonce) > BigInt(latestNonce)) throw new Error("An account transaction is pending. Reconcile it before another purchase, even if local records are missing");
     for (const j of [...loadJournal(), ...this.memory.values()]) {
-      if (!eq(j.branch, branch) || j.chainId !== this.config.chainId || !eq(j.account, account.address) || !["sponsor", "retry"].includes(j.operation)) continue;
+      if (j.identity !== this.identity || !eq(j.branch, branch) || j.chainId !== this.config.chainId || !eq(j.account, account.address) || !["sponsor", "retry"].includes(j.operation)) continue;
       const status = await this.reconcileJournal(j);
       if (!["MINED", "REVERTED", "REPLACED_OTHER", "REPLACED_SAME_CALL_READ_CHAIN"].includes(status)) throw new Error(`Original purchase status ${status}, reconcile first; no automatic or duplicate purchase`);
     }
@@ -349,6 +361,15 @@ export class ChainAdapter implements RelayAdapter {
     if (BigInt(await this.read(branch, "activeAttempt")) !== n) throw new Error("Only the current attempt can be retried");
     return this.purchase(account, `${branch}:${a.proposalId}`, max, q, true);
   }
+  async observeAdmission(id: string) {
+    if (this.config.chainId !== 1) throw new Error("Official observations are unavailable in fixture/local mode");
+    const { branch, n } = this.split(id);
+    await this.checkBranch(branch);
+    const a = await this.read(branch, "attempt", [n]);
+    const purchased = (await this.logs(branch)).find((l: any) => l.parsed?.name === "Purchased" && l.parsed.args.attempt === n && eq(l.parsed.args.requestId, a.requestId));
+    if (!purchased) throw new Error("Authenticated Purchased event is unavailable");
+    return sdk.observeAdmission({ chainId:1, transactionHash:purchased.transactionHash, requestId:a.requestId, payer:branch, intake:this.config.contracts.intake });
+  }
   async fetchOriginalResult(id: string): Promise<Uint8Array> {
     const { branch, n } = this.split(id);
     await this.checkBranch(branch);
@@ -376,7 +397,7 @@ export class ChainAdapter implements RelayAdapter {
     const event = receipt.logs.map((l: any) => { try { return sdk.interfaces.factory.parseLog(l); } catch { return null; } }).find((e: any) => e?.name === "BranchCreated");
     return this.getBranch(event.args.branch);
   }
-  async reconcile(r: RecoveryRecord) { return (await this.getSponsorships(r.branchId)).find(s => s.id === r.sponsorshipId || s.txHash === r.txHash) ?? null; }
+  async reconcile(r: RecoveryRecord) { if (r.identity !== this.identity) throw new Error("Recovery belongs to another deployment"); return (await this.getSponsorships(r.branchId)).find(s => s.id === r.sponsorshipId || s.txHash === r.txHash) ?? null; }
   async fetchFile(d: FileDescriptor, producerJobId: string) {
     if (this.config.chainId === 1) {
       const policy = sdk.createArtifactPolicy({ locations: [{ origin: "https://api.imd.fun", pathPrefix: "/artifacts/" }] });

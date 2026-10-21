@@ -1,8 +1,9 @@
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import type { RelayAdapter } from "../domain/adapter";
 import { imageDimensions, safeFileName, verifyFile, type VerifyResult } from "../domain/files";
 import type { AssetVersion, Capabilities } from "../domain/types";
 import { isolatedSrcDoc, renderMarkdown } from "./sanitize";
+import { sdk } from "../domain/sdk";
 import { CopyId, KIND_LABEL } from "../ui/format";
 import { EvidenceDisclosure } from "../components/platform";
 import { recordVerification, verificationKey } from "../ui/verification";
@@ -15,19 +16,16 @@ type Load =
 /** Fetches the actual bytes of one asset version, verifies them against the A1 descriptor and previews safely. */
 export function FilePreview({ asset, adapter, caps }: { asset: AssetVersion; adapter: RelayAdapter; caps: Capabilities }) {
   // Reset synchronously on version change: old verified bytes never flash as the new version.
-  return <VerifiedPreview key={JSON.stringify([verificationKey(asset), caps.maxBytes[asset.kind], caps.mediaTypes[asset.kind]])} asset={asset} adapter={adapter} caps={caps} />;
+  return <VerifiedPreview key={JSON.stringify([verificationKey(asset, adapter.identity), caps.maxBytes[asset.kind], caps.mediaTypes[asset.kind]])} asset={asset} adapter={adapter} caps={caps} />;
 }
 
 function VerifiedPreview({ asset, adapter, caps }: { asset: AssetVersion; adapter: RelayAdapter; caps: Capabilities }) {
   const [load, setLoad] = useState<Load>({ phase: "loading" });
   const d = asset.descriptor;
 
-  useEffect(() => {
-    let live = true;
-    setLoad({ phase: "loading" });
-    adapter
-      .fetchFile(d, asset.producerJobId)
-      .then(async (bytes) => {
+  const lifetime = useRef(true);
+  useEffect(() => { lifetime.current = true; return () => { lifetime.current = false; }; }, []);
+  async function verifyBytes(bytes: Uint8Array) {
         const result = await verifyFile(bytes, d, asset.kind, caps.maxBytes[asset.kind], caps.mediaTypes[asset.kind]);
         if (result.ok && asset.kind === "image") {
           const url = URL.createObjectURL(new Blob([bytes as BlobPart], { type: d.mediaType }));
@@ -39,14 +37,35 @@ function VerifiedPreview({ asset, adapter, caps }: { asset: AssetVersion; adapte
           result.checks.push({ name: "Image decode", ok: decoded, detail: decoded ? "Decoded by the browser" : "Image could not be decoded" });
           result.ok = decoded;
         }
+    return result;
+  }
+  const manual = async (file?: File) => {
+    if (!file) return;
+    try {
+      if (file.size > caps.maxBytes[asset.kind] || file.size !== d.bytes) throw new Error("Selected file length does not match the authenticated descriptor");
+      const bytes = new Uint8Array(await file.arrayBuffer());
+      const result = await verifyBytes(bytes);
+      if (!lifetime.current) return;
+      recordVerification(asset, result.ok ? "verified" : "failed", adapter.identity);
+      setLoad({ phase:"done", bytes, result });
+    } catch (e) { if (lifetime.current) { recordVerification(asset, "failed", adapter.identity); setLoad({ phase:"error", message:(e as Error).message }); } }
+  };
+
+  useEffect(() => {
+    let live = true;
+    setLoad({ phase: "loading" });
+    adapter
+      .fetchFile(d, asset.producerJobId)
+      .then(async (bytes) => {
+        const result = await verifyBytes(bytes);
         if (live) {
-          recordVerification(asset, result.ok ? "verified" : "failed");
+          recordVerification(asset, result.ok ? "verified" : "failed", adapter.identity);
           setLoad({ phase: "done", bytes, result });
         }
       })
       .catch((e: Error) => {
         if (!live) return;
-        recordVerification(asset, "failed");
+        recordVerification(asset, "failed", adapter.identity);
         setLoad({ phase: "error", message: e.message });
       });
     return () => { live = false; };
@@ -68,6 +87,7 @@ function VerifiedPreview({ asset, adapter, caps }: { asset: AssetVersion; adapte
   return <div className="preview" aria-live="polite">
     {load.phase === "loading" && <p className="state-line">Retrieving and verifying exact bytes…</p>}
     {load.phase === "error" && <p className="alert alert-error" role="alert">File unavailable: {load.message}. Preview and download are unavailable; this file is not verified.</p>}
+    {adapter.routeBase === "ethereum" && !verified && load.phase !== "loading" && <div className="form"><p className="hint">If the official host blocks browser reads, download the original file, then select it here. Only matching bytes receive a verified preview. File checks cannot settle a round.</p><a className="btn btn-secondary" href={sdk.artifactURL(d.sha256)} target="_blank" rel="noopener noreferrer">Open official file (unverified)</a><label className="field"><span>Select original file to verify</span><input type="file" onChange={e => void manual(e.target.files?.[0])} /></label></div>}
     {load.phase === "done" && !verified && <p className="alert alert-error" role="alert">Verification failed. Preview and download are unavailable. The producer must supply the correct file or binding.</p>}
     {verified && <div className="preview-state"><span className="badge badge-ok">Verified locally · SHA-256, length, media</span>{blobUrl && <a className="btn btn-secondary" href={blobUrl} download={safeFileName(d.path)}>Download verified file</a>}</div>}
     {verified && asset.kind === "html" && text !== null && <iframe className="frame" title={`${d.name} isolated preview`} sandbox="" referrerPolicy="no-referrer" srcDoc={isolatedSrcDoc(text)} />}

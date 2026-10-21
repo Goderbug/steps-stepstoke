@@ -1,19 +1,273 @@
 {
   "$schema": "https://json-schema.org/draft/2020-12/schema",
   "title": "STEPS production gate (evidence, never transaction authorization)",
-  "type": "object", "additionalProperties": false,
-  "required": ["chainId", "productionDeployment", "liveCompatibility", "productionReady", "gates"],
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "chainId",
+    "productionDeployment",
+    "liveCompatibility",
+    "productionReady",
+    "gates",
+    "profiles"
+  ],
   "properties": {
-    "chainId": {"const": 1},
-    "productionDeployment": {"oneOf": [{"type": "null"}, {"type": "object", "required": ["factory", "encoder", "verifier", "transactionHash", "blockNumber", "blockHash"], "additionalProperties": false, "properties": {"factory": {"$ref": "#/$defs/address"}, "encoder": {"$ref": "#/$defs/address"}, "verifier": {"$ref": "#/$defs/address"}, "transactionHash": {"$ref": "#/$defs/hash"}, "blockHash": {"$ref": "#/$defs/hash"}, "blockNumber": {"type": "integer", "minimum": 1}}}]},
-    "liveCompatibility": {"enum": ["NOT_RUN", "FAIL", "PASS"]},
-    "productionReady": {"type": "boolean"},
-    "gates": {"type": "object", "additionalProperties": false, "required": ["securityReview", "runtimeChildPolicy", "manifestCompatibility", "gasCeilings", "liveExecution", "deploymentVerification"], "properties": {"securityReview": {"$ref": "#/$defs/gate"}, "runtimeChildPolicy": {"$ref": "#/$defs/gate"}, "manifestCompatibility": {"$ref": "#/$defs/gate"}, "gasCeilings": {"$ref": "#/$defs/gate"}, "liveExecution": {"$ref": "#/$defs/gate"}, "deploymentVerification": {"$ref": "#/$defs/gate"}}}
+    "chainId": {
+      "const": 1
+    },
+    "productionDeployment": {
+      "oneOf": [
+        {
+          "type": "null"
+        },
+        {
+          "type": "object",
+          "required": [
+            "factory",
+            "encoder",
+            "verifier",
+            "transactionHash",
+            "blockNumber",
+            "blockHash",
+            "sourceCommit",
+            "attestationHash"
+          ],
+          "additionalProperties": false,
+          "properties": {
+            "factory": {
+              "$ref": "#/$defs/address"
+            },
+            "encoder": {
+              "$ref": "#/$defs/address"
+            },
+            "verifier": {
+              "$ref": "#/$defs/address"
+            },
+            "transactionHash": {
+              "$ref": "#/$defs/hash"
+            },
+            "blockHash": {
+              "$ref": "#/$defs/hash"
+            },
+            "blockNumber": {
+              "type": "integer",
+              "minimum": 1
+            },
+            "sourceCommit": {
+              "type": "string",
+              "pattern": "^[0-9a-f]{40}$"
+            },
+            "attestationHash": {
+              "type": "string",
+              "pattern": "^[0-9a-f]{64}$"
+            }
+          }
+        }
+      ]
+    },
+    "liveCompatibility": {
+      "enum": [
+        "NOT_RUN",
+        "FAIL",
+        "PASS"
+      ]
+    },
+    "productionReady": {
+      "type": "boolean"
+    },
+    "gates": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "securityReview",
+        "runtimeChildPolicy",
+        "manifestCompatibility",
+        "gasCeilings",
+        "liveExecution",
+        "deploymentVerification"
+      ],
+      "properties": {
+        "securityReview": {
+          "$ref": "#/$defs/gate"
+        },
+        "runtimeChildPolicy": {
+          "$ref": "#/$defs/gate"
+        },
+        "manifestCompatibility": {
+          "$ref": "#/$defs/gate"
+        },
+        "gasCeilings": {
+          "$ref": "#/$defs/gate"
+        },
+        "liveExecution": {
+          "$ref": "#/$defs/gate"
+        },
+        "deploymentVerification": {
+          "$ref": "#/$defs/gate"
+        }
+      }
+    },
+    "profiles": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "0",
+        "1",
+        "2",
+        "3",
+        "4"
+      ],
+      "properties": {
+        "0": {
+          "$ref": "#/$defs/gate"
+        },
+        "1": {
+          "$ref": "#/$defs/gate"
+        },
+        "2": {
+          "$ref": "#/$defs/gate"
+        },
+        "3": {
+          "$ref": "#/$defs/gate"
+        },
+        "4": {
+          "$ref": "#/$defs/gate"
+        }
+      }
+    }
   },
-  "allOf": [{"if": {"properties": {"productionReady": {"const": true}}}, "then": {"properties": {"productionDeployment": {"type": "object"}, "liveCompatibility": {"const": "PASS"}, "gates": {"additionalProperties": {"properties": {"status": {"const": "PASS"}, "evidence": {"minItems": 1}}}}}}}],
+  "allOf": [
+    {
+      "if": {
+        "properties": {
+          "productionReady": {
+            "const": true
+          }
+        }
+      },
+      "then": {
+        "properties": {
+          "productionDeployment": {
+            "type": "object"
+          },
+          "liveCompatibility": {
+            "const": "PASS"
+          },
+          "gates": {
+            "additionalProperties": {
+              "properties": {
+                "status": {
+                  "const": "PASS"
+                },
+                "evidence": {
+                  "minItems": 1
+                }
+              }
+            }
+          },
+          "profiles": {
+            "additionalProperties": {
+              "properties": {
+                "status": {
+                  "const": "PASS"
+                },
+                "evidence": {
+                  "minItems": 1
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    {
+      "if": {
+        "properties": {
+          "productionDeployment": {
+            "type": "null"
+          }
+        }
+      },
+      "then": {
+        "properties": {
+          "liveCompatibility": {
+            "const": "NOT_RUN"
+          },
+          "productionReady": {
+            "const": false
+          }
+        }
+      }
+    },
+    {
+      "if": {
+        "properties": {
+          "liveCompatibility": {
+            "const": "PASS"
+          }
+        }
+      },
+      "then": {
+        "properties": {
+          "productionDeployment": {
+            "type": "object"
+          },
+          "profiles": {
+            "additionalProperties": {
+              "properties": {
+                "status": {
+                  "const": "PASS"
+                },
+                "evidence": {
+                  "minItems": 1
+                }
+              }
+            }
+          }
+        }
+      }
+    }
+  ],
   "$defs": {
-    "address": {"type": "string", "pattern": "^0x[0-9a-fA-F]{40}$", "not": {"const": "0x0000000000000000000000000000000000000000"}},
-    "hash": {"type": "string", "pattern": "^0x[0-9a-fA-F]{64}$"},
-    "gate": {"type": "object", "additionalProperties": false, "required": ["status", "evidence", "detail"], "properties": {"status": {"enum": ["NOT_RUN", "OPEN", "FAIL", "PASS"]}, "evidence": {"type": "array", "items": {"type": "string", "minLength": 1}}, "detail": {"type": "string"}}}
+    "address": {
+      "type": "string",
+      "pattern": "^0x[0-9a-fA-F]{40}$",
+      "not": {
+        "const": "0x0000000000000000000000000000000000000000"
+      }
+    },
+    "hash": {
+      "type": "string",
+      "pattern": "^0x[0-9a-fA-F]{64}$"
+    },
+    "gate": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "status",
+        "evidence",
+        "detail"
+      ],
+      "properties": {
+        "status": {
+          "enum": [
+            "NOT_RUN",
+            "OPEN",
+            "FAIL",
+            "PASS"
+          ]
+        },
+        "evidence": {
+          "type": "array",
+          "items": {
+            "type": "string",
+            "minLength": 1
+          }
+        },
+        "detail": {
+          "type": "string"
+        }
+      }
+    }
   }
 }

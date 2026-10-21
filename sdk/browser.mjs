@@ -23,3 +23,7 @@ export async function webCryptoSha256(bytes) {
 }
 
 export * from './public.mjs';
+
+export * from './handoff.mjs';
+export * from './observation.mjs';
+export * from './gates.mjs';

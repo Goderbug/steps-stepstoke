@@ -160,6 +160,7 @@ async function seed(): Promise<State> {
 }
 
 export class FixtureAdapter implements RelayAdapter {
+  readonly identity = "fixture:deterministic:v1";
   readonly kind = "fixture" as const;
   readonly label = "Demo mode";
   readonly capabilities = { read: true, createBranch: true, propose: true, sponsor: true, fork: true, bindingRetry: true, realWalletSigning: false };

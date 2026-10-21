@@ -4,7 +4,7 @@
 
 STEPS preserves the Open Workshop flow: create a project, propose work, explicitly fund it, inspect accepted outputs/history, continue, or fork a selected historical checkpoint. Every Branch is a full independent contract and its own Intake payer. Proposal, approval and purchase are separate actions.
 
-The static export is in `dist/`. Open it through a static HTTP server; hash routes and relative assets also support subpaths. `#/demo` is labelled fixture data; `#/local` uses actual candidate contracts with local mocks; `#/ethereum` requires a later confirmed deployment. The public handoff record is explicitly pending, with no addresses. There is no hosting in this delivery.
+The static export is in `dist/`. Open it through a static HTTP server; hash routes and relative assets also support subpaths. `#/demo` is labelled fixture data; `#/local` uses actual candidate contracts with local mocks; `#/ethereum` requires a later confirmed deployment. The public handoff is unavailable until the later official deployment; no handoff or addresses are invented. There is no hosting in this delivery.
 
 ## Review and run
 
@@ -12,7 +12,7 @@ The static export is in `dist/`. Open it through a static HTTP server; hash rout
 - [Build and local rehearsal](docs/BUILD.md), [operations/runbook](docs/OPERATIONS.md), [SDK and CLI](docs/CLI.md).
 - [Three constructor proposal and runtime-child policy](docs/CONTRACTS.md).
 - [Protocol evidence](docs/PROTOCOL-OVERVIEW.md), [limits](docs/LIMITS.md), [open release gates](docs/REVIEW.md).
-- [Final checks and measurements](docs/validation/rc-v1/README.md), [historical byte recovery](docs/history/README.md).
+- [Integration checks](docs/validation/integration-v1/README.md), [contract measurements](docs/validation/rc-v1/README.md), [historical byte recovery](docs/history/README.md).
 - [Open Workshop design](DESIGN.md), [agent guide](docs/AGENT-GUIDE.md).
 
 ```sh

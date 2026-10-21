@@ -65,12 +65,12 @@ test('actual fetch path rejects mapped-private DNS answers before HTTPS and pins
     ]) {
       answers = candidate; connection = undefined;
       await assert.rejects(module.namespace.fetchPublicArtifact('https://artifact.example/file.md',
-        {mediaType:'text/markdown'}), error => error.code === 'PRIVATE_NETWORK');
+        {mediaType:'text/markdown'}, {locations:[{origin:'https://artifact.example',pathPrefix:'/'}]}), error => error.code === 'PRIVATE_NETWORK');
       assert.equal(connection, undefined);
     }
     answers = [{address:'2606:4700:4700::1111', family:6}];
     await assert.rejects(module.namespace.fetchPublicArtifact('https://artifact.example/file.md',
-      {mediaType:'text/markdown'}), /CHECKED_TRANSPORT/);
+      {mediaType:'text/markdown'}, {locations:[{origin:'https://artifact.example',pathPrefix:'/'}]}), /CHECKED_TRANSPORT/);
     assert.equal(connection.hostname, answers[0].address);
     assert.equal(connection.servername, 'artifact.example');
     assert.equal(connection.headers.host, 'artifact.example');

@@ -20,7 +20,7 @@ export function loadRecovery(): RecoveryRecord[] {
 }
 
 export function saveRecovery(r: RecoveryRecord) {
-  const all = loadRecovery().filter((x) => x.sponsorshipId !== r.sponsorshipId);
+  const all = loadRecovery().filter((x) => x.sponsorshipId !== r.sponsorshipId || x.identity !== r.identity);
   try { localStorage.setItem(KEY, JSON.stringify([...all, r].slice(-100))); return true; }
   catch { return false; } // Storage failure cannot turn a submitted purchase into a retry.
 }

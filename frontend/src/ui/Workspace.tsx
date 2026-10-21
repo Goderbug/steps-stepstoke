@@ -1,6 +1,6 @@
 import { useEffect, useRef, useState } from "react";
 import { useQuery, useQueryClient } from "@tanstack/react-query";
-import type { RelayAdapter } from "../domain/adapter";
+import { branchRoute, type RelayAdapter } from "../domain/adapter";
 import { FixtureAdapter, type CallbackOutcome } from "../domain/fixtureAdapter";
 import { signingAccount, type DisplayAccount as Account, type Branch, type Checkpoint, type Proposal, type Sponsorship } from "../domain/types";
 import { CopyId, STATE_LABEL, short } from "./format";
@@ -17,10 +17,10 @@ import { Sheet } from "../components/Sheet";
 interface Props { adapter: RelayAdapter; branchId: string; account: Account }
 export function Workspace({ adapter, branchId, account }: Props) {
   const qc = useQueryClient();
-  const snapshot = useQuery({ queryKey: ["snapshot", adapter.kind, branchId], queryFn: () => readWorkspaceSnapshot(adapter, branchId) });
-  const proposals = useQuery({ queryKey: ["proposals", adapter.kind, branchId], queryFn: () => adapter.getProposals(branchId) });
-  const sponsorships = useQuery({ queryKey: ["sponsorships", adapter.kind, branchId], queryFn: () => adapter.getSponsorships(branchId), refetchInterval: adapter.kind === "live" ? 3000 : false });
-  const caps = useQuery({ queryKey: ["caps", adapter.kind], queryFn: () => adapter.getCapabilities() });
+  const snapshot = useQuery({ queryKey: ["snapshot", adapter.identity ?? adapter.kind, branchId], queryFn: () => readWorkspaceSnapshot(adapter, branchId) });
+  const proposals = useQuery({ queryKey: ["proposals", adapter.identity ?? adapter.kind, branchId], queryFn: () => adapter.getProposals(branchId) });
+  const sponsorships = useQuery({ queryKey: ["sponsorships", adapter.identity ?? adapter.kind, branchId], queryFn: () => adapter.getSponsorships(branchId), refetchInterval: adapter.kind === "live" ? (adapter.routeBase === "ethereum" ? 15000 : 3000) : false });
+  const caps = useQuery({ queryKey: ["caps", adapter.identity ?? adapter.kind], queryFn: () => adapter.getCapabilities() });
   const [chosen, setChosen] = useState<string | null>(null);
   const [sponsorFor, setSponsorFor] = useState<string | null>(null);
   const [forkFrom, setForkFrom] = useState<string | null>(null);
@@ -28,7 +28,7 @@ export function Workspace({ adapter, branchId, account }: Props) {
   const [resubmit, setResubmit] = useState<Proposal | null>(null);
   const [notice, setNotice] = useState<string | null>(null);
   const [recovery, setRecovery] = useState<string | null>(null);
-  const who = `${account.address}:${account.chainId}`;
+  const who = `${adapter.identity ?? adapter.kind}:${branchId}:${account.address}:${account.chainId}`;
   const prevWho = useRef(who);
   const refresh = () => qc.invalidateQueries({ predicate: q => q.queryKey[0] !== "caps" });
   useEffect(() => { if (snapshot.data?.consistent) setChosen(old => old ?? snapshot.data.branch.latestCheckpoint); }, [snapshot.data]);
@@ -38,7 +38,7 @@ export function Workspace({ adapter, branchId, account }: Props) {
     setNotice("Account or network changed. Preparation cancelled; review again before signing.");
   }, [who]);
   useEffect(() => {
-    const recs = loadRecovery().filter(r => r.branchId === branchId && r.adapterKind === adapter.kind && r.chainId === account.chainId && r.account.toLowerCase() === account.address.toLowerCase());
+    const recs = loadRecovery().filter(r => r.branchId === branchId && r.adapterKind === adapter.kind && r.identity === adapter.identity && r.chainId === account.chainId && r.account.toLowerCase() === account.address.toLowerCase());
     if (!recs.length) return;
     let active = true;
     Promise.all(recs.map(async r => ({ r, sp: await adapter.reconcile(r) }))).then(rows => {
@@ -57,7 +57,7 @@ export function Workspace({ adapter, branchId, account }: Props) {
   const latest = cps.find(c => c.id === b.latestCheckpoint);
   if (!consistent || !latest) return <section className="panel"><h1>Project reads are out of sync</h1><p className="alert alert-warn" role="status">Read-only. Branch and history disagree; actions are paused. Retry fetches both reads together without a wallet or reload.</p><button className="btn btn-primary" disabled={snapshot.isFetching} onClick={() => snapshot.refetch()}>{snapshot.isFetching ? "Reading both…" : "Retry reads"}</button></section>;
   const view = cps.find(c => c.id === chosen) ?? latest;
-  const wrongNet = !account.address || account.chainId !== caps.data.chainId;
+  const wrongNet = !account.address || account.chainId !== caps.data.chainId || (adapter.kind === "live" && !adapter.capabilities.realWalletSigning);
   const fixture = adapter instanceof FixtureAdapter ? adapter : null;
   const isLatestAttempt = (sp: Sponsorship) => latestAttempt(sponsorships.data, sp);
   const outstanding = sponsorships.data?.some(sp => isLatestAttempt(sp) && (["unknown","pending"].includes(sp.stages.purchase) || ["pending","refused"].includes(sp.stages.callback) || ["pending","failed"].includes(sp.stages.binding)));
@@ -87,7 +87,7 @@ export function Workspace({ adapter, branchId, account }: Props) {
       {sponsorships.isSuccess && sponsorships.data.length === 0 && <p className="empty">No funding attempts recorded for this branch.</p>}
       <ul className="list">{sponsorships.data?.slice().reverse().map(sp => <SponsorshipRow key={`${who}:${sp.id}`} {...{sp,adapter,account,fixture,wrongNet}} canRetry={isLatestAttempt(sp)} onChange={refresh} branch={b} latest={latest} cps={cps} chainId={caps.data.chainId} proposal={proposals.data?.find(p => p.id===sp.proposalId) ?? null} />)}</ul>
     </section>
-    <EvidenceDisclosure title="Branch, network and execution identity"><dl className="facts"><div><dt>Chain</dt><dd>{caps.data.chainName} · {caps.data.chainId}</dd></div><div><dt>Branch / spender</dt><dd><CopyId value={b.address ?? b.id} label="Branch" /></dd></div><div><dt>Latest checkpoint</dt><dd><CopyId value={latest.id} label="latest checkpoint" /></dd></div><div><dt>Selected checkpoint</dt><dd><CopyId value={view.id} label="selected checkpoint" /></dd></div><div><dt>IMD project / latest execution</dt><dd>{b.imdProjectId ?? "None"} / {b.head ?? "None"}</dd></div>{b.parent && <div><dt>Fork provenance</dt><dd><a href={`#/${base}/b/${b.parent.branchId}`}>{b.parent.branchId}</a> · {b.parent.checkpointId}</dd></div>}</dl></EvidenceDisclosure>
+    <EvidenceDisclosure title="Branch, network and execution identity"><dl className="facts"><div><dt>Chain</dt><dd>{caps.data.chainName} · {caps.data.chainId}</dd></div><div><dt>Branch / spender</dt><dd><CopyId value={b.address ?? b.id} label="Branch" /></dd></div><div><dt>Latest checkpoint</dt><dd><CopyId value={latest.id} label="latest checkpoint" /></dd></div><div><dt>Selected checkpoint</dt><dd><CopyId value={view.id} label="selected checkpoint" /></dd></div><div><dt>IMD project / latest execution</dt><dd>{b.imdProjectId ?? "None"} / {b.head ?? "None"}</dd></div>{b.parent && <div><dt>Fork provenance</dt><dd><a href={branchRoute(adapter, b.parent.branchId)}>{b.parent.branchId}</a> · {b.parent.checkpointId}</dd></div>}</dl></EvidenceDisclosure>
     {fixture && <DemoOutcome fixture={fixture} />}
     {selectedProposal && <FundingSheet key={who} adapter={adapter} account={account} branch={b} proposal={selectedProposal} latest={latest} onClose={() => setSponsorFor(null)} onDone={() => { setSponsorFor(null); refresh(); document.getElementById("progress")?.focus(); }} />}
     {preparing && <Sheet title="Prepare a contribution" onClose={() => setPreparing(false)}><ProposeForm key={`${who}:${latest.id}:${resubmit?.id ?? ""}`} adapter={adapter} account={account} branch={b} latest={latest} caps={caps.data} prefill={resubmit} onDone={() => { setResubmit(null); setPreparing(false); refresh(); }} /></Sheet>}
@@ -97,23 +97,25 @@ export function Workspace({ adapter, branchId, account }: Props) {
 const order = (p: Proposal) => p.status === "current" ? 0 : p.status === "sponsored" ? 1 : 2;
 const jump = (id: string) => (e: React.MouseEvent) => { e.preventDefault(); document.getElementById(id)?.scrollIntoView({block:"start"}); document.getElementById(id)?.focus({preventScroll:true}); };
 
-function fileStage(sp: Sponsorship, cps: Checkpoint[]) {
+function fileStage(sp: Sponsorship, cps: Checkpoint[], identity?: string) {
   const base = {state:sp.stages.files, text:STATE_LABEL[sp.stages.files], note:null as string | null};
   if (sp.stages.files !== "pending" || !sp.checkpointId) return base;
   const cp = cps.find(c => c.id === sp.checkpointId);
   const outputs = cp?.assets.filter(a => cp.changed.includes(a.assetKey) && a.originCheckpoint===cp.id) ?? [];
-  const seen = outputs.map(verificationOf);
+  const seen = outputs.map(a => verificationOf(a, identity));
   if (seen.includes("failed")) return {...base,state:"failed" as const,text:"Local verification failed",note:"Output bytes are unavailable or disagree with the descriptor. Binding remains a separate record."};
   if (seen.length && seen.every(r => r === "verified")) return {...base,state:"confirmed" as const,text:"Verified locally",note:"SHA-256, length and media checked in this page. This is a local observation; reload requires verification again."};
   return base;
 }
 
 function SponsorshipRow({ sp, canRetry, adapter, account, fixture, wrongNet, onChange, branch, latest, cps, chainId, proposal }: { sp: Sponsorship; canRetry: boolean; adapter: RelayAdapter; account: Account; fixture: FixtureAdapter | null; wrongNet: boolean; onChange: () => void; branch: Branch; latest: Checkpoint; cps: Checkpoint[]; chainId: number; proposal: Proposal | null }) {
-  useVerificationVersion(); const files = fileStage(sp,cps);
+  useVerificationVersion(); const files = fileStage(sp,cps,adapter.identity);
+  const [observation,setObservation] = useState<unknown>(null);
   const [retrying,setRetrying] = useState(false), [busy,setBusy] = useState(false), [err,setErr] = useState<string | null>(null);
-  const lock = useRef(false); const assertActive = useActionScope(`${account.address}:${account.chainId}:${sp.id}`);
+  const lock = useRef(false); const assertActive = useActionScope(`${adapter.identity ?? adapter.kind}:${account.address}:${account.chainId}:${sp.id}`);
   const run = async (f: () => Promise<unknown>) => { if(lock.current)return; lock.current=true;setBusy(true);setErr(null);try{await f();onChange();}catch(e){setErr((e as Error).message);}finally{lock.current=false;setBusy(false);} };
   return <li className="attempt" data-testid={`sp-${sp.id}`}><h3>Attempt {sp.attempt} <span className="meta">· {sp.checkpointId ? "Bound to checkpoint" : "Not a completed round"}</span></h3><BuildStatus sponsorship={sp} files={files} />{sp.note && <p className="hint">{sp.note}</p>}{files.note && <p className="hint">{files.note}</p>}<EvidenceDisclosure title="Transaction and attempt identity"><dl className="facts"><div><dt>Proposal</dt><dd>{sp.proposalId}</dd></div><div><dt>Sponsor</dt><dd><CopyId value={sp.sponsor} label="sponsor" /></dd></div><div><dt>Original transaction</dt><dd>{sp.txHash ? <CopyId value={sp.txHash} label="transaction hash" /> : "Unknown"} · nonce {sp.nonce ?? "unknown"} · chain {chainId}</dd></div></dl></EvidenceDisclosure>
+    {adapter.routeBase === "ethereum" && adapter.observeAdmission && <EvidenceDisclosure title="Official admission, execution and Git observations"><p className="hint">Read-only HTTP observations, correlated to the on-chain request and Branch payer. They cannot settle a round, grant a retry or override its callback.</p><button className="btn btn-secondary" disabled={busy} onClick={() => run(async () => { setObservation(await adapter.observeAdmission!(sp.id)); })}>Read official job status</button>{observation !== null && <pre className="req">{JSON.stringify(observation,null,2)}</pre>}</EvidenceDisclosure>}
     <div className="actions">{sp.stages.callback === "refused" && canRetry && <button className="btn btn-secondary" disabled={busy || wrongNet || !proposal} onClick={() => setRetrying(true)}>Review identical paid retry</button>}{fixture && sp.stages.binding === "failed" && <button className="btn btn-secondary" disabled={busy || wrongNet} onClick={() => run(() => adapter.resubmitBinding(signingAccount(account,assertActive),sp.id))}>Correct binding without purchase</button>}{fixture && sp.stages.callback === "pending" && <button className="btn btn-quiet" disabled={busy} onClick={() => run(() => fixture.deliverCallback(sp.id))}>Demo: deliver callback</button>}</div>
     {adapter.fetchOriginalResult && sp.stages.binding === "pending" && <button className="btn btn-secondary" disabled={busy} onClick={() => run(async () => {
       const raw = await adapter.fetchOriginalResult!(sp.id);
@@ -127,9 +129,9 @@ function SponsorshipRow({ sp, canRetry, adapter, account, fixture, wrongNet, onC
 }
 function ForkForm({adapter,account,branch,cp,onDone}:{adapter:RelayAdapter;account:Account;branch:Branch;cp:Checkpoint;onDone:()=>void}) {
   const qc=useQueryClient(); const [direction,setDirection]=useState("");const [review,setReview]=useState(false),[busy,setBusy]=useState(false);const [err,setErr]=useState<string|null>(null),[made,setMade]=useState<Branch|null>(null);const lock=useRef(false);
-  const assertActive=useActionScope(`${account.address}:${account.chainId}:${cp.id}:${review}:${direction}`);
+  const assertActive=useActionScope(`${adapter.identity ?? adapter.kind}:${account.address}:${account.chainId}:${cp.id}:${review}:${direction}`);
   const submit=async()=>{if(lock.current)return;lock.current=true;setBusy(true);setErr(null);try{const child=await adapter.fork(signingAccount(account,assertActive),{branchId:branch.id,checkpointId:cp.id,direction});assertActive();setMade(child);await qc.invalidateQueries({queryKey:["branches"]});}catch(e){setErr((e as Error).message);}finally{lock.current=false;setBusy(false);}};
-  if(made)return <p className="alert alert-ok" role="status">Fork created. It has no IMD project and needs its own later funding. <a href={`#/${adapter.kind==="fixture"?"demo":(adapter.routeBase??"local")}/b/${made.id}`} onClick={onDone}>Open fork</a></p>;
+  if(made)return <p className="alert alert-ok" role="status">Fork created. It has no IMD project and needs its own later funding. <a href={branchRoute(adapter, made.id)} onClick={onDone}>Open fork</a></p>;
   return <form className="form" aria-label="Prepare historical fork" onSubmit={e=>{e.preventDefault();if(direction.trim())setReview(true);}}><p>Fork the exact selected snapshot. This creates a child branch, without purchasing execution.</p><dl className="facts"><div><dt>Selected checkpoint</dt><dd><CopyId value={cp.id} label="fork checkpoint" /></dd></div><div><dt>Inherited files</dt><dd>{cp.assets.map(a=>`${a.assetKey}@${a.revision}`).join(", ")}</dd></div></dl><label className="field"><span>Fork direction (fixed after creation)</span><textarea required rows={3} value={direction} onChange={e=>{setDirection(e.target.value);setReview(false);}} /></label>{!review?<button className="btn btn-primary" disabled={!direction.trim()}>Review fork</button>:<div className="confirm"><h3>Review before signing</h3><p>{direction}</p><p className="hint">Gas only. File provenance is retained. Proposals, the parent IMD project, execution head and publication identity are not copied.</p><div className="actions"><button type="button" className="btn btn-primary" disabled={busy} onClick={submit}>{busy?"Confirming fork…":"Sign and fork"}</button><button type="button" className="btn btn-quiet" onClick={()=>setReview(false)}>Back to edit</button></div></div>}{err&&<p className="alert alert-error" role="alert">{err}</p>}</form>;
 }
 function BindingForm({disabled,onBind}:{disabled:boolean;onBind:(raw:Uint8Array)=>Promise<void>}) {

@@ -5,8 +5,10 @@ import { fetchPublicArtifact, readArtifactFile, verifyHTMLDist } from '../sdk/fi
 const usage = `STEPS / Stepstoke RELEASE-CANDIDATE-V1 — unsigned preparation and free reads
 result-fetch --uri AUTHENTICATED_URI --hash CALLBACK_KECCAK [--gateway HTTPS_IPFS_PREFIX]
 intake-read --tx ORIGINAL_TRANSACTION_HASH
+admission-read --tx HASH --request REQUEST_ID --payer BRANCH --intake OFFICIAL_INTAKE [--job JOB_ID]
 create    --factory ADDRESS --goal TEXT
 propose   --branch ADDRESS --proposal FILE --witness FILE
+continue  --branch ADDRESS --proposal FILE --witness FILE  (proposal only; never buys)
 sponsor   --branch ADDRESS --id INTEGER --max-fee RAW_IMD_UNITS --witness FILE
 retry     --branch ADDRESS --max-fee RAW_IMD_UNITS --witness FILE
 bind      --branch ADDRESS --manifest FILE --hash CALLBACK_KECCAK --witness FILE
@@ -46,8 +48,10 @@ try {
     let result;
     switch (command) {
       case 'result-fetch': { const raw = await relay.fetchOriginalResult(required('uri'), required('hash'), { gateway: options.gateway }); result = { rawHex: Buffer.from(raw).toString('hex'), bytes: raw.length, keccak256: relay.keccak256Bytes(raw), settlement: false }; break; }
+      case 'admission-read': result = await relay.observeAdmission({ chainId:1, transactionHash:required('tx'), requestId:required('request'), payer:required('payer'), intake:required('intake'), jobId:options.job }); break;
       case 'intake-read': result = await relay.observeIntake(required('tx')); break;
       case 'create': result = relay.createProject(required('factory'), required('goal')); break;
+      case 'continue':
       case 'propose': result = relay.proposeWork(required('branch'), await jsonFile('proposal'), await witness()); break;
       case 'sponsor': result = relay.sponsorProposal(required('branch'), required('id'), required('max-fee'), await witness()); break;
       case 'retry': result = relay.retryRefused(required('branch'), required('max-fee'), await witness()); break;

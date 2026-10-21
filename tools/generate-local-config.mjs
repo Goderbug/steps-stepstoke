@@ -13,7 +13,7 @@ try {
   const factory = option('factory');
   if (!rpc || !factory) throw new Error('Usage: --rpc LOOPBACK_URL --factory ADDRESS [--out FILE]');
   const url = new URL(rpc);
-  if (!['127.0.0.1', 'localhost', '[::1]'].includes(url.hostname)) throw new Error('Local config generation reads a loopback RPC only');
+  if (url.protocol !== 'http:' || url.username || url.password || !['127.0.0.1', 'localhost', '[::1]'].includes(url.hostname)) throw new Error('Local config generation reads a loopback RPC only');
   let id = 0;
   const provider = {
     async request({ method, params }) {
@@ -25,6 +25,8 @@ try {
   };
   const release = JSON.parse(await readFile(new URL('../config/release.json', import.meta.url), 'utf8'));
   const config = await observeLocalDeployment(provider, { release, factory });
+  const block = await provider.request({method:'eth_getBlockByNumber',params:['latest',false]});
+  config.deploymentBlock = Number(BigInt(block.number)); config.deploymentBlockHash = block.hash;
   const text = JSON.stringify(config, null, 2) + '\n';
   if (option('out')) await writeFile(option('out'), text); else process.stdout.write(text);
 } catch (error) {

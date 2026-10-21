@@ -2,16 +2,23 @@ import { test, expect } from "@playwright/test";
 import { mkdir, writeFile, readFile } from "node:fs/promises";
 import { createHash } from "node:crypto";
 const out="../docs/validation/platform-ux-v1/final";
-const audit=new Map<string,{errors:string[];requests:string[];console:string[]}>();
+const audit=new Map<string,{errors:string[];requests:string[];console:string[];expectedRequests:string[];expectedConsole:string[]}>();
 test.beforeEach(async({page},info)=>{
-  const row={errors:[] as string[],requests:[] as string[],console:[] as string[]};audit.set(info.testId,row);
-  page.on("pageerror",e=>row.errors.push(e.message));page.on("console",m=>{if(m.type()==="error")row.console.push(m.text());});
-  page.on("response",r=>{if(r.status()>=400)row.requests.push(`${r.status()} ${r.url()}`);});
+  const row={errors:[] as string[],requests:[] as string[],console:[] as string[],expectedRequests:[] as string[],expectedConsole:[] as string[]};audit.set(info.testId,row);
+  page.on("pageerror",e=>row.errors.push(e.message));page.on("console",m=>{if(m.type()==="error"){
+    const expected=info.title.startsWith("Ethereum candidate has an explicit closed handoff") && new URL(m.location().url || "about:blank").pathname.endsWith("/imd-deployment.json") && /404/.test(m.text());
+    (expected?row.expectedConsole:row.console).push(m.text());
+  }});
+  page.on("response",r=>{if(r.status()>=400){
+    const expected=info.title.startsWith("Ethereum candidate has an explicit closed handoff") && r.status()===404 && new URL(r.url()).pathname.endsWith("/imd-deployment.json");
+    (expected?row.expectedRequests:row.requests).push(`${r.status()} ${r.url()}`);
+  }});
   await page.route(/^https?:\/\//,route=>new URL(route.request().url()).origin===new URL(info.project.use.baseURL as string).origin?route.continue():route.abort());
 });
 test.afterEach(async({page},info)=>{
   const row=audit.get(info.testId)!;const overflow=await page.evaluate(()=>document.documentElement.scrollWidth-document.documentElement.clientWidth).catch(()=>-1);
   await mkdir(`${out}/raw/browser`,{recursive:true});await writeFile(`${out}/raw/browser/${info.project.name}-${info.title.replace(/[^a-z0-9]+/gi,"-").slice(0,90)}.json`,JSON.stringify({...row,overflow,status:info.status},null,2));
+  if(info.title.startsWith("Ethereum candidate has an explicit closed handoff")) expect(row.expectedRequests).toHaveLength(1);
   expect(row.errors).toEqual([]);expect(row.requests).toEqual([]);expect(row.console).toEqual([]);expect(overflow).toBe(0);
 });
 async function shot(page:any,info:any,name:string){if(!["chromium-desktop","chromium-mobile"].includes(info.project.name)||name==="showcase"||(name==="funding"&&info.project.name==="chromium-desktop"))return;await mkdir(`${out}/screenshots`,{recursive:true});await page.screenshot({path:`${out}/screenshots/${info.project.name}-${name}.jpg`,type:"jpeg",quality:48,scale:"css",fullPage:false});}
@@ -67,7 +74,7 @@ test("reduced motion keeps keyboard preparation, focus return and historical sel
 test("Ethereum candidate has an explicit closed handoff without fabricated addresses",async({page})=>{
  await page.goto('./#/ethereum');
  await expect(page.getByRole('heading',{name:'Ethereum deployment unavailable'})).toBeVisible();
- await expect(page.getByText('No confirmed Ethereum deployment is configured.')).toBeVisible();
+ await expect(page.getByText('Confirmed deployment handoff unavailable')).toBeVisible();
  await expect(page.getByRole('button',{name:'Verify configuration again'})).toBeVisible();
  await expect(page.getByRole('button',{name:'Create project'})).toHaveCount(0);
 });

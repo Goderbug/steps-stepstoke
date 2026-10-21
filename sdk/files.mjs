@@ -98,7 +98,12 @@ const receive = (url, resolved, maximum) => new Promise((resolve, reject) => {
 // Downloads only an explicit public HTTPS URL, follows at most three checked HTTPS redirects,
 // retains no credentials, and never writes or executes the returned bytes.  The descriptor is
 // mandatory: success means the actual response bytes passed SHA-256, length and MIME checks.
-export async function fetchPublicArtifact(urlValue, descriptor) {
+export async function fetchPublicArtifact(urlValue, descriptor, { locations = [{ origin:'https://api.imd.fun', pathPrefix:'/artifacts/' }] } = {}) {
+  if (!Array.isArray(locations) || !locations.length || locations.length > 16) throw new ArtifactFetchError('INVALID_POLICY', 'Bounded artifact origin/path allowlist required');
+  const admitted = url => locations.some(l => {
+    const origin = safeURL(l.origin);
+    return origin.origin === l.origin && typeof l.pathPrefix === 'string' && l.pathPrefix.startsWith('/') && !l.pathPrefix.includes('..') && url.origin === origin.origin && url.pathname.startsWith(l.pathPrefix) && !url.search && !url.hash;
+  });
   if (!descriptor || typeof descriptor !== 'object') throw new ArtifactFetchError('INVALID_DESCRIPTOR', 'A file descriptor is required');
   const maximum = descriptor.mediaType === 'text/markdown' ? LIMITS.document
     : descriptor.mediaType === 'text/html' ? LIMITS.html
@@ -106,6 +111,7 @@ export async function fetchPublicArtifact(urlValue, descriptor) {
   if (!maximum) throw new ArtifactFetchError('INVALID_DESCRIPTOR', 'Descriptor MIME is not enabled');
   let url = safeURL(urlValue);
   for (let redirects = 0; redirects <= 3; redirects++) {
+    if (!admitted(url)) throw new ArtifactFetchError('UNTRUSTED_LOCATION','Artifact URL or redirect is outside the configured origin/path allowlist');
     const resolved = await resolvePublic(url.hostname);
     const response = await receive(url, resolved, maximum);
     if ([301, 302, 303, 307, 308].includes(response.statusCode)) {

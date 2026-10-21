@@ -50,7 +50,7 @@ test('public artifact fetcher rejects local, credentialed and unsupported source
     ['https://[::1]/file.md', 'UNSAFE_URL'],
     ['https://user:secret@example.com/file.md', 'UNSAFE_URL'],
     ['file:///tmp/file.md', 'UNSAFE_URL'],
-    ['https://localhost/file.md', 'PRIVATE_NETWORK']
+    ['https://localhost/file.md', 'UNTRUSTED_LOCATION']
   ]) {
     await assert.rejects(fetchPublicArtifact(url, descriptor), error => error instanceof ArtifactFetchError && error.code === code);
   }

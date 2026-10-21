@@ -14,6 +14,7 @@ import type {
 
 /** What the UI may persist locally to help recovery. Never treated as business truth. */
 export interface RecoveryRecord {
+  identity?: string;
   sponsorshipId: string;
   branchId: string;
   proposalId: string;
@@ -38,7 +39,9 @@ export interface IntegrationStatus {
  */
 export interface RelayAdapter {
   readonly kind: "fixture" | "live";
+  readonly identity?: string;
   readonly routeBase?: "local" | "ethereum";
+  observeAdmission?(sponsorshipId: string): Promise<unknown>;
   fetchOriginalResult?(sponsorshipId: string): Promise<Uint8Array>;
   readonly label: string;
   readonly capabilities: AdapterCapabilities;
@@ -60,4 +63,10 @@ export interface RelayAdapter {
   fork(account: Account, input: { branchId: string; checkpointId: string; direction: string }): Promise<Branch>;
   reconcile(record: RecoveryRecord): Promise<Sponsorship | null>;
   fetchFile(descriptor: FileDescriptor, producerJobId: string): Promise<Uint8Array>;
+}
+
+/** Public bookmarks include the attested deployment identity, not just an address. */
+export function branchRoute(adapter: RelayAdapter, id: string) {
+  const base = adapter.kind === "fixture" ? "demo" : (adapter.routeBase ?? "local");
+  return `#/${base}/b/${id}` + (base === "ethereum" ? `?deployment=${encodeURIComponent(adapter.identity ?? "")}` : "");
 }

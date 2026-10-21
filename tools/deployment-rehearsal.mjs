@@ -3,9 +3,16 @@
 // Replays the documented three-name CREATE2 batch with backward dependency references.
 import assert from 'node:assert/strict';
 import { observeDeployment, verifyRuntime } from '../sdk/config.mjs';
+import { execFileSync } from 'node:child_process';
 import { spawn } from 'node:child_process';
 import { once } from 'node:events';
 import { createServer } from 'node:net';
+import { mkdtemp, writeFile } from 'node:fs/promises';
+import { tmpdir } from 'node:os';
+import { join } from 'node:path';
+import { importDeployment } from './import-deployment.mjs';
+import { abiHash, verifyHandoffAssets } from '../sdk/handoff.mjs';
+import { verifyBoundRuntime } from '../sdk/deployment.mjs';
 import { readFile } from 'node:fs/promises';
 import { Interface, AbiCoder, keccak256, toUtf8Bytes, getCreate2Address } from '../vendor/ethers/ethers.mjs';
 const root=new URL('../',import.meta.url), coder=AbiCoder.defaultAbiCoder();
@@ -54,7 +61,18 @@ try {
  // Local fault-free public adapter read path on chain 1, with disclosed mocks solely for prices.
  for(const [name,address] of [['MockToken',release.imd],['MockIntake',release.intake]]) await rpc('anvil_setCode',[address,(await artifact(name)).deployedBytecode.object]);
  const publicAdapterObservation=await observeDeployment({request:({method,params})=>rpc(method,params)}, {release,factory:addresses[2],chainId:1});
- verifyRuntime(childCode,'RelayBranch',release);
- const output={scope:'DISPOSABLE_LOCAL_CHAIN_1_ONLY',productionDeployment:null,productionReady:false,liveCompatibility:'NOT_RUN',evm:'prague',networkGasCeiling:16777216,serviceGasCeiling:null,publicAdapterObservation,proposedManifest,manifestSource:'docs/CONTRACTS.md fenced JSON; no launch.json created',constructors:'empty dependency addresses PASS; full named batch PASS',names:['RelayEncoder','RelayVerifier','RelayFactory'],localAddresses:addresses,branch:event.args.branch,branchRuntimeBytes:(childCode.length-2)/2,receipts};
+ verifyBoundRuntime(childCode,'RelayBranch',release,{factory:addresses[2],encoder:addresses[0],verifier:addresses[1]});
+ const localDir=await mkdtemp(join(tmpdir(),'steps-handoff-local-'));
+ const sourceCommit=execFileSync('git',['rev-parse','HEAD']).toString().trim();
+ const localHandoff={version:1,launchId:'DISPOSABLE_LOCAL_REHEARSAL_ONLY',chainId:1,sourceCommit,attestationHash:keccak256(toUtf8Bytes('DISPOSABLE LOCAL REHEARSAL; NOT AN OFFICIAL ATTESTATION')).slice(2),contracts:await Promise.all(['RelayEncoder','RelayVerifier','RelayFactory'].map(async(name,i)=>({name,address:addresses[i],abiHash:abiHash(JSON.parse(await readFile(new URL(`abi/${name}.json`,root))))})))};
+ const deploymentReceipt=receipts.find(r=>r.label==='three named constructors in one atomic batch').receipt;
+ const localEvidence={classification:'DISPOSABLE_LOCAL_TEST_ONLY',sourceCommit,attestationHash:localHandoff.attestationHash,transactionHash:deploymentReceipt.transactionHash,blockNumber:Number(BigInt(deploymentReceipt.blockNumber)),blockHash:deploymentReceipt.blockHash,build:release.frozenBuild};
+ await writeFile(join(localDir,'handoff.json'),JSON.stringify(localHandoff));await writeFile(join(localDir,'evidence.json'),JSON.stringify(localEvidence));await writeFile(join(localDir,'index.html'),'<html lang="en">Disposable local importer rehearsal</html>');
+ const imported=await importDeployment({handoffPath:join(localDir,'handoff.json'),networkPath:join(localDir,'absent-network.json'),evidencePath:join(localDir,'evidence.json'),dist:localDir,provider:{request:({method,params})=>rpc(method,params)},release});
+ await verifyHandoffAssets(imported,p=>readFile(join(localDir,p)));
+ // A changed immutable must fail even if normalized executable code still matches.
+ assert.throws(()=>verifyBoundRuntime(childCode,'RelayBranch',release,{factory:addresses[0],encoder:addresses[0],verifier:addresses[1]}),/wrong immutable/);
+
+ const output={scope:'DISPOSABLE_LOCAL_CHAIN_1_ONLY',handoffImporter:'PASS: actual receipts, CREATE2 call traces, frozen settings/code and all immutables; final asset inventory verified',productionDeployment:null,productionReady:false,liveCompatibility:'NOT_RUN',evm:'prague',networkGasCeiling:16777216,serviceGasCeiling:null,publicAdapterObservation,proposedManifest,manifestSource:'docs/CONTRACTS.md fenced JSON; no launch.json created',constructors:'empty dependency addresses PASS; full named batch PASS',names:['RelayEncoder','RelayVerifier','RelayFactory'],localAddresses:addresses,branch:event.args.branch,branchRuntimeBytes:(childCode.length-2)/2,receipts};
  console.log(JSON.stringify(output,null,2));
 } finally {node.kill();}

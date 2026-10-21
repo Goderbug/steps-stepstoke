@@ -54,9 +54,9 @@ test('candidate cannot pass the production spending gate', async () => {
   assert.throws(()=>assertProductionGates(r),/gates remain open/);
 });
 test('production evidence is tied to the exact configured deployment', () => {
-  const d={factory:'0x'+'1'.repeat(40),encoder:'0x'+'2'.repeat(40),verifier:'0x'+'3'.repeat(40),transactionHash:'0x'+'4'.repeat(64),blockHash:'0x'+'5'.repeat(64),blockNumber:123};
+  const d={sourceCommit:'a'.repeat(40),attestationHash:'b'.repeat(64),factory:'0x'+'1'.repeat(40),encoder:'0x'+'2'.repeat(40),verifier:'0x'+'3'.repeat(40),transactionHash:'0x'+'4'.repeat(64),blockHash:'0x'+'5'.repeat(64),blockNumber:123};
   const gates=Object.fromEntries(['securityReview','runtimeChildPolicy','manifestCompatibility','gasCeilings','liveExecution','deploymentVerification'].map(k=>[k,{status:'PASS',evidence:['unit test evidence only']}])) ;
-  const gate={chainId:1,productionReady:true,liveCompatibility:'PASS',productionDeployment:d,gates};
+  const gate={profiles:Object.fromEntries([0,1,2,3,4].map(id=>[id,{status:'PASS',evidence:['UNIT TEST ONLY']} ])),chainId:1,productionReady:true,liveCompatibility:'PASS',productionDeployment:d,gates};
   const config={chainId:1,contracts:d,deploymentBlock:123};
   assert.doesNotThrow(()=>assertProductionGates(gate,config));
   assert.throws(()=>assertProductionGates(gate,{...config,deploymentBlock:124}),/different deployment/);

@@ -1,0 +1,29 @@
+{
+  "classification": "Previous accepted adaptation evidence; not the new integration runs or failures",
+  "entries": [
+    {
+      "commit": "9e53d2b1e6af36513cbf17a1756ac5af24a06825",
+      "path": "docs/validation/rc-v1/desktop.webp",
+      "bytes": 26668,
+      "sha256": "2ea1d4c848946ef73c6f3ed451e76b9094354110464392486ed781f6c3f75a2a",
+      "gitBlob": "2c0bad2bc3c03d14d72d6810191f3ac122232960",
+      "storage": "verified-immutable-predecessor"
+    },
+    {
+      "commit": "9e53d2b1e6af36513cbf17a1756ac5af24a06825",
+      "path": "docs/validation/rc-v1/mobile-320.webp",
+      "bytes": 57774,
+      "sha256": "a89ea6d88bdab209b16ddf6b3bae198055da24c0a885c6041f819c937384df8a",
+      "gitBlob": "d93bccdb771cb485b1c9ef0b04a302b119f4af7d",
+      "storage": "verified-immutable-predecessor"
+    },
+    {
+      "commit": "9e53d2b1e6af36513cbf17a1756ac5af24a06825",
+      "path": "docs/validation/rc-v1/current-evidence.tar.xz",
+      "bytes": 196572,
+      "sha256": "a5ff5a35eb4909806d6b35e75ad429d899a94b1cb373146daef2f55e435d05a6",
+      "gitBlob": "99b9e1366c37918beb27ddc4d1bf8acb06c96b36",
+      "storage": "verified-immutable-predecessor"
+    }
+  ]
+}

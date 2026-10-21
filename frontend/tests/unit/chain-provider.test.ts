@@ -51,6 +51,7 @@ it("keeps only bounded public RPC reads alive across navigation and preserves la
 
 it("public adapter accepts explicit Ethereum HTTPS configuration and blocks uncleared writes",async()=>{
  const publicConfig={...config,kind:"ETHEREUM_DEPLOYMENT",chainId:1,deploymentBlock:100,rpcURL:"https://ethereum-rpc.publicnode.com"} as LocalConfig;
+ publicConfig.handoff={version:1,launchId:"LOCAL_UNIT_TEST_ONLY",chainId:1,sourceCommit:"a".repeat(40),attestationHash:"b".repeat(64),contracts:["RelayEncoder","RelayVerifier","RelayFactory"].map(name=>({name,address:config.contracts[name.replace("Relay", "").toLowerCase() as keyof typeof config.contracts],abiHash:"c".repeat(64),abiPath:`abi/${name}.json`})),assets:["index.html","deployment-evidence.json",...['RelayEncoder','RelayVerifier','RelayFactory'].map(n=>`abi/${n}.json`)].map(path=>({path,sha256:"d".repeat(64)}))};
  const wallet=vi.fn(async()=>null);
  const a=new ChainAdapter(publicConfig,wallet);
  expect(a.routeBase).toBe("ethereum"); expect((await a.getCapabilities()).chainId).toBe(1);

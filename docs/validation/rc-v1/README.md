@@ -85,7 +85,7 @@ Current official docs/catalog/free-check responses, EIP-7825, initial rejected b
 - [Current evidence archive](current-evidence.tar.xz): raw requests/results, receipts/calldata, exact disassembly, constructor replay, Foundry/Node/browser logs and preserved intermediate failures.
 - [Rendered review](rendered-review.json), [desktop](desktop.webp), [320px](mobile-320.webp): actual final static export. Historical artifact text remains unchanged.
 - [Ethereum read evidence](ethereum-read-evidence.json), [authenticated result index](authenticated-results-index.json) and [multi-file observations](public-multiple-file-observations.json).
-- `source-manifest.json`: SHA-256 of final reviewed source, tests, ABI, config, tools and export; `delivery-size.json`: final payload size excluding caches and provided inputs.
+- `source-manifest.json.xz` (decode with `xz -dc`): SHA-256 of final reviewed source, tests, ABI, config, tools and export; `delivery-size.json`: final payload size excluding caches and provided inputs.
 - [Historical recovery](../../history/README.md): original text/failures and verified immutable predecessor references; no future head is substituted.
 
 Extract current evidence into a separate directory:
@@ -100,3 +100,9 @@ Current archive: 196,572 bytes; SHA-256 `a5ff5a35eb4909806d6b35e75ad429d899a94b1
 Initial failures are retained alongside final passes: constructor-expectation harness ordering, missing Workspace helper import, old path/policy/SDK expectations, renamed UI text expectations, old initializer selector compile typo, public download locator harness and declared-gas accounting. Contract/profile fixes and test-harness-only corrections are distinguished in ADAPTATION.md. A failed raw binding is never relabelled accepted.
 
 All open security, service-policy, protocol-envelope and gas gates remain in [REVIEW.md](../../REVIEW.md) and `config/production-gate.json`. This evidence does not authorize or prove a launch.
+
+## Subsequent integration assignment
+
+The imported measurements above describe the accepted adaptation. The later integration changes, reproduced failures, reruns and current limits are recorded in [../integration-v1/README.md](../integration-v1/README.md). Contract source and bytecode remain identical to that adaptation; public handoff, SDK/CLI, configuration and browser integration were strengthened. The final source inventory is compressed losslessly to preserve delivery headroom; its decoded JSON keeps every final path/byte/hash entry. The previous inventory and removed pending-only public config are byte-recoverable in the integration evidence archive.
+
+The accepted adaptation `current-evidence.tar.xz` is retained by verified immutable predecessor commit/path/blob/byte/SHA-256 reference in ../../history/integration-predecessor.json. Its archive-index.json remains here unchanged. The integration check reads that exact Git blob and verifies every indexed archive member; `git show 9e53d2b1e6af36513cbf17a1756ac5af24a06825:docs/validation/rc-v1/current-evidence.tar.xz` recovers it byte for byte. New integration failures/tests remain directly delivered in ../integration-v1.

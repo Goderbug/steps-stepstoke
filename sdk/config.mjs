@@ -52,6 +52,8 @@ export async function observeDeployment(provider, { release, factory, chainId: e
     if (p !== release.policyId) throw new Error('Dependency policy mismatch');
   }
   for (const key of ['intake', 'imd']) runtimeCodeKeccak[key] = keccak256(await readCode(provider, contracts[key]));
+  const { verifyBoundRuntime } = await import('./deployment.mjs');
+  for (const [key,name] of [['factory','RelayFactory'],['encoder','RelayEncoder'],['verifier','RelayVerifier']]) verifyBoundRuntime(await readCode(provider,contracts[key]),name,release,contracts);
   const prices = {};
   for (const [name, action] of Object.entries(release.actions)) prices[name] = (await call(provider, readPrice(contracts.intake, action, contracts.imd))).toString();
   for (const [key, value] of Object.entries(LIMITS)) {
@@ -72,11 +74,18 @@ export async function observeLocalDeployment(provider, options) {
 export async function verifyDeploymentConfig(provider, config, release) {
   const problems = [];
   try {
+    if (config.chainId === 1) {
+      if (!config.handoff || !config.evidence) throw new Error('Official deployment handoff and receipt verification required');
+      const { verifyPublicDeployment } = await import('./deployment.mjs');
+      const verified = await verifyPublicDeployment(provider, config.handoff, config.evidence, release);
+      if (verified.deploymentBlock !== config.deploymentBlock || Object.keys(verified.contracts).some(k => !same(verified.contracts[k],config.contracts[k]))) throw new Error('Runtime config differs from authoritative handoff');
+    }
     const observed = await observeDeployment(provider, { release, factory: config.contracts.factory, chainId: config.chainId });
     if (observed.kind !== config.kind) problems.push('kind');
-    for (const key of Object.keys(observed.contracts)) if (!same(observed.contracts[key], config.contracts[key])) problems.push(`contracts.${key}`);
-    for (const key of Object.keys(observed.runtimeCodeKeccak)) if (observed.runtimeCodeKeccak[key] !== config.runtimeCodeKeccak?.[key]) problems.push(`code.${key}`);
-    for (const key of Object.keys(observed.abiSha256)) if (observed.abiSha256[key] !== config.abiSha256?.[key]) problems.push(`abi.${key}`);
+    for (const key of Object.keys(observed.contracts)) if (!(config.chainId === 1 && ['intake','imd'].includes(key)) && !same(observed.contracts[key], config.contracts[key])) problems.push(`contracts.${key}`);
+    for (const key of Object.keys(observed.runtimeCodeKeccak)) if (config.chainId !== 1 && observed.runtimeCodeKeccak[key] !== config.runtimeCodeKeccak?.[key]) problems.push(`code.${key}`);
+    for (const key of Object.keys(observed.abiSha256)) if (config.chainId !== 1 && observed.abiSha256[key] !== config.abiSha256?.[key]) problems.push(`abi.${key}`);
+    if (config.chainId === 1 && !problems.length) { config.contracts.intake = observed.contracts.intake; config.contracts.imd = observed.contracts.imd; }
   } catch (error) { problems.push(error.message); }
   return problems;
 }

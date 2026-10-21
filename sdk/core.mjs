@@ -381,3 +381,7 @@ export function lifecycleStatus({ receipt, phase, checkpointVerified = false, fi
 }
 
 export { strictJSON, strictManifestJSON, unsignedJSONInteger, utf8Length, decodeUTF8, MANIFEST_LIMITS };
+
+// Continue is deliberately proposal-only. The branch encoder chooses its own latest job at
+// purchase; this helper cannot approve, purchase, infer a parent from a selected file or retry.
+export const continueWork = (...args) => proposeWork(...args);

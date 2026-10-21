@@ -10,18 +10,18 @@ const results = new Map<string, VerificationResult>();
 const listeners = new Set<() => void>();
 let version = 0;
 
-export const verificationKey = (a: AssetVersion) =>
-  JSON.stringify([a.originBranchId, a.originCheckpoint, a.assetKey, a.revision, a.producerJobId, a.kind, a.descriptor.name, a.descriptor.path, a.descriptor.mediaType, a.descriptor.bytes, a.descriptor.sha256]);
+export const verificationKey = (a: AssetVersion, identity = "") =>
+  JSON.stringify([identity, a.originBranchId, a.originCheckpoint, a.assetKey, a.revision, a.producerJobId, a.kind, a.descriptor.name, a.descriptor.path, a.descriptor.mediaType, a.descriptor.bytes, a.descriptor.sha256]);
 
-export function recordVerification(a: AssetVersion, result: VerificationResult) {
-  const key = verificationKey(a);
+export function recordVerification(a: AssetVersion, result: VerificationResult, identity = "") {
+  const key = verificationKey(a, identity);
   if (results.get(key) === result) return;
   results.set(key, result);
   version += 1;
   for (const l of listeners) l();
 }
 
-export const verificationOf = (a: AssetVersion) => results.get(verificationKey(a)) ?? null;
+export const verificationOf = (a: AssetVersion, identity = "") => results.get(verificationKey(a, identity)) ?? null;
 
 export function clearVerifications() {
   results.clear();

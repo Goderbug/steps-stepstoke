@@ -52,5 +52,32 @@
       ],
       "detail": "No production deployment exists. Only a later confirmed handoff may provide public addresses and receipt evidence."
     }
+  },
+  "profiles": {
+    "0": {
+      "status": "NOT_RUN",
+      "evidence": [],
+      "detail": "No authorized live job executed for this profile."
+    },
+    "1": {
+      "status": "NOT_RUN",
+      "evidence": [],
+      "detail": "No authorized live job executed for this profile."
+    },
+    "2": {
+      "status": "NOT_RUN",
+      "evidence": [],
+      "detail": "No authorized live job executed for this profile."
+    },
+    "3": {
+      "status": "NOT_RUN",
+      "evidence": [],
+      "detail": "No authorized live job executed for this profile."
+    },
+    "4": {
+      "status": "NOT_RUN",
+      "evidence": [],
+      "detail": "No authorized live job executed for this profile."
+    }
   }
 }

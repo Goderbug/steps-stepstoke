@@ -163,6 +163,10 @@
             "length": 32
           }
         ]
+      },
+      "immutableBindings": {
+        "3050": "encoder",
+        "3053": "verifier"
       }
     },
     "RelayBranch": {
@@ -211,18 +215,63 @@
             "length": 32
           }
         ]
+      },
+      "immutableBindings": {
+        "696": "factory",
+        "699": "encoder",
+        "702": "verifier"
       }
     },
     "RelayEncoder": {
       "bytes": 11498,
       "normalizedKeccak": "0x245ee3b1a84cc9e989b5ef162f7b4904a800dac79f93afa547e4de25691d66a4",
-      "immutableReferences": {}
+      "immutableReferences": {},
+      "immutableBindings": {}
     },
     "RelayVerifier": {
       "bytes": 14544,
       "normalizedKeccak": "0x0f5969a5ab4bbdb79f817634bea9f0d0f4bd05a294b8c90a151e2fb5bbb29edb",
-      "immutableReferences": {}
+      "immutableReferences": {},
+      "immutableBindings": {}
     }
   },
-  "officialX": "https://x.com/stepstoke"
+  "officialX": "https://x.com/stepstoke",
+  "frozenBuild": {
+    "compiler": "0.8.26+commit.8a97fa7a",
+    "settings": {
+      "remappings": [
+        "@openzeppelin/contracts/=lib/openzeppelin-contracts/contracts/",
+        "openzeppelin-contracts/=lib/openzeppelin-contracts/contracts/"
+      ],
+      "optimizer": {
+        "enabled": true,
+        "runs": 200
+      },
+      "metadata": {
+        "bytecodeHash": "none"
+      },
+      "evmVersion": "cancun",
+      "libraries": {},
+      "viaIR": true
+    },
+    "sources": {
+      "lib/openzeppelin-contracts/contracts/interfaces/IERC1363.sol": "0x438ecf10fa429e1000baa015d96b79087a3b3ce9fbe7ee8a90bba6435ce134f6",
+      "lib/openzeppelin-contracts/contracts/interfaces/IERC165.sol": "0x0afcb7e740d1537b252cb2676f600465ce6938398569f09ba1b9ca240dde2dfc",
+      "lib/openzeppelin-contracts/contracts/interfaces/IERC20.sol": "0x1a6221315ce0307746c2c4827c125d821ee796c74a676787762f4778671d4f44",
+      "lib/openzeppelin-contracts/contracts/token/ERC20/IERC20.sol": "0x74ed01eb66b923d0d0cfe3be84604ac04b76482a55f9dd655e1ef4d367f95bc2",
+      "lib/openzeppelin-contracts/contracts/token/ERC20/utils/SafeERC20.sol": "0xd56c65c54b2bcc02f258d85e8d7723a1a633aaf43e7060e340860566381c206f",
+      "lib/openzeppelin-contracts/contracts/utils/introspection/IERC165.sol": "0x8891738ffe910f0cf2da09566928589bf5d63f4524dd734fd9cedbac3274dd5c",
+      "src/RelayBranch.sol": "0x8bfd0429192a6782308ad663731e8eaf8e11be367ee074531f3496a9d613ba10",
+      "src/RelayEncoder.sol": "0x615e596b2a43e2ff0d868c2c914aa3873a668b7b3c0d7c7b277d5d2d8e6642dc",
+      "src/RelayFactory.sol": "0x501bb34d4013d38531d637e6d164233734e7b459225e91b046e5b9bdb1b5be34",
+      "src/RelayTypes.sol": "0x21f621c2914cbebe9de78232a250da7e65df975664f2db9f05a88530973b699f",
+      "src/RelayVerifier.sol": "0x590394fff6def1461bb1876d31f0cd6ee7ba9f2e0f3c0a700a142eaf0ed6bb5d",
+      "src/interfaces/IIntake.sol": "0xae7547c0325aa99ed3bc2d0b9817a8ce4814af9a5d7ba1e66587dac1bc8c59e9",
+      "src/libraries/Assets.sol": "0xa5eaddcd2d54cdbf672751d98999a3c3d0da55202ead4099900512ffad56a935",
+      "src/libraries/ManifestJSON.sol": "0x15c1a45542c9a830c5837e7aef20e5ded56e2953ba574285b0e95f2316faf5d1",
+      "src/libraries/Policy.sol": "0x5a4b054000ef66b70504c01270c7b341314c8cddfafbf2469353b6210fe61112",
+      "src/libraries/StrictJSON.sol": "0x6e1ca9baea31c52bffa6653331ca483878e50b3b537ec58fb263438905a21df9",
+      "src/libraries/Text.sol": "0x15d2f4e0370afc36f7ab6f14b2e4fb35d979f431fdd9a7ba6942516fa74e1e04"
+    }
+  }
 }

@@ -1,6 +1,6 @@
 # STEPS (Stepstoke) — RELEASE-CANDIDATE-V1 adaptation
 
-Development only. Imported commit: `d29eedf8e7d6608ed109972c179b367ac07ce91f`. No future project head was imported. `productionDeployment:null`, `liveCompatibility:NOT_RUN`, `productionReady:false`. No public-chain signing, broadcasts, deployment, spending, hosting, paid IMD requests or new orders occurred. Official X: https://x.com/stepstoke (not contacted for posting).
+Development only. Original adaptation baseline: `d29eedf8e7d6608ed109972c179b367ac07ce91f`. No future project head was imported. `productionDeployment:null`, `liveCompatibility:NOT_RUN`, `productionReady:false`. No public-chain signing, broadcasts, deployment, spending, hosting, paid IMD requests or new orders occurred. Official X: https://x.com/stepstoke (not contacted for posting).
 
 ## Launch construction and policy
 
@@ -47,3 +47,15 @@ All dependency/build configuration and protected paths are preserved. Historical
 ## Unresolved launch gates
 
 This candidate must **not launch** while a material security, policy, size/gas or protocol gate is open. [REVIEW.md](docs/REVIEW.md), [LIMITS.md](docs/LIMITS.md) and `config/production-gate.json` record the remaining work: independent final security review, service runtime-child acceptance, actual one-output runtime behavior across all profiles, real oversized/multi-file envelope policy, service gas/calldata ceilings, authorized live execution and confirmed deployment. A local fixture, free check, static export or receipt cannot close those gates. No owner/admin recovery, timeout purchase, new asset type, token, pool, hook, treasury or publication authority was introduced.
+
+## Integration of the accepted adaptation
+
+This assignment starts from exact imported commit `9e53d2b1e6af36513cbf17a1756ac5af24a06825`; no Solidity source was changed and no future head was fetched. The direct-Branch adaptation, ABI and all six operations are preserved. See [integration evidence](docs/validation/integration-v1/README.md) for the final runs and raw recoverable records.
+
+The later handoff importer now authenticates the supplied source commit against frozen compiler inputs and verifies the canonical receipt/block, actual CREATE/CREATE2 traces, constructor arguments, historical absence of code and frozen runtimes including actual immutable address words. Runtime-created Branches receive the same immutable checks. `dist/imd-deployment.json` is the sole public address/ABI source; every final export byte is inventoried. Auxiliary evidence cannot override application addresses. The old independent pending-only ethereum-config.json is removed and archived. Missing actual handoff remains unavailable, never a sample deployment.
+
+Local chain31337/loopback validation remains strict and separate from verified chain1 mode. Route, cache, journal and file verification identities include mode/chain/Factory/deployment. Public event reads begin at the verified deployment block, paginate in bounded chunks and invalidate on reorg; original-hash recovery waits with bounded backoff and never buys again. Twelve confirmations are an application observation policy, not consensus finality. Deployment validity, five live profile gates and signing capabilities are distinct.
+
+Official admission/job observations correlate chain, original transaction, request, payer, Intake and job identity; execution and Git delivery remain independent of settlement. Original callback-bound raw manifests and descriptor-bound files are retrieved with bounded reviewed origins and redirects. Current official Markdown and PNG artifact endpoints reproduce a browser CORS failure. Explicit manual byte verification and Node retrieval remain available; [resolver proposal](docs/RESOLVER-PROPOSAL.md) is unhosted and read-only. No proxy/server was added.
+
+Final exact encoder vectors cover five profiles across root first-open/continuation and historical-child first-open/continuation: 20 free checks, 16 structurally clear and four HTML-update invalid_artifacts responses from deliberately local HTML input. They do not establish runtime compatibility. The seven-job authorized live plan remains unexecuted. All readiness fields remain null/NOT_RUN/false.
