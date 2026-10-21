@@ -1,12 +1,12 @@
 # CTO Relay
 
-An English workspace for public projects: create a fixed goal, propose work, explicitly fund an execution, read accepted files, continue, or fork an accepted historical checkpoint. The Open Workshop platform leads with sequence and selected output. [DESIGN.md](DESIGN.md) documents the implemented system.
+CTO Relay is an English workspace for public projects: create a fixed goal, propose work, explicitly fund execution, read accepted files, continue, or fork accepted history. Its Open Workshop interface puts the checkpoint sequence and complete selected output before the next action.
 
-**Local acceptance only.** `productionDeployment:null`, `liveCompatibility:NOT_RUN`, `productionReady:false`. No public deployment, hosting, live IMD purchase, funded credential or child order was performed. A1 `src/`, `sdk/`, `cli/`, `abi/`, `config/`, root build configuration and root dependencies remain byte-identical to pinned source `878ba4ba1cf7c601656f3a25d17546a425ba1207`.
+**Local product only; not ready for real funds.** Public create/funding is disabled. Demo results/signatures are simulated; disposable local contracts use MockToken and MockIntake, with manually delivered callbacks rather than a real AI worker. `productionDeployment:null`, `liveCompatibility:NOT_RUN`, `productionReady:false`. External manifest/callback liveness, live execution and independent frontend review remain unaccepted. See [acceptance and open gates](docs/validation/platform-ux-v1/documentation/README.md).
 
-## Install, build and preview
+## Build and test
 
-Use Node.js 22 or newer. The frontend lockfile is delivered unchanged.
+From a fresh clone, use Node ≥22; frontend installation requires the locked npm registry packages. Foundry/solc are only needed for contract checks and local signing.
 
 ```sh
 npm ci --prefix frontend
@@ -16,57 +16,24 @@ npm run build --prefix frontend
 npm run preview --prefix frontend
 ```
 
-Open `http://localhost:4173/`. The Vite build writes the committed repository-root `dist/`. It uses `base: './'`, local runtime assets and hash routes, so a static server needs no route rewrites. To check a gateway-like subpath:
+Open `http://localhost:4173/#/demo/b/fx-branch-1`. The build emits root `dist/` with relative assets and hash routes. The committed export can also be viewed without npm installation:
 
 ```sh
 node frontend/scripts/static-preview.mjs
-# open http://127.0.0.1:4175/preview/
+# open http://127.0.0.1:4175/preview/#/demo/b/fx-branch-1
 ```
 
-| Route | Data and behavior |
-| --- | --- |
-| `#/` | Public configuration state; fails closed with no fixture substitution |
-| `#/local`, `#/local/b/<address>` | Actual disposable A1 contracts using local MockToken/MockIntake |
-| `#/demo`, `#/demo/b/fx-branch-1` | Labelled deterministic local fixtures; default successful HTML → PNG → HTML sequence |
-| `#/demo/b/fx-branch-sec` | Secondary hostile/broken-file fixtures |
-| `#/showcase` | The eight production component families using labelled demo data |
+For the full browser matrix, after building:
 
-Browsing never requires a wallet. Connection supports named EIP-6963 browser wallets, mobile wallet-browser links and Coinbase Smart Wallet behind one control. No relay project ID is required. Typography uses disclosed local Arial/Helvetica and Courier New fallbacks; no remote fonts are requested.
+```sh
+npm run test:e2e:install --prefix frontend
+npm run test:e2e --prefix frontend
+```
 
-## Run local contracts
-
-Foundry (`forge`, `anvil`) and solc 0.8.26 are needed. Core source dependencies are already delivered as ordinary files; no submodule initialization or root dependency change is needed.
+For core regressions, provision Foundry (`forge`, `anvil`), solc 0.8.26 and Python 3:
 
 ```sh
 forge build
-node frontend/scripts/local-setup.mjs
-# in another terminal:
-npm run preview --prefix frontend
-# open http://localhost:4173/#/local
-```
-
-Local setup creates a disposable loopback chain, installs MockToken/MockIntake, deploys the final A1 Factory and generates `frontend/public/local-config.json` from actual code hashes and policy/ABI identity. It also refreshes `dist/local-config.json`. Use a temporary local development wallet only; no funded public account or key is needed by the runner.
-
-After an explicit purchase, no real worker runs on this local chain. To deliver a mock callback:
-
-```sh
-node frontend/scripts/local-deliver.mjs --branch <local-branch-address> --job <new-local-job-id>
-```
-
-The command prints the original `result.json` path. Select it under **Original callback-authenticated result.json**, then choose **Bind original result without purchase**. `--status 1` delivers a refusal; an explicit retry pays again for the identical body. `--status 2` or an unknown failure freezes purchases. A missing callback remains pending. HTTP cannot settle or unlock the Branch.
-
-## Validate
-
-```sh
-npm run typecheck --prefix frontend
-npm run test:unit --prefix frontend
-npm run build --prefix frontend
-npx --prefix frontend playwright install chromium webkit
-npm run test:e2e --prefix frontend
-node frontend/tests/integration/browser-chain.mjs --browser chromium --group all
-node frontend/tests/integration/browser-chain.mjs --browser webkit --group all
-node frontend/tests/integration/browser-chain.mjs --browser chromium --group all --mobile
-node frontend/tests/integration/browser-chain.mjs --browser webkit --group all --mobile
 forge test
 forge fmt --check
 node --test test-sdk/*.test.mjs
@@ -74,31 +41,37 @@ node tools/check-release.mjs
 python3 test/adversarial/check-inline-fixtures.py
 ```
 
-Browser runtimes and shared libraries must be available locally. `PLAYWRIGHT_BROWSERS_PATH`, `W1_CHROMIUM_EXECUTABLE` and `W1_WEBKIT_EXECUTABLE` can point to test runtimes outside the repository. The current Playwright suite checks the committed export at `/preview/`, in Chromium at 320/390/1440 and WebKit at 390/1440. The actual-chain runner starts and closes its own Anvil and static/artifact servers. It drives the production app through a named test wallet forwarding unsigned calls to disposable unlocked Anvil accounts; it records receipts rather than substituting fixture state.
+Core libraries and the SDK's ethers bundle are committed ordinary files. Frontend npm packages, browser runtimes and compilers are not bundled. An offline machine must provision those prerequisites before building; the committed static export needs only a local server. [Build guide](docs/BUILD.md) gives all commands, environments, side effects and browser-library limits.
 
-Final results, raw logs, screenshots, hashes, receipts, six-domain design review and limitations are in [final integration validation](docs/validation/platform-ux-v1/final/README.md). These are the worker's local observations, not independent certification or live acceptance. Earlier evidence is retained under `docs/validation/integration/` and `review-fixes/`; its counts and hashes describe earlier source. All original scenario files now use English and the production composition. Playwright includes every spec across all five original configured projects. The full `browser-chain.mjs` runner retains the original contract assertions and adds mixed-read recovery, cancellation and non-square download checks. Run local contract suites sequentially: each owns the disposable ports and deployment configuration.
+## Use the workspace
 
-## Behavior and boundaries
+Browse without connecting a wallet. Start at the demo URL above, select Round 1, 2 or 3, inspect the complete output and original asset provenance, then choose **Continue** or **Historical Fork**. **Continue** opens preparation against the current checkpoint even while history is selected. Proposing, approving tokens and purchasing are separate actions. Historical Fork copies the exact selected accepted nonzero snapshot and requires its own later funding. Genesis, inheritance and failed attempts are not completed paid rounds.
 
-Continue opens preparation at the current checkpoint. Historical selection only changes the viewed snapshot. A Historical Fork copies the exact selected accepted nonzero checkpoint and its file provenance, and needs its own later funding. Genesis, inheritance and unaccepted attempts are not completed paid rounds.
+| Page | Access and limits |
+| --- | --- |
+| `#/` | Public configuration status and links; public mutations disabled |
+| `#/demo`, `#/demo/b/fx-branch-1` | Labelled deterministic HTML → PNG → HTML fixtures; simulated accounts and secondary failure controls |
+| `#/demo/b/fx-branch-sec` | Hostile/broken/unavailable-file demonstration |
+| `#/local`, `#/local/b/<registered-address>` | Actual disposable contracts; wallet-free reads; verified local network/account required for signing |
+| `#/showcase` | Production components and illustrative states; demo funding only |
 
-A proposal is immutable. Any eligible proposal remains reachable and can be funded; sponsors cannot edit it. Before signing, the adapter rechecks account, network, provider, anchor, proposal, witness, parent, spender, price/max fee and exact allowance. Approval confirmation precedes a separate purchase. Duplicate guards remain active through receipts. Closing or unmounting preparation, editing its context, or changing account/network cancels delayed preparation before wallet submission. Already-submitted transactions are reconciled by original hash/nonce; they cannot be cancelled retroactively or automatically purchased again.
+To run disposable contracts, keep this command running in another terminal after `forge build`:
 
-Files use trusted bounded retrieval, SHA-256, byte length and media checks. HTML stays in an opaque sandbox with a restrictive CSP; Markdown is sanitized. Downloads use the safe descriptor.path basename and preserve its extension and exact bytes. Failed or unavailable artifacts receive no verified label. The full asset table retains original producer Branch, job and checkpoint independently of the latest execution.
+```sh
+node frontend/scripts/local-setup.mjs
+```
 
-The protocol has no new authority, asset type, governance, treasury, automatic spending, auto-retry, refund or unlock. Publication remains disabled by the actual A1 release configuration. Demo publication controls only illustrate fixture states.
+Open `http://localhost:4173/#/local` using the preview command above. Setup regenerates loopback deployment configuration and local mock balances; committed session addresses are not reusable public deployments. Use a temporary development wallet on chain 31337 only. No funded public account is required. The worker does not run locally; [operations](docs/OPERATIONS.md) explains mock callback delivery and binding.
 
-## Source map and documentation
+Any account may create, propose, sponsor, bind or fork within the fixed protocol rules. Sponsors cannot edit proposals. Fresh signing checks enforce identity, anchor/witness/parent, price/maxFee and exact allowance; confirmed approval precedes purchase. Unknown transactions reconcile the original hash/nonce without rebuying. Missing callbacks remain pending; status 1 permits only an explicit identical paid retry; status 2/unknown failures freeze purchases. No refund, timeout unlock, governance, treasury or automatic spending exists. [Page/action failure modes](docs/frontend-README.md) and [complete public contract API](docs/CONTRACTS.md) describe permissions and errors.
 
-- `frontend/src/components/`, `frontend/src/ui/`: shared platform components and current surfaces.
-- `frontend/src/domain/`: existing adapter/SDK boundary, with derived read consistency and cancellation checks.
-- `src/`, `sdk/`, `cli/`, `abi/`, `config/`: preserved A1 core.
-- [Interface and state guide](docs/FRONTEND.md), [future frontend authoring](docs/PLATFORM-AUTHORING.md), [core build](docs/BUILD.md), [operations](docs/OPERATIONS.md).
-- [Contract API](docs/CONTRACTS.md), [limits](docs/LIMITS.md), [CLI examples](docs/CLI.md), [browser SDK trust model](docs/SDK-BROWSER.md), [historical handoff](docs/HANDOFF.md).
-- [Current design](DESIGN.md), [current validation](docs/validation/platform-ux-v1/README.md), [baseline hashes](docs/validation/platform-ux-v1/BASELINE.json).
+Artifact checks authenticate exact bytes/provenance, not quality or availability. HTML previews are isolated by sandbox/CSP; Markdown is sanitized; verified PNGs retain natural aspect ratio. Downloads preserve safe descriptor basenames/extensions and exact bytes. Failed/unavailable files are never verified. Historical records and authenticated project artwork are not translated or restyled.
 
-## Submission storage
+## Documentation and evidence
 
-Five large historical raw traces are stored without loss in `docs/validation/platform-ux-v1/final/history-traces.tar.xz`. Their original paths contain restoration instructions and original SHA-256 values; `history-traces-index.json` indexes every byte. All other historical evidence stays at its original path. The unused Noto UI font was removed; its historical license/provenance notices remain. Active typography uses the disclosed system fallbacks. No required runtime asset, root dependency, lockfile or authenticated output was removed.
+- [Current frontend README](docs/frontend-README.md), [design system](docs/DESIGN.md), [interface/state guide](docs/FRONTEND.md).
+- [Build/test](docs/BUILD.md), [operations](docs/OPERATIONS.md), [developer/Agent guide](docs/AGENT-GUIDE.md), [future brief language policy](docs/PLATFORM-AUTHORING.md).
+- [CLI/SDK reference](docs/CLI.md), [browser SDK](docs/SDK-BROWSER.md), [limits](docs/LIMITS.md), [handoff/readiness](docs/HANDOFF.md).
+- [Requirement matrix and documentation checks](docs/validation/platform-ux-v1/documentation/README.md), [prior final local results](docs/validation/platform-ux-v1/final/README.md), [raw logs/screenshots/receipts](docs/validation/platform-ux-v1/final/), [read-only baseline/hash audit](docs/validation/platform-ux-v1/documentation/byte-audit.json).
 
-The final validation directory records the complete source snapshot Git bundle size against the 8 MiB budget. Temporary screenshots, browser runtimes and package caches stay outside the submission. No ignore file was changed.
+Protected A1 sources, root build/dependencies and the existing frontend/export are unchanged by this documentation assignment. The pinned A1 baseline is `878ba4ba1cf7c601656f3a25d17546a425ba1207`; the starting checkout also includes accepted platform work. Historical hashes describe their recorded source, not updated prose. Current frontend/design guides live in `docs/` because this assignment permits only `README.md` and `docs/**`; contradictory earlier prose in `frontend/README.md` is superseded here.

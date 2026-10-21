@@ -1,6 +1,6 @@
 # Protocol overview (previous README, preserved)
 
-This is the README text as delivered at commit `28fbb8a`, kept verbatim below the line for its detailed description of payments, assets, binding, file trust and profiles. The current entry point is the [root README](../README.md). Where they differ, the root README and [CONTRACTS.md](CONTRACTS.md) describe the code as it is now. Relative links below were written for the repository root.
+This page is a historical previous-README record associated with commit `28fbb8a` and later integration prose. The body below is retained as historical data; its claims about a Chinese W1 interface, fonts, earlier test counts, runner defaults and pending integration are superseded. It is not a current operation/build guide. Use the [root README](../README.md), [current frontend README](frontend-README.md), [build guide](BUILD.md), [contract API](CONTRACTS.md) and [current requirement matrix](validation/platform-ux-v1/documentation/README.md). Historical relative links below were originally written for the repository root.
 
 ---
 

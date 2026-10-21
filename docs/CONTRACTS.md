@@ -1,6 +1,6 @@
 # Public contracts, ABI and configuration
 
-The public source is in [`src/`](../src/), ABI JSON in [`abi/`](../abi/) and fixed build metadata in [`config/release.json`](../config/release.json). This page describes the local A1/2 repair candidate atop the pinned IMD delivery. **No public deployment is recorded; live compatibility is `NOT_RUN`.** There are no web pages or frontend routes. Test mocks and test harnesses are not release contracts.
+The public source is in [`src/`](../src/), ABI JSON in [`abi/`](../abi/) and fixed build metadata in [`config/release.json`](../config/release.json). This page describes the local A1/2 repair candidate atop the pinned IMD delivery. **No public deployment is recorded; live compatibility is `NOT_RUN`.** The English frontend exposes these operations through local/demo routes; see [pages and permissions](frontend-README.md). Public deployment remains closed. Test mocks and test harnesses are not release contracts.
 
 ## Deployment and fixed authority
 

@@ -1,6 +1,6 @@
 # Future IMD request and observer procedure — NOT_RUN
 
-**This procedure was not executed.** No public deployment, real token approval, paid job, live request check or public-chain fork test is established by this documentation. It describes a future operator-controlled validation after review and separately authorized spending. The delivered tooling cannot sign or broadcast; this page does not supply credentials, a wallet, a live Factory address or spending authorization.
+**This procedure was not executed.** No public deployment, real token approval, paid job, live request check or public-chain fork test is established by this documentation. It describes a future operator-controlled validation after review and separately authorized spending. The offline request/observer tooling described on this page cannot sign or broadcast (the separate frontend signs only its configured disposable local flow); this page does not supply credentials, a wallet, a live Factory address or spending authorization.
 
 The release requests external skills and file-descriptor shapes that local mocks do not validate. An incompatible fixed encoder cannot be repaired by editing this document or changing a JSON config value after deployment. Keep live compatibility `NOT_RUN` until actual observations support a narrower statement; never turn an unexpected response into a claimed PASS.
 
@@ -139,4 +139,4 @@ If the original transaction outcome is unknown, look up that same hash/nonce and
 
 A wrong witness/raw document bind can be simulated read-only and should fail without changing the checkpoint/result. Correct original bytes/witness can then bind without purchasing. If the writer's **actual authenticated manifest** violates the fixed policy (extra outputs, oversize, invalid schema/identity), reformatting cannot fix it. Retain that core failure, stop readiness claims and assess an earlier historical fork; it does not make the failed paid attempt successful.
 
-No turnkey live observer harness, public deployment script, live fork-integration test, paid run evidence or external human audit is delivered. Those remain explicit work in [the A1 → W1 handoff](HANDOFF.md). Future reports must separate local checks, catalog/preflight, protocol reads, deployment, real consumption, Git and readiness, with exact commands/responses and unresolved findings for each.
+No turnkey live observer harness, public deployment script, live fork-integration test, paid run evidence or external human audit is delivered. Those remain explicit work in [the current handoff](HANDOFF.md). Future reports must separate local checks, catalog/preflight, protocol reads, deployment, real consumption, Git and readiness, with exact commands/responses and unresolved findings for each.

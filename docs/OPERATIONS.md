@@ -19,7 +19,7 @@ To fork, choose any accepted nonzero revision of a registered parent and supply 
 
 The exported functions prepare unsigned transactions: `createProject`, `proposeWork`, `sponsorProposal`, `retryRefused`, `bindResult`, and `forkHistory`. `previewProposal` and `readState` prepare `eth_call` requests. `decodeCheckpoint`, `recoverHistory`, `canonicalWitness` and `witnessHash` support history recovery from logs and independently obtained checkpoint reads. `verifyManifest` and `verifyFile` operate on raw bytes. `reconcileTransaction` always returns `purchase:false`.
 
-The initial CLI supports the same preparation flows, local file checks and checkpoint decoding. Run `node cli/relay.mjs help`. File paths are explicit operator arguments, never paths automatically selected by an untrusted manifest. No file is executed or previewed in a browser.
+The initial CLI supports the same preparation flows, local file checks and checkpoint decoding. Run `node cli/relay.mjs help`. File paths are explicit operator arguments, never paths automatically selected by an untrusted manifest. The CLI never executes or previews files. The separate frontend can display verified files inside its isolated preview boundary.
 
 The CLI prints read requests; it does not itself issue RPC calls. `queryPrepared`/`queryState`/`queryPreview` are optional SDK read adapters. There is no CLI approve or send command. Sponsor-to-Branch allowance must be prepared separately; unused allowance there is distinct from the Branch-to-Intake allowance that the contract clears. Prepared transactions must be simulated and reviewed against current state by the user's chosen transaction system before any separately authorized submission.
 
@@ -39,4 +39,29 @@ This work contains no public-chain deployment, live paid run, credentials, token
 
 ## Current browser operations
 
-The English platform maps these same fixed operations onto preparation, explicit signing and independent result stages. Continue opens preparation only. Funding requires a fresh quote, exact confirmed approval and a separate purchase. Historical Fork sits beside the selected accepted output. When branch/history disagree, Retry reads both without signing. See [the current interface guide](FRONTEND.md), [authoring guide](PLATFORM-AUTHORING.md) and [fresh local evidence](validation/platform-ux-v1/README.md). These do not change live acceptance or authorize public deployment.
+The English platform maps these same fixed operations onto preparation, explicit signing and independent result stages. Continue opens preparation only. Funding requires a fresh quote, exact confirmed approval and a separate purchase. Historical Fork sits beside the selected accepted output. When branch/history disagree, Retry reads both without signing. See [the current interface guide](FRONTEND.md), [authoring guide](PLATFORM-AUTHORING.md) and [current acceptance matrix](validation/platform-ux-v1/documentation/README.md). These do not change live acceptance or authorize public deployment.
+
+## Run and use the delivered local product
+
+From a clean checkout, run the install/build/preview sequence in [the frontend README](frontend-README.md). Browse the demo without a wallet. For actual local actions, build the core and keep setup running in a separate terminal:
+
+```sh
+forge build
+node frontend/scripts/local-setup.mjs
+```
+
+With the preview server running, open `http://localhost:4173/#/local`. Setup refuses occupied ports rather than modifying an existing chain. It starts Anvil on 8545 and an artifact server on 8546, regenerates source/export local config and creates temporary mock balances. Stop it with Ctrl+C. Restarting creates a new chain; old local transaction records may not apply. Regenerate setup and use **Verify local configuration again** after a stale-config error. Never send real funds to these session addresses.
+
+The header connects a selected wallet; local signing requires chain 31337 and a local mock-funded account. The automatic browser runner uses unsigned transactions forwarded to unlocked disposable Anvil accounts. It needs neither a funded public wallet nor a private key. A manual wallet must be configured for the disposable local session; the app does not fund arbitrary accounts. Do not import a production key for this demonstration.
+
+Create a project and fixed goal, open its workspace, choose Continue, review and submit a contribution. Review funding on an eligible immutable proposal, approve the exact token amount, await confirmation, then purchase separately. A local purchase remains pending until a mock callback is explicitly delivered. Substitute the actual Branch address and a new job ID from your local session:
+
+```sh
+node frontend/scripts/local-deliver.mjs --branch <local-branch-address> --job <new-local-job-id>
+```
+
+Use the printed original `result.json` file in **Original callback-authenticated result.json**, then **Bind original result without purchase**. `--status 1` simulates refusal; `--status 2` simulates frozen failure. This is test scaffolding, not an AI runtime. Correcting a result/witness only retries binding; it does not buy again.
+
+Use file tabs and disclosures to inspect exact selected output, all file origins and checkpoint IDs. Select an earlier accepted nonzero checkpoint to fork it; the new Branch inherits that snapshot and needs separate future funding. Latest remains the current head. A visible mixed-read Retry refetches both branch/history without reload or signature. Unknown submission outcomes reconcile original hash/nonce records; missing/corrupt records or a replaced transaction require investigation, never a speculative rebuy. Do not clear recovery storage to bypass a pending purchase guard.
+
+The local deployment disclosure exposes full local transaction journals for diagnosis. Keep real account data out of reports. The demo's reset control affects fixture state only; it does not reset an actual chain or settle a pending attempt. Public routes remain unavailable and never silently substitute demo data.

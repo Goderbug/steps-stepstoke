@@ -1,6 +1,6 @@
 # English platform interface
 
-The current frontend is PLATFORM-UX-V1, using the Open Workshop system in [DESIGN.md](../DESIGN.md). It preserves all six A1 functions. Earlier W1 Chinese screenshots, authenticated output and historical records are retained as history; they do not specify current interface copy.
+The current frontend is PLATFORM-UX-V1, using the Open Workshop system in [DESIGN.md](DESIGN.md). It preserves all six A1 functions. Earlier W1 Chinese screenshots, authenticated output and historical records are retained as history; they do not specify current interface copy.
 
 ## Surfaces and routes
 
@@ -35,4 +35,4 @@ HTML uses `sandbox=""`, an opaque origin, `referrerPolicy="no-referrer"`, restri
 
 Semantic headings, ordered checkpoints, labels, disclosures, 44px controls, visible keyboard focus and reduced motion share the same CSS tokens. Sheets trap Tab, support Escape/backdrop/close, make background content inert and return focus to the opener. Native table regions allow keyboard scrolling without page overflow. Current text, error copy and accessibility labels are English; authenticated historical content is preserved.
 
-See [authoring](PLATFORM-AUTHORING.md) for component reuse and [validation](validation/platform-ux-v1/README.md) for actual checks and limitations. Local/fixture evidence does not establish live compatibility: `productionDeployment:null`, `liveCompatibility:NOT_RUN`, `productionReady:false`.
+See [authoring](PLATFORM-AUTHORING.md) for component reuse and [current acceptance matrix](validation/platform-ux-v1/documentation/README.md) for actual checks and limitations. Local/fixture evidence does not establish live compatibility: `productionDeployment:null`, `liveCompatibility:NOT_RUN`, `productionReady:false`.
