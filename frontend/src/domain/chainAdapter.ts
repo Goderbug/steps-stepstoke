@@ -151,7 +151,8 @@ export class ChainAdapter implements RelayAdapter {
         const origin = await this.read(a.producer, "checkpoint", [a.revision]);
         assets.push({ assetKey: a.name, kind: ["document", "html", "image"][a.kind] as AssetVersion["kind"], revision: Number(a.revision), producerJobId: a.jobId, descriptor: { name: a.name, path: a.path, mediaType: a.mediaType, bytes: Number(a.size), sha256: a.fileHash }, originBranchId: a.producer, originCheckpoint: origin.digest });
       }
-      const output = bound ? sdk.verifyManifest(new Uint8Array(toBytes(bound.parsed.args.rawManifest)), cp.resultHash) : null;
+      const declared = purchase ? await this.read(branch, "proposal", [purchase.proposalId]) : null;
+      const output = bound ? sdk.verifyManifest(new Uint8Array(toBytes(bound.parsed.args.rawManifest)), cp.resultHash, declared) : null;
       rows.push({ id: item.digest, branchId: address(branch), revision: Number(item.revision), jobId: output?.jobId ?? null, funder: purchase ? purchase.sponsor : null, changed: bound ? assets.filter(a => eq(a.originBranchId, branch) && a.revision === Number(item.revision)).map(a => a.assetKey) : [], assets, createdBy: bound ? "round" : assets.length ? "fork" : "create", manifestKeccak: BigInt(cp.resultHash) ? cp.resultHash : null, at: await this.time(cpLogs.find((l: any) => l.parsed.args.revision === item.revision).blockNumber), git: { state: "unavailable", url: null, observedAt: null }, site: { state: "not_requested", url: null, observedAt: null } });
     }
     return rows;

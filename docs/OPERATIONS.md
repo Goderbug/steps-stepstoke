@@ -20,7 +20,7 @@ Release candidate only: `productionDeployment:null`, `liveCompatibility:NOT_RUN`
 | Authenticated status 1 | Only an explicit, separately funded identical-body retry of that attempt; new price/allowance/maxFee confirmation is required |
 | Authenticated status 2 or unknown failure status | Frozen permanently; no recovery authority |
 | Authenticated result recorded | Retrieve the original bytes from the recorded URI, verify keccak, and bind separately |
-| Invalid/oversized/multi-file binding | Keep the same recorded result; diagnose without stripping metadata, synthesizing a smaller document, changing the hash or purchasing again |
+| Invalid/oversized/ambiguous binding | Keep the same recorded result; diagnose without stripping metadata, synthesizing a smaller document, changing the hash or purchasing again. Extra files alone are allowed when exactly one declared name/path matches and the original envelope fits all bounds |
 
 Only Intake and the Branch's own pending request may deliver the result/failure. Duplicates, cross-Branch requests and impersonation revert. The callback only stores/emits under 200,000 gas. Parsing and checkpoint construction occur later. The 1,024-byte URI bound is a candidate limit: official documentation gives no universal maximum URI length. Above it the callback is undelivered and the Branch stays pending.
 

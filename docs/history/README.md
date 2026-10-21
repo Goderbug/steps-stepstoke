@@ -1,5 +1,9 @@
 # Historical evidence and exact recovery
 
+The multi-file revision preserves all 220 earlier accepted platform records by verified immutable predecessor commit/path/blob/SHA-256 references in `accepted-platform-validation-index.json.xz`. Each member was read from commit `1c5a3339f09b98516fe3f364147acce0b8c55b9c` and compared byte for byte before removal. Decode the index with Python `lzma.decompress`, then retrieve a member with `git show <commit>:<path>` to an explicit separate destination. Six previous RC raw evidence/measurement/failure files remain byte-recoverable at their original paths in `accepted-rc-raw.tar.xz`; its adjacent compressed index verifies every member and archive digest. Extract that archive into a separate directory using `tar -xJf`. `python3 tools/verify-history.py --predecessor` verifies every archive member and predecessor reference. These are historical observations, not final revision passes.
+
+The previous integration `evidence.tar.xz` is retained by the byte-verified commit/path/blob/SHA-256 reference to `1c5a3339f09b98516fe3f364147acce0b8c55b9c` in `integration-predecessor.json`; its original per-member index remains at `docs/validation/integration-v1/archive-index.json`. Retrieve it with `git show <commit>:<path>` to an explicit separate destination. Current revision results and failures are preserved independently in `docs/validation/multi-file-revision/`.
+
 The imported predecessor is commit `d29eedf8e7d6608ed109972c179b367ac07ce91f`. Delivery was initially 20,440,428 tracked bytes, including 12,521,728 bytes of historical validation. To fit the 8 MiB limit without erasing failures or rewriting authenticated content:
 
 - `imported-evidence-text.tar.xz` contains original text logs, operational/design documents and failure records, with their original repository paths and bytes. Extract into a separate directory, not over the candidate.

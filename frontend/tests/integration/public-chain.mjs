@@ -35,8 +35,10 @@ try {
 
  const receipt=await send('public adapter fixture: direct root',sdk.createProject(local.config.contracts.factory,'Ethereum adapter local rehearsal'));
  const branch=receipt.logs.map(l=>{try{return sdk.interfaces.factory.parseLog(l)}catch{return null}}).find(e=>e?.name==='BranchCreated').args.branch;
- const raw=await readFile(resolve(root,'test/fixtures/document.md.result.json')),file=await readFile(resolve(root,'test/fixtures/document.md'));
- const m=JSON.parse(raw),p={anchor:await read(branch,'anchor'),profile:0,target:toBeHex(1,32),inputs:[],outputName:m.files[0].name,outputPath:m.files[0].path,text:'Prepare the report.',publish:false};
+ const singleResult=await readFile(resolve(root,'test/fixtures/document.md.result.json')),file=await readFile(resolve(root,'test/fixtures/document.md'));
+ const m=JSON.parse(singleResult);
+ const raw=Buffer.from(JSON.stringify({...m,files:[{name:'producer-data',path:'artifacts/producer-data.json',mediaType:'application/json',bytes:999999999},...m.files]}));
+ const p={anchor:await read(branch,'anchor'),profile:0,target:toBeHex(1,32),inputs:[],outputName:m.files[0].name,outputPath:m.files[0].path,text:'Prepare the report.',publish:false};
  await send('public adapter fixture: proposal',sdk.proposeWork(branch,p,[]));
  const fee=500000000000000000n;
  await send('public adapter fixture: exact approval',sdk.approveExact(local.release.imd,branch,fee));
@@ -45,6 +47,8 @@ try {
  await send('public adapter fixture: callback',{to:local.release.intake,data:local.intakeI.encodeFunctionData('complete',[attempt.requestId,raw])},local.writer);
  const bound=await send('public adapter fixture: bind',sdk.bindResult(branch,raw,keccak256(raw),[]));
  const witness=sdk.decodeCheckpoint(bound.logs.find(l=>{try{return sdk.interfaces.branch.parseLog(l)?.name==='CheckpointWritten'}catch{return false}})).witness;
+ assert.equal(witness.length,1);assert.equal(witness[0].name,p.outputName);
+ report.multiFile={listedFiles:2,acceptedAssets:1,resultHash:keccak256(raw)};
  const pendingRaw=await readFile(resolve(root,'test/fixtures/document-updated.md.result.json'));
  const update={...p,anchor:await read(branch,'anchor'),profile:1,inputs:[p.target],text:'Update the report.'};
  await send('public adapter fixture: update proposal',sdk.proposeWork(branch,update,witness));

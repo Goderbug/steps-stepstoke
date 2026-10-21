@@ -32,11 +32,7 @@ contract RelayVerifier {
         Text.identifier(project, 64);
         uint256 files = J.field(t, 0, "files");
         if (t[files].kind != J.Type.Array) revert Policy.Invalid();
-        uint256 file = files + 1;
-        // This release declares exactly one output; accepting extra files is deliberately disabled.
-        if (file >= t[files].end || t[file].kind != J.Type.Object || t[file].end != t[files].end) {
-            revert Policy.Invalid();
-        }
+        uint256 file = _declaredFile(t, files, proposal.outputName, proposal.outputPath);
         T.Asset memory a;
         a.key = proposal.target;
         a.kind = Policy.kind(proposal.profile);
@@ -57,6 +53,25 @@ contract RelayVerifier {
         a.revision = revision;
         Assets.descriptor(a);
         next = Assets.replace(oldAssets, a);
+    }
+
+    function _declaredFile(J.Token[] memory t, uint256 files, string memory name, string memory path)
+        private
+        pure
+        returns (uint256 file)
+    {
+        // The plane lists every produced file. Admit only the proposal's unique output;
+        // the complete original envelope (including ignored entries) remains hash-bound.
+        for (uint256 i = files + 1; i < t[files].end; i = t[i].end) {
+            if (t[i].kind != J.Type.Object) revert Policy.Invalid();
+            bool named = Text.equal(_string(t, i, "name"), name);
+            bool located = Text.equal(_string(t, i, "path"), path);
+            if (named || located) {
+                if (!named || !located || file != 0) revert Policy.Invalid();
+                file = i;
+            }
+        }
+        if (file == 0) revert Policy.Invalid();
     }
 
     function _string(J.Token[] memory t, uint256 object, string memory key)

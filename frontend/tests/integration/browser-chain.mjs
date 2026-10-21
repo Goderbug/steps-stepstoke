@@ -11,6 +11,7 @@ import { fileURLToPath } from 'node:url';
 import assert from 'node:assert/strict';
 import { startLocal } from '../../scripts/local-setup.mjs';
 import * as sdk from '../../../sdk/browser.mjs';
+import { keccak256 } from '../../../vendor/ethers/ethers.mjs';
 const root = resolve(dirname(fileURLToPath(import.meta.url)), '../../..');
 // Software-rendered WebKit and RPC-heavy history verification need a bounded allowance for
 // slow CI. This changes assertion patience only; no timer can unlock or resubmit an operation.
@@ -148,12 +149,13 @@ async function sponsor(branch, proposalNumber, account = 0) {
   return { number, attempt };
 }
 const sha = b => createHash('sha256').update(b).digest('hex');
-async function deliver(branch, { text, bytes, project = 'local-project-main', job, malicious = false } = {}) {
+async function deliver(branch, { text, bytes, project = 'local-project-main', job, malicious = false, extraFiles = 0 } = {}) {
   const a = await read(branch, 'attempt', [await read(branch, 'activeAttempt')]);
   const p = await read(branch, 'proposal', [a.proposalId]);
   const kind = Number(p.profile) < 2 ? 0 : Number(p.profile) < 4 ? 1 : 2;
   const file = bytes ?? new TextEncoder().encode(text ?? (kind === 0 ? `# Local file\n${job}\n` : `<!doctype html><html><body><h1>${job}</h1></body></html>`));
   const manifest = { jobId: job, projectId: project, state: 'completed', files: [{ name: p.outputName, path: p.outputPath, mediaType: ['text/markdown', 'text/html', 'image/png'][kind], bytes: file.length, hash: sha(file), submissionHash: sha(Buffer.from(`submission-${job}`)) }] };
+  for (let i = 0; i < extraFiles; ++i) manifest.files.unshift({ name: `data-${i}`, path: `artifacts/data-${i}.json`, mediaType: 'application/json', bytes: 999999999 });
   const raw = new TextEncoder().encode(JSON.stringify(manifest));
   const path = resolve(local.artifacts, `${job}/${p.outputPath}`);
   await mkdir(dirname(path), { recursive: true }); await writeFile(path, file);
@@ -227,11 +229,18 @@ try {
     assert.equal(await countPurchases(), 0);
     await propose(); assert.equal(await countPurchases(), 0);
     await sponsor(markdown, 1, 1);
-    const first = await deliver(markdown, { job: 'markdown-create' }); await bind(markdown, first);
+    const first = await deliver(markdown, { job: 'markdown-create', extraFiles: 1 }); await bind(markdown, first);
+    assert.equal(first.manifest.files.length, 2);
+    assert.equal(await countPurchases(), 1);
     await expect((await filePreview('main')).locator('.md').getByText('markdown-create', { exact: true })).toBeVisible();
     await propose({ mode: 'update', target: 'main', inputs: ['main'], text: 'Update local notes' });
     await sponsor(markdown, 2, 0);
-    const second = await deliver(markdown, { job: 'markdown-update' }); await bind(markdown, second);
+    const second = await deliver(markdown, { job: 'markdown-update', extraFiles: 16 }); await bind(markdown, second);
+    assert.equal(second.manifest.files.length, 17);
+    assert.equal(await countPurchases(), 2);
+    const history = await local.provider.request({ method: 'eth_getLogs', params: [{ address: markdown, fromBlock: '0x0', toBlock: 'latest', topics: [sdk.interfaces.branch.getEvent('CheckpointWritten').topicHash] }] });
+    assert.equal(sdk.decodeCheckpoint(history.at(-1)).witness.length, 1);
+    evidence.multiFile = { counts: [2, 17], acceptedAssets: 1, purchases: 2, exactResultHashes: [keccak256(first.raw), keccak256(second.raw)] };
     assert.equal(await read(markdown, 'latestJobId'), 'markdown-update');
     await expect((await filePreview('main')).locator('.md').getByText('markdown-update', { exact: true })).toBeVisible();
     await capture('actual-markdown.jpg');

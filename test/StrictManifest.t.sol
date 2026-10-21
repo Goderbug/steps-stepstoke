@@ -180,7 +180,7 @@ contract StrictManifestTest is TestBase {
         }
     }
 
-    function test_rejectEmptyAndMultipleFilesEvenIfOneMatches() public {
+    function test_rejectEmptyOrMalformedExtraFileEntries() public {
         bytes memory raw = F.documentResult();
         _reject(replace(raw, '"files":[{', '"files":[{}, {'));
         _reject(replace(raw, '"files":[{', '"files":[null, {'));

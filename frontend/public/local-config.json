@@ -17,7 +17,7 @@
   "runtimeCodeKeccak": {
     "factory": "0x4be21b9f09a32cb3644afd71abb0cb2dd74a441e79c898e480c72a6aa63492f1",
     "encoder": "0x245ee3b1a84cc9e989b5ef162f7b4904a800dac79f93afa547e4de25691d66a4",
-    "verifier": "0x0f5969a5ab4bbdb79f817634bea9f0d0f4bd05a294b8c90a151e2fb5bbb29edb",
+    "verifier": "0x908286df56d37ede05739b6c431e12a64cfa1dd7b5e95529accde57d85bf3e73",
     "intake": "0x8f43b3de49e1d5598e4c1795303ce46e626fa219072d0fd25b0b814d26fcd11d",
     "imd": "0x2ee755f38b10b8c79f1b97425bfd7b78b53065ec8dec1c3da0c4d84eeee6582b"
   },
@@ -96,7 +96,7 @@
   "productionReady": false,
   "remainingReviewRisk": "Authenticated results outside the finite manifest envelope may remain unbindable; actual IMD compatibility remains unverified.",
   "deploymentBlock": 8,
-  "deploymentBlockHash": "0x87d45e5c71aef733cd1abc9c832af0595cf19977afe2984763a89a44b86b7b75",
+  "deploymentBlockHash": "0x3b0a4381c62f0e021ead59490515585e17e12c28fdc1fee0316bde5b44a4515b",
   "rpcURL": "http://127.0.0.1:8545",
   "artifactBase": "http://127.0.0.1:8546/artifacts/",
   "artifactPolicy": "TEST_ONLY_LOOPBACK_FIXTURE"

@@ -1,0 +1,11 @@
+// SPDX-License-Identifier: MIT
+pragma solidity 0.8.26;
+
+/// @dev Exact captured HTTP bytes; replayed with a local authenticated callback, not live proof.
+library MultiFileResult {
+    function raw() internal pure returns (bytes memory) {
+        return bytes(
+            '{"jobId":"b7645d94-4f1e-4e20-baef-8782bf432ae9","projectId":"b7645d94-4f1e-4e20-baef-8782bf432ae9","state":"completed","complete":true,"launch":{"requested":false,"kind":null,"id":null,"status":null,"chainId":null},"source":[{"node":"research_report","submissionHash":"3a92d41b587936a9d9ef791eb8eab0672ac775282b05328b82d6330ad963d85d","hash":"1a07579dd6b5e7acfafc9097000cc918302925926ea4af548f0e639149843c48","url":"https://api.imd.fun/bundles/1a07579dd6b5e7acfafc9097000cc918302925926ea4af548f0e639149843c48","evaluation":"structural","profile":"none"}],"files":[{"name":"r5-report","path":"artifacts/r5-report.md","hash":"77ddc8340baa239e79c2f6360bbd08b8e8ed221c28667532917b6a8da853fa25","mediaType":"text/markdown","bytes":25123,"submissionHash":"3a92d41b587936a9d9ef791eb8eab0672ac775282b05328b82d6330ad963d85d","url":"https://api.imd.fun/artifacts/77ddc8340baa239e79c2f6360bbd08b8e8ed221c28667532917b6a8da853fa25","evaluation":"structural","profile":"none"},{"name":"r5-data","path":"artifacts/r5-data.json","hash":"07ccb66d08a4128171f75b67a0a2fc3ab39c319f283a7f20ea7b66af2203a17c","mediaType":"application/json","bytes":45480,"submissionHash":"3a92d41b587936a9d9ef791eb8eab0672ac775282b05328b82d6330ad963d85d","url":"https://api.imd.fun/artifacts/07ccb66d08a4128171f75b67a0a2fc3ab39c319f283a7f20ea7b66af2203a17c","evaluation":"structural","profile":"none"}],"delivery":{"requested":true,"mode":"research","repoUrl":"https://github.com/Identity-md/research/blob/main/jobs/b7645d94-4f1e-4e20-baef-8782bf432ae9/_identitymd/README.md","commit":"0c2704b049a819c37472f5b4a5d8259420ab30b1","deliveredAt":"2026-09-16T04:19:40.796Z","failure":null}}'
+        );
+    }
+}

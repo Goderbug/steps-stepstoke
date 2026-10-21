@@ -1,5 +1,7 @@
 # RELEASE-CANDIDATE-V1 evidence
 
+Historical accepted adaptation evidence. The current multi-file revision has its own [final results](../multi-file-revision/README.md). Six original raw evidence/measurement/failure files referenced below are byte-recoverable at their original paths from `docs/history/accepted-rc-raw.tar.xz`; its adjacent compressed index and `tools/verify-history.py` verify every member. No historical pass is claimed for the new verifier.
+
 Checked 2026-10-21 against the exact imported project, with the existing Foundry configuration. This is development evidence, not independent production approval. `productionDeployment:null`, `liveCompatibility:NOT_RUN`, `productionReady:false`.
 
 ## Final checks

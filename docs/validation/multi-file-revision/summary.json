@@ -1,0 +1,213 @@
+{
+  "classification": "WORKER_LOCAL_REVISION_EVIDENCE; NOT INDEPENDENT PRODUCTION APPROVAL",
+  "revisionBaseline": "1c5a3339f09b98516fe3f364147acce0b8c55b9c",
+  "productionDeployment": null,
+  "liveCompatibility": "NOT_RUN",
+  "productionReady": false,
+  "checks": {
+    "forge": {
+      "passed": 146,
+      "suites": 20,
+      "deliveredTests": 143,
+      "scratchProofAndAdvisoryTests": 3,
+      "fuzzSeed": "0x0658c4410aa492d0cfda058f7f13f56d416689bcd97d746fd69793d6a2483bd5"
+    },
+    "sdk": {
+      "passed": 71
+    },
+    "frontendUnit": {
+      "passed": 83
+    },
+    "typecheck": "PASS",
+    "productionBuild": "PASS",
+    "fixtures": {
+      "startTime": "2026-10-21T18:53:41.240Z",
+      "duration": 244008.068,
+      "expected": 180,
+      "skipped": 0,
+      "unexpected": 0,
+      "flaky": 0
+    },
+    "localContractBrowser": [
+      {
+        "project": "chromium",
+        "passed": 16,
+        "failed": 0,
+        "browserRuntime": "PASS",
+        "multiFile": {
+          "counts": [
+            2,
+            17
+          ],
+          "acceptedAssets": 1,
+          "purchases": 2,
+          "exactResultHashes": [
+            "0x30dc1a70bcd8b997942cb47b97c04a5f19a5a08b82627e4482e54846f176fca8",
+            "0xbd89e9e2eb9c15cf36330e4ccb6a379240943943e197f72635f66b90e83953da"
+          ]
+        }
+      },
+      {
+        "project": "chromium-mobile",
+        "passed": 16,
+        "failed": 0,
+        "browserRuntime": "PASS",
+        "multiFile": {
+          "counts": [
+            2,
+            17
+          ],
+          "acceptedAssets": 1,
+          "purchases": 2,
+          "exactResultHashes": [
+            "0x30dc1a70bcd8b997942cb47b97c04a5f19a5a08b82627e4482e54846f176fca8",
+            "0xbd89e9e2eb9c15cf36330e4ccb6a379240943943e197f72635f66b90e83953da"
+          ]
+        }
+      },
+      {
+        "project": "webkit",
+        "passed": 16,
+        "failed": 0,
+        "browserRuntime": "PASS",
+        "multiFile": {
+          "counts": [
+            2,
+            17
+          ],
+          "acceptedAssets": 1,
+          "purchases": 2,
+          "exactResultHashes": [
+            "0x30dc1a70bcd8b997942cb47b97c04a5f19a5a08b82627e4482e54846f176fca8",
+            "0xbd89e9e2eb9c15cf36330e4ccb6a379240943943e197f72635f66b90e83953da"
+          ]
+        }
+      },
+      {
+        "project": "webkit-mobile",
+        "passed": 16,
+        "failed": 0,
+        "browserRuntime": "PASS",
+        "multiFile": {
+          "counts": [
+            2,
+            17
+          ],
+          "acceptedAssets": 1,
+          "purchases": 2,
+          "exactResultHashes": [
+            "0x30dc1a70bcd8b997942cb47b97c04a5f19a5a08b82627e4482e54846f176fca8",
+            "0xbd89e9e2eb9c15cf36330e4ccb6a379240943943e197f72635f66b90e83953da"
+          ]
+        }
+      }
+    ],
+    "publicAdapter": {
+      "passed": 5,
+      "scope": "ACTUAL_LOCAL_CHAIN_1; HTTPS ROUTES ARE LOCAL TEST TRANSPORT",
+      "multiFile": {
+        "listedFiles": 2,
+        "acceptedAssets": 1,
+        "resultHash": "0x1286f097af18017b3b767968edeac8e87fc06d2d810a6563ed98dfdb4af57eaf"
+      }
+    },
+    "taste": {
+      "passed": 16,
+      "total": 16
+    },
+    "suppliedBrowserMCP": {
+      "status": "NOT_RUN",
+      "reason": "Chromium chrome distribution unavailable at /opt/google/chrome/chrome; installed Playwright used for all browser projects"
+    },
+    "nativeScreenReader": "NOT_RUN",
+    "physicalWalletsAndDevices": "NOT_RUN",
+    "nativeBrowserZoom": "NOT_RUN"
+  },
+  "contracts": {
+    "RelayFactory": {
+      "creationCodeHash": "0x41d0c6705f10ee3306fd4799b3374c2b820d75653bbc15690473465054ba47a1",
+      "runtimeBytesBeforeImmutablePatching": 21195,
+      "initcodeBytes": 21475
+    },
+    "RelayBranch": {
+      "creationCodeHash": "0x90239deb23f571538b695329b676ba29ef5faaa9872f48e2eaef88ca5349edd6",
+      "runtimeBytesBeforeImmutablePatching": 12876,
+      "initcodeBytes": 16219
+    },
+    "RelayEncoder": {
+      "creationCodeHash": "0x01e47a7ec9da2fcc772b5b863c8fb369eccb875527e872e034c9f48ed61e1bca",
+      "runtimeBytesBeforeImmutablePatching": 11498,
+      "initcodeBytes": 11524
+    },
+    "RelayVerifier": {
+      "creationCodeHash": "0x702683c558092f216679e946e9c238591527d9f7cf2306f832fbea17b7185b98",
+      "runtimeBytesBeforeImmutablePatching": 14719,
+      "initcodeBytes": 14745
+    }
+  },
+  "export": [
+    {
+      "path": "dist/assets/dist-BDJMXmMx.js",
+      "bytes": 102692,
+      "sha256": "c41e09b87df6e27621a1f7a7a70e553b568feb115ac5b9533c1a0a973d4b1581"
+    },
+    {
+      "path": "dist/assets/index-4UpPiOax.css",
+      "bytes": 18774,
+      "sha256": "495955c0bf1f98305d4536decee51018fccbb3a4ea63b61fcab2179edff5ff0c"
+    },
+    {
+      "path": "dist/assets/index-B9l8pOnm.js",
+      "bytes": 741024,
+      "sha256": "4ecc2ba4590380567eb4cc785fc9690068a340daad7b28f0f7a1cbb2e2569bcb"
+    },
+    {
+      "path": "dist/favicon.svg",
+      "bytes": 267,
+      "sha256": "759fec54d3994b36ac2f504a699d7cac8bf5febc16a14f8b9a890d7fa46aff24"
+    },
+    {
+      "path": "dist/index.html",
+      "bytes": 1023,
+      "sha256": "15177c21fc96cf5cea19aab96f51123a335b0167955ded2f6b1f5c1eaf5c55df"
+    },
+    {
+      "path": "dist/local-config.json",
+      "bytes": 3473,
+      "sha256": "df4c0e5e8195c4a90fef187afcadbe733240af2979621217f8a745203f851925"
+    },
+    {
+      "path": "dist/og.png",
+      "bytes": 50098,
+      "sha256": "5679126801c83042c4b3e74e19e1e6d7e0f7048d0319f1cc6edcc0a6f737f8e5"
+    },
+    {
+      "path": "dist/og.svg",
+      "bytes": 979,
+      "sha256": "ae8e3af19715ba91d948cc1a028f3d38e20fb6f57508103fae4068ffd650fe5f"
+    }
+  ],
+  "initialRuns": {
+    "suppliedProof": "FAIL Invalid(); final unchanged proof PASS",
+    "fixtures": {
+      "passed": 179,
+      "failed": 1,
+      "reason": "Chromium first-Tab focus assertion; unchanged assertion passes 5 reruns and the final full matrix"
+    },
+    "harnessRepairs": [
+      "Reserved Solidity local identifier; helper extraction for compiler stack depth",
+      "Moved expected-revert setup before arming the cheatcode",
+      "Unit test runs in Node to avoid mixed JSDOM/Node typed-array realms",
+      "Renamed a duplicated integration-test local identifier",
+      "Copied missing documentation into the test mirror; corrected a grep that matched no tests"
+    ]
+  },
+  "limitations": [
+    "All purchases/callbacks use disposable Anvil and MockIntake; no authorized live profile execution",
+    "Existing raw/complexity limits can still leave an authenticated result unbindable",
+    "Only identical explicit paid retry follows status 1; deterministic refusals can charge again",
+    "Compiled-in protocol identifiers cannot follow a withdrawn catalog/Intake migration",
+    "Long mobile histories keep the existing vertical two-column sequence",
+    "No hosting, public-chain signing/broadcast/deployment/spending or X posting"
+  ]
+}

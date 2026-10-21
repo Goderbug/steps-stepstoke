@@ -72,7 +72,7 @@ Controls use 6px radii, previews/sheets 8px, badges 4px. The app favicon is a lo
 - Keep original file producer branch/job/checkpoint and exact chain IDs. Latest is not every file's origin; attempts are not completed rounds.
 - Do not translate authenticated outputs, infer relationships, simulate live projects, change protocol limits, introduce a dark theme, or execute artifact scripts.
 
-Rendered coverage, fixes, screenshots and limitations are recorded in `docs/validation/rc-v1/README.md`. Better Interface guidance is adapted from Jakub Krehel (MIT); documentation method from Paul Bakaus / Impeccable (Apache-2.0). Retained notices are in `frontend/docs/licenses/`.
+Historical rendered coverage is recorded in `docs/validation/rc-v1/README.md`; current revision coverage is in `docs/validation/multi-file-revision/README.md`. Better Interface guidance is adapted from Jakub Krehel (MIT); documentation method from Paul Bakaus / Impeccable (Apache-2.0). Retained notices are in `frontend/docs/licenses/`.
 
 ## Final integration refinements
 
@@ -106,3 +106,11 @@ Final Chromium review of the actual static export at 1440×900 verified the fixt
 Review corrections: frontend/src/ui/LocalApp.tsx and domain/adapter.ts now gate only live adapter signing rather than disabling fixture controls; tests assert the expected missing handoff 404 without allowing unrelated resource failures. Final screenshots and exact review records are in docs/validation/integration-v1/evidence.tar.xz. Display screenshots are WebP recompressions, not original pixel evidence. No new visual defect was observed in the final two manual views; this is bounded coverage, not a universal accessibility certification.
 
 Design guidance attribution and licenses remain in frontend/docs/licenses (Better Interface, Jakub Krehel, MIT; documentation guidance from Paul Bakaus / Impeccable, Apache-2.0, pinned commit 9d715cc4f5564a990ca8345abfdd5df6dc9b41c8). Existing frontend/DESIGN.md retains the broader interface record.
+
+## Multi-file revision
+
+The revision preserves the tokens, typography, components, logo/mark, spacing and responsive rules above. `ChainAdapter.getHistory` supplies the bound attempt's stored proposal to the SDK so the selected output remains the declared accepted file even when the producer lists other artifacts. Technical provenance and full hashes stay in disclosures; extra files are not added as asset tabs or treated as new supported types.
+
+A 32-checkpoint layout rehearsal confirms the existing desktop rail scrolls internally, its earlier control works and keyboard selection changes the selected output while preserving the latest label. At 390px and 320px the accepted two-column mobile sequence grows vertically; all checkpoints and the output remain reachable without horizontal page overflow. Long phone histories therefore require more vertical scrolling. This revision preserves that existing layout.
+
+Current measured design/browser coverage and limitations are in `docs/validation/multi-file-revision/README.md`. The earlier integration paragraph's browser availability refers to that historical run. Native screen readers, browser-native zoom and physical wallet/device sessions remain unverified; a narrow or emulated viewport does not establish those checks.

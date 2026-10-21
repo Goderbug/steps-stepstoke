@@ -11,17 +11,21 @@ test('public authenticated snapshots remain exact and unsupported zero-file enve
   for(const row of index) {
     const raw=await readFile(new URL(`../test/fixtures/public/completed-${row.index}.json`,import.meta.url));
     assert.equal(keccak256(raw),row.resultHash);
-    assert.throws(()=>verifyManifest(raw,row.resultHash),/exactly one declared file/);
+    assert.throws(()=>verifyManifest(raw,row.resultHash),/Expected a declared file/);
     const mutable=await readFile(new URL(`../test/fixtures/public/mutable-job-${row.index}.json`,import.meta.url));
     assert.notEqual(keccak256(mutable),row.resultHash);
     assert.throws(()=>verifyManifest(mutable,row.resultHash),/digest mismatch/);
   }
 });
-test('actual public multi-file result is unsupported even with a matching local test hash', async () => {
+test('actual public multi-file result selects only the proposal output from exact bytes', async () => {
   const raw=await readFile(new URL('../test/fixtures/public/observed-multiple-files.json',import.meta.url));
-  // HTTP observation is not a callback. This test only establishes parser incompatibility.
+  // HTTP observation is not a callback. The local digest tests parser compatibility only.
   assert.equal(JSON.parse(raw).files.length,2);
-  assert.throws(()=>verifyManifest(raw,keccak256(raw)),/exactly one declared file/);
+  assert.throws(()=>verifyManifest(raw,keccak256(raw)),/Supply declared output/);
+  const output=verifyManifest(raw,keccak256(raw),{outputName:'r5-report',outputPath:'artifacts/r5-report.md'});
+  assert.equal(output.file.hash,'0x77ddc8340baa239e79c2f6360bbd08b8e8ed221c28667532917b6a8da853fa25');
+  assert.equal(output.file.mediaType,'text/markdown');
+  assert.equal(output.file.bytes,25123);
 });
 
 test('original bytes survive fetch and require exact callback hash', async () => {

@@ -26,7 +26,7 @@
         "docs/validation/rc-v1/README.md",
         "docs/REVIEW.md"
       ],
-      "detail": "Eight exact free samples pass; real HTML update, oversized/multi-file delivery and all-profile runtime execution remain unsupported or unproved."
+      "detail": "Unique declared output among bounded extra files is supported and locally replayed against captured two-file bytes. Real HTML update, authenticated envelope bounds and all-profile live runtime execution remain unproved."
     },
     "gasCeilings": {
       "status": "OPEN",

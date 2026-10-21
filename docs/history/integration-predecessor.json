@@ -1,5 +1,5 @@
 {
-  "classification": "Previous accepted adaptation evidence; not the new integration runs or failures",
+  "classification": "Earlier accepted adaptation and integration evidence; not current revision passes or failures",
   "entries": [
     {
       "commit": "9e53d2b1e6af36513cbf17a1756ac5af24a06825",
@@ -23,6 +23,14 @@
       "bytes": 196572,
       "sha256": "a5ff5a35eb4909806d6b35e75ad429d899a94b1cb373146daef2f55e435d05a6",
       "gitBlob": "99b9e1366c37918beb27ddc4d1bf8acb06c96b36",
+      "storage": "verified-immutable-predecessor"
+    },
+    {
+      "commit": "1c5a3339f09b98516fe3f364147acce0b8c55b9c",
+      "path": "docs/validation/integration-v1/evidence.tar.xz",
+      "bytes": 232008,
+      "sha256": "10bfeb9b72641c514990c0b498052ca44887da8a74c6dc0b2009058f0f8ce055",
+      "gitBlob": "58e49d6829316c0b3a8d52d9a89721603a7055f0",
       "storage": "verified-immutable-predecessor"
     }
   ]

@@ -6,6 +6,18 @@ STEPS preserves the Open Workshop flow: create a project, propose work, explicit
 
 The static export is in `dist/`. Open it through a static HTTP server; hash routes and relative assets also support subpaths. `#/demo` is labelled fixture data; `#/local` uses actual candidate contracts with local mocks; `#/ethereum` requires a later confirmed deployment. The public handoff is unavailable until the later official deployment; no handoff or addresses are invented. There is no hosting in this delivery.
 
+Install the pinned frontend dependencies, check/rebuild the export, then preview it on loopback:
+
+```sh
+npm ci --ignore-scripts --prefix frontend
+npm run typecheck --prefix frontend
+npm run test:unit --prefix frontend
+npm run build --prefix frontend
+npm run preview --prefix frontend -- --host 127.0.0.1
+```
+
+The build writes root `dist/` with relative assets. Validation in this revision used a `/tmp` mirror with the same unchanged manifests so no dependency/cache directory entered the repository. [Revision evidence](docs/validation/multi-file-revision/README.md) records the multi-file repair, actual final results and browser limitations; earlier evidence remains recoverable as described in [history](docs/history/README.md).
+
 ## Review and run
 
 - [ADAPTATION.md](ADAPTATION.md): exact launch and reproduced compatibility changes.

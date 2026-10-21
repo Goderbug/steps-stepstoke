@@ -23,3 +23,24 @@ if extra.exists():
    assert len(data)==row['bytes'] and hashlib.sha256(data).hexdigest()==row['sha256']
    assert subprocess.check_output(['git','rev-parse',row['commit']+':'+row['path']],cwd=root).decode().strip()==row['gitBlob']
  print('PASS: integration predecessor references'+(' independently byte-verified' if '--predecessor' in sys.argv else ' indexed; use --predecessor for object verification'))
+
+for name in ['accepted-platform-validation', 'accepted-rc-raw']:
+ index=json.loads(lzma.decompress((root/f'docs/history/{name}-index.json.xz').read_bytes()))
+ if index.get('storage')=='verified-immutable-predecessor':
+  assert len(index['commit'])==40
+  if '--predecessor' in sys.argv:
+   for row in index['entries']:
+    raw=subprocess.check_output(['git','show',index['commit']+':'+row['path']],cwd=root)
+    assert len(raw)==row['bytes'] and hashlib.sha256(raw).hexdigest()==row['sha256'],row['path']
+    assert subprocess.check_output(['git','rev-parse',index['commit']+':'+row['path']],cwd=root).decode().strip()==row['gitBlob']
+  print(f'PASS: {name} predecessor members'+(' independently byte-verified' if '--predecessor' in sys.argv else ' indexed; use --predecessor for object verification'))
+  continue
+ archive=root/index['archive']
+ data=archive.read_bytes()
+ assert len(data)==index['bytes'] and hashlib.sha256(data).hexdigest()==index['sha256']
+ with tarfile.open(archive,'r:xz') as tar:
+  assert sorted(tar.getnames())==sorted(row['path'] for row in index['entries'])
+  for row in index['entries']:
+   raw=tar.extractfile(row['path']).read()
+   assert len(raw)==row['bytes'] and hashlib.sha256(raw).hexdigest()==row['sha256'],row['path']
+ print(f'PASS: {name} archive and every original member byte-verified')

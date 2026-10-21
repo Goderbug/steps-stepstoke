@@ -1,5 +1,7 @@
 # RC-V1 integration evidence
 
+Historical accepted integration evidence. The current multi-file revision is recorded [separately](../multi-file-revision/README.md). This directory's original evidence archive is retained by a verified immutable predecessor reference in `docs/history/integration-predecessor.json`, with the original member index beside this file. All earlier 220 platform browser records/screenshots are byte-recoverable through the verified predecessor references in `docs/history/accepted-platform-validation-index.json.xz`. See [exact recovery](../../history/README.md).
+
 Development only, starting from imported commit `9e53d2b1e6af36513cbf17a1756ac5af24a06825`. Solidity source/bytecode are unchanged from the accepted direct-Branch adaptation. No public deployment, signing, paid request, extra order, hosting or posting occurred. productionDeployment:null; liveCompatibility:NOT_RUN; productionReady:false.
 
 ## Actual checks

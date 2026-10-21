@@ -292,14 +292,30 @@ export function recoverHistory(branch, logs, checkpoints) {
   }).sort((a, b) => a.revision < b.revision ? -1 : a.revision > b.revision ? 1 : 0);
 }
 
-export function verifyManifest(raw, recordedHash) {
+export function verifyManifest(raw, recordedHash, declaredOutput) {
   if (!(raw instanceof Uint8Array) || keccak256(raw) !== hash(recordedHash)) throw new Error('Raw manifest digest mismatch');
   const manifest = strictManifestJSON(raw);
   if (manifest.state !== 'completed') throw new Error('Incomplete result');
   identifier(manifest.jobId);
   identifier(manifest.projectId);
-  if (!Array.isArray(manifest.files) || manifest.files.length !== 1) throw new Error('Expected exactly one declared file');
-  const file = manifest.files[0];
+  if (!Array.isArray(manifest.files) || !manifest.files.length) throw new Error('Expected a declared file');
+  // A single-file call remains compatible. Multi-file selection requires the actual
+  // proposal; guessing the first entry can display an unrelated producer artifact.
+  const name = declaredOutput?.outputName ?? declaredOutput?.name;
+  const output = declaredOutput?.outputPath ?? declaredOutput?.path;
+  if (declaredOutput && (typeof name !== 'string' || typeof output !== 'string')) throw new Error('Expected declared output name and path');
+  if (!declaredOutput && manifest.files.length !== 1) throw new Error('Supply declared output for a multi-file result');
+  let file;
+  for (const entry of manifest.files) {
+    if (!entry || typeof entry !== 'object' || Array.isArray(entry) || typeof entry.name !== 'string' || typeof entry.path !== 'string') throw new Error('Expected a file object with name and path');
+    const named = !declaredOutput || entry.name === name;
+    const located = !declaredOutput || entry.path === output;
+    if (named || located) {
+      if (!named || !located || file) throw new Error('Ambiguous declared output');
+      file = entry;
+    }
+  }
+  if (!file) throw new Error('Declared output is missing');
   identifier(file.name);
   path(file.path);
   const kind = mime.indexOf(file.mediaType);
