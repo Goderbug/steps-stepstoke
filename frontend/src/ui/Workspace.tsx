@@ -5,7 +5,7 @@ import { FixtureAdapter, type CallbackOutcome } from "../domain/fixtureAdapter";
 import { signingAccount, type DisplayAccount as Account, type Branch, type Checkpoint, type Proposal, type Sponsorship } from "../domain/types";
 import { CopyId, STATE_LABEL, short } from "./format";
 import { ProposeForm } from "./ProposeForm";
-import { loadRecovery, removeRecovery } from "./recovery";
+import { loadRecovery, removeRecovery, isLatestAttempt as latestAttempt } from "./recovery";
 import { useVerificationVersion, verificationOf } from "./verification";
 import { useActionScope } from "./actionScope";
 import { readWorkspaceSnapshot } from "./snapshot";
@@ -63,7 +63,7 @@ export function Workspace({ adapter, branchId, account }: Props) {
   const outstanding = sponsorships.data?.some(sp => isLatestAttempt(sp) && (["unknown","pending"].includes(sp.stages.purchase) || ["pending","refused"].includes(sp.stages.callback) || ["pending","failed"].includes(sp.stages.binding)));
   const selectedProposal = proposals.data?.find(p => p.id === sponsorFor);
   const canFork = view.revision > 0 && view.createdBy === "round" && view.assets.length > 0;
-  const base = adapter.kind === "fixture" ? "demo" : "local";
+  const base = adapter.kind === "fixture" ? "demo" : (adapter.routeBase ?? "local");
   return <div className="ws">
     <ProjectHeader title={b.projectTitle} goal={b.goal} branch={b} back={`#/${base}`} />
     {notice && <p className="alert alert-warn" role="status">{notice}<button className="btn btn-link" onClick={() => setNotice(null)}>Dismiss</button></p>}
@@ -115,6 +115,11 @@ function SponsorshipRow({ sp, canRetry, adapter, account, fixture, wrongNet, onC
   const run = async (f: () => Promise<unknown>) => { if(lock.current)return; lock.current=true;setBusy(true);setErr(null);try{await f();onChange();}catch(e){setErr((e as Error).message);}finally{lock.current=false;setBusy(false);} };
   return <li className="attempt" data-testid={`sp-${sp.id}`}><h3>Attempt {sp.attempt} <span className="meta">· {sp.checkpointId ? "Bound to checkpoint" : "Not a completed round"}</span></h3><BuildStatus sponsorship={sp} files={files} />{sp.note && <p className="hint">{sp.note}</p>}{files.note && <p className="hint">{files.note}</p>}<EvidenceDisclosure title="Transaction and attempt identity"><dl className="facts"><div><dt>Proposal</dt><dd>{sp.proposalId}</dd></div><div><dt>Sponsor</dt><dd><CopyId value={sp.sponsor} label="sponsor" /></dd></div><div><dt>Original transaction</dt><dd>{sp.txHash ? <CopyId value={sp.txHash} label="transaction hash" /> : "Unknown"} · nonce {sp.nonce ?? "unknown"} · chain {chainId}</dd></div></dl></EvidenceDisclosure>
     <div className="actions">{sp.stages.callback === "refused" && canRetry && <button className="btn btn-secondary" disabled={busy || wrongNet || !proposal} onClick={() => setRetrying(true)}>Review identical paid retry</button>}{fixture && sp.stages.binding === "failed" && <button className="btn btn-secondary" disabled={busy || wrongNet} onClick={() => run(() => adapter.resubmitBinding(signingAccount(account,assertActive),sp.id))}>Correct binding without purchase</button>}{fixture && sp.stages.callback === "pending" && <button className="btn btn-quiet" disabled={busy} onClick={() => run(() => fixture.deliverCallback(sp.id))}>Demo: deliver callback</button>}</div>
+    {adapter.fetchOriginalResult && sp.stages.binding === "pending" && <button className="btn btn-secondary" disabled={busy} onClick={() => run(async () => {
+      const raw = await adapter.fetchOriginalResult!(sp.id);
+      const url = URL.createObjectURL(new Blob([raw as BlobPart], { type: "application/json" }));
+      const a = document.createElement("a"); a.href = url; a.download = "result.json"; a.click(); setTimeout(() => URL.revokeObjectURL(url), 1000);
+    })}>Download original result</button>}
     {adapter.kind === "live" && ["failed","pending"].includes(sp.stages.binding) && <BindingForm disabled={busy || wrongNet} onBind={raw => run(() => adapter.resubmitBinding(signingAccount(account,assertActive),sp.id,raw))} />}
     {retrying && proposal && <FundingSheet adapter={adapter} account={account} branch={branch} proposal={proposal} latest={latest} retryOf={sp} onClose={() => setRetrying(false)} onDone={() => {setRetrying(false);onChange();}} />}
     {err && <p className="alert alert-error" role="alert">{err}</p>}
@@ -124,7 +129,7 @@ function ForkForm({adapter,account,branch,cp,onDone}:{adapter:RelayAdapter;accou
   const qc=useQueryClient(); const [direction,setDirection]=useState("");const [review,setReview]=useState(false),[busy,setBusy]=useState(false);const [err,setErr]=useState<string|null>(null),[made,setMade]=useState<Branch|null>(null);const lock=useRef(false);
   const assertActive=useActionScope(`${account.address}:${account.chainId}:${cp.id}:${review}:${direction}`);
   const submit=async()=>{if(lock.current)return;lock.current=true;setBusy(true);setErr(null);try{const child=await adapter.fork(signingAccount(account,assertActive),{branchId:branch.id,checkpointId:cp.id,direction});assertActive();setMade(child);await qc.invalidateQueries({queryKey:["branches"]});}catch(e){setErr((e as Error).message);}finally{lock.current=false;setBusy(false);}};
-  if(made)return <p className="alert alert-ok" role="status">Fork created. It has no IMD project and needs its own later funding. <a href={`#/${adapter.kind==="fixture"?"demo":"local"}/b/${made.id}`} onClick={onDone}>Open fork</a></p>;
+  if(made)return <p className="alert alert-ok" role="status">Fork created. It has no IMD project and needs its own later funding. <a href={`#/${adapter.kind==="fixture"?"demo":(adapter.routeBase??"local")}/b/${made.id}`} onClick={onDone}>Open fork</a></p>;
   return <form className="form" aria-label="Prepare historical fork" onSubmit={e=>{e.preventDefault();if(direction.trim())setReview(true);}}><p>Fork the exact selected snapshot. This creates a child branch, without purchasing execution.</p><dl className="facts"><div><dt>Selected checkpoint</dt><dd><CopyId value={cp.id} label="fork checkpoint" /></dd></div><div><dt>Inherited files</dt><dd>{cp.assets.map(a=>`${a.assetKey}@${a.revision}`).join(", ")}</dd></div></dl><label className="field"><span>Fork direction (fixed after creation)</span><textarea required rows={3} value={direction} onChange={e=>{setDirection(e.target.value);setReview(false);}} /></label>{!review?<button className="btn btn-primary" disabled={!direction.trim()}>Review fork</button>:<div className="confirm"><h3>Review before signing</h3><p>{direction}</p><p className="hint">Gas only. File provenance is retained. Proposals, the parent IMD project, execution head and publication identity are not copied.</p><div className="actions"><button type="button" className="btn btn-primary" disabled={busy} onClick={submit}>{busy?"Confirming fork…":"Sign and fork"}</button><button type="button" className="btn btn-quiet" onClick={()=>setReview(false)}>Back to edit</button></div></div>}{err&&<p className="alert alert-error" role="alert">{err}</p>}</form>;
 }
 function BindingForm({disabled,onBind}:{disabled:boolean;onBind:(raw:Uint8Array)=>Promise<void>}) {

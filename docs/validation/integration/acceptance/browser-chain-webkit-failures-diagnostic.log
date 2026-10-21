@@ -1,4 +1,0 @@
-PASS Public config closed; local reads without wallet; EIP-6963 selected provider
-PASS Authenticated status2 and unknown failure freeze permanently
-PASS Pending original hash/nonce saved before wait; missing/corrupt journal uses pending nonce; replaced transaction reconciles without rebuy
-PASS Same-call replacement recovers authenticated attempt; status1 retry uses chain truth despite original journal

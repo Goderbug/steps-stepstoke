@@ -6,7 +6,7 @@ import { sdk, deployment, release } from "./sdk";
 
 export interface Provider { request(a: { method: string; params?: any[] }): Promise<any> }
 export interface LocalConfig {
-  kind: "LOCAL_DEPLOYMENT"; chainId: number; contracts: Record<string, string>;
+  kind: "LOCAL_DEPLOYMENT" | "ETHEREUM_DEPLOYMENT"; chainId: number; contracts: Record<string, string>;
   runtimeCodeKeccak: Record<string, string>; actions: Record<string, string>;
   rpcURL: string; artifactBase: string; [key: string]: any;
 }
@@ -15,7 +15,7 @@ export interface Journal {
   hash: Hex | null; nonce: number; account: Hex; chainId: number; operation: string;
   branch: string; proposalId?: string; data: string; to: string; state: string; at: string;
 }
-const KEY = "relay.local.transactions.v1";
+const KEY = "relay.local.transactions.v1"; // Existing journal retained; every lookup is chain-scoped.
 const now = () => new Date().toISOString();
 const eq = (a: string, b: string) => a.toLowerCase() === b.toLowerCase();
 const address = (s: string) => getAddress(s) as Hex;
@@ -61,37 +61,44 @@ export function assertLoopbackConfig(c: LocalConfig) {
   }
 }
 
+export function assertChainConfig(c: LocalConfig) {
+  if (c.kind === "LOCAL_DEPLOYMENT") return assertLoopbackConfig(c);
+  if (c.kind !== "ETHEREUM_DEPLOYMENT" || c.chainId !== 1 || !Number.isSafeInteger(c.deploymentBlock) || c.deploymentBlock < 1) throw new Error("A confirmed Ethereum deployment and deployment block are required");
+  const rpc = new URL(c.rpcURL);
+  if (rpc.protocol !== "https:" || rpc.username || rpc.password || ["localhost", "127.0.0.1", "[::1]"].includes(rpc.hostname)) throw new Error("Public RPC must use credential-free HTTPS");
+}
+
 /** Actual A1 contracts + browser SDK. Reads are public RPC; only the selected wallet signs. */
 export class ChainAdapter implements RelayAdapter {
   readonly kind = "live" as const;
-  readonly label = "Local contracts with MockToken / MockIntake (not live IMD)";
+  get label() { return this.config.chainId === 1 ? "STEPS · Ethereum mainnet" : "Local contracts with MockToken / MockIntake (not live IMD)"; }
+  get routeBase() { return this.config.chainId === 1 ? "ethereum" : "local"; }
   readonly capabilities = { read: true, createBranch: true, propose: true, sponsor: true, fork: true, bindingRetry: true, realWalletSigning: true };
   readonly provider: Provider;
   private locked = false;
   private memory = new Map<string, Journal>();
-  constructor(readonly config: LocalConfig, private wallet: WalletGetter) { assertLoopbackConfig(config); this.provider = httpProvider(config.rpcURL); }
+  constructor(readonly config: LocalConfig, private wallet: WalletGetter) { assertChainConfig(config); this.provider = httpProvider(config.rpcURL); }
   async verify() {
     const problems = await deployment.verifyDeploymentConfig(this.provider, this.config, release);
     if (problems.length) throw new Error(`Deployment verification failed: ${problems.join(", ")}`);
   }
-  status() { return { state: "ready" as const, summary: this.label, missing: [], a1: { jobId: "d5530989-b886-4f9d-80dd-44d26d85ffd2", submittedBodySha256: "", checkedAt: "2026-10-21", observedState: "local verified", delivery: null } }; }
+  status() { return { state: "ready" as const, summary: this.label, missing: [], a1: { jobId: "d5530989-b886-4f9d-80dd-44d26d85ffd2", submittedBodySha256: "", checkedAt: "2026-10-21", observedState: `Candidate runtime verified on chain ${this.config.chainId}`, delivery: null } }; }
   private read = async (branch: string, method: string, args: any[] = []) => (await sdk.queryState(this.provider, sdk.readState(branch, method, args)))[0];
   private factoryRead = async (method: string, args: any[] = []) => (await sdk.queryState(this.provider, sdk.readFactory(this.config.contracts.factory, method, args)))[0];
   private async logs(at: string, iface = sdk.interfaces.branch) {
-    const raw = await this.provider.request({ method: "eth_getLogs", params: [{ address: at, fromBlock: "0x0", toBlock: "latest" }] });
+    const head = Number(BigInt(await this.provider.request({ method: "eth_blockNumber" })));
+    const raw = await sdk.readLogs(this.provider, { address: at, fromBlock: this.config.deploymentBlock ?? 0, toBlock: head });
     return raw.map((log: any) => { try { return { ...log, parsed: iface.parseLog(log) }; } catch { return { ...log, parsed: null }; } });
   }
   private async checkBranch(branch: string) {
     address(branch);
     if (!await this.factoryRead("registered", [branch])) throw new Error("Branch is not registered by this Factory");
     for (const name of ["factory", "encoder", "verifier"]) if (!eq(await this.read(branch, name), this.config.contracts[name])) throw new Error(`Branch ${name} verification failed`);
-    // Factory registered clones have the fixed implementation code; check the minimal proxy runtime too.
     const code = await this.provider.request({ method: "eth_getCode", params: [branch, "latest"] });
-    const expected = `0x363d3d373d3d3d363d73${this.config.contracts.implementation.slice(2).toLowerCase()}5af43d82803e903d91602b57fd5bf3`;
-    if (!eq(code, expected)) throw new Error("Branch proxy code verification failed");
+    deployment.verifyRuntime(code, "RelayBranch", release);
   }
   async getCapabilities(): Promise<Capabilities> {
-    return { source: `A1 ${release.version} · policy ${release.policyId}`, chainId: this.config.chainId, chainName: "Local contract chain", enabledKinds: ["document", "html", "image"], maxAssets: release.limits.assets, maxInputs: release.limits.inputs, maxOutputs: release.limits.outputs, maxBytes: { document: release.limits.markdownBytes, html: release.limits.htmlBytes, image: release.limits.imageBytes }, maxRequestBodyBytes: release.limits.requestBytes, maxTextBytes: 1024, maxGoalBytes: 512, maxAssetNameBytes: 64, sitePublication: release.publishing, imageEditing: false, mediaTypes: { document: ["text/markdown"], html: ["text/html"], image: ["image/png"] } };
+    return { source: `A1 ${release.version} · policy ${release.policyId}`, chainId: this.config.chainId, chainName: this.config.chainId === 1 ? "Ethereum" : "Local contract chain", enabledKinds: ["document", "html", "image"], maxAssets: release.limits.assets, maxInputs: release.limits.inputs, maxOutputs: release.limits.outputs, maxBytes: { document: release.limits.markdownBytes, html: release.limits.htmlBytes, image: release.limits.imageBytes }, maxRequestBodyBytes: release.limits.requestBytes, maxTextBytes: 1024, maxGoalBytes: 512, maxAssetNameBytes: 64, sitePublication: release.publishing, imageEditing: false, mediaTypes: { document: ["text/markdown"], html: ["text/html"], image: ["image/png"] } };
   }
   async listBranches() {
     const count = Number(await this.factoryRead("branchCount"));
@@ -215,7 +222,7 @@ export class ChainAdapter implements RelayAdapter {
     const price = (await sdk.queryState(this.provider, sdk.readPrice(this.config.contracts.intake, preview.action, this.config.contracts.imd)))[0];
     if (price <= 0n) throw new Error("This action is not currently for sale");
     const head = await this.read(branch, "latestJobId");
-    return { price, token: "Mock IMD", decimals: 18, quotedAt: now(), anchor: w.digest, action: head ? "job.continue" : "job.open", parentJobId: head || null, spender: address(branch), proposalId, bodyHash: preview.bodyHash, bodyBytes: preview.byteLength, bodyText: new TextDecoder().decode(preview.raw) };
+    return { price, token: this.config.chainId === 1 ? "IMD" : "Mock IMD", decimals: 18, quotedAt: now(), anchor: w.digest, action: head ? "job.continue" : "job.open", parentJobId: head || null, spender: address(branch), proposalId, bodyHash: preview.bodyHash, bodyBytes: preview.byteLength, bodyText: new TextDecoder().decode(preview.raw) };
   }
   private async selected(account: Account): Promise<Provider> {
     account.assertActive?.();
@@ -227,6 +234,7 @@ export class ChainAdapter implements RelayAdapter {
   }
   private async send(account: Account, operation: string, branch: string, prepare: () => Promise<any>, proposalId?: string): Promise<any> {
     if (this.locked) throw new Error("A signature or unresolved transaction is already in progress");
+    if (this.config.chainId === 1) sdk.assertProductionGates(this.config.productionGate, this.config);
     this.locked = true;
     try {
       await this.verify();
@@ -268,7 +276,7 @@ export class ChainAdapter implements RelayAdapter {
     const minedNonce = Number(BigInt(await this.provider.request({ method: "eth_getTransactionCount", params: [j.account, "latest"] })));
     if (minedNonce > j.nonce) {
       const head = Number(BigInt(await this.provider.request({ method: "eth_blockNumber" })));
-      for (let b = head; b >= 0; b--) {
+      for (let b = head; b >= Math.max(this.config.deploymentBlock ?? 0, head - 127); b--) {
         const block = await this.provider.request({ method: "eth_getBlockByNumber", params: [`0x${b.toString(16)}`, true] });
         const replacement = block.transactions.find((t: any) => eq(t.from, j.account) && Number(BigInt(t.nonce)) === j.nonce);
         if (replacement) return eq(replacement.to ?? "", j.to) && eq(replacement.input, j.data) ? "REPLACED_SAME_CALL_READ_CHAIN" : "REPLACED_OTHER";
@@ -298,7 +306,7 @@ export class ChainAdapter implements RelayAdapter {
     const find = (name: string) => w.witness.find((a: any) => a.name === name);
     const target = find(d.targetKey);
     const kind = ["document", "html", "image"].indexOf(d.kind);
-    const p = { anchor: w.digest, profile: kind * 2 + (d.mode === "update" ? 1 : 0), target: target?.key ?? keccak256(toUtf8Bytes(d.targetKey)), inputs: d.inputKeys.map(name => { const a = find(name); if (!a) throw new Error("Input is absent from the current witness"); return a.key; }).sort((a, b) => BigInt(a) < BigInt(b) ? -1 : 1), outputName: target?.name ?? d.targetKey, outputPath: target?.path ?? (kind === 1 ? "dist/index.html" : kind === 0 ? `docs/${d.targetKey}.md` : `images/${d.targetKey}.png`), text: d.requirement, publish: d.publish };
+    const p = { anchor: w.digest, profile: kind * 2 + (d.mode === "update" ? 1 : 0), target: target?.key ?? keccak256(toUtf8Bytes(d.targetKey)), inputs: d.inputKeys.map(name => { const a = find(name); if (!a) throw new Error("Input is absent from the current witness"); return a.key; }).sort((a, b) => BigInt(a) < BigInt(b) ? -1 : 1), outputName: target?.name ?? d.targetKey, outputPath: sdk.nextOutputPath(kind, target?.name ?? d.targetKey, target?.path ?? ""), text: d.requirement, publish: d.publish };
     return { p, w: w.witness };
   }
   async propose(account: Account, d: ProposalDraft) {
@@ -341,6 +349,14 @@ export class ChainAdapter implements RelayAdapter {
     if (BigInt(await this.read(branch, "activeAttempt")) !== n) throw new Error("Only the current attempt can be retried");
     return this.purchase(account, `${branch}:${a.proposalId}`, max, q, true);
   }
+  async fetchOriginalResult(id: string): Promise<Uint8Array> {
+    const { branch, n } = this.split(id);
+    await this.checkBranch(branch);
+    const a = await this.read(branch, "attempt", [n]);
+    const log = (await this.logs(branch)).find((l: any) => l.parsed?.name === "ResultRecorded" && l.parsed.args.attempt === n && eq(l.parsed.args.requestId, a.requestId));
+    if (!a.delivered || !log || !eq(log.parsed.args.resultHash, a.outcome)) throw new Error("Authenticated result callback is missing");
+    return sdk.fetchOriginalResult(log.parsed.args.uri, a.outcome, { gateway: this.config.ipfsGateway });
+  }
   async resubmitBinding(account: Account, id: string, raw?: Uint8Array) {
     const { branch, n } = this.split(id);
     if (!raw) throw new Error("Select the original callback-authenticated result.json. Preserve its exact bytes");
@@ -362,7 +378,11 @@ export class ChainAdapter implements RelayAdapter {
   }
   async reconcile(r: RecoveryRecord) { return (await this.getSponsorships(r.branchId)).find(s => s.id === r.sponsorshipId || s.txHash === r.txHash) ?? null; }
   async fetchFile(d: FileDescriptor, producerJobId: string) {
-    // Locations are an explicit local-test policy, not discovered from untrusted result metadata.
+    if (this.config.chainId === 1) {
+      const policy = sdk.createArtifactPolicy({ locations: [{ origin: "https://api.imd.fun", pathPrefix: "/artifacts/" }] });
+      const result = await sdk.fetchTrustedArtifact(sdk.artifactURL(d.sha256), { ...d, hash: d.sha256 }, { policy });
+      return result.bytes;
+    }
     const base = new URL(this.config.artifactBase);
     const policy = sdk.createLoopbackFixturePolicy({ locations: [{ origin: base.origin, pathPrefix: base.pathname }] });
     if (!/^[a-zA-Z0-9_-]+$/.test(producerJobId) || d.path.split("/").some(s => !s || s === "." || s === "..")) throw new Error("Invalid artifact location");

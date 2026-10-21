@@ -8,3 +8,5 @@ export * from './core.mjs';
 export const RUNTIME = 'node';
 export const nodeSha256 = bytes => `0x${createHash('sha256').update(bytes).digest('hex')}`;
 export const verifyFile = createFileVerifier(nodeSha256);
+
+export * from './public.mjs';

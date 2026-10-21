@@ -40,7 +40,7 @@ contract RelayHistoryTest is RelaySetup {
         assertTrue(contains(body, bytes(Text.hex32(second[1].fileHash))));
         assertTrue(contains(body, '"as":"asset-0"'));
         assertTrue(contains(body, '"as":"asset-1"'));
-        assertTrue(contains(body, '"path":"dist/index.html"'));
+        assertTrue(contains(body, '"path":"artifacts/index.html"'));
         assertFalse(contains(body, '"projectId"'));
         assertFalse(contains(body, '"repoUrl"'));
         assertFalse(contains(body, '"baseCommit"'));
@@ -122,9 +122,9 @@ contract RelayHistoryTest is RelaySetup {
         T.Asset[] memory first = _document();
         T.Asset[] memory second =
             _accept(branch, _proposal(branch, T.Profile.MarkdownUpdate, 1), first, F.documentUpdatedResult());
-        address implementation = factory.implementation();
+        address unregistered = address(factory.encoder());
         vm.expectRevert(RelayFactory.InvalidParent.selector);
-        factory.fork(implementation, 1, first, "fork");
+        factory.fork(unregistered, 1, first, "fork");
         vm.expectRevert(RelayFactory.InvalidCheckpoint.selector);
         factory.fork(address(branch), 0, _empty(), "fork");
         vm.expectRevert(RelayFactory.InvalidCheckpoint.selector);
@@ -151,16 +151,20 @@ contract RelayHistoryTest is RelaySetup {
         assertEq(intake.count(), 2);
     }
 
-    function test_reinitializeAndImplementationInitializationCannotChangeAuthority() public {
-        RelayBranch implementation = RelayBranch(factory.implementation());
-        vm.expectRevert(RelayBranch.Unauthorized.selector);
-        branch.initialize("different goal", "", T.Source(address(0), 0, 0), 0, _empty());
+    function test_removedInitializerCannotChangeAuthorityEvenForFactory() public {
+        bytes memory data = abi.encodeWithSignature(
+            "initialize(string,string,(address,uint64,bytes32),bytes32,(bytes32,uint8,string,string,bytes32,string,uint32,bytes32,address,string,bytes32,uint64)[])",
+            "different goal",
+            "",
+            T.Source(address(0), 0, 0),
+            bytes32(0),
+            _empty()
+        );
+        (bool initialized,) = address(branch).call(data);
+        assertFalse(initialized);
         vm.prank(address(factory));
-        vm.expectRevert(RelayBranch.Unauthorized.selector);
-        branch.initialize("different goal", "", T.Source(address(0), 0, 0), 0, _empty());
-        vm.prank(address(factory));
-        vm.expectRevert(RelayBranch.Unauthorized.selector);
-        implementation.initialize("different goal", "", T.Source(address(0), 0, 0), 0, _empty());
+        (initialized,) = address(branch).call(data);
+        assertFalse(initialized);
         (bool ok,) = address(branch).call(abi.encodeWithSignature("setIntake(address)", address(this)));
         assertFalse(ok);
         (ok,) = address(branch)

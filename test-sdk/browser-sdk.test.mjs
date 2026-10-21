@@ -89,7 +89,7 @@ test('utf8Length matches Buffer.byteLength, including unpaired surrogates', () =
 
 test('HTML export check matches the Node dist check for embedded images and refuses tampering', async () => {
   const html = u8(Buffer.from(`<!doctype html><html><body><img src="data:image/png;base64,${Buffer.from(fx.image).toString('base64')}"></body></html>`));
-  const descriptor = { path: 'dist/index.html', mediaType: 'text/html', hash: sha256(html), bytes: html.length };
+  const descriptor = { path: 'artifacts/index.html', mediaType: 'text/html', hash: sha256(html), bytes: html.length };
   const images = [{ descriptor: { mediaType: 'image/png', hash: fx.imageSha, bytes: fx.image.length }, bytes: fx.image }];
   const dir = await mkdtemp(join(tmpdir(), 'relay-browser-'));
   try {

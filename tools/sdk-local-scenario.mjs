@@ -19,7 +19,7 @@ export async function runLocalScenario({ sdk, provider, config, accounts, writer
     // Simulate on current state, then hand the unsigned transaction to the account's provider.
     await provider.request({ method: 'eth_call', params: [{ from, to: prepared.to, data: prepared.data }, 'latest'] });
     const request = sdk.toWalletRequest(prepared, { from, chainId: config.chainId });
-    const hash = await provider.request({ method: request.method, params: [{ ...request.params[0], gas: '0x1c9c380' }] });
+    const hash = await provider.request({ method: request.method, params: [{ ...request.params[0], gas: '0x'+(16777216).toString(16) }] });
     const receipt = await receiptOf(hash);
     check(BigInt(receipt.status) === 1n, `${step} reverted`);
     trace.steps.push({ step, from, to: prepared.to, hash, gasUsed: BigInt(receipt.gasUsed).toString(), block: BigInt(receipt.blockNumber).toString() });

@@ -1,8 +1,8 @@
-# CTO Relay: Open Workshop
+# STEPS: Open Workshop
 
 ## Overview
 
-CTO Relay is a workspace for public projects: propose work, fund one execution, inspect accepted output, then continue or fork history. The platform uses a warm, precise light interface, independent of project artwork. This system changes platform chrome, not authenticated artifacts or Second Life artwork.
+STEPS is a workspace for public projects: propose work, fund one execution, inspect accepted output, then continue or fork history. The platform uses a warm, precise light interface, independent of project artwork. This system changes platform chrome, not authenticated artifacts or Second Life artwork.
 
 The source of truth is `frontend/src/styles.css`. Three surfaces share one hierarchy: a compact fixed goal, the ordered checkpoint sequence, the selected complete output, then the next action. Details and provenance use native disclosures. The project list uses the same header, rows, actions and form primitives. The funding surface separates proposal review, token approval and purchase. `#/showcase` composes the production components using labelled demo data.
 
@@ -72,7 +72,7 @@ Controls use 6px radii, previews/sheets 8px, badges 4px. The app favicon is a lo
 - Keep original file producer branch/job/checkpoint and exact chain IDs. Latest is not every file's origin; attempts are not completed rounds.
 - Do not translate authenticated outputs, infer relationships, simulate live projects, change protocol limits, introduce a dark theme, or execute artifact scripts.
 
-Rendered coverage, fixes, screenshots and limitations are recorded in `docs/validation/platform-ux-v1/design-review.md`. Better Interface guidance is adapted from Jakub Krehel (MIT); documentation method from Paul Bakaus / Impeccable (Apache-2.0). Retained notices are in `frontend/docs/licenses/`.
+Rendered coverage, fixes, screenshots and limitations are recorded in `docs/validation/rc-v1/README.md`. Better Interface guidance is adapted from Jakub Krehel (MIT); documentation method from Paul Bakaus / Impeccable (Apache-2.0). Retained notices are in `frontend/docs/licenses/`.
 
 ## Final integration refinements
 
@@ -82,6 +82,12 @@ Unbroken project names and goals wrap with `overflow-wrap:anywhere`; flex headin
 
 The funding sheet shows both approval and purchase controls throughout. Purchase is disabled before confirmed approval; approval is disabled after confirmation. Only the available next action has the primary fill. A price change returns to exact approval. Closing any preparation restores its opener's focus and invalidates delayed signing work.
 
-Final rendered observations, contrast measurements, six-domain coverage and browser limits: [integration review](docs/validation/platform-ux-v1/final/design-review.md).
+Final rendered observations, contrast measurements, six-domain coverage and browser limits: [integration review](docs/validation/rc-v1/README.md).
 
 Inputs, selects and textareas use the 16px body token even inside 13px metadata containers. Main navigation links have minimum 44px width and height. These values are verified by the final rendered review.
+
+## RELEASE-CANDIDATE-V1 observations
+
+The existing Open Workshop visual system and icon were retained. Platform chrome and the existing OG image text now use STEPS/Stepstoke and link to https://x.com/stepstoke. No new brand artwork or slogan is supplied. Historical output content is unchanged. Ethereum mode has an explicit undeployed state and original-result download uses the same established action controls.
+
+The actual export was inspected at desktop and 320px width, including the loaded sandboxed HTML preview and wallet sheet. No host horizontal overflow was observed. Full local-chain browser scenarios exercise creation, proposals, explicit approval/purchase, history, continuation, fork and recovery. Browser/engine coverage and limitations are in the current evidence index; prior screenshots are historical archive references.

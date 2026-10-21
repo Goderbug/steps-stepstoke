@@ -59,7 +59,7 @@ contract ManifestSpecTest is SpecSetup {
         raw = replace(
             raw,
             '"source":[]',
-            '"source":[{"name":"notes","path":"docs/notes.md","hash":"evil-source"}],'
+            '"source":[{"name":"notes","path":"artifacts/notes.md","hash":"evil-source"}],'
             '"delivery":{"repoUrl":"https://untrusted.invalid/repo","commit":"newer-commit"},'
             '"publication":{"status":"published","url":"https://untrusted.invalid/site"}'
         );
@@ -85,7 +85,7 @@ contract ManifestSpecTest is SpecSetup {
         bad[1] = replace(good, '"jobId":"manifest-job"', '"jobId":null');
         bad[2] = replace(good, '"projectId":"manifest-project"', '"projectId":""');
         bad[3] = replace(good, '"name":"notes"', '"name":"undeclared"');
-        bad[4] = replace(good, '"path":"docs/notes.md"', '"path":"dist/index.html"');
+        bad[4] = replace(good, '"path":"artifacts/notes.md"', '"path":"artifacts/index.html"');
         bad[5] = replace(good, '"mediaType":"text/markdown"', '"mediaType":"text/plain"');
         bad[6] = replace(good, '"files"', '"sourceOnly"');
         bad[7] = replace(good, '"files":[{', '"files":[{"name":"notes"}, {');
@@ -204,12 +204,12 @@ contract ManifestSpecTest is SpecSetup {
         string memory project = string(D.repeat("p", 64));
         bytes memory raw = D.manifest(p, job, project, D.document());
         raw = replace(raw, '"state":"completed"', '"st\\u0061te":"co\\u006dpleted"');
-        raw = replace(raw, '"path":"docs/notes.md"', '"path":"docs\\/notes.md"');
+        raw = replace(raw, '"path":"artifacts/notes.md"', '"path":"artifacts\\/notes.md"');
         (string memory decodedJob, string memory decodedProject, T.Asset[] memory assets) =
             verifier.verify(raw, keccak256(raw), p, empty(), address(root), 1);
         assertEq(decodedJob, job);
         assertEq(decodedProject, project);
-        assertEq(assets[0].path, "docs/notes.md");
+        assertEq(assets[0].path, "artifacts/notes.md");
         bytes memory longJob = replace(raw, bytes(job), bytes.concat(bytes(job), "j"));
         vm.expectRevert(Policy.Limit.selector);
         verifier.verify(longJob, keccak256(longJob), p, empty(), address(root), 1);

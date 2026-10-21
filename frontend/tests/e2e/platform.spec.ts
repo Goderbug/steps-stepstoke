@@ -19,7 +19,7 @@ async function workspace(page:any){await page.goto("./#/demo/b/fx-branch-1");awa
 async function openFunding(page:any){await workspace(page);await page.getByRole("button",{name:"Review funding",exact:true}).first().click();const sheet=page.getByRole("dialog",{name:"Fund a contribution"});await expect(sheet.getByRole("button",{name:"1. Approve exact amount"})).toBeEnabled();return sheet;}
 
 test("first screen identifies the product and main action; gateway metadata",async({page},info)=>{
-  await page.goto("./");await expect(page).toHaveTitle("CTO Relay · Open Workshop");const action=page.getByRole("link",{name:/Explore demo project/});await expect(action).toBeInViewport();await expect(page.locator('html')).toHaveAttribute("lang","en");for(const name of ["description","og:title","og:image"]){expect(await page.locator(`meta[${name.startsWith("og")?"property":"name"}="${name}"]`).getAttribute("content")).toBeTruthy();}
+  await page.goto("./");await expect(page).toHaveTitle("STEPS · Stepstoke · Open Workshop");const action=page.getByRole("link",{name:/Explore demo project/});await expect(action).toBeInViewport();await expect(page.locator('html')).toHaveAttribute("lang","en");for(const name of ["description","og:title","og:image"]){expect(await page.locator(`meta[${name.startsWith("og")?"property":"name"}="${name}"]`).getAttribute("content")).toBeTruthy();}
   await shot(page,info,"home");await action.click();await expect(page.getByRole("heading",{name:"Round 3 output"})).toBeVisible();
 });
 test("project list and separate gas-only project creation",async({page})=>{
@@ -62,4 +62,12 @@ test("reduced motion keeps keyboard preparation, focus return and historical sel
   await page.keyboard.press("Escape");await expect(action).toBeFocused();
   await page.getByRole("button",{name:/Select Round 1/}).click();await expect(page.getByRole("button",{name:/Select Round 3/})).toContainText("Latest");
   expect(await page.evaluate(()=>document.documentElement.scrollWidth-innerWidth)).toBe(0);
+});
+
+test("Ethereum candidate has an explicit closed handoff without fabricated addresses",async({page})=>{
+ await page.goto('./#/ethereum');
+ await expect(page.getByRole('heading',{name:'Ethereum deployment unavailable'})).toBeVisible();
+ await expect(page.getByText('No confirmed Ethereum deployment is configured.')).toBeVisible();
+ await expect(page.getByRole('button',{name:'Verify configuration again'})).toBeVisible();
+ await expect(page.getByRole('button',{name:'Create project'})).toHaveCount(0);
 });

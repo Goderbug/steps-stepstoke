@@ -1,4 +1,0 @@
-PASS Public config closed; local reads without wallet; EIP-6963 selected provider
-PASS Exact allowance and fresh price/maxFee checks; double-click and signature rejection
-PASS Account/network changes invalidate prepared signing; no purchase
-PASS Purchase signature rejection and double-click send exactly one explicit paid attempt

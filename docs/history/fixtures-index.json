@@ -1,0 +1,72 @@
+[
+  {
+    "path": "test/fixtures/FixtureData.sol",
+    "sha256": "43f5b17b4f49501eb053f8b8126b214d7b4d9d697c93b04bd3f20d2a8b76c948",
+    "bytes": 7613
+  },
+  {
+    "path": "test/fixtures/LiveResultFixture.sol",
+    "sha256": "a5e6b2517a9fe92d4af8372476442a7481e8dbb761e788695a75ff5ceb746a18",
+    "bytes": 3576
+  },
+  {
+    "path": "test/fixtures/SdkGolden.sol",
+    "sha256": "6ba904307975d118b17592e0e2f10268416776bb3f2e4af32fd113f9dbc302d5",
+    "bytes": 620
+  },
+  {
+    "path": "test/fixtures/document-updated.md",
+    "sha256": "83605e76b0309dacc8cb8b045c51b3dda9d7f481b6975747ecf5f827c7ed800c",
+    "bytes": 55
+  },
+  {
+    "path": "test/fixtures/document-updated.md.result.json",
+    "sha256": "26ba0d4952eeb287c6ac58518111e0798a597af90b45c74a64f0f4b349fe7baf",
+    "bytes": 478
+  },
+  {
+    "path": "test/fixtures/document.md",
+    "sha256": "0b5bda36d61062cbbc3d58fa80fb6bdc2bbe7288f13e11a3ff8434ab1b5c335f",
+    "bytes": 32
+  },
+  {
+    "path": "test/fixtures/document.md.result.json",
+    "sha256": "f6d6be14786e21970699d13690fc8c35d44accb14dbfe4ecfe89d5b2ae375ea0",
+    "bytes": 478
+  },
+  {
+    "path": "test/fixtures/html-1.html",
+    "sha256": "f32b9679cf9534a4ba9966948ce4a7900b9e0c84af7bdfeeca432bd06bbace0c",
+    "bytes": 183
+  },
+  {
+    "path": "test/fixtures/html-1.html.result.json",
+    "sha256": "3e23e91bf6f3aff9e9fd36043f4c2bf4339329ca6e9a1002d63d4a8a054a9ddf",
+    "bytes": 478
+  },
+  {
+    "path": "test/fixtures/html-3.html",
+    "sha256": "e6a15991045502145928b303bba6edf330086893c6bc7a06742a62c7c020317a",
+    "bytes": 335
+  },
+  {
+    "path": "test/fixtures/html-3.html.result.json",
+    "sha256": "b6892bb4e608f341d62935b11e9da574fd7f1b651e3de2bb80224a74041b3ace",
+    "bytes": 478
+  },
+  {
+    "path": "test/fixtures/image-2.png",
+    "sha256": "6f35a9bb5217bc3a09f2e1547b5a95983c3ae6cfa8087ee3bf9cdc3542cb4e7e",
+    "bytes": 70
+  },
+  {
+    "path": "test/fixtures/image-2.png.result.json",
+    "sha256": "8156fceb1aa619215ffcd875a5225d7eacb1fa242d8863e0b5707c2c604ce9f9",
+    "bytes": 493
+  },
+  {
+    "path": "test/fixtures/sdk-golden.json",
+    "sha256": "59ea1669a3d6a5df878e7620f5a8d0058aabb4a49dc1f5d564e1a424578415b1",
+    "bytes": 960
+  }
+]

@@ -1,6 +1,19 @@
 [
   {
     "type": "function",
+    "name": "policyId",
+    "inputs": [],
+    "outputs": [
+      {
+        "name": "",
+        "type": "bytes32",
+        "internalType": "bytes32"
+      }
+    ],
+    "stateMutability": "pure"
+  },
+  {
+    "type": "function",
     "name": "verify",
     "inputs": [
       {

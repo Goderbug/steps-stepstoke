@@ -1,7 +1,7 @@
 {
-  "name": "CTO Relay Station A1",
-  "version": "0.1.1-local-review",
-  "policyId": "0x98360971ff8aeee2617322ba7ccbb1b51b318fb6e47f39129464eb5fd2f2e19b",
+  "name": "STEPS (Stepstoke)",
+  "version": "RELEASE-CANDIDATE-V1",
+  "policyId": "0xda20682d095e562fad40017c7dec4f700f23864077e1faddbc75f342bf5a984a",
   "intendedChainId": 1,
   "intake": "0xa43e6f75ee006411f79ac1c84120606c2330de82",
   "imd": "0xd34a99bc0f67ae1bbd63c660e6d0b0dd03e263b7",
@@ -13,7 +13,7 @@
   "ethers": "6.17.0",
   "productionDeployment": null,
   "liveCompatibility": "NOT_RUN",
-  "independentContributorReview": "ORIGINAL_SWARM_REVIEW_COMPLETED",
+  "independentContributorReview": "NOT_RUN_FOR_RELEASE_CANDIDATE_V1",
   "productionReady": false,
   "publishing": false,
   "github": true,
@@ -33,14 +33,14 @@
     {
       "id": 0,
       "name": "MarkdownCreate",
-      "skill": "build-document",
+      "skill": "research-report",
       "mime": "text/markdown",
       "update": false
     },
     {
       "id": 1,
       "name": "MarkdownUpdate",
-      "skill": "build-document",
+      "skill": "research-report",
       "mime": "text/markdown",
       "update": true
     },
@@ -49,7 +49,7 @@
       "name": "HTMLCreate",
       "skill": "build-website",
       "mime": "text/html",
-      "path": "dist/index.html",
+      "path": "artifacts/index.html",
       "update": false
     },
     {
@@ -57,13 +57,13 @@
       "name": "HTMLUpdate",
       "skill": "build-website",
       "mime": "text/html",
-      "path": "dist/index.html",
+      "path": "artifacts/index.html",
       "update": true
     },
     {
       "id": 4,
       "name": "ImageCreate",
-      "skill": "imagegen",
+      "skill": "create-image",
       "mime": "image/png",
       "update": false,
       "references": false
@@ -71,32 +71,33 @@
   ],
   "contracts": {
     "RelayFactory": {
-      "creationCodeHash": "0xb3e401d6af73c59c91280e30399f37cd38ac747ef635c294fc9242e4a9319f4a",
-      "runtimeBytesBeforeImmutablePatching": 4249,
-      "initcodeBytes": 45535
+      "creationCodeHash": "0x41d0c6705f10ee3306fd4799b3374c2b820d75653bbc15690473465054ba47a1",
+      "runtimeBytesBeforeImmutablePatching": 21195,
+      "initcodeBytes": 21475
     },
     "RelayBranch": {
-      "creationCodeHash": "0x0a1f39641064ab3d3c4bfbd7702546639f5cad35844a729d17f2416574ec644e",
-      "runtimeBytesBeforeImmutablePatching": 15472,
-      "initcodeBytes": 15724
+      "creationCodeHash": "0x90239deb23f571538b695329b676ba29ef5faaa9872f48e2eaef88ca5349edd6",
+      "runtimeBytesBeforeImmutablePatching": 12876,
+      "initcodeBytes": 16219
     },
     "RelayEncoder": {
-      "creationCodeHash": "0x6bce140fb6cda3b9b1613bca7066df1d6a55765426f93b56d0337ddc9fa762f4",
-      "runtimeBytesBeforeImmutablePatching": 10842,
-      "initcodeBytes": 10868
+      "creationCodeHash": "0x01e47a7ec9da2fcc772b5b863c8fb369eccb875527e872e034c9f48ed61e1bca",
+      "runtimeBytesBeforeImmutablePatching": 11498,
+      "initcodeBytes": 11524
     },
     "RelayVerifier": {
-      "creationCodeHash": "0x0692ebf17ab1ea93ba54988a5dae61b35fce086f777c8feea5f7776ce6757dd4",
-      "runtimeBytesBeforeImmutablePatching": 14372,
-      "initcodeBytes": 14398
+      "creationCodeHash": "0xe5f008f03ee3fba664428084ceb20f587d35b145dd34c8403a3431d3c6ab105c",
+      "runtimeBytesBeforeImmutablePatching": 14544,
+      "initcodeBytes": 14570
     }
   },
-  "independentAgentReview": "LOCAL_REPAIRS_REVIEWED_WITH_RESIDUAL_MEDIUM",
-  "validationReport": "docs/validation/review-fixes/README.md",
+  "independentAgentReview": "NOT_RUN_FOR_RELEASE_CANDIDATE_V1",
+  "validationReport": "docs/validation/rc-v1/README.md",
   "sourceBaseline": {
     "repository": "https://github.com/identity-md-launches/launch-2294-build-cto-relay-station",
     "commit": "9b0294e7ab19060bd00c489fbe032cf248528e0d",
-    "scope": "Local repair candidate; not a new Swarm delivery or public deployment"
+    "scope": "Undeployed Ethereum contracts-only candidate; liveCompatibility NOT_RUN",
+    "importedCommit": "d29eedf8e7d6608ed109972c179b367ac07ce91f"
   },
   "manifestParser": {
     "depth": 16,
@@ -112,5 +113,116 @@
       "comparisonCount": "sum(0+1+...+(memberCount-1)) for each object, including skipped metadata"
     }
   },
-  "remainingReviewRisk": "Authenticated results outside the finite manifest envelope may remain unbindable; actual IMD compatibility remains unverified."
+  "remainingReviewRisk": "Authenticated results outside the finite manifest envelope may remain unbindable; actual IMD compatibility remains unverified.",
+  "runtimeChecks": {
+    "RelayFactory": {
+      "bytes": 21195,
+      "normalizedKeccak": "0x1a12c8ec49e0e35f0b19ded8fffe5a1b2da799a4590a4c1e163a2e7743d8ae23",
+      "immutableReferences": {
+        "3050": [
+          {
+            "start": 829,
+            "length": 32
+          },
+          {
+            "start": 2180,
+            "length": 32
+          },
+          {
+            "start": 3061,
+            "length": 32
+          },
+          {
+            "start": 3746,
+            "length": 32
+          },
+          {
+            "start": 4519,
+            "length": 32
+          }
+        ],
+        "3053": [
+          {
+            "start": 1068,
+            "length": 32
+          },
+          {
+            "start": 2872,
+            "length": 32
+          },
+          {
+            "start": 3296,
+            "length": 32
+          },
+          {
+            "start": 4677,
+            "length": 32
+          },
+          {
+            "start": 4884,
+            "length": 32
+          }
+        ]
+      }
+    },
+    "RelayBranch": {
+      "bytes": 12876,
+      "normalizedKeccak": "0xa07776424b71fb742c6c87aa16cce83644d0d1463412f4d74ac729b1fadf2907",
+      "immutableReferences": {
+        "696": [
+          {
+            "start": 1541,
+            "length": 32
+          },
+          {
+            "start": 3422,
+            "length": 32
+          }
+        ],
+        "699": [
+          {
+            "start": 1631,
+            "length": 32
+          },
+          {
+            "start": 4620,
+            "length": 32
+          },
+          {
+            "start": 7238,
+            "length": 32
+          },
+          {
+            "start": 9340,
+            "length": 32
+          },
+          {
+            "start": 12611,
+            "length": 32
+          }
+        ],
+        "702": [
+          {
+            "start": 867,
+            "length": 32
+          },
+          {
+            "start": 6806,
+            "length": 32
+          }
+        ]
+      }
+    },
+    "RelayEncoder": {
+      "bytes": 11498,
+      "normalizedKeccak": "0x245ee3b1a84cc9e989b5ef162f7b4904a800dac79f93afa547e4de25691d66a4",
+      "immutableReferences": {}
+    },
+    "RelayVerifier": {
+      "bytes": 14544,
+      "normalizedKeccak": "0x0f5969a5ab4bbdb79f817634bea9f0d0f4bd05a294b8c90a151e2fb5bbb29edb",
+      "immutableReferences": {}
+    }
+  },
+  "officialX": "https://x.com/stepstoke"
 }

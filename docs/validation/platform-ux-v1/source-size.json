@@ -1,7 +1,0 @@
-{
-  "frontendSourceBytes": 764342,
-  "limit": 8388608,
-  "status": "PASS",
-  "excludes": "generated node_modules/cache/test-result/scratch directories only",
-  "distBytes": 877404
-}

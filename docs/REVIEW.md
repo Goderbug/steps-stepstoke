@@ -1,50 +1,27 @@
-# Local adversarial review and readiness record
+# Release review and open risks
 
-Scope: Solidity authority, payments, callbacks, exact-byte manifest binding, persistent assets, historical forks, and the offline Node preparation layer.
+This is the worker's local source review and evidence record, not independent production approval. `productionDeployment:null`, `liveCompatibility:NOT_RUN`, `productionReady:false`. The imported source already contained reviewed parser/payment/mapping repairs; those tests and all historical failures are retained by archive/index. Current changes and reproductions are enumerated in [ADAPTATION.md](../ADAPTATION.md).
 
-The original IMD A1 source delivery is pinned at `9b0294e7ab19060bd00c489fbe032cf248528e0d`. This checkout is a local repair candidate under policy A1/2. Current review, regression outcomes and source-specific measurements are indexed in [review-fixes](validation/review-fixes/README.md). It is not a new IMD delivery, a deployed system or an external security audit. Live profile compatibility, real IMD runtime consumption and public deployment remain `NOT_RUN`.
-
-## Findings addressed in this candidate
-
-The later Swarm adversarial review executed and reported two Medium findings and one Low finding. The original documentation pass did not fully carry those findings into its handoff; it must not be used as the current review status.
-
-| Finding | Risk | Candidate repair and remaining boundary |
+| Gate | Current result | Required before launch |
 | --- | --- | --- |
-| Medium: create profiles allowed different slots to reuse public names/paths | Two accepted assets could compete for one workspace mapping | Reject an output name or equal path used by another current slot before payment; also reject file/directory ancestor conflicts in both directions. Updates retain their target mapping and check all other slots; historical descriptors remain readable |
-| Medium: unrelated metadata could exceed the fully retained parser envelope | A completed authenticated result could never bind, leaving the Branch stopped | A binding-specific parser validates the whole raw document while retaining only acceptance fields; the SDK mirrors that projection. Metadata has finite raw/complexity budgets. This repairs demonstrated envelope cases, not every possible future manifest |
-| Low: non-HTML assets could write under top-level `dist/` | Later HTML instructions requiring only `dist/index.html` conflict with those files | On-chain/SDK output-path checks reserve top-level `dist/` to the fixed HTML mapping |
-| Local review follow-up: individually bounded JSON shapes can combine expensive work | An input within each separate limit could still exhaust the binding gas margin | Whole-document resource accounting and combined-shape regression measurement; final policy and measured outcomes are in [limits](LIMITS.md) and [current evidence](validation/review-fixes/README.md) |
+| Final security review | OPEN: local regressions/fuzz/invariants pass; new construction and public adapter need independent review | Review exact final source/ABI and custody, callback, lineage, input limits and external dependency assumptions |
+| Runtime-child launch policy | Mechanical floor PASS; service acceptance OPEN | Confirm full runtime-created Branch is permitted without being a static manifest entry; no hidden child or init call |
+| Manifest/profile compatibility | OPEN | Real authenticated one-output results and continuation/input materialization for all profiles, especially HTML update; resolve zero/multiple/oversized envelopes |
+| Size/gas/service limits | EIP size floor PASS; service/global gas bounds OPEN | Service simulation of exact three-entry batch, full calldata and worst allowed operations; documented service limits and margin |
+| Live execution | NOT_RUN | Separately authorized mainnet validation; local mocks and free syntax checks do not qualify |
+| Deployment verification | NOT_RUN | Confirm chain-1 transaction/block/hash, addresses, exact runtimes/dependencies, policy and ABI hashes |
 
-Regression evidence records failing behavior before the relevant fixes, positive controls for legitimate mappings and metadata, and corrected behavior. Original full-capacity fixtures were changed to distinct names/paths without reducing their field lengths or capacity. Untouched asset structs retain their complete provenance. Test counts, final source hashes and gas figures must be read from current evidence, not copied from original delivery logs.
+`config/production-gate.schema.json` defines these gates; `config/production-gate.json` is the closed candidate record. `productionReady:true` requires a nonnull deployment, live PASS, all six gate statuses PASS and nonempty evidence. The adapter also requires the record's addresses/block to match its verified configuration. Editing a JSON status is not authorization or independent evidence.
 
-## Authority and lifecycle boundaries
+Specific unresolved boundaries:
 
-- Factory embeds fixed code and creates fixed nonupgradeable clones; initialization is single-use, Factory-only and atomic with registration.
-- The repair adds no owner, upgrade, arbitrary call, admin repair, callback replacement or raw-body entrypoint.
-- Proposals share an anchor without FIFO; insertion does not invalidate other proposals. Purchases serialize execution and stale/invalid requests fail before payment.
-- Sponsorship and retry retain guarded token/Intake calls, exact price/maxFee accounting and callback authentication.
-- Status 1 pins the same active request for explicit funded retries; other failure statuses freeze. Missing callbacks remain pending indefinitely.
-- Binding authenticates the original callback digest, rejects replay/project changes and preserves the prior checkpoint on failure. An authenticated manifest outside fixed policy can still leave the Branch at `ResultRecorded`; no truncation or substitute JSON can settle it.
-- Forks authenticate the chosen permanent parent checkpoint; a child preserves inherited provenance and starts with its own execution identity unset.
+- Four callback-authenticated public snapshots contain no named output. Actual HTTP results with 2/4/17 files are refused by the one-output parser. Do not strip extra files or metadata, reserialize JSON or accept a projection hash. Oversized authenticated real results were not obtained. A recorded but unbindable result remains stopped, with no paid retry.
+- Official protocol does not promise our raw JSON complexity limits or a universal 1,024-byte URI maximum. Unsupported delivery can leave a Branch permanently pending/recorded. The assignment explicitly preserves that behavior; no timeout/admin settlement is added.
+- Current catalog routing and shape/path changes pass eight exact free samples. The two HTML-update samples fail because their selected HTML is a local fixture, not a public accepted artifact. Real HTML update and HTML+PNG materialization remain unproved. Research-report's semantic behavior for arbitrary Markdown edits must be observed; syntax approval is not proof.
+- A full child costs substantially more gas than a clone. Stress bind cases reach near 13.58M gas. The finite budget is tested, not a global proof. Launch service gas/calldata limits are unverified.
+- Runtime dependency checks establish code presence/policy identity. Exact deployment source/runtimes must still be verified at handoff. Intake/IMD and action semantics are external dependencies fixed in this no-admin release; a protocol change requires a separately reviewed release.
+- Default frontend history scans stop beyond 100,000 blocks/10,000 logs and replacement lookup covers only 128 blocks. An authenticated pagination/indexing design is required for longer-lived deployments. It must preserve full checkpoint proof and never infer recovery from missing logs.
+- Public HTTPS gateways/API/RPC may be unavailable or restrict CORS. Browser code cannot verify DNS/IP. Only allowlisted result/artifact routes are used; custom trusted IPFS gateway selection remains an operator configuration. Direct file selection still requires exact callback hash.
+- Browser checks cover the actual static export and local EIP-6963 shim. They do not prove every real wallet app/passkey flow. Engine availability and checks actually run are recorded; no absent engine is marked passed.
 
-## Parser and file trust
-
-The binding parser validates syntax and decoded duplicate keys everywhere, including ignored metadata. Required result fields keep their semantic limits. Unknown metadata is validated and discarded from the retained projection, never cut out of the hashed input. Raw bytes, decoded keys, object members, depth, retained tokens and whole-document work all have bounds; see [LIMITS.md](LIMITS.md). The generic SDK `strictJSON` helper retains its original defaults; `strictManifestJSON` is used for binding preparation and manifest checks.
-
-Malformed UTF-8, escaped/raw surrogates, noncharacters, duplicate escaped keys, malformed numbers/escapes, trailing data, extra outputs, wrong file types and resource excess remain rejection cases. Accepting a larger bounded envelope does not certify live IMD compatibility.
-
-Contracts authenticate writer-supplied descriptors. They cannot prove file availability, quality, model input consumption or safe HTML. SDK checks compare actual local/publicly retrieved bytes without executing them; PNG signature checks are not a complete decoder audit. The fixed HTML output path and file checks do not grant the contract control over the remote runtime filesystem.
-
-## Preserved original review history
-
-The original contributor repaired an earlier gas-heavy fully retained parser by reducing its cap to 8 KiB, fixed an invalid PNG fixture CRC, corrected canonical newline/test expectations and prevented SDK numeric-wrapper impersonation. Those original fixes and measurements are historical; the candidate uses a different binding parser and must be measured separately.
-
-An earlier independent agent review found a High-severity artifact-fetch bypass via IPv4-mapped IPv6 DNS answers. The delivered implementation uses a conservative global-unicast allowlist with special/transition ranges excluded; tests cover rejection before transport and checked-address pinning. Its report remains in [original independent review](validation/independent-review.md). This does not erase the later Swarm findings addressed above.
-
-Original Foundry linter dispositions remain useful context: exact balance comparisons are deliberate; token/Intake interactions are guarded; Base64 overhead rounds upward; narrowing follows explicit bounds; bounded loops and zero-initialized accumulators are intentional. Raw original logs, [documentation reproduction](validation/documentation-pass/README.md) and source inventories remain untouched. They are not new validation of candidate bytecode.
-
-## Remaining release gates
-
-The local repair review is separate from an external human audit; no Slither/Mythril or external audit conclusion is claimed. Review status and any unresolved findings belong in [current repair evidence](validation/review-fixes/README.md). Confirmed Critical/High findings or core failures block readiness.
-
-Before a release claim, validate actual IMD profiles/schema/result envelopes and files through separately authorized runtime tests and verify deployment addresses/code. The delivered English frontend now has actual disposable-contract integration, with final local evidence in [PLATFORM-UX-V1](validation/platform-ux-v1/final/README.md); neither its fixture flows nor its MockIntake receipts establish live acceptance. Independent contributor review of the final frontend remains NOT_RUN. See [handoff](HANDOFF.md) and [future runtime procedure](LIVE-VALIDATION.md).
+No new owner/admin, upgrade, pause, treasury, voting, scoring, token, pool, hook, asset type, publication path or automatic spending/retry was introduced. No finding is considered repaired by turning off a config flag or accepting mocked success. Required source changes and their negative tests are documented; unsupported behavior stays visible.

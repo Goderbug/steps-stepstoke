@@ -1,6 +1,0 @@
-Historical raw trace, stored losslessly in docs/validation/platform-ux-v1/final/history-traces.tar.xz.
-Original path: evidence/limits-initial-trace.txt
-Original bytes: 1817268
-Original SHA-256: 5cda105376bcefd1d38bbe015e9102798fc2f4cff35a51605c3447f68494a2bb
-Restore from the repository root:
-tar -xJf docs/validation/platform-ux-v1/final/history-traces.tar.xz -C .

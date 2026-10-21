@@ -49,7 +49,7 @@ try {
   const accounts = await provider.request({ method: 'eth_accounts' });
   const [deployer, writer, treasury, funderA, funderB] = accounts;
   const mined = async tx => {
-    const hash = await provider.request({ method: 'eth_sendTransaction', params: [{ gas: '0x1c9c380', ...tx }] });
+    const hash = await provider.request({ method: 'eth_sendTransaction', params: [{ gas: '0x'+(16777216).toString(16), ...tx }] });
     for (let i = 0; i < 400; i++) { const r = await provider.request({ method: 'eth_getTransactionReceipt', params: [hash] }); if (r) { if (BigInt(r.status) !== 1n) throw new Error('setup reverted'); return r; } await new Promise(res => setTimeout(res, 25)); }
     throw new Error('setup receipt timeout');
   };
@@ -63,7 +63,10 @@ try {
   for (const action of Object.values(release.actions)) await mined({ from: deployer, to: release.intake, data: intakeI.encodeFunctionData('setPrice', [action, 500000000000000000n]) });
   for (const who of [funderA, funderB]) await mined({ from: deployer, to: release.imd, data: tokenI.encodeFunctionData('mint', [who, 10n ** 19n]) });
   const factoryArtifact = await artifact('RelayFactory');
-  const deployed = await mined({ from: deployer, data: factoryArtifact.bytecode.object });
+  const encoder = await mined({ from: deployer, data: (await artifact('RelayEncoder')).bytecode.object });
+  const verifier = await mined({ from: deployer, data: (await artifact('RelayVerifier')).bytecode.object });
+  const args = new Interface(factoryArtifact.abi).encodeDeploy([encoder.contractAddress, verifier.contractAddress]);
+  const deployed = await mined({ from: deployer, data: factoryArtifact.bytecode.object + args.slice(2) });
   const config = await observeLocalDeployment(provider, { release, factory: deployed.contractAddress });
   evidence.generatedConfig = config;
   const fixtures = {

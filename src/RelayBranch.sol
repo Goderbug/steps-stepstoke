@@ -10,7 +10,7 @@ import {RelayVerifier} from "./RelayVerifier.sol";
 import {Policy} from "./libraries/Policy.sol";
 
 /// @notice A permanent public continuation branch and the sole payer for its own Intake project.
-/// @dev Fixed implementation clones; initialization is atomic and restricted to the deploying Factory.
+/// @dev Full independent runtime instance, constructor-complete and atomically registered by its Factory.
 contract RelayBranch {
     using SafeERC20 for IERC20;
 
@@ -18,7 +18,6 @@ contract RelayBranch {
     RelayEncoder public immutable encoder;
     RelayVerifier public immutable verifier;
 
-    bool private initialized;
     bool private entered;
     string public goal;
     string public direction;
@@ -41,7 +40,6 @@ contract RelayBranch {
     mapping(uint64 => T.Checkpoint) private checkpoints;
     mapping(bytes32 => bool) public usedJob;
 
-    error Unauthorized();
     error Busy();
     error Stale();
     error UnknownProposal();
@@ -76,29 +74,26 @@ contract RelayBranch {
         entered = false;
     }
 
-    constructor(RelayEncoder encoder_, RelayVerifier verifier_) {
+    /// @dev Runtime child only (not a named launch contract). Factory validates before CREATE.
+    /// No external calls, initializer, proxy implementation or usable partial instance exists.
+    constructor(
+        RelayEncoder encoder_,
+        RelayVerifier verifier_,
+        string memory goal_,
+        string memory direction_,
+        T.Source memory source_,
+        bytes32 inheritedProjectHash_,
+        bytes32 inheritedAssetsHash_,
+        T.Asset[] memory inherited
+    ) {
         factory = msg.sender;
         encoder = encoder_;
         verifier = verifier_;
-        initialized = true; // The implementation itself can never become a usable Branch.
-    }
-
-    function initialize(
-        string calldata goal_,
-        string calldata direction_,
-        T.Source calldata source_,
-        bytes32 inheritedProjectHash_,
-        T.Asset[] calldata inherited
-    ) external guarded {
-        if (msg.sender != factory || initialized) revert Unauthorized();
-        encoder.validateText(goal_, direction_);
-        initialized = true;
         goal = goal_;
         direction = direction_;
         source = source_;
         inheritedProjectHash = inheritedProjectHash_;
-        // Factory supplied either the empty root table or an authenticated parent checkpoint.
-        assetsHash = encoder.witnessHash(inherited);
+        assetsHash = inheritedAssetsHash_;
         _checkpoint(bytes32(0), inherited);
         emit Initialized(goal_, direction_, source_);
     }
@@ -139,7 +134,7 @@ contract RelayBranch {
         guarded
         returns (uint256 id)
     {
-        if (!initialized || p.anchor != anchor()) revert Stale();
+        if (p.anchor != anchor()) revert Stale();
         _witness(current);
         (, bytes memory body) = encoder.encode(goal, direction, latestJobId, p, current);
         id = ++proposalCount;

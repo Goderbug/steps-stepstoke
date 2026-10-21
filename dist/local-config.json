@@ -1,25 +1,23 @@
 {
   "kind": "LOCAL_DEPLOYMENT",
-  "label": "Local development chain (not a public deployment)",
+  "label": "Local mock deployment",
   "chainId": 31337,
   "release": {
-    "name": "CTO Relay Station A1",
-    "version": "0.1.1-local-review",
-    "policyId": "0x98360971ff8aeee2617322ba7ccbb1b51b318fb6e47f39129464eb5fd2f2e19b"
+    "name": "STEPS (Stepstoke)",
+    "version": "RELEASE-CANDIDATE-V1",
+    "policyId": "0xda20682d095e562fad40017c7dec4f700f23864077e1faddbc75f342bf5a984a"
   },
   "contracts": {
-    "factory": "0x5FC8d32690cc91D4c39d9d3abcBD16989F875707",
-    "implementation": "0x8EFa1819Ff5B279077368d44B593a4543280e402",
-    "encoder": "0x61c36a8d610163660E21a8b7359e1Cac0C9133e1",
-    "verifier": "0x23dB4a08f2272df049a4932a4Cc3A6Dc1002B33E",
+    "factory": "0xa513E6E4b8f2a923D98304ec87F64353C4D5C853",
+    "encoder": "0x5FC8d32690cc91D4c39d9d3abcBD16989F875707",
+    "verifier": "0x0165878A594ca255338adfa4d48449f69242Eb8F",
     "intake": "0xa43e6F75ee006411F79Ac1C84120606C2330DE82",
     "imd": "0xD34a99Bc0f67aE1bbd63C660e6d0b0dd03E263B7"
   },
   "runtimeCodeKeccak": {
-    "factory": "0xd11e88efd6da90e35d4701858d73e3996fbbd3c17fec577c7e3fb17b53aa8bcf",
-    "implementation": "0x1f3be5f1e302f59115160be5cc2aeee86a9fb62fe2536ecbed426324b6dddb7f",
-    "encoder": "0x66d04dfc8962821d964652482e4aa6f559e255485fb8a90a729e0f5ecffd35c1",
-    "verifier": "0xc6f1b75521b5f5932c894443c30c2fde725f08a56e10b3027162693318b54433",
+    "factory": "0x4be21b9f09a32cb3644afd71abb0cb2dd74a441e79c898e480c72a6aa63492f1",
+    "encoder": "0x245ee3b1a84cc9e989b5ef162f7b4904a800dac79f93afa547e4de25691d66a4",
+    "verifier": "0x0f5969a5ab4bbdb79f817634bea9f0d0f4bd05a294b8c90a151e2fb5bbb29edb",
     "intake": "0x8f43b3de49e1d5598e4c1795303ce46e626fa219072d0fd25b0b814d26fcd11d",
     "imd": "0x2ee755f38b10b8c79f1b97425bfd7b78b53065ec8dec1c3da0c4d84eeee6582b"
   },
@@ -46,14 +44,14 @@
     {
       "id": 0,
       "name": "MarkdownCreate",
-      "skill": "build-document",
+      "skill": "research-report",
       "mime": "text/markdown",
       "update": false
     },
     {
       "id": 1,
       "name": "MarkdownUpdate",
-      "skill": "build-document",
+      "skill": "research-report",
       "mime": "text/markdown",
       "update": true
     },
@@ -62,7 +60,7 @@
       "name": "HTMLCreate",
       "skill": "build-website",
       "mime": "text/html",
-      "path": "dist/index.html",
+      "path": "artifacts/index.html",
       "update": false
     },
     {
@@ -70,23 +68,23 @@
       "name": "HTMLUpdate",
       "skill": "build-website",
       "mime": "text/html",
-      "path": "dist/index.html",
+      "path": "artifacts/index.html",
       "update": true
     },
     {
       "id": 4,
       "name": "ImageCreate",
-      "skill": "imagegen",
+      "skill": "create-image",
       "mime": "image/png",
       "update": false,
       "references": false
     }
   ],
   "abiSha256": {
-    "RelayFactory": "5262e223a80ee89b432c95e18c8a73aec1f907e18449bcc2d16e834ef32d7dc6",
-    "RelayBranch": "0af0418a66347339164aa4abe872ab4f14090f1a1a2a5f8eeb77c21b79b15f80",
+    "RelayFactory": "57287ca9e538a407bbfbd14dabc237bb93e3d6750c232c9c04b575751d9bf5e3",
+    "RelayBranch": "625a38a5b197044f1b70415e0a4752abb43f1d7d7a8791d7ff51da028d8bba74",
     "RelayEncoder": "7f7cc7133fb159f4ae248c9c903855ea506cf154e8e6017680075e3c50d9153a",
-    "RelayVerifier": "943d11cab4f5fc08d887485037642d6d02c1974bb909cbc4037dd6c5230bfc6d",
+    "RelayVerifier": "788539b92c802abeb9a461146b9e9b7585c5e91802e49640704532b3bea7f157",
     "IIntake": "5b229bcd1a0e3cbcaf2f5a692b1b9bc899fa89ac67724ea4009580c5a694e5d6"
   },
   "publicNetwork": {

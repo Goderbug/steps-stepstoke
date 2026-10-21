@@ -22,7 +22,8 @@ contract ProfileBoundarySpecTest is SpecSetup {
         for (uint256 i = 1; i <= 8; ++i) {
             T.Proposal memory documentProposal = proposal(parent, T.Profile.MarkdownCreate, i);
             documentProposal.outputName = string(D.repeat(bytes1(uint8(65 + i)), 64));
-            documentProposal.outputPath = string(bytes.concat(D.repeat(bytes1(uint8(97 + i)), 125), ".md"));
+            documentProposal.outputPath =
+                string(bytes.concat("artifacts/", D.repeat(bytes1(uint8(97 + i)), 115), ".md"));
             assets = accept(
                 parent,
                 documentProposal,
@@ -81,7 +82,7 @@ contract ProfileBoundarySpecTest is SpecSetup {
         T.Proposal memory p = proposal(b, T.Profile.MarkdownCreate, 1);
         p.text = string(bytes.concat(twoByte, twoByte)); // Exactly 1,024 bytes.
         p.outputName = string(D.repeat("n", 64));
-        p.outputPath = string(bytes.concat(D.repeat("p", 125), ".md")); // Exactly 128 bytes.
+        p.outputPath = string(bytes.concat("artifacts/", D.repeat("p", 115), ".md")); // Exactly 128 bytes.
         uint256 id = b.propose(p, empty());
         (, bytes memory body) = b.bodyOf(id, empty());
         assertTrue(contains(body, bytes(p.text)));
@@ -93,7 +94,7 @@ contract ProfileBoundarySpecTest is SpecSetup {
         vm.expectRevert(Policy.Limit.selector);
         b.propose(p, empty());
         p.outputName = "notes";
-        p.outputPath = string(bytes.concat(D.repeat("p", 126), ".md"));
+        p.outputPath = string(bytes.concat("artifacts/", D.repeat("p", 116), ".md"));
         vm.expectRevert(Policy.Limit.selector);
         b.propose(p, empty());
         assertEq(b.proposalCount(), 1);
@@ -149,12 +150,12 @@ contract ProfileBoundarySpecTest is SpecSetup {
         T.Asset[] memory assets = table(2);
         assets[0].kind = T.Kind.HTML;
         assets[0].name = "page";
-        assets[0].path = "dist/index.html";
+        assets[0].path = "artifacts/index.html";
         assets[0].mediaType = "text/html";
         assets[0].size = uint32(2_097_152 - encodedImage);
         assets[1].kind = T.Kind.Image;
         assets[1].name = "pixel";
-        assets[1].path = "art/pixel.png";
+        assets[1].path = "artifacts/pixel.png";
         assets[1].mediaType = "image/png";
         assets[1].size = uint32(imageBytes);
         T.Proposal memory p = proposal(root, T.Profile.HTMLUpdate, 1);
@@ -190,11 +191,11 @@ contract ProfileBoundarySpecTest is SpecSetup {
         assets = table(16);
         assets[14].kind = T.Kind.HTML;
         assets[14].name = "page";
-        assets[14].path = "dist/index.html";
+        assets[14].path = "artifacts/index.html";
         assets[14].mediaType = "text/html";
         assets[15].kind = T.Kind.Image;
         assets[15].name = "pixel";
-        assets[15].path = "art/pixel.png";
+        assets[15].path = "artifacts/pixel.png";
         assets[15].mediaType = "image/png";
         p = proposal(root, T.Profile.MarkdownUpdate, 1);
         encoder.encode("Goal", "", "latest-job", p, assets);
@@ -217,7 +218,7 @@ contract ProfileBoundarySpecTest is SpecSetup {
             T.Proposal memory p = proposal(root, T.Profile.MarkdownCreate, i + 1);
             if (i != 0) {
                 p.outputName = string.concat("notes-", D.decimal(i + 1));
-                p.outputPath = string.concat("docs/notes-", D.decimal(i + 1), ".md");
+                p.outputPath = string.concat("artifacts/notes-", D.decimal(i + 1), ".md");
             }
             bytes memory raw = D.manifest(p, "descriptor-job", "descriptor-project", D.document());
             assets[i] = D.output(p, "descriptor-job", D.document(), raw, address(root), 1);

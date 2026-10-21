@@ -23,7 +23,7 @@ export function draftIssues(caps: Capabilities, latest: Checkpoint, d: Draft): D
   const push = (field: DraftField | null, text: string) => out.push({ field, text });
   if (!caps.enabledKinds.includes(d.kind)) push("kind", `A1 configuration has disabled ${KIND_LABEL[d.kind]}`);
   if (caps.maxAssetNameBytes) {
-    if (!/^[a-zA-Z0-9_-]{1,64}$/.test(d.targetKey)) push("target", "Use letters, numbers, underscores or hyphens, up to 64 bytes");
+    if (!/^[a-zA-Z][a-zA-Z0-9_-]{0,63}$/.test(d.targetKey)) push("target", "Start with a letter; use letters, numbers, underscores or hyphens, up to 64 bytes");
   } else if (!/^[a-z0-9][a-z0-9-]{0,31}$/.test(d.targetKey)) push("target", "Use lowercase letters, numbers and hyphens, up to 32 characters");
   const existing = latest.assets.find((a) => a.assetKey === d.targetKey);
   if (d.mode === "create" && existing) push("target", `Asset slot ${d.targetKey} already exists; choose Update`);
@@ -43,7 +43,7 @@ export function draftIssues(caps: Capabilities, latest: Checkpoint, d: Draft): D
   if (caps.maxTextBytes && d.mode === "create") {
     const kinds = new Set(latest.assets.map(a => a.kind)); kinds.add(d.kind);
     if (latest.assets.length + 1 + 3 - kinds.size > caps.maxAssets) push(null, "Reserve slots for the remaining asset types");
-    if (d.kind === "html" && latest.assets.some(a => a.kind === "html")) push("target", "HTML output is fixed to dist/index.html. Update the existing HTML asset");
+    if (d.kind === "html" && latest.assets.some(a => a.kind === "html")) push("target", "HTML uses one output slot. Update the existing HTML asset");
   }
   if (caps.maxTextBytes && d.kind === "document" && latest.assets.some(a => d.inputKeys.includes(a.assetKey) && a.kind !== "document")) push("inputs", "Markdown accepts Markdown inputs only");
   const inputBytes = latest.assets.filter((a) => d.inputKeys.includes(a.assetKey)).reduce((n, a) => n + a.descriptor.bytes, 0);

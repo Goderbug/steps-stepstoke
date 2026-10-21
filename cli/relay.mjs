@@ -2,7 +2,9 @@
 import * as relay from '../sdk/index.mjs';
 import { fetchPublicArtifact, readArtifactFile, verifyHTMLDist } from '../sdk/files.mjs';
 
-const usage = `CTO Relay Station A1 — unsigned, offline transaction preparation
+const usage = `STEPS / Stepstoke RELEASE-CANDIDATE-V1 — unsigned preparation and free reads
+result-fetch --uri AUTHENTICATED_URI --hash CALLBACK_KECCAK [--gateway HTTPS_IPFS_PREFIX]
+intake-read --tx ORIGINAL_TRANSACTION_HASH
 create    --factory ADDRESS --goal TEXT
 propose   --branch ADDRESS --proposal FILE --witness FILE
 sponsor   --branch ADDRESS --id INTEGER --max-fee RAW_IMD_UNITS --witness FILE
@@ -20,7 +22,7 @@ decode-checkpoint --log FILE
 recover-history --branch ADDRESS --logs FILE --checkpoints FILE
 
 Outputs calldata or eth_call requests. Never signs, sends transactions, opens a browser, or retries automatically.
-Only fetch-check downloads an explicit public HTTPS artifact and verifies its bytes.
+fetch-check and result-fetch verify downloaded original bytes. intake-read is an HTTP observation only.
 All file arguments are explicit operator inputs, never paths taken from a manifest.`;
 const [command = 'help', ...argv] = process.argv.slice(2);
 const options = Object.create(null);
@@ -43,6 +45,8 @@ try {
     const witness = () => jsonFile('witness');
     let result;
     switch (command) {
+      case 'result-fetch': { const raw = await relay.fetchOriginalResult(required('uri'), required('hash'), { gateway: options.gateway }); result = { rawHex: Buffer.from(raw).toString('hex'), bytes: raw.length, keccak256: relay.keccak256Bytes(raw), settlement: false }; break; }
+      case 'intake-read': result = await relay.observeIntake(required('tx')); break;
       case 'create': result = relay.createProject(required('factory'), required('goal')); break;
       case 'propose': result = relay.proposeWork(required('branch'), await jsonFile('proposal'), await witness()); break;
       case 'sponsor': result = relay.sponsorProposal(required('branch'), required('id'), required('max-fee'), await witness()); break;

@@ -1,5 +1,5 @@
-# Platform design
+# STEPS Open Workshop design
 
-The current English Open Workshop system is documented in the repository [DESIGN.md](../DESIGN.md). Its source is `src/styles.css` and `src/components/`; `#/showcase` uses the production components.
+STEPS (Stepstoke) RELEASE-CANDIDATE-V1. The current reference is [../DESIGN.md](../DESIGN.md); checks and operating details are in [../docs/validation/rc-v1/README.md](../docs/validation/rc-v1/README.md).
 
-Historical W1 designs and screenshots under the retained validation directories describe earlier source. They are not the current style or current acceptance results.
+`productionDeployment:null`, `liveCompatibility:NOT_RUN`, `productionReady:false`. The public static export is delivered but no hosting, public deployment or paid execution occurred. Earlier source/review material is preserved in the indexed `docs/history` archive at the repository root, not used as current readiness evidence.

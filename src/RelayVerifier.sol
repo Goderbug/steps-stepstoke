@@ -10,6 +10,10 @@ import {ManifestJSON} from "./libraries/ManifestJSON.sol";
 
 /// @notice Verifies the exact result bytes, never a JSON reserialization or later Git state.
 contract RelayVerifier {
+    function policyId() external pure returns (bytes32) {
+        return Policy.ID;
+    }
+
     function verify(
         bytes memory raw,
         bytes32 recordedHash,

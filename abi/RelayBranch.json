@@ -11,6 +11,115 @@
         "name": "verifier_",
         "type": "address",
         "internalType": "contract RelayVerifier"
+      },
+      {
+        "name": "goal_",
+        "type": "string",
+        "internalType": "string"
+      },
+      {
+        "name": "direction_",
+        "type": "string",
+        "internalType": "string"
+      },
+      {
+        "name": "source_",
+        "type": "tuple",
+        "internalType": "struct RelayTypes.Source",
+        "components": [
+          {
+            "name": "parent",
+            "type": "address",
+            "internalType": "address"
+          },
+          {
+            "name": "revision",
+            "type": "uint64",
+            "internalType": "uint64"
+          },
+          {
+            "name": "checkpoint",
+            "type": "bytes32",
+            "internalType": "bytes32"
+          }
+        ]
+      },
+      {
+        "name": "inheritedProjectHash_",
+        "type": "bytes32",
+        "internalType": "bytes32"
+      },
+      {
+        "name": "inheritedAssetsHash_",
+        "type": "bytes32",
+        "internalType": "bytes32"
+      },
+      {
+        "name": "inherited",
+        "type": "tuple[]",
+        "internalType": "struct RelayTypes.Asset[]",
+        "components": [
+          {
+            "name": "key",
+            "type": "bytes32",
+            "internalType": "bytes32"
+          },
+          {
+            "name": "kind",
+            "type": "uint8",
+            "internalType": "enum RelayTypes.Kind"
+          },
+          {
+            "name": "name",
+            "type": "string",
+            "internalType": "string"
+          },
+          {
+            "name": "path",
+            "type": "string",
+            "internalType": "string"
+          },
+          {
+            "name": "fileHash",
+            "type": "bytes32",
+            "internalType": "bytes32"
+          },
+          {
+            "name": "mediaType",
+            "type": "string",
+            "internalType": "string"
+          },
+          {
+            "name": "size",
+            "type": "uint32",
+            "internalType": "uint32"
+          },
+          {
+            "name": "submissionHash",
+            "type": "bytes32",
+            "internalType": "bytes32"
+          },
+          {
+            "name": "producer",
+            "type": "address",
+            "internalType": "address"
+          },
+          {
+            "name": "jobId",
+            "type": "string",
+            "internalType": "string"
+          },
+          {
+            "name": "resultHash",
+            "type": "bytes32",
+            "internalType": "bytes32"
+          },
+          {
+            "name": "revision",
+            "type": "uint64",
+            "internalType": "uint64"
+          }
+        ]
       }
     ],
     "stateMutability": "nonpayable"
@@ -435,118 +544,6 @@
       }
     ],
     "stateMutability": "view"
-  },
-  {
-    "type": "function",
-    "name": "initialize",
-    "inputs": [
-      {
-        "name": "goal_",
-        "type": "string",
-        "internalType": "string"
-      },
-      {
-        "name": "direction_",
-        "type": "string",
-        "internalType": "string"
-      },
-      {
-        "name": "source_",
-        "type": "tuple",
-        "internalType": "struct RelayTypes.Source",
-        "components": [
-          {
-            "name": "parent",
-            "type": "address",
-            "internalType": "address"
-          },
-          {
-            "name": "revision",
-            "type": "uint64",
-            "internalType": "uint64"
-          },
-          {
-            "name": "checkpoint",
-            "type": "bytes32",
-            "internalType": "bytes32"
-          }
-        ]
-      },
-      {
-        "name": "inheritedProjectHash_",
-        "type": "bytes32",
-        "internalType": "bytes32"
-      },
-      {
-        "name": "inherited",
-        "type": "tuple[]",
-        "internalType": "struct RelayTypes.Asset[]",
-        "components": [
-          {
-            "name": "key",
-            "type": "bytes32",
-            "internalType": "bytes32"
-          },
-          {
-            "name": "kind",
-            "type": "uint8",
-            "internalType": "enum RelayTypes.Kind"
-          },
-          {
-            "name": "name",
-            "type": "string",
-            "internalType": "string"
-          },
-          {
-            "name": "path",
-            "type": "string",
-            "internalType": "string"
-          },
-          {
-            "name": "fileHash",
-            "type": "bytes32",
-            "internalType": "bytes32"
-          },
-          {
-            "name": "mediaType",
-            "type": "string",
-            "internalType": "string"
-          },
-          {
-            "name": "size",
-            "type": "uint32",
-            "internalType": "uint32"
-          },
-          {
-            "name": "submissionHash",
-            "type": "bytes32",
-            "internalType": "bytes32"
-          },
-          {
-            "name": "producer",
-            "type": "address",
-            "internalType": "address"
-          },
-          {
-            "name": "jobId",
-            "type": "string",
-            "internalType": "string"
-          },
-          {
-            "name": "resultHash",
-            "type": "bytes32",
-            "internalType": "bytes32"
-          },
-          {
-            "name": "revision",
-            "type": "uint64",
-            "internalType": "uint64"
-          }
-        ]
-      }
-    ],
-    "outputs": [],
-    "stateMutability": "nonpayable"
   },
   {
     "type": "function",
@@ -1448,11 +1445,6 @@
   {
     "type": "error",
     "name": "Stale",
-    "inputs": []
-  },
-  {
-    "type": "error",
-    "name": "Unauthorized",
     "inputs": []
   },
   {

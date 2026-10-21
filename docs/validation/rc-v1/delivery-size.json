@@ -1,0 +1,40 @@
+{
+  "bytes": 8251949,
+  "limitBytes": 8388608,
+  "withinLimit": true,
+  "fileCount": 285,
+  "byTopLevel": {
+    ".gitignore": 36,
+    "ADAPTATION.md": 9415,
+    "DESIGN.md": 10133,
+    "LICENSE": 1087,
+    "README.md": 2163,
+    "abi": 51737,
+    "cli": 5953,
+    "config": 10250,
+    "dist": 893484,
+    "docs": 748725,
+    "foundry.toml": 242,
+    "frontend": 644945,
+    "lib": 47413,
+    "package-lock.json": 4008,
+    "package.json": 655,
+    "remappings.txt": 63,
+    "sdk": 93056,
+    "src": 74285,
+    "test": 265729,
+    "test-sdk": 58445,
+    "tools": 87066,
+    "vendor": 5243059
+  },
+  "excludes": [
+    ".git/",
+    ".imd/ (provided inputs)",
+    "out/",
+    "cache/",
+    "test/scratch/",
+    "node_modules/"
+  ],
+  "includesThisReport": true,
+  "baselineTrackedBytes": 20440428
+}

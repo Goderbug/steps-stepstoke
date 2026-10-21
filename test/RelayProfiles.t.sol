@@ -17,7 +17,7 @@ contract RelayProfilesTest is RelaySetup {
                 bytes32(i + 1),
                 T.Kind.Markdown,
                 i == 0 ? "main" : string.concat("main-", Text.decimal(i + 1)),
-                i == 0 ? "docs/main.md" : string.concat("docs/main-", Text.decimal(i + 1), ".md"),
+                i == 0 ? "artifacts/main.md" : string.concat("artifacts/main-", Text.decimal(i + 1), ".md"),
                 sha256(F.document()),
                 "text/markdown",
                 uint32(F.document().length),
@@ -34,7 +34,7 @@ contract RelayProfilesTest is RelaySetup {
         a.kind = k;
         a.mediaType = Policy.mime(k);
         a.name = k == T.Kind.HTML ? "site" : "illustration";
-        a.path = k == T.Kind.HTML ? "dist/index.html" : "assets/illustration.png";
+        a.path = k == T.Kind.HTML ? "artifacts/index.html" : "artifacts/illustration.png";
         return a;
     }
 
@@ -120,7 +120,7 @@ contract RelayProfilesTest is RelaySetup {
         branch.propose(p, current);
         p.profile = T.Profile.MarkdownCreate;
         p.outputName = "main";
-        p.outputPath = "docs/main.md";
+        p.outputPath = "artifacts/main.md";
         vm.expectRevert(Policy.Invalid.selector);
         branch.propose(p, current);
     }
@@ -155,9 +155,9 @@ contract RelayProfilesTest is RelaySetup {
                 _manifest(string.concat("capacity-job-", Text.decimal(i)), Policy.kind(profile), 32);
             if (i > 1 && i <= 14) {
                 created.outputName = string.concat("main-", Text.decimal(i));
-                created.outputPath = string.concat("docs/main-", Text.decimal(i), ".md");
+                created.outputPath = string.concat("artifacts/main-", Text.decimal(i), ".md");
                 raw = replace(raw, '"main"', Text.quote(created.outputName));
-                raw = replace(raw, '"docs/main.md"', Text.quote(created.outputPath));
+                raw = replace(raw, '"artifacts/main.md"', Text.quote(created.outputPath));
             }
             current = _accept(branch, created, current, raw);
         }
@@ -276,7 +276,7 @@ contract RelayProfilesTest is RelaySetup {
         p.outputPath = current[0].path;
         bytes memory raw =
             replace(F.documentResult(), '"name":"main"', bytes.concat('"name":', Text.quote(p.outputName)));
-        raw = replace(raw, '"path":"docs/main.md"', bytes.concat('"path":', Text.quote(p.outputPath)));
+        raw = replace(raw, '"path":"artifacts/main.md"', bytes.concat('"path":', Text.quote(p.outputPath)));
         bytes memory padding = new bytes(225);
         for (uint256 i; i < padding.length; ++i) {
             padding[i] = "a";
@@ -324,8 +324,10 @@ contract RelayProfilesTest is RelaySetup {
             string memory shortPath = p.outputPath;
             // Keep maximum lengths while using a distinct public mapping per slot.
             p.outputName = _repeat(64, bytes1(uint8(65 + i)));
-            if (i <= 14) p.outputPath = string.concat(_repeat(125, bytes1(uint8(97 + i))), ".md");
-            if (i == 16) p.outputPath = string.concat(_repeat(124, "a"), ".png");
+            if (i <= 14) {
+                p.outputPath = string.concat("artifacts/", _repeat(115, bytes1(uint8(97 + i))), ".md");
+            }
+            if (i == 16) p.outputPath = string.concat("artifacts/", _repeat(114, "a"), ".png");
             bytes memory raw = _manifest(Text.hex32(keccak256(abi.encode(i))), Policy.kind(profile), 32);
             raw = replace(raw, Text.quote(shortName), Text.quote(p.outputName));
             raw = replace(raw, Text.quote(shortPath), Text.quote(p.outputPath));
@@ -336,7 +338,7 @@ contract RelayProfilesTest is RelaySetup {
         update.outputPath = current[0].path;
         bytes memory raw = _manifest(Text.hex32(keccak256("new job")), T.Kind.Markdown, 42);
         raw = replace(raw, '"main"', Text.quote(update.outputName));
-        raw = replace(raw, '"docs/main.md"', Text.quote(update.outputPath));
+        raw = replace(raw, '"artifacts/main.md"', Text.quote(update.outputPath));
         raw = replace(raw, '"state":"completed"', '"state":"completed","source":[]');
         if (shape == 2) {
             bytes memory emptyObjects = _wideObjects(0);

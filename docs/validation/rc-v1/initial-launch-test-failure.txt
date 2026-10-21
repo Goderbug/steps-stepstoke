@@ -1,0 +1,24 @@
+Compiling 1 files with Solc 0.8.26
+Solc 0.8.26 finished in 14.24s
+Compiler run successful!
+
+Ran 7 tests for test/LaunchCompatibility.t.sol:LaunchCompatibilityTest
+[PASS] test_badPolicyAndBadInputsFailBeforeCreateAndRegistration() (gas: 179829)
+[PASS] test_callbackUriAtLimitWithinOfficialStipendAndAboveStaysPending() (gas: 2223092)
+[FAIL: next call did not revert as expected] test_constructorRejectsZeroAndDuplicateDependencies() (gas: 8280)
+[PASS] test_directChildrenAreCompleteIndependentPayers() (gas: 6785461)
+[PASS] test_launchAndRuntimeChildPassProtectedOpcodeRule() (gas: 20761023)
+[PASS] test_namedBatchBackwardReferencesThenRuntimeChild() (gas: 13369136)
+[PASS] test_staticFactoryConstructorAcceptsEmptyDependenciesWithoutCallsOrChildren() (gas: 53669)
+Suite result: FAILED. 6 passed; 1 failed; 0 skipped; finished in 41.15ms (46.27ms CPU time)
+
+Ran 1 test suite in 41.99ms (41.15ms CPU time): 6 tests passed, 1 failed, 0 skipped (7 total tests)
+
+Failing tests:
+Encountered 1 failing test in test/LaunchCompatibility.t.sol:LaunchCompatibilityTest
+[FAIL: next call did not revert as expected] test_constructorRejectsZeroAndDuplicateDependencies() (gas: 8280)
+
+Encountered a total of 1 failing tests, 6 tests succeeded
+
+Tip: Run `forge test --rerun` to retry only the 1 failed test
+Tip: Run `forge test --debug --match-test <TEST_NAME>` to inspect one failing test in the debugger

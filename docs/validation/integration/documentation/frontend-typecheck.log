@@ -1,4 +1,0 @@
-
-> cto-relay-station-w1@0.1.0 typecheck
-> tsc --noEmit -p tsconfig.json
-

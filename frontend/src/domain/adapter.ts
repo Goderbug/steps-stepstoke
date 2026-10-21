@@ -38,6 +38,8 @@ export interface IntegrationStatus {
  */
 export interface RelayAdapter {
   readonly kind: "fixture" | "live";
+  readonly routeBase?: "local" | "ethereum";
+  fetchOriginalResult?(sponsorshipId: string): Promise<Uint8Array>;
   readonly label: string;
   readonly capabilities: AdapterCapabilities;
   status(): IntegrationStatus;

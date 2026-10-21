@@ -1,6 +1,0 @@
-PASS pinned patch bytes=194891 sha256=3028547365dae0b93d9a6191f15b9023fd59821c791d205e8c79cc16375a2989
-PASS patched baseline source manifest: 70 files
-PASS pinned W1 original files: 319
-PASS preserved W1 lockfile
-Current accepted HEAD: 8c0d6da09cd32c73b26a5da43f7c24867e7869af
-Initial archive apply-check and source verification are recorded in source-inputs.json; this log rechecks retained authenticated inputs after implementation.

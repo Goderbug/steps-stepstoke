@@ -33,7 +33,7 @@ contract StrictManifestTest is TestBase {
         p.target = bytes32(uint256(1));
         p.profile = T.Profile.MarkdownCreate;
         p.outputName = "main";
-        p.outputPath = "docs/main.md";
+        p.outputPath = "artifacts/main.md";
     }
 
     function _verify(bytes memory raw) private view returns (T.Asset[] memory a) {
@@ -52,7 +52,7 @@ contract StrictManifestTest is TestBase {
         assertEq(a[0].resultHash, keccak256(F.documentResult()));
         assertTrue(a[0].fileHash != a[0].resultHash);
         assertEq(a[0].name, "main");
-        assertEq(a[0].path, "docs/main.md");
+        assertEq(a[0].path, "artifacts/main.md");
         assertEq(a[0].mediaType, "text/markdown");
     }
 
@@ -70,7 +70,7 @@ contract StrictManifestTest is TestBase {
         bytes memory raw = replace(
             F.documentResult(),
             '"source":[]',
-            '"source":[{"name":"main","path":"docs/main.md","hash":"untrusted-source-not-an-output"}]'
+            '"source":[{"name":"main","path":"artifacts/main.md","hash":"untrusted-source-not-an-output"}]'
         );
         T.Asset[] memory a = _verify(raw);
         assertEq(a[0].fileHash, sha256(F.document()));
@@ -158,17 +158,17 @@ contract StrictManifestTest is TestBase {
         string[10] memory bad = [
             "../main.md",
             "/main.md",
-            "docs/../main.md",
-            "docs//main.md",
-            "docs/.hidden.md",
+            "artifacts/../main.md",
+            "artifacts//main.md",
+            "artifacts/.hidden.md",
             "https://host/main.md",
-            "docs/main.md/",
+            "artifacts/main.md/",
             "docs\\\\main.md",
-            "docs/\\u002e\\u002e/main.md",
-            "docs/main\\u0000.md"
+            "artifacts/\\u002e\\u002e/main.md",
+            "artifacts/main\\u0000.md"
         ];
         for (uint256 i; i < bad.length; ++i) {
-            _reject(replace(F.documentResult(), "docs/main.md", bytes(bad[i])));
+            _reject(replace(F.documentResult(), "artifacts/main.md", bytes(bad[i])));
         }
     }
 

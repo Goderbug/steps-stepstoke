@@ -42,7 +42,7 @@ contract RelayHandler is TestBase {
         p.inputs = new bytes32[](assets.length == 0 ? 0 : 1);
         if (p.inputs.length != 0) p.inputs[0] = p.target;
         p.outputName = "main";
-        p.outputPath = "docs/main.md";
+        p.outputPath = "artifacts/main.md";
         p.text = string.concat("Explicit request ", Text.decimal(textSeed));
         choiceA = choiceB;
         choiceB = branch.propose(p, assets);
@@ -71,7 +71,7 @@ contract RelayHandler is TestBase {
         raw = bytes.concat(
             '{"jobId":"invariant-job-',
             bytes(Text.decimal(purchases)),
-            '","projectId":"invariant-project","state":"completed","files":[{"name":"main","path":"docs/main.md","hash":"',
+            '","projectId":"invariant-project","state":"completed","files":[{"name":"main","path":"artifacts/main.md","hash":"',
             bytes(Text.hex32(sha256(F.document()))),
             '","mediaType":"text/markdown","bytes":',
             bytes(Text.decimal(F.document().length)),

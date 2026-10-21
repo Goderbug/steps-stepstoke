@@ -1,5 +1,7 @@
 // SPDX-License-Identifier: MIT
 pragma solidity 0.8.26;
+import {RelayVerifier} from "src/RelayVerifier.sol";
+import {RelayEncoder} from "src/RelayEncoder.sol";
 
 import {SpecSetup, SpecData as D} from "./SpecSupport.sol";
 import {RelayTypes as T} from "src/RelayTypes.sol";
@@ -236,7 +238,7 @@ contract ContinuationSpecTest is SpecSetup {
             D.document(),
             ALICE
         );
-        RelayFactory other = new RelayFactory();
+        RelayFactory other = new RelayFactory(new RelayEncoder(), new RelayVerifier());
         vm.expectRevert(RelayFactory.InvalidParent.selector);
         other.fork(address(root), 1, assets, "Cross-factory forgery.");
         RelayBranch impostor = other.createProject(root.goal());
@@ -279,7 +281,7 @@ contract ContinuationSpecTest is SpecSetup {
                     block.chainid,
                     address(factory),
                     address(branch),
-                    keccak256("CTO-Relay-A1/2/fixed-profiles/unpublished"),
+                    keccak256("STEPS/RELEASE-CANDIDATE-V1/fixed-profiles/artifacts/unpublished"),
                     address(factory.encoder()),
                     address(factory.verifier()),
                     keccak256(bytes(branch.goal())),

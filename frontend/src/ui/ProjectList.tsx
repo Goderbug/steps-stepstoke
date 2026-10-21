@@ -27,14 +27,14 @@ export function ProjectList({ adapter, account }: { adapter: RelayAdapter; accou
             {q.data.map((b) => (
               <li key={b.id} className="row">
                 <div className="row-main">
-                  <a className="row-title" href={`#/${adapter.kind === "fixture" ? "demo" : "local"}/b/${b.id}`}>{b.projectTitle}</a>
+                  <a className="row-title" href={`#/${adapter.kind === "fixture" ? "demo" : (adapter.routeBase ?? "local")}/b/${b.id}`}>{b.projectTitle}</a>
                   <p className="row-goal">{b.direction ? `Fork direction: ${b.direction}` : b.goal}</p>
                   <p className="meta">
                     {b.parent ? "Fork branch" : "Root branch"} · Created by {short(b.creator)} · {formatTime(b.createdAt)}
                     {b.imdProjectId ? "" : " · No IMD project yet"}
                   </p>
                 </div>
-                <a className="btn btn-secondary" href={`#/${adapter.kind === "fixture" ? "demo" : "local"}/b/${b.id}`} aria-label={`Open ${b.projectTitle}`}>Open</a>
+                <a className="btn btn-secondary" href={`#/${adapter.kind === "fixture" ? "demo" : (adapter.routeBase ?? "local")}/b/${b.id}`} aria-label={`Open ${b.projectTitle}`}>Open</a>
               </li>
             ))}
           </ul>
@@ -66,7 +66,7 @@ function CreateBranchForm({ adapter, account, onDone }: { adapter: RelayAdapter;
     try {
       const b = await adapter.createBranch(signingAccount(account, assertActive), { title, goal });
       await qc.invalidateQueries({ queryKey: ["branches"] });
-      setMsg({ kind: "ok", text: `Created project: ${b.projectTitle}.`, href: `#/${adapter.kind === "fixture" ? "demo" : "local"}/b/${b.id}` });
+      setMsg({ kind: "ok", text: `Created project: ${b.projectTitle}.`, href: `#/${adapter.kind === "fixture" ? "demo" : (adapter.routeBase ?? "local")}/b/${b.id}` });
       setTitle("");
       setGoal("");
       setReview(false);

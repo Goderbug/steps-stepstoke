@@ -36,7 +36,7 @@ export async function startLocal({ rpcPort = 8545, artifactPort = 8546, configOu
     const [deployer, writer, treasury, alternate] = accounts;
     const trace = [];
     const send = async (operation, tx) => {
-      const hash = await provider.request({ method: 'eth_sendTransaction', params: [{ gas: '0x1c9c380', ...tx }] });
+      const hash = await provider.request({ method: 'eth_sendTransaction', params: [{ gas: '0x'+(16777216).toString(16), ...tx }] });
       for (let n = 0; n < 300; n++) {
         const receipt = await provider.request({ method: 'eth_getTransactionReceipt', params: [hash] });
         if (receipt) { if (BigInt(receipt.status) !== 1n) throw new Error(`${operation} reverted`); trace.push({ operation, hash, from: tx.from, to: tx.to ?? receipt.contractAddress, block: receipt.blockNumber, gasUsed: receipt.gasUsed }); return receipt; }
@@ -52,7 +52,11 @@ export async function startLocal({ rpcPort = 8545, artifactPort = 8546, configOu
     await send('initialize MockIntake', { from: deployer, to: release.intake, data: intakeI.encodeFunctionData('initialize', [writer, treasury, release.imd]) });
     for (const action of Object.values(release.actions)) await send('set mock price', { from: deployer, to: release.intake, data: intakeI.encodeFunctionData('setPrice', [action, 500000000000000000n]) });
     for (const who of [deployer, alternate]) await send('mint local mock balance', { from: deployer, to: release.imd, data: tokenI.encodeFunctionData('mint', [who, 10n ** 20n]) });
-    const deployed = await send('deploy actual final RelayFactory', { from: deployer, data: factory.bytecode.object });
+    const encoderCode = await artifact('RelayEncoder'), verifierCode = await artifact('RelayVerifier');
+    const encoder = await send('deploy RelayEncoder', { from: deployer, data: encoderCode.bytecode.object });
+    const verifier = await send('deploy RelayVerifier', { from: deployer, data: verifierCode.bytecode.object });
+    const args = new Interface(factory.abi).encodeDeploy([encoder.contractAddress, verifier.contractAddress]);
+    const deployed = await send('deploy actual final RelayFactory', { from: deployer, data: factory.bytecode.object + args.slice(2) });
     // Execute the delivered generator against actual deployed code; add only local transport/location policy.
     const { stdout } = await exec(process.execPath, ['tools/generate-local-config.mjs', '--rpc', rpcURL, '--factory', deployed.contractAddress], { cwd: root });
     const config = { ...JSON.parse(stdout), rpcURL, artifactBase, artifactPolicy: 'TEST_ONLY_LOOPBACK_FIXTURE' };

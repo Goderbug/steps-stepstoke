@@ -1,2 +1,0 @@
-81 recorded source/test/ABI/config/vendor fingerprints MATCH.
-This compares the retained inventory, not Git remote delivery.

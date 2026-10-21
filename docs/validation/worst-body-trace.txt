@@ -1,6 +1,0 @@
-Historical raw trace, stored losslessly in docs/validation/platform-ux-v1/final/history-traces.tar.xz.
-Original path: docs/validation/worst-body-trace.txt
-Original bytes: 1248071
-Original SHA-256: 0435a55d50b8d72ad1679f65c3a8109db010e68e3d2898ef6039d5f548c7a75b
-Restore from the repository root:
-tar -xJf docs/validation/platform-ux-v1/final/history-traces.tar.xz -C .

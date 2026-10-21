@@ -1,0 +1,8 @@
+{
+  "kind": "ETHEREUM_DEPLOYMENT_PENDING",
+  "chainId": 1,
+  "release": "RELEASE-CANDIDATE-V1",
+  "productionDeployment": null,
+  "liveCompatibility": "NOT_RUN",
+  "productionReady": false
+}

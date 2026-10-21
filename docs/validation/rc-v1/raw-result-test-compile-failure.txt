@@ -1,0 +1,8 @@
+Compiling 13 files with Solc 0.8.26
+Solc 0.8.26 finished in 105.24ms
+Error: Compiler run failed:
+Error (9582): Member "retryRefused" not found or not visible after argument-dependent lookup in contract RelayBranch.
+  --> test/PublicResults.t.sol:21:32:
+   |
+21 |             vm.expectRevert(); branch.retryRefused(PRICE,_empty());
+   |                                ^^^^^^^^^^^^^^^^^^^

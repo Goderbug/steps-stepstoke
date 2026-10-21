@@ -1,6 +1,0 @@
-Historical raw trace, stored losslessly in docs/validation/platform-ux-v1/final/history-traces.tar.xz.
-Original path: evidence/max-binding-trace.txt
-Original bytes: 6972265
-Original SHA-256: 8301f4ef8bcd7aed508ae89c14b860cb90f4d200d557077a2c9d228f0a107c04
-Restore from the repository root:
-tar -xJf docs/validation/platform-ux-v1/final/history-traces.tar.xz -C .

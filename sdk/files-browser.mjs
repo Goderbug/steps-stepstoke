@@ -157,7 +157,7 @@ export function base64(bytes) {
 // Browser counterpart of files.mjs verifyHTMLDist: the dist export is a single index.html, so
 // the caller supplies its bytes. Checks bytes and exact embedded image data URIs, executes nothing.
 export function verifyHTMLExport(descriptor, raw, selectedImages = [], verifyFile = defaultVerifyFile) {
-  if (!descriptor || descriptor.path !== 'dist/index.html' || descriptor.mediaType !== 'text/html') throw new Error('Wrong HTML output mapping');
+  if (!descriptor || !['dist/index.html', 'artifacts/index.html'].includes(descriptor.path) || descriptor.mediaType !== 'text/html') throw new Error('Wrong HTML output mapping');
   const result = verifyFile(descriptor, raw);
   const html = decodeUTF8(raw);
   if (!Array.isArray(selectedImages) || selectedImages.length > LIMITS.inputs) throw new Error('Input count limit');

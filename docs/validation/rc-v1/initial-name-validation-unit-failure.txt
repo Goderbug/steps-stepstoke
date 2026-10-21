@@ -1,0 +1,39 @@
+
+> cto-relay-station-w1@0.1.0 test:unit
+> vitest run
+
+
+ RUN  v5.0.5 /tmp/steps-ui/frontend
+
+ ❯ tests/unit/chain-provider.test.ts (3 tests | 1 failed) 15ms
+   × uses A1 name limits for CLI-produced names rather than fixture slot restrictions 5ms
+
+⎯⎯⎯⎯⎯⎯⎯ Failed Tests 1 ⎯⎯⎯⎯⎯⎯⎯
+
+ FAIL  tests/unit/chain-provider.test.ts > uses A1 name limits for CLI-produced names rather than fixture slot restrictions
+AssertionError: expected [ Array(1) ] to include 'Use letters, numbers, underscores or …'
+ ❯ tests/unit/chain-provider.test.ts:36:114
+     34|   const draft = { kind: "document" as const, mode: "create" as const, …
+     35|   expect(draftProblems(caps, { assets: [] } as unknown as Checkpoint, …
+     36|   expect(draftProblems(caps, { assets: [] } as unknown as Checkpoint, …
+       |                                                                                                                  ^
+     37| });
+     38|
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[1/1]⎯
+
+
+ Test Files  1 failed | 3 passed (4)
+      Tests  1 failed | 42 passed (43)
+   Start at  16:05:27
+   Duration  3.65s (environment 40%, import 24%, tests 21%, transform 9%, setup 6%)
+
+Environment  jsdom was created 4 times · 3.51s total, 40% of tracked time
+             create it once per worker with pool: 'vmThreads' (keeps per-file isolation) or isolate: false (shares it across files)
+             learn more: https://vitest.dev/guide/improving-performance#test-environments
+
+npm notice
+npm notice New minor version of npm available! 11.6.0 -> 11.21.1
+npm notice Changelog: https://github.com/npm/cli/releases/tag/v11.21.1
+npm notice To update run: npm install -g npm@11.21.1
+npm notice

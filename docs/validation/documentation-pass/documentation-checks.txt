@@ -1,7 +1,0 @@
-109 local Markdown link targets resolve across 14 Markdown files; code fences balanced.
-51 ABI public function entries represented by name in CONTRACTS.md; permissions/failures reviewed against source.
-35 SDK exports named in CLI.md.
-15 argument-taking CLI commands represented; help/default described.
-git diff --check: PASS.
-7 tracked changes and 20 untracked deliverable files are within README.md/docs/.
-Live instructions were reviewed as future templates only; no public RPC, request checker, artifact fetch or paid request was executed.

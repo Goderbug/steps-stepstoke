@@ -13,7 +13,7 @@ contract RelayMappingRegressionTest is RelaySetup {
     function test_createRejectsExistingNameEvenWhenPathAndSlotDifferBeforePayment() public {
         T.Asset[] memory current = _document();
         T.Proposal memory p = _proposal(branch, T.Profile.MarkdownCreate, 2);
-        p.outputPath = "docs/second.md";
+        p.outputPath = "artifacts/second.md";
         _rejectWithoutSpending(p, current);
     }
 
@@ -35,15 +35,15 @@ contract RelayMappingRegressionTest is RelaySetup {
         T.Asset[] memory current = _document();
         T.Proposal memory p = _proposal(branch, T.Profile.MarkdownCreate, 2);
         p.outputName = "second";
-        p.outputPath = "docs/main.md/next.md";
+        p.outputPath = "artifacts/main.md/next.md";
         _rejectWithoutSpending(p, current);
     }
 
     function test_pathAncestorCannotReplaceAnExistingDirectoryWithFileBeforePayment() public {
         T.Proposal memory p = _proposal(branch, T.Profile.MarkdownCreate, 1);
-        p.outputPath = "docs/main.md/next.md";
+        p.outputPath = "artifacts/main.md/next.md";
         bytes memory raw =
-            replace(F.documentResult(), '"path":"docs/main.md"', '"path":"docs/main.md/next.md"');
+            replace(F.documentResult(), '"path":"artifacts/main.md"', '"path":"artifacts/main.md/next.md"');
         T.Asset[] memory current = _accept(branch, p, _empty(), raw);
         p = _proposal(branch, T.Profile.MarkdownCreate, 2);
         p.outputName = "second";
@@ -57,7 +57,7 @@ contract RelayMappingRegressionTest is RelaySetup {
         inherited[1] = abi.decode(abi.encode(original[0]), (T.Asset));
         inherited[1].key = bytes32(uint256(2));
         inherited[1].name = "second";
-        inherited[1].path = "docs/main.md/next.md";
+        inherited[1].path = "artifacts/main.md/next.md";
         RelayEncoder encoder = factory.encoder();
         assertEq(encoder.assetsHash(inherited), keccak256(abi.encode(inherited)));
         T.Proposal memory p = _proposal(branch, T.Profile.MarkdownUpdate, 1);
@@ -65,7 +65,7 @@ contract RelayMappingRegressionTest is RelaySetup {
         encoder.encode("Goal", "", "", p, inherited);
         p = _proposal(branch, T.Profile.MarkdownUpdate, 2);
         p.outputName = "second";
-        p.outputPath = "docs/main.md/next.md";
+        p.outputPath = "artifacts/main.md/next.md";
         vm.expectRevert(Policy.Invalid.selector);
         encoder.encode("Goal", "", "", p, inherited);
     }
@@ -74,9 +74,9 @@ contract RelayMappingRegressionTest is RelaySetup {
         T.Asset[] memory current = _document();
         T.Proposal memory p = _proposal(branch, T.Profile.MarkdownCreate, 2);
         p.outputName = "second";
-        p.outputPath = "docs/second.md";
+        p.outputPath = "artifacts/second.md";
         branch.propose(p, current);
-        p.outputPath = "docs/main.md-more/next.md";
+        p.outputPath = "artifacts/main.md-more/next.md";
         branch.propose(p, current);
         assertEq(intake.count(), 1);
     }
@@ -90,7 +90,7 @@ contract RelayMappingRegressionTest is RelaySetup {
         // The existing HTML is still updatable with its authenticated selected input.
         uint256 id = branch.propose(_proposal(branch, T.Profile.HTMLUpdate, 1), current);
         (, bytes memory body) = branch.bodyOf(id, current);
-        assertTrue(contains(body, '"path":"dist/index.html"'));
+        assertTrue(contains(body, '"path":"artifacts/index.html"'));
     }
 
     function test_markdownAndImageCannotWriteAnyTopLevelDistDescendant() public {
@@ -108,11 +108,11 @@ contract RelayMappingRegressionTest is RelaySetup {
 
     function test_distLikeNamesAndNestedNonWebsiteDistDirectoryRemainAllowed() public {
         T.Proposal memory p = _proposal(branch, T.Profile.MarkdownCreate, 1);
-        p.outputPath = "distribution/notes.md";
+        p.outputPath = "artifacts/distribution/notes.md";
         branch.propose(p, _empty());
-        p.outputPath = "dist-notes.md";
+        p.outputPath = "artifacts/dist-notes.md";
         branch.propose(p, _empty());
-        p.outputPath = "docs/dist/notes.md";
+        p.outputPath = "artifacts/dist/notes.md";
         branch.propose(p, _empty());
         assertEq(intake.count(), 0);
     }
@@ -122,9 +122,9 @@ contract RelayMappingRegressionTest is RelaySetup {
         bytes32 untouched = keccak256(abi.encode(current[0]));
         T.Proposal memory p = _proposal(branch, T.Profile.MarkdownCreate, 2);
         p.outputName = "second";
-        p.outputPath = "docs/second.md";
+        p.outputPath = "artifacts/second.md";
         bytes memory raw = replace(F.documentUpdatedResult(), '"name":"main"', '"name":"second"');
-        raw = replace(raw, '"path":"docs/main.md"', '"path":"docs/second.md"');
+        raw = replace(raw, '"path":"artifacts/main.md"', '"path":"artifacts/second.md"');
         current = _accept(branch, p, current, raw);
         assertEq(current.length, 2);
         assertEq(keccak256(abi.encode(current[0])), untouched);
@@ -135,7 +135,7 @@ contract RelayMappingRegressionTest is RelaySetup {
         current = _accept(branch, _proposal(branch, T.Profile.MarkdownUpdate, 1), current, raw);
         assertEq(keccak256(abi.encode(current[1])), second);
         assertEq(current[0].name, "main");
-        assertEq(current[0].path, "docs/main.md");
+        assertEq(current[0].path, "artifacts/main.md");
     }
 
     function test_historicalForkKeepsSourceProvenanceAndCanUpdateInheritedSlot() public {

@@ -153,7 +153,7 @@ export async function verifyHTMLDist(directory, descriptor, selectedImages = [])
   if (!stat.isDirectory() || stat.isSymbolicLink()) throw new Error('Expected a real dist directory');
   const entries = await readdir(directory, { withFileTypes: true });
   if (entries.length !== 1 || entries[0].name !== 'index.html' || !entries[0].isFile()) throw new Error('dist must contain only a regular index.html');
-  if (descriptor.path !== 'dist/index.html' || descriptor.mediaType !== 'text/html') throw new Error('Wrong HTML output mapping');
+  if (!['dist/index.html', 'artifacts/index.html'].includes(descriptor.path) || descriptor.mediaType !== 'text/html') throw new Error('Wrong HTML output mapping');
   const raw = await readArtifactFile(join(directory, 'index.html'), LIMITS.html);
   const result = verifyFile(descriptor, raw);
   const html = new TextDecoder('utf-8', { fatal: true }).decode(raw);

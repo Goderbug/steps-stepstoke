@@ -1,0 +1,33 @@
+{
+  "classification": "Rendered static export, no public deployment",
+  "date": "2026-10-21",
+  "desktop": {
+    "viewport": [
+      1440,
+      960
+    ],
+    "title": "STEPS \u00b7 Stepstoke \u00b7 Open Workshop",
+    "horizontalOverflow": 0,
+    "createDisabled": true,
+    "officialX": "https://x.com/stepstoke"
+  },
+  "mobile": {
+    "viewport": [
+      320,
+      844
+    ],
+    "horizontalOverflow": 0,
+    "loadedSandboxedPreview": true,
+    "historicalContent": "Original CTO Relay demo title retained inside authenticated/demo artifact"
+  },
+  "walletSheet": "Browser wallet and Coinbase Wallet inspected; mobile deep links covered by automated fixtures. No real wallet connection or mainnet signing attempted.",
+  "engines": {
+    "chromium": "PASS",
+    "webkit": "NOT_RUN: downloaded engine cannot run with the available system libraries"
+  },
+  "screenshots": [
+    "desktop.webp",
+    "mobile-320.webp"
+  ],
+  "screenshotEncoding": "WebP recompressed at quality 45 for delivery size; source render and dimensions preserved"
+}

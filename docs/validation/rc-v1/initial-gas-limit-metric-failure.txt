@@ -1,0 +1,31 @@
+✖ network gas ceiling applies to declared gas limit even when receipt usage is small (1.048333ms)
+✔ intrinsic accounting preserves zero/nonzero calldata and creation word charges (0.219071ms)
+ℹ tests 2
+ℹ suites 0
+ℹ pass 1
+ℹ fail 1
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 55.009018
+
+✖ failing tests:
+
+test at test-sdk/transaction-metrics.test.mjs:4:1
+✖ network gas ceiling applies to declared gas limit even when receipt usage is small (1.048333ms)
+  AssertionError [ERR_ASSERTION]: Expected values to be strictly equal:
+  
+  true !== false
+  
+      at TestContext.<anonymous> (file:///home/seat/.identitymd/work/395064a3-ae28-4477-89c2-9435e70bb7e8/89142d05-27de-46fe-9f69-96374384acd1/test-sdk/transaction-metrics.test.mjs:5:9)
+      at Test.runInAsyncScope (node:async_hooks:214:14)
+      at Test.run (node:internal/test_runner/test:1106:25)
+      at Test.start (node:internal/test_runner/test:1003:17)
+      at startSubtestAfterBootstrap (node:internal/test_runner/harness:358:17) {
+    generatedMessage: true,
+    code: 'ERR_ASSERTION',
+    actual: true,
+    expected: false,
+    operator: 'strictEqual',
+    diff: 'simple'
+  }

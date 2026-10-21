@@ -33,7 +33,7 @@ it("uses A1 name limits for CLI-produced names rather than fixture slot restrict
   expect(targetKey.length).toBe(64);
   const draft = { kind: "document" as const, mode: "create" as const, targetKey, inputKeys: [], requirement: "A valid requirement" };
   expect(draftProblems(caps, { assets: [] } as unknown as Checkpoint, draft)).toEqual([]);
-  expect(draftProblems(caps, { assets: [] } as unknown as Checkpoint, { ...draft, targetKey: targetKey + "A" })).toContain("Use letters, numbers, underscores or hyphens, up to 64 bytes");
+  expect(draftProblems(caps, { assets: [] } as unknown as Checkpoint, { ...draft, targetKey: targetKey + "A" })).toContain("Start with a letter; use letters, numbers, underscores or hyphens, up to 64 bytes");
 });
 
 it("keeps only bounded public RPC reads alive across navigation and preserves large simulation bytes",async()=>{
@@ -47,4 +47,15 @@ it("keeps only bounded public RPC reads alive across navigation and preserves la
     expect(fetch.mock.calls[1][1]?.keepalive).toBe(false);expect(JSON.parse(String(fetch.mock.calls[1][1]?.body)).params[0].data).toBe(data);
     await provider.request({method:'eth_sendTransaction',params:[{}]});expect(fetch.mock.calls[2][1]?.keepalive).toBe(false);
   }finally{vi.unstubAllGlobals();}
+});
+
+it("public adapter accepts explicit Ethereum HTTPS configuration and blocks uncleared writes",async()=>{
+ const publicConfig={...config,kind:"ETHEREUM_DEPLOYMENT",chainId:1,deploymentBlock:100,rpcURL:"https://ethereum-rpc.publicnode.com"} as LocalConfig;
+ const wallet=vi.fn(async()=>null);
+ const a=new ChainAdapter(publicConfig,wallet);
+ expect(a.routeBase).toBe("ethereum"); expect((await a.getCapabilities()).chainId).toBe(1);
+ await expect(a.createBranch({...DEMO_ACCOUNTS[0],chainId:1},{title:"Gate",goal:"Public gate test"})).rejects.toThrow("Production gates remain open");
+ expect(wallet).not.toHaveBeenCalled();
+ expect(()=>new ChainAdapter({...publicConfig,chainId:11155111},wallet)).toThrow("confirmed Ethereum");
+ expect(()=>new ChainAdapter({...publicConfig,rpcURL:"http://127.0.0.1:8545"},wallet)).toThrow("HTTPS");
 });

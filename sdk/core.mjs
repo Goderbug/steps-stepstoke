@@ -76,7 +76,7 @@ export function canonicalWitness(assets) {
     const size = positive(a.size);
     if (size > BigInt(caps[kind]) || a.mediaType !== mime[kind]) throw new Error('Invalid file type or size');
     const filePath = outputPath(kind, a.path);
-    if ((kind === 0 && !filePath.endsWith('.md')) || (kind === 1 && filePath !== 'dist/index.html') || (kind === 2 && !filePath.endsWith('.png'))) throw new Error('Invalid output path');
+    if ((kind === 0 && !filePath.endsWith('.md')) || (kind === 1 && !['dist/index.html','artifacts/index.html'].includes(filePath)) || (kind === 2 && !filePath.endsWith('.png'))) throw new Error('Invalid output path');
     const revision = positive(a.revision);
     if (revision > (1n << 64n) - 1n) throw new Error('Revision overflow');
     return {
@@ -106,9 +106,15 @@ const profileRule = profile => {
 const outputPath = (kind, value) => {
   const checked = path(value);
   if (kind !== 1 && checked.startsWith('dist/')) throw new Error('dist is reserved for the HTML export');
-  if ((kind === 0 && !checked.endsWith('.md')) || (kind === 1 && checked !== 'dist/index.html') || (kind === 2 && !checked.endsWith('.png'))) throw new Error('Invalid output path');
+  if ((kind === 0 && !checked.endsWith('.md')) || (kind === 1 && !['dist/index.html','artifacts/index.html'].includes(checked)) || (kind === 2 && !checked.endsWith('.png'))) throw new Error('Invalid output path');
   return checked;
 };
+
+export function nextOutputPath(kind, name, previous = '') {
+  identifier(name);
+  if (previous.startsWith('artifacts/')) return previous;
+  return kind === 1 ? 'artifacts/index.html' : `artifacts/${name}${kind === 0 ? '.md' : '.png'}`;
+}
 
 // Mirrors the fixed encoder's locally knowable admission rules.  A current eth_call is still
 // needed before spending: anchor, phase, price and a competing transaction can change.
@@ -123,12 +129,14 @@ export function validateProposal(proposal, witness) {
   p.inputs = p.inputs.map(hash);
   for (let i = 1; i < p.inputs.length; i++) if (BigInt(p.inputs[i]) <= BigInt(p.inputs[i - 1])) throw new Error('Inputs must be sorted and unique');
   p.outputName = identifier(p.outputName);
+  if (!/^[a-zA-Z]/u.test(p.outputName)) throw new Error("Output names must start with a letter");
   p.outputPath = outputPath(rule.kind, p.outputPath);
+  if (!p.outputPath.startsWith("artifacts/")) throw new Error("Named outputs must be under artifacts/");
   p.text = bounded(p.text, 1024);
   const current = canonicalWitness(witness);
   const target = current.find(asset => asset.key === p.target);
   if (rule.update) {
-    if (!target || target.kind !== rule.kind || target.name !== p.outputName || target.path !== p.outputPath) throw new Error('Update target mapping mismatch');
+    if (!target || target.kind !== rule.kind || target.name !== p.outputName || nextOutputPath(target.kind, target.name, target.path) !== p.outputPath) throw new Error('Update target mapping mismatch');
     if (!p.inputs.includes(p.target)) throw new Error('Update must select target');
   } else {
     if (target) throw new Error('Create target already exists');
@@ -136,13 +144,14 @@ export function validateProposal(proposal, witness) {
     kinds.add(rule.kind);
     if (current.length + 1 + 3 - kinds.size > LIMITS.assets) throw new Error('Reserved asset slots exhausted');
   }
-  if (current.some(a => a.key !== p.target && (a.name === p.outputName || a.path === p.outputPath || a.path.startsWith(p.outputPath + '/') || p.outputPath.startsWith(a.path + '/')))) throw new Error('Output name or path conflicts with another asset');
+  if (current.some(a => a.key !== p.target && (a.name === p.outputName || (rule.kind === 1 && a.kind === 1) || a.path === p.outputPath || a.path.startsWith(p.outputPath + '/') || p.outputPath.startsWith(a.path + '/')))) throw new Error('Output name or path conflicts with another asset');
   if (rule.kind === 2 && p.inputs.length !== 0) throw new Error('Image references are disabled');
   let imageBytes = 0;
   let htmlBytes = 0;
   for (const key of p.inputs) {
     const selected = current.find(asset => asset.key === key);
     if (!selected) throw new Error('Input is not a current asset');
+    if (!/^[a-zA-Z]/u.test(selected.name)) throw new Error('Input names must start with a letter');
     if (rule.kind === 0 && selected.kind !== 0) throw new Error('Markdown accepts Markdown inputs only');
     if (selected.kind === 2) {
       imageBytes += Number(selected.size);
@@ -196,7 +205,7 @@ export function readPrice(intake, action, asset) {
   return { kind: 'eth_call', method: 'priceOf', abi: 'intake', transaction: transaction(interfaces.intake, intake, 'priceOf', [hash(action), address(asset)]) };
 }
 export function readFactory(factory, method = 'policyId', args = []) {
-  const allowed = new Set(['branchCount', 'branches', 'registered', 'policyId', 'encoder', 'verifier', 'implementation']);
+  const allowed = new Set(['branchCount', 'branches', 'registered', 'policyId', 'encoder', 'verifier', 'intake', 'imd']);
   if (!allowed.has(method)) throw new Error('Unsupported factory read');
   return { kind: 'eth_call', method, abi: 'factory', transaction: transaction(interfaces.factory, factory, method, args) };
 }
@@ -206,7 +215,7 @@ export function readFactory(factory, method = 'policyId', args = []) {
 export function toWalletRequest(prepared, { from, chainId }) {
   if (!prepared || typeof prepared.to !== 'string' || typeof prepared.data !== 'string' || prepared.value !== '0x0') throw new Error('Expected a prepared unsigned A1 transaction');
   const chain = BigInt(chainId);
-  if (chain <= 0n) throw new Error('Expected a chain id');
+  if (![1n, 31337n].includes(chain)) throw new Error('Only Ethereum chain 1 and disposable local chain 31337 are supported');
   return Object.freeze({ method: 'eth_sendTransaction', params: [Object.freeze({ from: address(from), to: address(prepared.to), data: prepared.data, value: '0x0', chainId: `0x${chain.toString(16)}` })] });
 }
 

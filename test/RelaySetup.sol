@@ -34,7 +34,7 @@ abstract contract RelaySetup is TestBase {
         intake.initialize(WRITER, TREASURY, Policy.IMD);
         intake.setPrice(Policy.OPEN, PRICE);
         intake.setPrice(Policy.CONTINUE, PRICE);
-        factory = new RelayFactory();
+        factory = new RelayFactory(new RelayEncoder(), new RelayVerifier());
         branch = factory.createProject("Maintain a public relay project.");
         token.mint(SPONSOR, 1000 ether);
         _approve(branch);
@@ -62,8 +62,8 @@ abstract contract RelaySetup is TestBase {
         T.Kind k = Policy.kind(profile);
         p.outputName = k == T.Kind.Markdown ? "main" : k == T.Kind.HTML ? "site" : "illustration";
         p.outputPath = k == T.Kind.Markdown
-            ? "docs/main.md"
-            : k == T.Kind.HTML ? "dist/index.html" : "assets/illustration.png";
+            ? "artifacts/main.md"
+            : k == T.Kind.HTML ? "artifacts/index.html" : "artifacts/illustration.png";
         if (Policy.update(profile)) {
             p.inputs = new bytes32[](1);
             p.inputs[0] = p.target;
@@ -120,8 +120,8 @@ abstract contract RelaySetup is TestBase {
             ',"path":',
             Text.quote(
                 kind == T.Kind.Markdown
-                    ? "docs/main.md"
-                    : kind == T.Kind.HTML ? "dist/index.html" : "assets/illustration.png"
+                    ? "artifacts/main.md"
+                    : kind == T.Kind.HTML ? "artifacts/index.html" : "artifacts/illustration.png"
             ),
             ',"hash":"',
             bytes(Text.hex32(sha256("local-fixture-content"))),

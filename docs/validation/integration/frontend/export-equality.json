@@ -1,7 +1,0 @@
-{
-  "result": "PASS",
-  "deliveredExportFiles": 8,
-  "rebuiltExportFiles": 8,
-  "differingPaths": [],
-  "method": "Rebuild final source to a separate output directory; compare every exported file SHA-256 including observed local config"
-}

@@ -47,8 +47,38 @@ library Assets {
                 && b[4] == "/"
         ) revert Policy.Invalid();
         if (kind == T.Kind.Markdown && !Text.suffix(path, ".md")) revert Policy.Invalid();
-        if (kind == T.Kind.HTML && !Text.equal(path, "dist/index.html")) revert Policy.Invalid();
+        if (
+            kind == T.Kind.HTML && !Text.equal(path, "dist/index.html")
+                && !Text.equal(path, "artifacts/index.html")
+        ) revert Policy.Invalid();
         if (kind == T.Kind.Image && !Text.suffix(path, ".png")) revert Policy.Invalid();
+    }
+
+    function namedOutputPath(T.Kind kind, string memory path) internal pure {
+        outputPath(kind, path);
+        if (!isNamedPath(path)) revert Policy.Invalid();
+    }
+
+    function isNamedPath(string memory path) internal pure returns (bool) {
+        bytes memory b = bytes(path);
+        bytes memory prefix = "artifacts/";
+        if (b.length <= prefix.length) return false;
+        for (uint256 i; i < prefix.length; ++i) {
+            if (b[i] != prefix[i]) return false;
+        }
+        return true;
+    }
+
+    /// @dev Preserve authenticated historical paths; only a new write migrates a legacy slot.
+    /// The name/key are unchanged and an already supported path can never be renamed.
+    function nextOutputPath(T.Kind kind, string memory name, string memory previous)
+        internal
+        pure
+        returns (string memory)
+    {
+        if (isNamedPath(previous)) return previous;
+        if (kind == T.Kind.HTML) return "artifacts/index.html";
+        return string.concat("artifacts/", name, kind == T.Kind.Markdown ? ".md" : ".png");
     }
 
     /// @dev Two files conflict if identical, or either would have to be a

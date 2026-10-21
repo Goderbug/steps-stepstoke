@@ -54,7 +54,7 @@ test("static export works beneath a gateway subpath with local metadata and asse
   await expect(page.getByRole("heading", { name: "Public projects", exact: true })).toBeVisible();
   await disclose(page, /^Deployment status/);
   await expect(page.getByText("A1_INTEGRATION_PENDING", { exact: true })).toBeVisible();
-  await expect(page).toHaveTitle("CTO Relay · Open Workshop");
+  await expect(page).toHaveTitle("STEPS · Stepstoke · Open Workshop");
   const metadata = await page.locator("meta[property='og:image']").getAttribute("content");
   expect(metadata).toBe("./og.png");
   expect(await page.locator(".brand img").evaluate((e) => (e as HTMLImageElement).naturalWidth)).toBeGreaterThan(0);

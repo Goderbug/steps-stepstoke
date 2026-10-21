@@ -1,6 +1,0 @@
-Historical raw trace, stored losslessly in docs/validation/platform-ux-v1/final/history-traces.tar.xz.
-Original path: evidence/wide-binding-trace.txt
-Original bytes: 2311748
-Original SHA-256: b3a6ed66a5e32d80623cce7b2e77abfd874d099db228d4da3c227e6b3fcaf0cc
-Restore from the repository root:
-tar -xJf docs/validation/platform-ux-v1/final/history-traces.tar.xz -C .

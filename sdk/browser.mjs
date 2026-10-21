@@ -21,3 +21,5 @@ export async function webCryptoSha256(bytes) {
   const digest = new Uint8Array(await subtle.digest('SHA-256', bytes));
   return `0x${Array.from(digest, b => b.toString(16).padStart(2, '0')).join('')}`;
 }
+
+export * from './public.mjs';

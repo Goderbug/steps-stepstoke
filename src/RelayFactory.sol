@@ -1,7 +1,6 @@
 // SPDX-License-Identifier: MIT
 pragma solidity 0.8.26;
 
-import {Clones} from "@openzeppelin/contracts/proxy/Clones.sol";
 import {RelayTypes as T} from "./RelayTypes.sol";
 import {RelayBranch} from "./RelayBranch.sol";
 import {RelayEncoder} from "./RelayEncoder.sol";
@@ -12,11 +11,11 @@ import {Policy} from "./libraries/Policy.sol";
 contract RelayFactory {
     RelayEncoder public immutable encoder;
     RelayVerifier public immutable verifier;
-    address public immutable implementation;
     mapping(address => bool) public registered;
     mapping(uint256 => address) public branches;
     uint256 public branchCount;
 
+    error InvalidDependency();
     error InvalidParent();
     error InvalidCheckpoint();
 
@@ -28,10 +27,30 @@ contract RelayFactory {
         address creator
     );
 
-    constructor() {
-        encoder = new RelayEncoder();
-        verifier = new RelayVerifier();
-        implementation = address(new RelayBranch(encoder, verifier));
+    /// @dev Launch-safe: static arguments only, no calls, code inspection or child deployment.
+    constructor(RelayEncoder encoder_, RelayVerifier verifier_) {
+        if (
+            address(encoder_) == address(0) || address(verifier_) == address(0)
+                || address(encoder_) == address(verifier_)
+        ) revert InvalidDependency();
+        encoder = encoder_;
+        verifier = verifier_;
+    }
+
+    function intake() external pure returns (address) {
+        return Policy.INTAKE;
+    }
+
+    function imd() external pure returns (address) {
+        return Policy.IMD;
+    }
+
+    /// @dev Validate fixed dependencies at use, not on the launch's empty-chain constructor probe.
+    function _dependencies() private view {
+        if (address(encoder).code.length == 0 || address(verifier).code.length == 0) {
+            revert InvalidDependency();
+        }
+        if (encoder.policyId() != Policy.ID || verifier.policyId() != Policy.ID) revert InvalidDependency();
     }
 
     function policyId() external pure returns (bytes32) {
@@ -47,6 +66,7 @@ contract RelayFactory {
         external
         returns (RelayBranch branch)
     {
+        _dependencies();
         if (!registered[parent]) revert InvalidParent();
         T.Checkpoint memory cp = RelayBranch(parent).checkpoint(at);
         if (at == 0 || cp.digest == 0 || cp.resultHash == 0 || encoder.witnessHash(witness) != cp.assetsHash)
@@ -66,8 +86,13 @@ contract RelayFactory {
         bytes32 inheritedProjectHash,
         T.Asset[] memory inherited
     ) private returns (RelayBranch branch) {
-        branch = RelayBranch(Clones.clone(implementation));
-        branch.initialize(goal, direction, source, inheritedProjectHash, inherited);
+        _dependencies();
+        encoder.validateText(goal, direction);
+        bytes32 inheritedAssetsHash = encoder.witnessHash(inherited);
+        // All external validation precedes CREATE. The child constructor only stores/hashes/emits.
+        branch = new RelayBranch(
+            encoder, verifier, goal, direction, source, inheritedProjectHash, inheritedAssetsHash, inherited
+        );
         registered[address(branch)] = true;
         branches[++branchCount] = address(branch);
         emit BranchCreated(address(branch), source.parent, source.revision, source.checkpoint, msg.sender);

@@ -1,0 +1,10 @@
+
+> cto-relay-station-w1@0.1.0 typecheck
+> tsc --noEmit -p tsconfig.json
+
+src/ui/Workspace.tsx(62,48): error TS2552: Cannot find name 'latestAttempt'. Did you mean 'isLatestAttempt'?
+npm notice
+npm notice New minor version of npm available! 11.6.0 -> 11.21.1
+npm notice Changelog: https://github.com/npm/cli/releases/tag/v11.21.1
+npm notice To update run: npm install -g npm@11.21.1
+npm notice

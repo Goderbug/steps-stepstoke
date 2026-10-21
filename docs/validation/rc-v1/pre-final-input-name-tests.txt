@@ -1,0 +1,236 @@
+Compiling 13 files with Solc 0.8.26
+Solc 0.8.26 finished in 126.42s
+Compiler run successful!
+
+Ran 5 tests for test/IntakeCompatibility.t.sol:IntakeCompatibilityTest
+[PASS] test_currentCatalogShapeAndOutputNamespaceAreEncoded() (gas: 6964755)
+[PASS] test_legacyDescriptorRemainsExactAndMigrationRequiresExplicitCanonicalUpdate() (gas: 4422358)
+[PASS] test_legacyHTMLCannotCreateSecondHTMLSlotAndExplicitUpdateMigrates() (gas: 4756167)
+[PASS] test_namesRequireInitialLetterButHistoricalNamesRemainReadable() (gas: 3203077)
+[PASS] test_oldOutputNamespaceRejectedBeforePayment() (gas: 273375)
+Suite result: ok. 5 passed; 0 failed; 0 skipped; finished in 29.54ms (28.07ms CPU time)
+
+Ran 7 tests for test/LaunchCompatibility.t.sol:LaunchCompatibilityTest
+[PASS] test_badPolicyAndBadInputsFailBeforeCreateAndRegistration() (gas: 179829)
+[PASS] test_callbackUriAtLimitWithinOfficialStipendAndAboveStaysPending() (gas: 2261794)
+[PASS] test_constructorRejectsZeroAndDuplicateDependencies() (gas: 12577)
+[PASS] test_directChildrenAreCompleteIndependentPayers() (gas: 6867297)
+[PASS] test_launchAndRuntimeChildPassProtectedOpcodeRule() (gas: 21169930)
+[PASS] test_namedBatchBackwardReferencesThenRuntimeChild() (gas: 13644024)
+[PASS] test_staticFactoryConstructorAcceptsEmptyDependenciesWithoutCallsOrChildren() (gas: 53669)
+Suite result: ok. 7 passed; 0 failed; 0 skipped; finished in 45.24ms (44.43ms CPU time)
+
+Ran 5 tests for test/adversarial/ContinuationSpec.t.sol:ContinuationSpecTest
+[PASS] test_checkpointPreimageBindsChainFactoryBranchPolicyRevisionAndSource() (gas: 9313743)
+[PASS] test_currentProposalsSelectableInEitherOrderAndLosingSponsorPaysNothing() (gas: 9130285)
+[PASS] test_everyWitnessFieldAuthenticatedForSponsorBindAndHistoricalFork() (gas: 9948724)
+[PASS] test_fiveRootRoundsTwoSponsorsHistoricalForkAndTwoChildRounds() (gas: 44566509)
+[PASS] test_foreignFactoryAndUnregisteredLookalikeCannotForgeHistoricalFork() (gas: 6257480)
+Suite result: ok. 5 passed; 0 failed; 0 skipped; finished in 86.11ms (82.31ms CPU time)
+
+Ran 2 tests for test/CrossLanguage.t.sol:CrossLanguageTest
+[PASS] test_sdkCalldataActuallyCreatesBranchWithoutPayment() (gas: 2871398)
+[PASS] test_sdkCanonicalWitnessMatchesSolidity() (gas: 501530)
+Suite result: ok. 2 passed; 0 failed; 0 skipped; finished in 2.18ms (1.43ms CPU time)
+
+Ran 13 tests for test/RelayMappingRegression.t.sol:RelayMappingRegressionTest
+[PASS] test_createRejectsExistingNameEvenWhenPathAndSlotDifferBeforePayment() (gas: 3183613)
+[PASS] test_createRejectsExistingPathEvenWhenNameAndSlotDifferBeforePayment() (gas: 3188141)
+[PASS] test_distLikeNamesAndNestedNonWebsiteDistDirectoryRemainAllowed() (gas: 1676882)
+[PASS] test_historicalForkKeepsSourceProvenanceAndCanUpdateInheritedSlot() (gas: 8123829)
+[PASS] test_legacyIndependentDescriptorsStayReadableButCollidingUpdateIsRejected() (gas: 3539584)
+[PASS] test_markdownAndImageCannotWriteAnyTopLevelDistDescendant() (gas: 746471)
+[PASS] test_namesCannotCollideAcrossDifferentAssetKinds() (gas: 3187101)
+[PASS] test_pathAncestorCannotReplaceAnExistingDirectoryWithFileBeforePayment() (gas: 5681579)
+[PASS] test_pathAncestorCollisionWithOtherSlotAlsoRejectsUpdates() (gas: 3319608)
+[PASS] test_pathCommonDirectoriesAndNonBoundaryPrefixesAreAllowed() (gas: 4229598)
+[PASS] test_pathDescendantCannotTreatAnExistingFileAsDirectoryBeforePayment() (gas: 3191751)
+[PASS] test_secondHtmlSlotRejectsFixedPathCollision() (gas: 6177217)
+[PASS] test_uniqueCreateAndUpdatePreserveOtherAssetProvenance() (gas: 13666117)
+Suite result: ok. 13 passed; 0 failed; 0 skipped; finished in 85.69ms (84.81ms CPU time)
+
+Ran 14 tests for test/RelayProfiles.t.sol:RelayProfilesTest
+[PASS] test_capacityEndToEndSixteenAssetsThenUpdate() (gas: 91666851)
+[PASS] test_htmlImagesPerFileAggregateAndBase64OverheadBounds() (gas: 1372705)
+[PASS] test_imageReferencesAndMarkdownImageInputsDisabled() (gas: 3386936)
+[PASS] test_invalidTextAndCanonicalWitnessRejectBeforePayment() (gas: 346980)
+[PASS] test_jsonEscapingCannotInjectRuntimeFields() (gas: 1027532)
+[PASS] test_maximumCompleteBindingASCIIFitsGasBudget() (gas: 227143797)
+[PASS] test_maximumCompleteBindingEscapedUnicodeFitsGasBudget() (gas: 253094714)
+[PASS] test_maximumCompleteBindingWideObjectsFitsGasBudget() (gas: 256200433)
+[PASS] test_measureMaximumWitnessAndLargeManifestTogether() (gas: 14171947)
+[PASS] test_publishDisabledAndOutputMappingFixedBeforePayment() (gas: 360385)
+[PASS] test_requestBodyUTF8ByteLimitCheckedBeforePayment() (gas: 6267323)
+[PASS] test_reserveEachEnabledTypeAndExistingSlotsUpdatableAtCapacity() (gas: 4279669)
+[PASS] test_selectedInputsMustBeCurrentSortedUniqueAndWithinEight() (gas: 10483741)
+[PASS] test_updateTargetMandatoryCreateCannotOverwriteAndRenameDisabled() (gas: 3862787)
+Suite result: ok. 14 passed; 0 failed; 0 skipped; finished in 1.69s (1.69s CPU time)
+
+Ran 15 tests for test/ManifestEnvelopeRegression.t.sol:ManifestEnvelopeRegressionTest
+[PASS] test_bind33ActualSourceDescriptorsWithoutAnotherPurchase() (gas: 9864175)
+[PASS] test_bind33StructuredSourceEntriesWithoutAnotherPurchase() (gas: 5631393)
+[PASS] test_bindLongMetadataOnTheAcceptedFileWithoutAnotherPurchase() (gas: 4942787)
+[PASS] test_bindMaximumEscapedKeyBytesWithFullWitness() (gas: 249929772)
+[PASS] test_bindMaximumIgnoredNumberWithFullWitness() (gas: 183749454)
+[PASS] test_bindMaximumMetadataComplexityWithFullWitness() (gas: 196890633)
+[PASS] test_bindMaximumMetadataValuesAndUnicodeWithFullWitness() (gas: 202348319)
+[PASS] test_bindMaximumWhitespaceWithFullWitness() (gas: 175276310)
+[PASS] test_bindMetadataBeyond8192BytesWithoutAnotherPurchase() (gas: 9044400)
+[PASS] test_exactPreviouslyObservedIMDResultBindsWithoutReserialization() (gas: 3487268)
+[PASS] test_invalidIgnoredMetadataCannotHideBehindProjection() (gas: 4481149)
+[PASS] test_longIgnoredStringStillRejectsLateInvalidUtf8AndDuplicateKeys() (gas: 20272118)
+[PASS] test_manifestAggregateKeyBudgetAccepts2048Rejects2049() (gas: 3584775)
+[PASS] test_manifestValueBudgetAccepts512Rejects513() (gas: 5801736)
+[PASS] test_wrongHashStillRejectsProjectedManifest() (gas: 1320499)
+Suite result: ok. 15 passed; 0 failed; 0 skipped; finished in 2.17s (2.17s CPU time)
+
+Ran 5 tests for test/adversarial/ProfileBoundarySpec.t.sol:ProfileBoundarySpecTest
+[PASS] testFuzz_htmlBase64RoundingAndOneByteOverTheKnownInputBudget(uint32) (runs: 1000, μ: 991574, ~: 991641)
+[PASS] test_realEightAssetWitnessExact16384ByteRequestAndOneByteOverRejectedBeforePayment() (gas: 138029741)
+[PASS] test_slotReservationInputCountAndFullCapacityUpdateBoundaries() (gas: 9072556)
+[PASS] test_unsafePathComponentsInvalidUtf8AndDisabledModesRejectWithoutSpending() (gas: 2664661)
+[PASS] test_utf8TextLimitsCountBytesAndOutputMappingLengthsAreBounded() (gas: 32437523)
+Suite result: ok. 5 passed; 0 failed; 0 skipped; finished in 2.89s (2.89s CPU time)
+
+Ran 1 test for test/PublicResults.t.sol:PublicResultsTest
+[PASS] test_exactAuthenticatedPublicZeroFileResultsNeverSettleOrRebuy() (gas: 19887658)
+Suite result: ok. 1 passed; 0 failed; 0 skipped; finished in 12.72ms (11.76ms CPU time)
+
+Ran 9 tests for test/RelayHistory.t.sol:RelayHistoryTest
+[PASS] test_badBindingPreservesResultThenCorrectWitnessWorksWithoutPurchase() (gas: 6737224)
+[PASS] test_childCannotBindParentsProjectAsOwn() (gas: 9367792)
+[PASS] test_forkCannotAuthenticateFakeParentLatestWitnessOrForgedProvenance() (gas: 6768247)
+[PASS] test_forkChosenHistoricalCheckpointStartsOwnProjectAndPayer() (gas: 18242773)
+[PASS] test_forkIsAllowedWhileParentPendingOrFrozen() (gas: 11732531)
+[PASS] test_htmlImageHtmlLatestJobAndOlderSelectedInputs() (gas: 27053236)
+[PASS] test_projectMismatchCannotOverwriteCheckpoint() (gas: 7217438)
+[PASS] test_removedInitializerCannotChangeAuthorityEvenForFactory() (gas: 139171)
+[PASS] test_reusedJobCannotCreateNewRevision() (gas: 6297395)
+Suite result: ok. 9 passed; 0 failed; 0 skipped; finished in 109.06ms (108.01ms CPU time)
+
+Ran 11 tests for test/adversarial/ManifestSpec.t.sol:ManifestSpecTest
+[PASS] testFuzz_nonWhitespaceTrailingByteAlwaysRejected(uint8) (runs: 1000, μ: 72226, ~: 72227)
+[PASS] testFuzz_unicodeScalarEscapesDecodeAndDuplicateKeysReject(uint32) (runs: 1000, μ: 243450, ~: 242436)
+[PASS] test_callbackDigestBindsWhitespaceAndKeyOrderOfOriginalBytes() (gas: 3565417)
+[PASS] test_exactDepthMemberKeyAndTokenBoundaries() (gas: 4652769)
+[PASS] test_exactManifestAndStringByteLimitsAcceptBoundaryRejectOneMore() (gas: 15282764)
+[PASS] test_fileSizeIntegerGrammarAndAllProfileDeclaredCaps() (gas: 23919046)
+[PASS] test_hashEncodingTypeWidthNonhexAndZeroAreCheckedForBothDigests() (gas: 99356052)
+[PASS] test_identityLengthDecodedFieldsAndEmptyAcceptedFiles() (gas: 8543239)
+[PASS] test_manifestRejectionsKeepRecordedDigestAndOldHistory() (gas: 110340506)
+[PASS] test_projectSwitchAndHistoricalJobReplayPreservePreviousCheckpoint() (gas: 19261425)
+[PASS] test_sourceAndLaterGitMetadataNeverReplaceAcceptedFilesDescriptor() (gas: 3644462)
+Suite result: ok. 11 passed; 0 failed; 0 skipped; finished in 1.25s (1.25s CPU time)
+
+Ran 6 tests for test/MetadataScannerDifferential.t.sol:MetadataScannerDifferentialTest
+[PASS] testFuzz_ArbitraryRawString(bytes32,bytes32) (runs: 256, μ: 396844, ~: 393620)
+[PASS] testFuzz_RawUnicode(uint32) (runs: 256, μ: 396558, ~: 401471)
+[PASS] testFuzz_UnicodeEscape(uint16,uint16) (runs: 256, μ: 415097, ~: 415703)
+[PASS] test_ControlsInvalidHexAndSurrogates() (gas: 6737042)
+[PASS] test_MixedRawAndEscapedUnicode() (gas: 2463481)
+[PASS] test_RetainedASCIICopyAtWordBoundaries() (gas: 10836839)
+Suite result: ok. 6 passed; 0 failed; 0 skipped; finished in 613.02ms (612.85ms CPU time)
+
+Ran 13 tests for test/RelayPayments.t.sol:RelayPaymentsTest
+[PASS] testFuzz_exactDynamicFeeConservesBalances(uint96) (runs: 1000, μ: 2013406, ~: 2013380)
+[PASS] testFuzz_nonRefusalFailureAlwaysFreezes(uint8) (runs: 1000, μ: 2191610, ~: 2191611)
+[PASS] test_callbacksAuthenticateSenderOwnRequestAndSingleDelivery() (gas: 2258871)
+[PASS] test_creationAndProposalsDoNotPurchaseOrMoveAnchor() (gas: 3606600)
+[PASS] test_dynamicFeeBranchPayerExactBodyAndSelectors() (gas: 2485075)
+[PASS] test_feeOnTransferSenderTaxFalseAndPartialPullRevertAtomically() (gas: 3683252)
+[PASS] test_foreignIntakeRequestCannotSettleBranch() (gas: 2291514)
+[PASS] test_missingCallbackStaysPendingIndefinitely() (gas: 2122683)
+[PASS] test_noReturnTokenAndStickyAllowanceCleared() (gas: 2016285)
+[PASS] test_refusedOnlyExplicitIdenticalRetryWithNewReceipt() (gas: 5278255)
+[PASS] test_stipendCallbackOnlyRecordsAndBindingIsPermissionless() (gas: 3025656)
+[PASS] test_tokenReentrancyAndSynchronousCallbackAreRejected() (gas: 3194464)
+[PASS] test_zeroUnknownProposalFeeCapAndUnpricedRejectBeforeTransfer() (gas: 1663544)
+Suite result: ok. 13 passed; 0 failed; 0 skipped; finished in 4.05s (4.04s CPU time)
+
+Ran 15 tests for test/StrictManifest.t.sol:StrictManifestTest
+[PASS] testFuzz_asciiJSONQuoteDecodeRoundTrip(bytes32,uint8) (runs: 1000, μ: 245829, ~: 131337)
+[PASS] testFuzz_decodedDuplicateKeyAlwaysRejected(uint8) (runs: 1000, μ: 77972, ~: 77955)
+[PASS] test_actualFileHashesAndManifestKeccakAreDistinct() (gas: 444865)
+[PASS] test_boundedLargeManifestMeasurement() (gas: 5046204)
+[PASS] test_onlyDeclaredFilesNotSourceOrGitMetadataSupplyAcceptedFile() (gas: 4148913)
+[PASS] test_parserBoundsManifestStringDepthMembersAndTokens() (gas: 2643587)
+[PASS] test_rejectDuplicateKeysIncludingDecodedEscapesAtEveryDepth() (gas: 5856502)
+[PASS] test_rejectEmptyAndMultipleFilesEvenIfOneMatches() (gas: 3905234)
+[PASS] test_rejectIncompleteWrongIdentityTypesAndWrongFileTypes() (gas: 13243534)
+[PASS] test_rejectInvalidUTF8UnicodeSurrogatesAndNoncharacters() (gas: 871737)
+[PASS] test_rejectPathsTraversalHiddenURLAbsoluteAndDecodedControl() (gas: 20592452)
+[PASS] test_rejectTrailingAndMalformedJSON() (gas: 1235180)
+[PASS] test_rejectZeroOversizedNonIntegerAndStringFileBytes() (gas: 15383349)
+[PASS] test_validUTF8EscapesAndSurrogatePairsDecodeExactly() (gas: 1596924)
+[PASS] test_whitespaceIsLegalButDigestIsOverExactRawBytes() (gas: 460505)
+Suite result: ok. 15 passed; 0 failed; 0 skipped; finished in 936.07ms (935.60ms CPU time)
+
+Ran 1 test for test/RelayInvariant.t.sol:RelayInvariantTest
+[PASS] invariant_conservationAndPermanentHistory() (runs: 128, calls: 8192, reverts: 0)
+
+╭--------------+--------------+-------+---------+----------╮
+| Contract     | Selector     | Calls | Reverts | Discards |
++==========================================================+
+| RelayHandler | bind         | 1399  | 0       | 0        |
+|--------------+--------------+-------+---------+----------|
+| RelayHandler | fail         | 1387  | 0       | 0        |
+|--------------+--------------+-------+---------+----------|
+| RelayHandler | propose      | 1360  | 0       | 0        |
+|--------------+--------------+-------+---------+----------|
+| RelayHandler | recordResult | 1309  | 0       | 0        |
+|--------------+--------------+-------+---------+----------|
+| RelayHandler | retry        | 1315  | 0       | 0        |
+|--------------+--------------+-------+---------+----------|
+| RelayHandler | sponsor      | 1422  | 0       | 0        |
+╰--------------+--------------+-------+---------+----------╯
+
+Suite result: ok. 1 passed; 0 failed; 0 skipped; finished in 5.00s (5.00s CPU time)
+
+Ran 14 tests for test/adversarial/PaymentSpec.t.sol:PaymentSpecTest
+[PASS] testFuzz_priceChangeCapAndDonationsConserveEveryWei(uint96,uint64) (runs: 1000, μ: 3011817, ~: 3012302)
+[PASS] testFuzz_unknownFailureFrozenDespiteNewProposalsAndTime(uint8) (runs: 1000, μ: 3334862, ~: 3334864)
+[PASS] test_continuationRetryRetainsParentAndFullSelectedSnapshot() (gas: 8232477)
+[PASS] test_exactWholeBalanceAndMaxFeeDoesNotOvercharge() (gas: 2250854)
+[PASS] test_insufficientApprovalAndBalanceRollbackBeforeAnyReceipt() (gas: 3490499)
+[PASS] test_intakeRevertPartialPullZeroIdAndClearFailureRollbackAllEffects() (gas: 7692635)
+[PASS] test_malformedResultIsRecordedWithoutParsingThenBadBindingPreservesIt() (gas: 2697678)
+[PASS] test_maximumCallbackURIWithinStipendAndOversizeFailureStaysPending() (gas: 6463824)
+[PASS] test_missingCallbackHasNoTimeoutButAuthenticLateCallbackStillWorks() (gas: 3224238)
+[PASS] test_reentrancyAtTransferApprovalAndIntakeCannotProposeOrBuyAgain() (gas: 13300661)
+[PASS] test_refusalCannotSubstituteProposalAndRetryRacesCostOnlyWinner() (gas: 6136658)
+[PASS] test_reusedIntakeRequestIdOnRetryCannotOverwriteAttemptOrDoubleCharge() (gas: 4586023)
+[PASS] test_spoofForeignCrossBranchAndReplayCallbacksCannotSettleOwnRequest() (gas: 8654638)
+[PASS] test_synchronousIntakeResultAndFailureCannotSettlePurchasingState() (gas: 4024524)
+Suite result: ok. 14 passed; 0 failed; 0 skipped; finished in 4.37s (6.61s CPU time)
+
+Ran 2 tests for test/adversarial/StateMachineSpec.t.sol:StateMachineSpecTest
+[PASS] invariant_modelFeesReceiptsAssetsAndPermanentCheckpoints() (runs: 256, calls: 24576, reverts: 0)
+
+╭------------------+-----------------+-------+---------+----------╮
+| Contract         | Selector        | Calls | Reverts | Discards |
++=================================================================+
+| SpecStateHandler | advanceTime     | 2417  | 0       | 0        |
+|------------------+-----------------+-------+---------+----------|
+| SpecStateHandler | bind            | 2484  | 0       | 0        |
+|------------------+-----------------+-------+---------+----------|
+| SpecStateHandler | donate          | 2481  | 0       | 0        |
+|------------------+-----------------+-------+---------+----------|
+| SpecStateHandler | fail            | 2397  | 0       | 0        |
+|------------------+-----------------+-------+---------+----------|
+| SpecStateHandler | forkHistory     | 2440  | 0       | 0        |
+|------------------+-----------------+-------+---------+----------|
+| SpecStateHandler | hostileCallback | 2531  | 0       | 0        |
+|------------------+-----------------+-------+---------+----------|
+| SpecStateHandler | propose         | 2544  | 0       | 0        |
+|------------------+-----------------+-------+---------+----------|
+| SpecStateHandler | purchase        | 2371  | 0       | 0        |
+|------------------+-----------------+-------+---------+----------|
+| SpecStateHandler | recordResult    | 2497  | 0       | 0        |
+|------------------+-----------------+-------+---------+----------|
+| SpecStateHandler | retry           | 2414  | 0       | 0        |
+╰------------------+-----------------+-------+---------+----------╯
+
+[PASS] test_modelExercisesRefusalRetryChildContinuationAndHistoricalFork() (gas: 26025461)
+Suite result: ok. 2 passed; 0 failed; 0 skipped; finished in 25.04s (25.05s CPU time)
+
+Ran 17 test suites in 26.83s (48.38s CPU time): 138 tests passed, 0 failed, 0 skipped (138 total tests)

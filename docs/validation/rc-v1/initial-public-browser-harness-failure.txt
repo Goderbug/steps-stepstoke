@@ -1,0 +1,14 @@
+node:internal/process/promises:394
+    triggerUncaughtException(err, true /* fromPromise */);
+    ^
+
+page.waitForEvent: Timeout 30000ms exceeded while waiting for event "download"
+=========================== logs ===========================
+waiting for event "download"
+============================================================
+    at /tmp/steps-ui/frontend/tests/integration/public-chain.mjs:51:22 {
+  log: [],
+  name: 'TimeoutError'
+}
+
+Node.js v24.9.0

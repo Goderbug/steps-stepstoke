@@ -9,7 +9,8 @@ library Policy {
     address internal constant IMD = 0xD34a99Bc0f67aE1bbd63C660e6d0b0dd03E263B7;
     bytes32 internal constant OPEN = bytes32("job.open@job-1");
     bytes32 internal constant CONTINUE = bytes32("job.continue@job-1");
-    bytes32 internal constant ID = keccak256("CTO-Relay-A1/2/fixed-profiles/unpublished");
+    bytes32 internal constant ID =
+        keccak256("STEPS/RELEASE-CANDIDATE-V1/fixed-profiles/artifacts/unpublished");
     uint256 internal constant MAX_ASSETS = 16;
     uint256 internal constant MAX_INPUTS = 8;
     uint256 internal constant MAX_BODY = 16_384;

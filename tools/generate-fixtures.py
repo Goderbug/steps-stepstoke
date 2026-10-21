@@ -13,11 +13,11 @@ constants = []
 for filename, content in files.items():
     (folder / filename).write_bytes(content)
     if filename.startswith('document'):
-        name,path,mime='main','docs/main.md','text/markdown'
+        name,path,mime='main','artifacts/main.md','text/markdown'
     elif filename.endswith('.png'):
-        name,path,mime='illustration','assets/illustration.png','image/png'
+        name,path,mime='illustration','artifacts/illustration.png','image/png'
     else:
-        name,path,mime='site','dist/index.html','text/html'
+        name,path,mime='site','artifacts/index.html','text/html'
     manifest = {'jobId': str(uuid.uuid5(uuid.NAMESPACE_URL, 'https://example.invalid/a1/'+filename)), 'projectId': project, 'state':'completed', 'launch':None, 'delivery':{'repoUrl':'https://example.invalid/local-fixture','commit':'local-fixture'}, 'source':[], 'files':[{'name':name,'path':path,'hash':hashlib.sha256(content).hexdigest(),'mediaType':mime,'bytes':len(content),'submissionHash':hashlib.sha256(('local-submission:'+filename).encode()).hexdigest()}]}
     raw = json.dumps(manifest, separators=(',',':'), ensure_ascii=False).encode()
     (folder/(filename+'.result.json')).write_bytes(raw)

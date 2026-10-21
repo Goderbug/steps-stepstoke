@@ -37,7 +37,7 @@ contract RelayPaymentsTest is RelaySetup {
         assertEq(
             body,
             bytes(
-                '{"objective":"Public project goal: Maintain a public relay project.\\u000aBranch direction: \\u000aRequested change: Perform the declared change.\\u000aCreate a new asset without replacing another slot. Write a UTF-8 Markdown document, at most 65536 bytes. Read only the explicit inputs at .imd/reads/artifacts/<as>. No website or IPFS publishing.\\u000aProduce exactly the declared named output. Do not delete or claim to have read unselected assets. No paid child jobs, autonomous spending, contract deployment or token launches.","github":true,"ipfs":false,"steps":[{"skill":"build-document","inputs":[],"outputs":[{"name":"main","path":"docs/main.md","mediaType":"text/markdown"}]}]}'
+                '{"objective":"Public project goal: Maintain a public relay project.\\u000aBranch direction: \\u000aRequested change: Perform the declared change.\\u000aCreate a new asset without replacing another slot. Write a UTF-8 Markdown document, at most 65536 bytes. Read only the explicit inputs at .imd/reads/artifacts/<as>. No website or IPFS publishing.\\u000aProduce exactly the declared named output. Do not delete or claim to have read unselected assets. No paid child jobs, autonomous spending, contract deployment or token launches.","shape":"chain","github":true,"ipfs":false,"steps":[{"skill":"research-report","inputs":[],"outputs":[{"name":"main","path":"artifacts/main.md","mediaType":"text/markdown"}]}]}'
             )
         );
         bytes32 req = _pay(branch, id, _empty());

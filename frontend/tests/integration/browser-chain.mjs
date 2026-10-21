@@ -486,7 +486,7 @@ try {
     await expect.poll(() => page.evaluate(branch => JSON.parse(localStorage.getItem('relay.local.transactions.v1') ?? '[]').findLast(r => r.operation === 'sponsor' && r.branch.toLowerCase() === branch.toLowerCase() && r.state === 'SUBMITTED'), branch)).toBeTruthy();
     const original = await page.evaluate(branch => JSON.parse(localStorage.getItem('relay.local.transactions.v1')).findLast(r => r.operation === 'sponsor' && r.branch.toLowerCase() === branch.toLowerCase()), branch);
     await local.provider.request({ method: 'anvil_dropTransaction', params: [original.hash] });
-    const replacement = await local.provider.request({ method: 'eth_sendTransaction', params: [{ from: original.account, to: original.to, data: original.data, value: '0x0', nonce: `0x${original.nonce.toString(16)}`, gas: '0x1c9c380' }] });
+    const replacement = await local.provider.request({ method: 'eth_sendTransaction', params: [{ from: original.account, to: original.to, data: original.data, value: '0x0', nonce: `0x${original.nonce.toString(16)}`, gas: '0x'+(16777216).toString(16) }] });
     await local.provider.request({ method: 'evm_setAutomine', params: [true] }); await local.provider.request({ method: 'evm_mine', params: [] });
     assert.equal(await countPurchases(), spent + 1);
     const first = await read(branch, 'attempt', [1]);
@@ -517,7 +517,7 @@ try {
       await bind(web, await deliver(web, { job: artifactJob, project: 'local-files-project' }));
     }
     await page.goto(`http://127.0.0.1:4174/#/local/b/${web}`);
-    const assetPath = resolve(local.artifacts, `${artifactJob}/dist/index.html`);
+    const assetPath = resolve(local.artifacts, `${artifactJob}/artifacts/index.html`);
     const original = await readFile(assetPath);
     for (const content of [Buffer.from('tampered'), Buffer.alloc(2097153, 120)]) {
       await writeFile(assetPath, content); await page.reload();
@@ -527,12 +527,12 @@ try {
       await expect(row.getByText('Verified locally · SHA-256, length, media')).toHaveCount(0);
     }
     await writeFile(assetPath, original);
-    expectedHTTPFailures.add(`${local.config.artifactBase}${artifactJob}/dist/index.html`);
-    await page.route(`**/artifacts/${artifactJob}/dist/index.html`, r => r.fulfill({ status: 503, body: 'unavailable' }));
+    expectedHTTPFailures.add(`${local.config.artifactBase}${artifactJob}/artifacts/index.html`);
+    await page.route(`**/artifacts/${artifactJob}/artifacts/index.html`, r => r.fulfill({ status: 503, body: 'unavailable' }));
     await page.reload();
     await disclose(/^File verification details/);
     await expect(page.getByText('File unavailable:', { exact: false })).toBeVisible();
-    await page.unroute(`**/artifacts/${artifactJob}/dist/index.html`);
+    await page.unroute(`**/artifacts/${artifactJob}/artifacts/index.html`);
     expectedHTTPFailures.clear();
     const evil = await createProject('Preview isolation test');
     await propose({ kind: 'html', target: 'evil', text: 'Hostile HTML fixture' }); await sponsor(evil, 1, 0);

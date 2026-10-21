@@ -9,6 +9,7 @@ import { tmpdir } from 'node:os';
 import { join } from 'node:path';
 import { Contract, ContractFactory, JsonRpcProvider, keccak256, hexlify, toBeHex } from '../vendor/ethers/ethers.mjs';
 import * as sdk from '../sdk/index.mjs';
+import { transactionMetrics } from './transaction-metrics.mjs';
 import { verifyHTMLDist } from '../sdk/files.mjs';
 
 const root = new URL('../', import.meta.url);
@@ -72,7 +73,7 @@ try {
   const tx = async (label, prepared, signer = sponsor) => {
     // Every prepared transaction is simulated against the current state before submission.
     await provider.call({ ...prepared, from: await signer.getAddress() });
-    const receipt = await mined(signer.sendTransaction({ ...prepared, gasLimit: 29000000n }), label);
+    const receipt = await mined(signer.sendTransaction({ ...prepared, gasLimit: 16777216n }), label);
     assert.equal(receipt.status, 1);
     evidence.transactions.push({ label, hash: receipt.hash, gasUsed: receipt.gasUsed, block: receipt.blockNumber });
     return receipt;
@@ -88,9 +89,17 @@ try {
   for (const action of Object.values(config.actions)) await mined(intake.setPrice(action, fee), 'set mock price');
   await mined(token.mint(payer, fee * 20n), 'mint mock funds');
   const factoryArtifact = await artifact('RelayFactory');
-  const factory = await bounded(new ContractFactory(factoryArtifact.abi, factoryArtifact.bytecode.object, sponsor).deploy({ gasLimit: 29000000n }), 'deploy local Factory submission');
+  const deps = [];
+  for (const name of ['RelayEncoder', 'RelayVerifier']) {
+    const a = await artifact(name);
+    const contract = await new ContractFactory(a.abi, a.bytecode.object, sponsor).deploy();
+    const receipt = await mined(contract.deploymentTransaction(), `deploy ${name}`);
+    evidence.transactions.push({ label: `deploy ${name}`, hash: receipt.hash, gasUsed: receipt.gasUsed });
+    deps.push(await contract.getAddress());
+  }
+  const factory = await bounded(new ContractFactory(factoryArtifact.abi, factoryArtifact.bytecode.object, sponsor).deploy(...deps, { gasLimit: 16777216n }), 'deploy local Factory submission');
   const deployReceipt = await mined(factory.deploymentTransaction(), 'deploy local Factory');
-  evidence.transactions.push({ label: 'deploy fixed factory and dependencies', hash: deployReceipt.hash, gasUsed: deployReceipt.gasUsed });
+  evidence.transactions.push({ label: 'deploy RelayFactory with static dependencies', hash: deployReceipt.hash, gasUsed: deployReceipt.gasUsed });
   const factoryAddress = await factory.getAddress();
   assert.equal((await factory.policyId()).toLowerCase(), config.policyId);
   const branchFrom = receipt => {
@@ -101,7 +110,7 @@ try {
   const branch = branchFrom(await tx('SDK create project', sdk.createProject(factoryAddress, 'Maintain a public relay project.')));
   assert.equal(await intake.count(), 0n);
   const branchAddress = await branch.getAddress();
-  await mined(token.approve(branchAddress, fee * 10n), 'approve local root');
+
   let current = [];
   const histories = new Map();
   const logsByBranch = new Map();
@@ -151,18 +160,21 @@ try {
       const actual = body.steps[0].inputs[i];
       assert.deepEqual(actual, { name: source.name, path: source.path, hash: source.fileHash.slice(2), mediaType: source.mediaType, bytes: Number(source.size), submissionHash: source.submissionHash.slice(2), as: `asset-${i}` });
     }
+    await tx(`SDK exact approval ${file}`, sdk.approveExact(config.imd,bAddress,fee));
     await tx(`SDK sponsor ${file}`, sdk.sponsorProposal(bAddress, id, fee, old));
     let attempt = await b.attempt(await b.activeAttempt());
     const requested = await intake.request(attempt.requestId);
     assert.equal(requested.payer, bAddress);
     assert.equal(requested.body.toLowerCase(), hexlify(preview.raw).toLowerCase());
     assert.equal(await token.allowance(bAddress, config.intake), 0n);
+    assert.equal(await token.allowance(payer,bAddress),0n);
     assert.equal(await token.balanceOf(bAddress), 0n);
     if (file === 'document-updated.md') {
       const refusal = await mined(intake.connect(writer).fail(attempt.requestId, 1, toBeHex(1, 32), { gasLimit: 500000n }), 'mock refusal');
       evidence.transactions.push({ label: 'mock refusal callback under 200k stipend', hash: refusal.hash, gasUsed: refusal.gasUsed });
       assert.equal(await b.phase(), 4n);
       const revisionBeforeRetry = await b.revision();
+      await tx('SDK exact retry approval',sdk.approveExact(config.imd,bAddress,fee));
       await tx('SDK explicit funded identical retry', sdk.retryRefused(bAddress, fee, old));
       const retried = await b.attempt(await b.activeAttempt());
       assert.notEqual(retried.requestId, attempt.requestId);
@@ -225,7 +237,7 @@ try {
   assert.equal(await child.proposalCount(), 0n);
   assert.equal(await child.assetsHash(), sdk.witnessHash(historical));
   assert.equal((await child.source()).checkpoint, historicalDigest);
-  await mined(token.approve(childAddress, fee * 10n), 'approve local child');
+
   current = historical;
   await round(child, 4, key(20), [], 'image-2.png', 'Generate a PNG for this child.', 'local-child-project');
   await round(child, 3, key(10), [key(10), key(20)], 'html-3.html', 'Continue this child using its own latest job and the inherited HTML.', 'local-child-project');
@@ -233,6 +245,23 @@ try {
   assert.equal(await intake.count(), 8n);
   assert.equal(await token.balanceOf(await treasury.getAddress()), fee * 8n);
   evidence.checks.push('All five fixed profile modes executed', 'HTML -> image -> HTML selects both authenticated older HTML and latest image', 'Exact PNG data URI and old marker checked without executing HTML', 'Historical fork uses revision 1 after parent revision 5', 'Child opens its own project then continues its own latest job', 'Untouched descriptors and provenance preserved', 'No implicit purchases; exact fees, zero Branch residual balance/allowance', 'SDK canonical witness, raw manifest, transaction and history encoding agree with EVM', 'Explicit SDK-funded status-1 retry retains exact body/snapshot and does not create a revision', 'Rejected wrong-witness binding preserves recorded result/anchor and correct SDK binding succeeds without purchase');
+  // Include full transaction calldata and intrinsic/net execution gas, including dependencies,
+  // creates, forks, proposals, purchases, retries, callbacks and bindings. Never clone figures.
+  for (const row of evidence.transactions) {
+    const actual = await provider.send('eth_getTransactionByHash', [row.hash]);
+    Object.assign(row, transactionMetrics(actual.input, row.gasUsed, actual.to === null, BigInt(actual.gas)));
+    assert.equal(row.withinEip7825Ceiling,true,'declared transaction gas limit');
+    row.calldata = actual.input;
+    if (row.label.includes('callback')) {
+      const trace=await provider.send('debug_traceTransaction',[row.hash,{tracer:'callTracer'}]);
+      const find=frame=>[branchAddress,childAddress].some(a=>a.toLowerCase()===frame.to?.toLowerCase()) ? frame : frame.calls?.map(find).find(Boolean);
+      const callback=find(trace);
+      assert.ok(callback,'Branch callback trace');
+      row.branchCallback={gasProvided:Number(BigInt(callback.gas)),executionGas:Number(BigInt(callback.gasUsed)),calldata:callback.input,error:callback.error??null};
+      assert.equal(row.branchCallback.error,null);
+      assert.ok(row.branchCallback.executionGas<=200000,'official callback stipend');
+    }
+  }
   evidence.factory = factoryAddress;
   evidence.reviewFixes = reviewFixes;
   evidence.policyId = config.policyId;

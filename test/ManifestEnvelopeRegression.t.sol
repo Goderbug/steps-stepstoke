@@ -54,7 +54,7 @@ contract ManifestEnvelopeRegressionTest is SpecSetup {
             source = bytes.concat(
                 source,
                 i == 0 ? bytes("") : bytes(","),
-                '{"path":"docs/source.md","hash":"untrusted-input-metadata","url":"https://example.invalid/source"}'
+                '{"path":"artifacts/source.md","hash":"untrusted-input-metadata","url":"https://example.invalid/source"}'
             );
         }
         raw = replace(raw, '"source":[]', bytes.concat(source, "]"));
@@ -195,8 +195,10 @@ contract ManifestEnvelopeRegressionTest is SpecSetup {
                 i <= 14 ? T.Profile.MarkdownCreate : i == 15 ? T.Profile.HTMLCreate : T.Profile.ImageCreate;
             T.Proposal memory p = proposal(root, profile, i);
             p.outputName = string(D.repeat(bytes1(uint8(65 + i)), 64));
-            if (i <= 14) p.outputPath = string(bytes.concat(D.repeat(bytes1(uint8(97 + i)), 125), ".md"));
-            if (i == 16) p.outputPath = string(bytes.concat(D.repeat("a", 124), ".png"));
+            if (i <= 14) {
+                p.outputPath = string(bytes.concat("artifacts/", D.repeat(bytes1(uint8(97 + i)), 115), ".md"));
+            }
+            if (i == 16) p.outputPath = string(bytes.concat("artifacts/", D.repeat("a", 114), ".png"));
             old = accept(
                 root,
                 p,

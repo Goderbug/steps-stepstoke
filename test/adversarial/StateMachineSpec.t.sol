@@ -94,7 +94,7 @@ contract SpecStateHandler is TestBase {
             ? (exists ? T.Profile.MarkdownUpdate : T.Profile.MarkdownCreate)
             : k == 1 ? (exists ? T.Profile.HTMLUpdate : T.Profile.HTMLCreate) : T.Profile.ImageCreate;
         p.outputName = k == 0 ? "notes" : k == 1 ? "page" : "pixel";
-        p.outputPath = k == 0 ? "docs/notes.md" : k == 1 ? "dist/index.html" : "art/pixel.png";
+        p.outputPath = k == 0 ? "artifacts/notes.md" : k == 1 ? "artifacts/index.html" : "artifacts/pixel.png";
         p.text = string.concat("Explicit model change ", D.decimal(words));
         bool imageInput = k == 1 && has(m, bytes32(uint256(20)));
         p.inputs = new bytes32[]((exists ? 1 : 0) + (imageInput ? 1 : 0));
@@ -391,7 +391,7 @@ contract SpecStateHandler is TestBase {
                 block.chainid,
                 address(factory),
                 address(b),
-                keccak256("CTO-Relay-A1/2/fixed-profiles/unpublished"),
+                keccak256("STEPS/RELEASE-CANDIDATE-V1/fixed-profiles/artifacts/unpublished"),
                 address(factory.encoder()),
                 address(factory.verifier()),
                 keccak256(bytes(m.goal)),

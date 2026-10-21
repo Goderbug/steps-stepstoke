@@ -1,3 +1,4 @@
+import { ChainAdapter, type LocalConfig, type WalletGetter } from "./chainAdapter";
 import type { IntegrationStatus, RelayAdapter } from "./adapter";
 import { IntegrationPendingError } from "./types";
 import { A1_SOURCE } from "../config";
@@ -9,10 +10,14 @@ import { A1_SOURCE } from "../config";
  */
 const pending = (what: string) => () => Promise.reject(new IntegrationPendingError(what));
 
-export function createLiveAdapter(): RelayAdapter {
+export function createLiveAdapter(config?: LocalConfig, wallet?: WalletGetter): RelayAdapter {
+  if (config) {
+    if (config.kind !== "ETHEREUM_DEPLOYMENT" || config.chainId !== 1 || !wallet) throw new Error("Ethereum deployment and selected wallet getter required");
+    return new ChainAdapter(config, wallet);
+  }
   const status: IntegrationStatus = {
     state: "A1_INTEGRATION_PENDING",
-    summary: "A1 and its browser SDK are integrated locally. productionDeployment is null; public operations are unavailable.",
+    summary: "STEPS RELEASE-CANDIDATE-V1 has no public deployment. Ethereum operations require a confirmed deployment and cleared release gates.",
     missing: [
       "Verified chain ID, Factory address and public RPC",
       
@@ -22,7 +27,7 @@ export function createLiveAdapter(): RelayAdapter {
   };
   return {
     kind: "live",
-    label: "A1 public",
+    label: "STEPS · Ethereum",
     capabilities: {
       read: false,
       createBranch: false,

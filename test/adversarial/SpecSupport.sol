@@ -1,5 +1,7 @@
 // SPDX-License-Identifier: MIT
 pragma solidity 0.8.26;
+import {RelayVerifier} from "src/RelayVerifier.sol";
+import {RelayEncoder} from "src/RelayEncoder.sol";
 
 import {TestBase, Vm} from "../TestBase.sol";
 import {RelayFactory} from "src/RelayFactory.sol";
@@ -355,7 +357,7 @@ abstract contract SpecSetup is TestBase {
         intake.initialize(token, WRITER, TREASURY);
         intake.setPrice(OPEN, FEE);
         intake.setPrice(CONTINUE, FEE);
-        factory = new RelayFactory();
+        factory = new RelayFactory(new RelayEncoder(), new RelayVerifier());
         vm.prank(BOB);
         root = factory.createProject("Preserve public field notes and illustrations.");
         token.mint(ALICE, INITIAL);
@@ -385,8 +387,9 @@ abstract contract SpecSetup is TestBase {
         p.text = "Preserve existing markers and produce the declared output.";
         T.Kind k = SpecData.kind(profile);
         p.outputName = k == T.Kind.Markdown ? "notes" : k == T.Kind.HTML ? "page" : "pixel";
-        p.outputPath =
-            k == T.Kind.Markdown ? "docs/notes.md" : k == T.Kind.HTML ? "dist/index.html" : "art/pixel.png";
+        p.outputPath = k == T.Kind.Markdown
+            ? "artifacts/notes.md"
+            : k == T.Kind.HTML ? "artifacts/index.html" : "artifacts/pixel.png";
         bool update = profile == T.Profile.MarkdownUpdate || profile == T.Profile.HTMLUpdate;
         p.inputs = new bytes32[](update ? 1 : 0);
         if (update) p.inputs[0] = p.target;

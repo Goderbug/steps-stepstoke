@@ -1,1 +1,0 @@
-{"result":"PASS","engine":"chromium","operations":{"createProject":12,"propose":19,"approve":20,"sponsor":16,"bind":10,"fork":1,"retry":2},"receipts":78,"dropped":2}

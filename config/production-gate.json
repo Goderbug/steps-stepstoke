@@ -1,0 +1,56 @@
+{
+  "chainId": 1,
+  "productionDeployment": null,
+  "liveCompatibility": "NOT_RUN",
+  "productionReady": false,
+  "gates": {
+    "securityReview": {
+      "status": "OPEN",
+      "evidence": [
+        "docs/validation/rc-v1/README.md",
+        "docs/REVIEW.md"
+      ],
+      "detail": "Final candidate independently reviewed security approval has not been obtained."
+    },
+    "runtimeChildPolicy": {
+      "status": "OPEN",
+      "evidence": [
+        "docs/validation/rc-v1/README.md",
+        "docs/REVIEW.md"
+      ],
+      "detail": "Supplied launch floor, direct child code scan and three-name local batch pass; deployment-service runtime-child acceptance remains unconfirmed."
+    },
+    "manifestCompatibility": {
+      "status": "OPEN",
+      "evidence": [
+        "docs/validation/rc-v1/README.md",
+        "docs/REVIEW.md"
+      ],
+      "detail": "Eight exact free samples pass; real HTML update, oversized/multi-file delivery and all-profile runtime execution remain unsupported or unproved."
+    },
+    "gasCeilings": {
+      "status": "OPEN",
+      "evidence": [
+        "docs/validation/rc-v1/README.md",
+        "docs/REVIEW.md"
+      ],
+      "detail": "Candidate sizes and full local transactions measured; finite stress cases do not prove a global bound or the unpublished service ceilings."
+    },
+    "liveExecution": {
+      "status": "NOT_RUN",
+      "evidence": [
+        "docs/validation/rc-v1/README.md",
+        "docs/REVIEW.md"
+      ],
+      "detail": "No paid mainnet operation was authorized or performed. Local mocks and free checks are not live compatibility."
+    },
+    "deploymentVerification": {
+      "status": "NOT_RUN",
+      "evidence": [
+        "docs/validation/rc-v1/README.md",
+        "docs/REVIEW.md"
+      ],
+      "detail": "No production deployment exists. Only a later confirmed handoff may provide public addresses and receipt evidence."
+    }
+  }
+}

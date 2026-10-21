@@ -1,8 +1,0 @@
-{
-  "result": "PASS",
-  "protectedFilesChecked": 44,
-  "protectedGitDiff": "",
-  "ignoreChanges": false,
-  "baselineSource": "878ba4ba1cf7c601656f3a25d17546a425ba1207",
-  "authenticatedHistory": "Five original raw traces preserved byte-for-byte in history-traces.tar.xz with indexed original SHA-256; all other historical evidence at original paths"
-}

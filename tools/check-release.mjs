@@ -12,6 +12,7 @@ for (const name of ['RelayFactory','RelayBranch','RelayEncoder','RelayVerifier']
   assert.deepEqual(JSON.parse(await read(`abi/${name}.json`)), a.abi, `${name} ABI drift`);
   const sz = h => (h.length - 2) / 2;
   out[name] = { creationCodeHash: keccak256(a.bytecode.object), runtimeBytesBeforeImmutablePatching: sz(a.deployedBytecode.object), initcodeBytes: sz(a.bytecode.object) };
+  assert.deepEqual(config.runtimeChecks[name], { bytes: sz(a.deployedBytecode.object), normalizedKeccak: keccak256(a.deployedBytecode.object), immutableReferences: a.deployedBytecode.immutableReferences ?? {} }, `${name} runtime validation drift`);
   assert.ok(out[name].runtimeBytesBeforeImmutablePatching <= 24576); assert.ok(out[name].initcodeBytes <= 49152);
 }
 assert.deepEqual(config.contracts, out, 'release.json artifact drift');

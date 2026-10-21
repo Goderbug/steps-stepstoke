@@ -55,7 +55,7 @@ contract RelayEncoder {
             continuing ? bytes.concat('{"parentJobId":', Text.quote(ownLatestJob), ",") : bytes("{"),
             '"objective":',
             objective,
-            ',"github":true,"ipfs":false,"steps":[{"skill":',
+            ',"shape":"chain","github":true,"ipfs":false,"steps":[{"skill":',
             Text.quote(_skill(p.profile)),
             ',"inputs":['
         );
@@ -81,18 +81,22 @@ contract RelayEncoder {
         if (p.publish || p.target == 0 || p.inputs.length > Policy.MAX_INPUTS) revert Policy.Invalid();
         Text.bounded(p.text, Policy.MAX_TEXT);
         Text.identifier(p.outputName, 64);
+        _initialLetter(p.outputName);
         T.Kind kind = Policy.kind(p.profile);
-        Assets.outputPath(kind, p.outputPath);
+        Assets.namedOutputPath(kind, p.outputPath);
         uint256 targetIndex = Assets.find(current, p.target);
         bool updating = Policy.update(p.profile);
         if (updating) {
             if (targetIndex == type(uint256).max || current[targetIndex].kind != kind) {
                 revert Policy.Invalid();
             }
-            // An update cannot rename the accepted slot's public file mapping.
+            // Current mappings are fixed; legacy non-artifacts paths migrate only on an explicit update.
             if (
                 !Text.equal(current[targetIndex].name, p.outputName)
-                    || !Text.equal(current[targetIndex].path, p.outputPath)
+                    || !Text.equal(
+                        Assets.nextOutputPath(kind, current[targetIndex].name, current[targetIndex].path),
+                        p.outputPath
+                    )
             ) revert Policy.Invalid();
         } else {
             if (targetIndex != type(uint256).max) revert Policy.Invalid();
@@ -115,6 +119,7 @@ contract RelayEncoder {
             if (
                 current[i].key != p.target
                     && (Text.equal(current[i].name, p.outputName)
+                        || (kind == T.Kind.HTML && current[i].kind == T.Kind.HTML)
                         || Assets.pathsConflict(current[i].path, p.outputPath))
             ) revert Policy.Invalid();
         }
@@ -131,6 +136,7 @@ contract RelayEncoder {
             uint256 index = Assets.find(current, key);
             if (index == type(uint256).max) revert Policy.Invalid();
             T.Asset memory a = current[index];
+            _initialLetter(a.name);
             if (key == p.target) selectedTarget = true;
             if (kind == T.Kind.Markdown && a.kind != T.Kind.Markdown) revert Policy.Invalid();
             if (a.kind == T.Kind.Image) {
@@ -166,10 +172,15 @@ contract RelayEncoder {
         );
     }
 
+    function _initialLetter(string memory name) private pure {
+        uint8 first = uint8(bytes(name)[0]); // descriptor/identifier validation already rejects empty names
+        if (!((first >= 65 && first <= 90) || (first >= 97 && first <= 122))) revert Policy.Invalid();
+    }
+
     function _skill(T.Profile p) private pure returns (string memory) {
-        if (Policy.kind(p) == T.Kind.Markdown) return "build-document";
+        if (Policy.kind(p) == T.Kind.Markdown) return "research-report";
         if (Policy.kind(p) == T.Kind.HTML) return "build-website";
-        return "imagegen";
+        return "create-image";
     }
 
     function _instructions(T.Profile p) private pure returns (string memory) {
@@ -186,7 +197,7 @@ contract RelayEncoder {
         if (kind == T.Kind.HTML) {
             return string.concat(
                 restore,
-                "Write self-contained UTF-8 HTML. The named accepted HTML must be the exact dist/index.html bytes. dist must contain only index.html, no symlinks. Inline all CSS and JS. Inline selected images byte-for-byte as PNG/JPEG/WebP data URIs; do not transcode or fetch remote resources. Each image at most 262144 bytes, images total at most 524288 bytes, final HTML including Base64 overhead at most 2097152 bytes. Retain old markers on updates. No website or IPFS publishing."
+                "Write self-contained UTF-8 HTML with inline CSS and JavaScript. Store identical finished HTML in dist/index.html and the declared artifacts output. Keep dist limited to index.html with no symlinks. Embed selected images as Base64 data URIs without changing their bytes; no transcoding or remote resources. Each image at most 262144 bytes, images total at most 524288 bytes, final HTML including Base64 overhead at most 2097152 bytes. Retain old markers on updates. No website or IPFS publishing."
             );
         }
         return "Generate one PNG image from text, at most 262144 bytes. No reference images, editing, variations or remote fetches. No website or IPFS publishing. Return the actual PNG as the declared output.";

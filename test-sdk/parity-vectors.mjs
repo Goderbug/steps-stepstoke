@@ -14,7 +14,7 @@ export function parityVectors(sdk, fx) {
   const out = { runtime: sdk.RUNTIME, ok: {}, rejected: {} };
   const parsed = JSON.parse(new TextDecoder().decode(fx.documentResult));
   const asset = {
-    key: key(1), kind: 0, name: 'main', path: 'docs/main.md', fileHash: `0x${parsed.files[0].hash}`, mediaType: 'text/markdown',
+    key: key(1), kind: 0, name: 'main', path: 'artifacts/main.md', fileHash: `0x${parsed.files[0].hash}`, mediaType: 'text/markdown',
     size: parsed.files[0].bytes, submissionHash: `0x${parsed.files[0].submissionHash}`, producer: BRANCH, jobId: parsed.jobId,
     resultHash: null, revision: 1
   };
@@ -22,9 +22,9 @@ export function parityVectors(sdk, fx) {
   asset.resultHash = manifestKeccak;
   const image = { ...asset, key: key(2), kind: 2, name: 'logo', path: 'assets/logo.png', mediaType: 'image/png', size: fx.image.length, fileHash: fx.imageSha, revision: 2 };
   const witness = [image, asset];
-  const createP = { anchor: key(10), profile: 0, target: key(3), inputs: [key(1)], outputName: 'notes', outputPath: 'docs/notes.md', text: 'Write notes 中文 ✓', publish: false };
-  const updateP = { anchor: key(10), profile: 1, target: key(1), inputs: [key(1)], outputName: 'main', outputPath: 'docs/main.md', text: 'Update', publish: false };
-  const htmlP = { anchor: key(10), profile: 2, target: key(4), inputs: [key(1), key(2)], outputName: 'site', outputPath: 'dist/index.html', text: 'Site', publish: false };
+  const createP = { anchor: key(10), profile: 0, target: key(3), inputs: [key(1)], outputName: 'notes', outputPath: 'artifacts/notes.md', text: 'Write notes 中文 ✓', publish: false };
+  const updateP = { anchor: key(10), profile: 1, target: key(1), inputs: [key(1)], outputName: 'main', outputPath: 'artifacts/main.md', text: 'Update', publish: false };
+  const htmlP = { anchor: key(10), profile: 2, target: key(4), inputs: [key(1), key(2)], outputName: 'site', outputPath: 'artifacts/index.html', text: 'Site', publish: false };
   const record = (name, fn) => {
     try { out.ok[name] = JSON.parse(JSON.stringify(fn(), (_, v) => typeof v === 'bigint' ? `${v}n` : v instanceof Uint8Array ? Array.from(v) : v)); }
     catch (error) { out.ok[name] = { threw: error.message }; }
@@ -88,7 +88,7 @@ export function parityVectors(sdk, fx) {
   reject('textControl', () => sdk.createProject(FACTORY, 'bad \u0007'));
   reject('textBytes', () => sdk.createProject(FACTORY, '中'.repeat(171)));
   reject('proposalCollision', () => sdk.proposeWork(BRANCH, { ...createP, outputName: 'main' }, witness));
-  reject('proposalPrefix', () => sdk.proposeWork(BRANCH, { ...createP, outputPath: 'docs/main.md/x.md' }, witness));
+  reject('proposalPrefix', () => sdk.proposeWork(BRANCH, { ...createP, outputPath: 'artifacts/main.md/x.md' }, witness));
   reject('proposalPublish', () => sdk.proposeWork(BRANCH, { ...createP, publish: true }, witness));
   reject('proposalInputsUnsorted', () => sdk.proposeWork(BRANCH, { ...htmlP, inputs: [key(2), key(1)] }, witness));
   reject('proposalImageRefs', () => sdk.proposeWork(BRANCH, { ...createP, profile: 4, outputPath: 'a/b.png', inputs: [key(2)] }, witness));

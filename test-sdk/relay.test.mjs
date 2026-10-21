@@ -17,10 +17,16 @@ const raw = await fixture('document.md.result.json');
 const document = await fixture('document.md');
 const parsed = JSON.parse(raw);
 const asset = {
-  key: key(1), kind: 0, name: 'main', path: 'docs/main.md', fileHash: `0x${parsed.files[0].hash}`,
+  key: key(1), kind: 0, name: 'main', path: 'artifacts/main.md', fileHash: `0x${parsed.files[0].hash}`,
   mediaType: 'text/markdown', size: parsed.files[0].bytes, submissionHash: `0x${parsed.files[0].submissionHash}`,
   producer: branch, jobId: parsed.jobId, resultHash: keccak256(raw), revision: 1
 };
+
+test('legacy names remain readable but cannot become invalid official request inputs', () => {
+  const legacy={...asset,name:'1legacy'};
+  assert.equal(relay.canonicalWitness([legacy])[0].name,'1legacy');
+  assert.throws(()=>relay.validateProposal({anchor:key(1),profile:0,target:key(2),inputs:[key(1)],outputName:'next',outputPath:'artifacts/next.md',text:'Write the next report.',publish:false},[legacy]),/Input names must start with a letter/);
+});
 
 test('vendored ethers is exactly 6.17.0 and every locked dependency is present offline', async () => {
   assert.equal(relay.ethersVersion, '6.17.0');
@@ -35,7 +41,7 @@ test('vendored ethers is exactly 6.17.0 and every locked dependency is present o
 });
 
 test('all six functions have unsigned ABI transaction/read preparation', () => {
-  const p = { anchor: key(10), profile: 0, target: key(1), inputs: [], outputName: 'main', outputPath: 'docs/main.md', text: 'Continue the public goal', publish: false };
+  const p = { anchor: key(10), profile: 0, target: key(1), inputs: [], outputName: 'main', outputPath: 'artifacts/main.md', text: 'Continue the public goal', publish: false };
   const cases = [
     [relay.createProject(factory, 'A fixed public goal'), relay.interfaces.factory, 'createProject'],
     [relay.proposeWork(branch, p, []), relay.interfaces.branch, 'propose'],
@@ -63,7 +69,7 @@ test('proposal zero, unsigned funding caps, publishing and invalid inputs are re
   assert.throws(() => relay.forkHistory(factory, branch, 0, [], 'fork'));
   assert.throws(() => relay.createProject(factory, '\ud800'));
   assert.throws(() => relay.readState(branch, 'sponsor', []));
-  const p = { anchor: key(1), profile: 0, target: key(1), inputs: [], outputName: 'main', outputPath: 'docs/main.md', text: 'work', publish: true };
+  const p = { anchor: key(1), profile: 0, target: key(1), inputs: [], outputName: 'main', outputPath: 'artifacts/main.md', text: 'work', publish: true };
   assert.throws(() => relay.proposeWork(branch, p, []));
   const defaults = { ...p };
   delete defaults.publish;
@@ -74,12 +80,12 @@ test('proposal zero, unsigned funding caps, publishing and invalid inputs are re
 });
 
 test('client rejects fixed-profile violations before it prepares a purchaseable proposal', () => {
-  const base = { anchor: key(10), profile: relay.PROFILES.MarkdownUpdate, target: key(1), inputs: [key(1)], outputName: 'main', outputPath: 'docs/main.md', text: 'Update', publish: false };
-  assert.equal(relay.validateProposal(base, [asset]).proposal.outputPath, 'docs/main.md');
+  const base = { anchor: key(10), profile: relay.PROFILES.MarkdownUpdate, target: key(1), inputs: [key(1)], outputName: 'main', outputPath: 'artifacts/main.md', text: 'Update', publish: false };
+  assert.equal(relay.validateProposal(base, [asset]).proposal.outputPath, 'artifacts/main.md');
   assert.throws(() => relay.validateProposal({ ...base, inputs: [] }, [asset]), /select target/u);
   assert.throws(() => relay.validateProposal({ ...base, outputName: 'changed' }, [asset]), /mapping/u);
-  assert.throws(() => relay.validateProposal({ ...base, profile: relay.PROFILES.HTMLUpdate, outputName: 'main', outputPath: 'dist/index.html' }, [asset]), /mapping/u);
-  assert.throws(() => relay.validateProposal({ ...base, profile: relay.PROFILES.ImageCreate, inputs: [key(1)], target: key(2), outputName: 'image', outputPath: 'image.png' }, [asset]), /references/u);
+  assert.throws(() => relay.validateProposal({ ...base, profile: relay.PROFILES.HTMLUpdate, outputName: 'main', outputPath: 'artifacts/index.html' }, [asset]), /mapping/u);
+  assert.throws(() => relay.validateProposal({ ...base, profile: relay.PROFILES.ImageCreate, inputs: [key(1)], target: key(2), outputName: 'image', outputPath: 'artifacts/image.png' }, [asset]), /references/u);
   assert.throws(() => relay.validateProposal({ ...base, profile: relay.PROFILES.MarkdownCreate, inputs: [], target: key(1) }, [asset]), /already exists/u);
 });
 
