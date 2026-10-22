@@ -2,8 +2,9 @@
 
 This addition tests the existing repaired contracts. It changes no application source,
 dependency, compiler setting, launch manifest or website file. The working-tree base
-was `e1f964c7c3cd325a012928b179da83e542f38843`; that is the input revision, not a claim
-about the final submission commit or the original public import. Existing repair
+was `e1f964c7c3cd325a012928b179da83e542f38843`, revised against `f71783be121c963c6e5888a5d50ffb517ece8673`
+(which raised `ManifestJSON.MAX_RETAINED_TOKENS` to `2 * MAX_VALUES`); these are input revisions, not
+claims about the final submission commit or the original public import. Existing repair
 authorship and provenance remain with their contributors.
 
 ## Exact C-GAS-01 reproduction
@@ -45,8 +46,9 @@ runtime sizes, reachable forbidden opcodes, exported ABIs, compiler settings, an
 runtime bytes after substituting the exact immutable words. A subsequent runtime
 `createProject` creates a complete Branch.
 
-The measured complete bind transaction used **13,427,365 gas**, below **16,777,216**.
-The local three-contract batch used **10,266,939 gas**. These finite cases do not prove
+On the revised source the measured complete bind transaction used **13,687,379 gas**
+(13,427,365 before the retained-token revision), below **16,777,216**. The local
+three-contract batch used **10,269,931 gas**. These finite cases do not prove
 a universal worst-case gas bound. The local batch helper is a rehearsal of the launch
 shape, not the official deployment service.
 
@@ -85,8 +87,8 @@ TMPDIR="$PWD/test/scratch" node --test test-sdk/*.test.mjs
 node test/release/replay-exact-gas.mjs test/scratch/out
 ```
 
-Observed on Foundry 1.8.3 / Solidity 0.8.26: build passed; **175 Foundry tests passed**
-across 22 suites; **85 SDK tests passed**. The added invariant executed **24,576 handler
+Observed on Foundry 1.8.3 / Solidity 0.8.26: build passed; **180 Foundry tests passed**
+across 23 suites; **86 SDK tests passed**. The added invariant executed **24,576 handler
 calls** with no unexpected reverts or discards. The raw-byte mutation fuzz test ran
 128 cases. No new reproducible contract defect was found in this addition.
 
