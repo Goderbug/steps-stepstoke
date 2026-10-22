@@ -1,0 +1,21 @@
+{
+  "kind": "evm_contracts",
+  "contracts": [
+    {
+      "contract": "RelayEncoder",
+      "constructorArgs": []
+    },
+    {
+      "contract": "RelayVerifier",
+      "constructorArgs": []
+    },
+    {
+      "contract": "RelayFactory",
+      "constructorArgs": [
+        "$contract:RelayEncoder",
+        "$contract:RelayVerifier"
+      ]
+    }
+  ],
+  "notes": "STEPS (Stepstoke) contracts-only Ethereum mainnet (chainId 1) release of the locally repaired, independently accepted source (imported local repair v1 head c511aab on IMD candidate b7747bf, plus launch packaging v1 and its revision 1; the exact final source commit is the service's commit of this tree, whose compiler inputs are frozen in config/release.json). Three constructor-complete applications in dependency order: RelayEncoder() and RelayVerifier() use their default nonpayable zero-argument constructors; RelayFactory(encoder, verifier) stores the two earlier launch addresses as immutables and checks only that they are nonzero and distinct, so it deploys on an empty chain with no external call, code check, ETH value, child creation or post-deployment initialization. Dependency code and policyId are validated at first product use, not in the constructor. There is no owner, admin, upgrade, pause, forced unlock, proxy, DELEGATECALL, CALLCODE, SELFDESTRUCT, linked external library, token, pool, hook or treasury; no $owner argument exists because no contract has a privileged role. Runtime createProject/fork creates complete independent RelayBranch contracts via CREATE from the factory; branches are full runtime children, not proxies and not manifest entries. Preserved properties: six operations, exact explicit payment, Branch-as-payer, one active request, authenticated success/failure callbacks, full original-result Keccak binding, file SHA-256 verification, accepted checkpoints and historical forks, Unicode/escaped/raw JSON semantics and current budgets. The accepted 32768-byte C-GAS-01 regression (SHA-256 8768318db71105397ac89eef44af007752b94e966eb8adebd237a2b97c9de805) with the original 16-asset witness binds as a complete Branch.bind transaction below 16777216 gas (measured 13,687,379 after revision 1 raised only the structural retained-token cap to 2*MAX_VALUES=1024; every other parser budget unchanged). Build: solc 0.8.26, evm cancun, optimizer 200 runs, via_ir, bytecode_hash none. Local acceptance only: productionReady=false, liveCompatibility NOT_RUN, productionDeployment null. No key, broadcast, public RPC, paid job, website publication, paid UI activation, rebuild or branding/social step is part of this manifest; official launch ID, transaction hash, receipt, addresses, sender and verified source links come only from the service deployment handoff and are not invented here."
+}
