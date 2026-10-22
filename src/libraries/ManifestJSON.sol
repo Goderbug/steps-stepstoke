@@ -2,7 +2,6 @@
 pragma solidity 0.8.26;
 
 import {Policy} from "./Policy.sol";
-import {Text} from "./Text.sol";
 import {StrictJSON as J} from "./StrictJSON.sol";
 
 /// @notice Strict whole-document validation with a small retained result projection.
@@ -236,54 +235,216 @@ library ManifestJSON {
             p.pos = end + 1;
             return string(out);
         }
-        uint256 n;
-        bool rawNonASCII;
-        while (p.pos < p.raw.length) {
-            bytes1 c = p.raw[p.pos++];
-            if (c == '"') {
-                assembly ("memory-safe") { mstore(out, n) }
-                // Escaped scalars were validated before encoding; only raw multibyte input
-                // needs a second UTF-8 pass. ASCII-only escaped keys need no bytewise replay.
-                if (rawNonASCII) Text.utf8(out);
-                return string(out);
-            }
-            if (uint8(c) < 32) revert Policy.Invalid();
-            if (uint8(c) >= 128) rawNonASCII = true;
-            if (c == "\\") {
-                if (p.pos == p.raw.length) revert Policy.Invalid();
-                c = p.raw[p.pos++];
-                if (c == "u") {
-                    uint256 scalar = _escapedScalar(p);
-                    uint256 width = scalar < 0x80 ? 1 : scalar < 0x800 ? 2 : scalar < 0x10000 ? 3 : 4;
-                    if (n + width > max) revert Policy.Limit();
-                    if (width == 1) {
-                        out[n++] = bytes1(uint8(scalar));
-                    } else {
-                        if (width == 2) {
-                            out[n++] = bytes1(uint8(0xc0 | (scalar >> 6)));
-                        } else if (width == 3) {
-                            out[n++] = bytes1(uint8(0xe0 | (scalar >> 12)));
-                            out[n++] = bytes1(uint8(0x80 | ((scalar >> 6) & 63)));
-                        } else {
-                            out[n++] = bytes1(uint8(0xf0 | (scalar >> 18)));
-                            out[n++] = bytes1(uint8(0x80 | ((scalar >> 12) & 63)));
-                            out[n++] = bytes1(uint8(0x80 | ((scalar >> 6) & 63)));
-                        }
-                        out[n++] = bytes1(uint8(0x80 | (scalar & 63)));
-                    }
-                    continue;
+        uint256 pos = begin;
+        uint256 status;
+        // Decode and validate each scalar once. In particular, retained raw UTF-8 must not
+        // incur Solidity byte-array checks followed by a second full Text.utf8 replay.
+        // All reads which affect acceptance and every output write are bounded explicitly.
+        assembly ("memory-safe") {
+            function simpleEscape(e) -> c {
+                c := e
+                if iszero(or(or(eq(e, 34), eq(e, 92)), eq(e, 47))) {
+                    // The five control escapes are indexed from ASCII 'b'. BYTE returns
+                    // zero for out-of-range indices; zero is not a simple JSON escape.
+                    c := byte(sub(e, 98), 0x080000000c000000000000000a0000000d000900000000000000000000000000)
                 }
-                if (c == "b") c = 0x08;
-                else if (c == "f") c = 0x0c;
-                else if (c == "n") c = 0x0a;
-                else if (c == "r") c = 0x0d;
-                else if (c == "t") c = 0x09;
-                else if (c != '"' && c != "\\" && c != "/") revert Policy.Invalid();
             }
-            if (n == max) revert Policy.Limit();
-            out[n++] = c;
+            function scalarOK(c) -> ok {
+                ok := and(
+                    and(lt(c, 0x110000), iszero(and(iszero(lt(c, 0xd800)), lt(c, 0xe000)))),
+                    and(iszero(and(iszero(lt(c, 0xfdd0)), lt(c, 0xfdf0))), lt(and(c, 0xffff), 0xfffe))
+                )
+            }
+            function hexDigitOK(c) -> ok {
+                let lower := or(c, 32)
+                ok := or(and(gt(c, 47), lt(c, 58)), and(gt(lower, 96), lt(lower, 103)))
+            }
+            function hex4(data, i, length) -> v, ok {
+                ok := iszero(gt(add(i, 4), length))
+                if ok {
+                    let word := mload(add(data, i))
+                    ok := and(hexDigitOK(byte(2, word)), hexDigitOK(byte(3, word)))
+                    if iszero(eq(shr(240, word), 0x3030)) {
+                        ok := and(ok, and(hexDigitOK(byte(0, word)), hexDigitOK(byte(1, word))))
+                    }
+                    let packed := shr(224, word)
+                    // ASCII digits have bit 6 clear; A-F/a-f have it set. Add nine to
+                    // their low nibble, then pack the four independently validated digits.
+                    let digits := add(and(packed, 0x0f0f0f0f), mul(and(shr(6, packed), 0x01010101), 9))
+                    v := or(
+                        or(shl(12, and(shr(24, digits), 15)), shl(8, and(shr(16, digits), 15))),
+                        or(shl(4, and(shr(8, digits), 15)), and(digits, 15))
+                    )
+                }
+            }
+            function escaped(data, i, length) -> c, next, ok {
+                c, ok := hex4(data, i, length)
+                next := add(i, 4)
+                // The common BMP prefix contains neither surrogates nor noncharacters.
+                if lt(c, 0xd800) { leave }
+                if and(ok, and(iszero(lt(c, 0xd800)), lt(c, 0xdc00))) {
+                    ok := iszero(gt(add(next, 6), length))
+                    if ok {
+                        ok := and(
+                            eq(byte(0, mload(add(data, next))), 92),
+                            eq(byte(0, mload(add(data, add(next, 1)))), 117)
+                        )
+                    }
+                    if ok {
+                        let low
+                        low, ok := hex4(data, add(next, 2), length)
+                        ok := and(ok, and(iszero(lt(low, 0xdc00)), lt(low, 0xe000)))
+                        c := add(0x10000, add(shl(10, sub(c, 0xd800)), sub(low, 0xdc00)))
+                        next := add(next, 6)
+                    }
+                }
+                ok := and(ok, scalarOK(c))
+            }
+            function utf8(data, i, length, c) -> next, ok {
+                // Canonical scalar UTF-8, classified by encoded width. Two-byte scalars
+                // cannot be surrogates or noncharacters, so they need no scalar replay.
+                let word := mload(add(data, i))
+                let b := byte(0, word)
+                ok := and(iszero(lt(b, 0x80)), lt(b, 0xc0))
+                if and(iszero(lt(c, 0xc2)), lt(c, 0xe0)) {
+                    next := add(i, 1)
+                    ok := and(ok, iszero(gt(next, length)))
+                    leave
+                }
+                let d := byte(1, word)
+                ok := and(ok, and(iszero(lt(d, 0x80)), lt(d, 0xc0)))
+                if and(iszero(lt(c, 0xe0)), lt(c, 0xf0)) {
+                    next := add(i, 2)
+                    ok := and(ok, iszero(gt(next, length)))
+                    if and(eq(c, 0xe0), lt(b, 0xa0)) { ok := 0 }
+                    if and(eq(c, 0xed), iszero(lt(b, 0xa0))) { ok := 0 }
+                    if eq(c, 0xef) {
+                        if and(eq(b, 0xb7), and(iszero(lt(d, 0x90)), lt(d, 0xb0))) { ok := 0 }
+                        if and(eq(b, 0xbf), iszero(lt(d, 0xbe))) { ok := 0 }
+                    }
+                    leave
+                }
+                let e := byte(2, word)
+                next := add(i, 3)
+                ok := and(ok, and(iszero(lt(e, 0x80)), lt(e, 0xc0)))
+                ok := and(ok, and(and(iszero(lt(c, 0xf0)), lt(c, 0xf5)), iszero(gt(next, length))))
+                if and(eq(c, 0xf0), lt(b, 0x90)) { ok := 0 }
+                if and(eq(c, 0xf4), iszero(lt(b, 0x90))) { ok := 0 }
+                if and(eq(and(b, 15), 15), and(eq(d, 0xbf), iszero(lt(e, 0xbe)))) { ok := 0 }
+            }
+            let data := add(raw, 32)
+            let length := mload(raw)
+            let dst := add(out, 32)
+            let n := 0
+            let segment := pos
+            for {} lt(pos, length) {} {
+                let start := pos
+                let c := byte(0, mload(add(data, pos)))
+                pos := add(pos, 1)
+                if eq(c, 34) {
+                    let size := sub(start, segment)
+                    if size {
+                        if gt(add(n, size), max) {
+                            status := 2
+                            break
+                        }
+                        mcopy(add(dst, n), add(data, segment), size)
+                        n := add(n, size)
+                    }
+                    mstore(out, n)
+                    status := 1
+                    break
+                }
+                if lt(c, 32) { break }
+                if eq(c, 92) {
+                    let size := sub(start, segment)
+                    if size {
+                        if gt(add(n, size), max) {
+                            status := 2
+                            break
+                        }
+                        mcopy(add(dst, n), add(data, segment), size)
+                        n := add(n, size)
+                    }
+                    if eq(pos, length) { break }
+                    let e := byte(0, mload(add(data, pos)))
+                    pos := add(pos, 1)
+                    switch e
+                    case 117 {
+                        let ok
+                        c, pos, ok := escaped(data, pos, length)
+                        if iszero(ok) { break }
+                        let width := 1
+                        if gt(c, 0x7f) { width := 2 }
+                        if gt(c, 0x7ff) { width := 3 }
+                        if gt(c, 0xffff) { width := 4 }
+                        if gt(add(n, width), max) {
+                            status := 2
+                            break
+                        }
+                        let at := add(dst, n)
+                        switch width
+                        case 1 { mstore8(at, c) }
+                        case 2 {
+                            mstore8(at, or(0xc0, shr(6, c)))
+                            mstore8(add(at, 1), or(0x80, and(c, 63)))
+                        }
+                        case 3 {
+                            mstore8(at, or(0xe0, shr(12, c)))
+                            mstore8(add(at, 1), or(0x80, and(shr(6, c), 63)))
+                            mstore8(add(at, 2), or(0x80, and(c, 63)))
+                        }
+                        case 4 {
+                            mstore8(at, or(0xf0, shr(18, c)))
+                            mstore8(add(at, 1), or(0x80, and(shr(12, c), 63)))
+                            mstore8(add(at, 2), or(0x80, and(shr(6, c), 63)))
+                            mstore8(add(at, 3), or(0x80, and(c, 63)))
+                        }
+                        n := add(n, width)
+                        segment := pos
+                        continue
+                    }
+                    default {
+                        c := simpleEscape(e)
+                        if iszero(c) { break }
+                    }
+                    if eq(n, max) {
+                        status := 2
+                        break
+                    }
+                    mstore8(add(dst, n), c)
+                    n := add(n, 1)
+                    // Consecutive simple escapes need no raw-segment flush, scalar decoder
+                    // or repeated outer dispatch. Unicode/unknown escapes return to the
+                    // general path without consuming a byte; unknown forms still reject.
+                    for {} lt(add(pos, 1), length) {} {
+                        let pair := mload(add(data, pos))
+                        if iszero(eq(byte(0, pair), 92)) { break }
+                        let decoded := simpleEscape(byte(1, pair))
+                        if iszero(decoded) { break }
+                        if eq(n, max) {
+                            status := 2
+                            break
+                        }
+                        mstore8(add(dst, n), decoded)
+                        n := add(n, 1)
+                        pos := add(pos, 2)
+                    }
+                    if eq(status, 2) { break }
+                    segment := pos
+                    continue
+                }
+                if gt(c, 127) {
+                    let ok
+                    pos, ok := utf8(data, pos, length, c)
+                    if iszero(ok) { break }
+                }
+            }
         }
-        revert Policy.Invalid();
+        if (status == 2) revert Policy.Limit();
+        if (status != 1) revert Policy.Invalid();
+        p.pos = pos;
+        return string(out);
     }
 
     function _skipString(Parser memory p) private pure {
@@ -300,34 +461,42 @@ library ManifestJSON {
                     and(iszero(and(iszero(lt(c, 0xfdd0)), lt(c, 0xfdf0))), lt(and(c, 0xffff), 0xfffe))
                 )
             }
+            function hexDigitOK(c) -> ok {
+                let lower := or(c, 32)
+                ok := or(and(gt(c, 47), lt(c, 58)), and(gt(lower, 96), lt(lower, 103)))
+            }
             function hex4(data, i, length) -> v, ok {
                 ok := iszero(gt(add(i, 4), length))
                 if ok {
                     let word := mload(add(data, i))
-                    for { let j := 0 } lt(j, 4) { j := add(j, 1) } {
-                        let c := byte(j, word)
-                        let d := sub(c, 48)
-                        if gt(d, 9) {
-                            d := sub(or(c, 32), 97)
-                            if gt(d, 5) { ok := 0 }
-                            d := add(d, 10)
-                        }
-                        v := or(shl(4, v), d)
+                    ok := and(hexDigitOK(byte(2, word)), hexDigitOK(byte(3, word)))
+                    if iszero(eq(shr(240, word), 0x3030)) {
+                        ok := and(ok, and(hexDigitOK(byte(0, word)), hexDigitOK(byte(1, word))))
                     }
+                    let packed := shr(224, word)
+                    // ASCII digits have bit 6 clear; A-F/a-f have it set. Add nine to
+                    // their low nibble, then pack the four independently validated digits.
+                    let digits := add(and(packed, 0x0f0f0f0f), mul(and(shr(6, packed), 0x01010101), 9))
+                    v := or(
+                        or(shl(12, and(shr(24, digits), 15)), shl(8, and(shr(16, digits), 15))),
+                        or(shl(4, and(shr(8, digits), 15)), and(digits, 15))
+                    )
                 }
             }
             function escaped(data, i, length) -> next, ok {
                 let c
                 c, ok := hex4(data, i, length)
                 next := add(i, 4)
+                // The common BMP prefix contains neither surrogates nor noncharacters.
+                if lt(c, 0xd800) { leave }
                 if and(ok, and(iszero(lt(c, 0xd800)), lt(c, 0xdc00))) {
-                    ok := and(
-                        iszero(gt(add(next, 6), length)),
-                        and(
+                    ok := iszero(gt(add(next, 6), length))
+                    if ok {
+                        ok := and(
                             eq(byte(0, mload(add(data, next))), 92),
                             eq(byte(0, mload(add(data, add(next, 1)))), 117)
                         )
-                    )
+                    }
                     if ok {
                         let low
                         low, ok := hex4(data, add(next, 2), length)
@@ -411,50 +580,6 @@ library ManifestJSON {
         }
         if (!valid) revert Policy.Invalid();
         p.pos = pos;
-    }
-
-    function _escapedScalar(Parser memory p) private pure returns (uint256 scalar) {
-        scalar = _u16(p);
-        if (scalar >= 0xd800 && scalar <= 0xdbff) {
-            if (!_take(p, "\\") || !_take(p, "u")) revert Policy.Invalid();
-            uint256 low = _u16(p);
-            if (low < 0xdc00 || low > 0xdfff) revert Policy.Invalid();
-            scalar = 0x10000 + ((scalar - 0xd800) << 10) + low - 0xdc00;
-        }
-        _scalar(scalar);
-    }
-
-    function _scalar(uint256 scalar) private pure {
-        if (
-            scalar > 0x10ffff || (scalar >= 0xd800 && scalar <= 0xdfff)
-                || (scalar >= 0xfdd0 && scalar <= 0xfdef) || (scalar & 0xffff) >= 0xfffe
-        ) revert Policy.Invalid();
-    }
-
-    function _u16(Parser memory p) private pure returns (uint256 v) {
-        if (p.pos + 4 > p.raw.length) revert Policy.Invalid();
-        bytes memory raw = p.raw;
-        uint256 pos = p.pos;
-        bool valid = true;
-        // Decode four ASCII hex digits directly; bounds were checked above. Unknown strings can
-        // contain thousands of escapes and must not pay four dynamic-array checks per digit.
-        assembly ("memory-safe") {
-            let word := mload(add(add(raw, 32), pos))
-            let start := 0
-            if eq(shr(240, word), 0x3030) { start := 2 }
-            for { let i := start } lt(i, 4) { i := add(i, 1) } {
-                let c := byte(i, word)
-                let digit := sub(c, 48)
-                if gt(digit, 9) {
-                    digit := sub(or(c, 32), 97)
-                    if gt(digit, 5) { valid := 0 }
-                    digit := add(digit, 10)
-                }
-                v := or(shl(4, v), digit)
-            }
-        }
-        if (!valid) revert Policy.Invalid();
-        p.pos = pos + 4;
     }
 
     function _number(Parser memory p) private pure {

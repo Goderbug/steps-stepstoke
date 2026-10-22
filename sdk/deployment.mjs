@@ -44,5 +44,13 @@ export async function verifyPublicDeployment(provider, h, evidence, release) {
       if (create[0].output && !eq(create[0].output,code)) throw new Error('Creation trace runtime differs');
     }
   }
+  // Historical code/trace requests may use another public RPC after an availability
+  // failure. Re-check canonicality after those reads; never accept a mixed reorg view.
+  const finalBlock = await provider.request({ method:'eth_getBlockByNumber', params:[tag(evidence.blockNumber),false] });
+  const finalReceipt = await provider.request({ method:'eth_getTransactionReceipt', params:[evidence.transactionHash] });
+  if (!eq(finalBlock?.hash,evidence.blockHash) || Number(BigInt(finalBlock.number)) !== evidence.blockNumber
+    || !finalBlock.transactions.some(t => eq(typeof t === 'string' ? t : t.hash,evidence.transactionHash))
+    || !eq(finalReceipt?.blockHash,evidence.blockHash) || !eq(finalReceipt?.transactionHash,evidence.transactionHash)
+    || Number(BigInt(finalReceipt.blockNumber)) !== evidence.blockNumber || BigInt(finalReceipt.status) !== 1n) throw new Error('Deployment changed during verification');
   return { validity:'VERIFIED_DEPLOYMENT', chainId:1, contracts:addresses, deploymentBlock:evidence.blockNumber, blockHash:evidence.blockHash, transactionHash:evidence.transactionHash, liveCompatibility:'NOT_RUN', productionReady:false };
 }

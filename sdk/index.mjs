@@ -14,3 +14,4 @@ export * from './public.mjs';
 export * from './handoff.mjs';
 export * from './observation.mjs';
 export * from './gates.mjs';
+export * from './public-rpc.mjs';

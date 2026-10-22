@@ -40,6 +40,28 @@ test("sequence selection is read-only and exact verified downloads preserve exte
 test("continue prepares a proposal without approval or purchase",async({page})=>{
   await workspace(page);await page.getByRole("button",{name:"Continue",exact:true}).click();const form=page.getByRole("dialog");await form.getByLabel("New asset name",{exact:true}).fill("guide");await form.getByLabel("Requirement",{exact:true}).fill("Document the handoff in plain English.");await form.getByRole("button",{name:"Review proposal",exact:true}).click();await expect(form).toContainText("Gas only. Execution requires separate funding");await form.getByRole("button",{name:"Sign and submit proposal"}).click();await expect(form).toHaveCount(0);await expect(page.getByRole("heading",{name:/Create Markdown.*guide/})).toBeVisible();expect(await page.evaluate(()=>JSON.parse(localStorage.getItem("platform.fixture.v1")!).sponsorships.length)).toBe(0);expect(await page.getByRole("button",{name:"Review funding",exact:true}).count()).toBe(3);
 });
+test("contribution sheets restore the actual clicked opener instead of stale focus",async({page})=>{
+  await workspace(page);
+  const triggers = [
+    page.getByRole("button", {name:"Continue",exact:true}),
+    page.getByRole("button", {name:"Review funding",exact:true}).first(),
+    page.getByRole("button", {name:"Historical Fork",exact:true}),
+    page.getByRole("button", {name:"Prepare at current checkpoint",exact:true}).first(),
+  ];
+  for (const trigger of triggers) {
+    // A mouse/touch activation need not focus its button on WebKit. Retain unrelated
+    // prior focus to prove dismissal uses the actual initiating control.
+    await page.getByRole("button", {name:"Connect wallet",exact:true}).focus();
+    await trigger.click();
+    const sheet = page.getByRole("dialog");
+    await expect(sheet).toBeVisible();
+    await expect(page.locator("#root")).toHaveAttribute("inert", "");
+    await sheet.getByRole("button", {name:"Close preparation",exact:true}).click();
+    await expect(sheet).toHaveCount(0);
+    await expect(trigger).toBeFocused();
+    await expect(page.locator("#root")).not.toHaveAttribute("inert", "");
+  }
+});
 test("approval confirms before a separate purchase; exact allowance; completed attempt",async({page},info)=>{
   const sheet=await openFunding(page);await shot(page,info,"funding");await expect(sheet.getByRole("button",{name:"2. Purchase execution"})).toBeDisabled();await sheet.getByLabel(/Maximum fee/).fill("100");await sheet.getByRole("button",{name:"1. Approve exact amount"}).dblclick();await expect(sheet.getByRole("button",{name:"2. Purchase execution"})).toBeEnabled();expect(await page.evaluate(()=>Object.values(JSON.parse(localStorage.getItem("platform.fixture.v1")!).allowances))).toEqual(["25000000000000000000"]);await sheet.getByRole("button",{name:"2. Purchase execution"}).dblclick();await expect(sheet).toHaveCount(0);await expect(page.locator(".attempt")).toHaveCount(1);await expect(page.locator(".attempt .stage").filter({hasText:"Binding"})).toContainText("Confirmed");await page.getByRole("button",{name:/Select Round 4/}).click();await expect(page.getByRole("heading",{name:"Round 4 output"})).toBeVisible();await expect(page.getByRole("button",{name:/Select Round 3/})).not.toContainText("Latest");
 });

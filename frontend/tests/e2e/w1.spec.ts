@@ -285,8 +285,12 @@ test("malicious files stay isolated and broken files never get a verified badge"
 
 test("keyboard: skip link, focus ring, connect sheet traps and restores focus", async ({ page }) => {
   await page.goto("./");
+  const skip = page.getByRole("link", { name: "Skip to main content" });
+  await expect(skip).toHaveCount(1);
   await page.keyboard.press("Tab");
-  await expect(page.getByRole("link", { name: "Skip to main content" })).toBeFocused();
+  await expect(skip).toBeFocused();
+  await page.keyboard.press("Enter");
+  await expect(page.locator("#main")).toBeFocused();
   const connect = page.getByRole("button", { name: "Connect wallet" });
   await connect.focus();
   const outline = await connect.evaluate((el) => getComputedStyle(el).outlineStyle);

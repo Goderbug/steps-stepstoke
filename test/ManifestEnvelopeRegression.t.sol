@@ -285,4 +285,82 @@ contract ManifestEnvelopeRegressionTest is SpecSetup {
         assertEq(uint256(root.phase()), uint256(T.Phase.Ready));
         assertEq(root.revision(), 17);
     }
+
+    function test_bindMaximumRetainedRawUtf8TwoByteWithFullWitness() public {
+        _maximumRetainedStrings(hex"c3a9", 500, 15);
+    }
+
+    function test_bindMaximumRetainedRawUtf8ThreeByteWithFullWitness() public {
+        _maximumRetainedStrings(hex"e6b0b4", 333, 15);
+    }
+
+    function test_bindMaximumRetainedRawUtf8FourByteWithFullWitness() public {
+        _maximumRetainedStrings(hex"f09f9a80", 250, 15);
+    }
+
+    function test_bindMaximumRetainedEscapedUtf8WithFullWitness() public {
+        _maximumRetainedStrings(bytes("\\u00e9"), 500, 5);
+    }
+
+    function test_bindMaximumRetainedEscapedSurrogatesWithFullWitness() public {
+        _maximumRetainedStrings(bytes("\\uD83D\\uDE80"), 250, 5);
+    }
+
+    function test_bindMaximumRetainedSimpleEscapesWithFullWitness() public {
+        _maximumRetainedStrings(bytes("\\n"), 1000, 7);
+    }
+
+    function _maximumRetainedStrings(bytes memory scalar, uint256 repetitions, uint256 extraFiles) private {
+        // Reach a real sixteen-asset checkpoint before the paid update and authenticated callback.
+        T.Asset[] memory old = empty();
+        for (uint256 i = 1; i <= 16; ++i) {
+            T.Profile profile =
+                i <= 14 ? T.Profile.MarkdownCreate : i == 15 ? T.Profile.HTMLCreate : T.Profile.ImageCreate;
+            T.Proposal memory p = proposal(root, profile, i);
+            p.outputName = string(D.repeat(bytes1(uint8(65 + i)), 64));
+            if (i <= 14) {
+                p.outputPath = string(bytes.concat("artifacts/", D.repeat(bytes1(uint8(97 + i)), 115), ".md"));
+            }
+            if (i == 16) p.outputPath = string(bytes.concat("artifacts/", D.repeat("a", 114), ".png"));
+            old = accept(
+                root,
+                p,
+                old,
+                string(D.repeat(bytes1(uint8(65 + i)), 64)),
+                "metadata-project",
+                D.document(),
+                ALICE
+            );
+        }
+        T.Proposal memory update = proposal(root, T.Profile.MarkdownUpdate, 1);
+        update.outputName = old[0].name;
+        update.outputPath = old[0].path;
+        bytes memory raw = D.manifest(update, "retained-gas-job", "metadata-project", D.document());
+        bytes memory text;
+        for (uint256 i; i < repetitions; ++i) {
+            text = bytes.concat(text, scalar);
+        }
+        bytes memory extra;
+        for (uint256 i; i < extraFiles; ++i) {
+            bytes memory named = bytes.concat(text, bytes(D.decimal(i)));
+            extra = bytes.concat(
+                extra, i == 0 ? bytes("") : bytes(","), '{"name":"', named, '","path":"', named, '"}'
+            );
+        }
+        raw = replace(raw, '"files":[{', bytes.concat('"files":[', extra, ",{"));
+        // The final envelope is exactly the already-supported 32 KiB, not a narrowed admission rule.
+        assertTrue(raw.length <= Policy.MAX_MANIFEST);
+        raw = bytes.concat(raw, D.repeat(" ", Policy.MAX_MANIFEST - raw.length));
+        record(pay(root, root.propose(update, old), old, ALICE), raw);
+        uint256 beforeGas = gasleft();
+        root.bind(raw, old);
+        uint256 used = beforeGas - gasleft();
+        emit Metric("retained string complete bind execution gas", used);
+        assertTrue(used < 14_000_000);
+        assertEq(uint256(root.phase()), uint256(T.Phase.Ready));
+        assertEq(root.revision(), 17);
+        assertEq(root.checkpoint(17).resultHash, keccak256(raw));
+        assertEq(intake.count(), 17);
+        assertAccounting(17 * FEE, 0);
+    }
 }

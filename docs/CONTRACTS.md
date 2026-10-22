@@ -10,7 +10,7 @@ This is documentation, not a manifest or launch authorization. The later manifes
     {"contract":"RelayVerifier","constructorArgs":[]},
     {"contract":"RelayFactory","constructorArgs":["$contract:RelayEncoder","$contract:RelayVerifier"]}
   ],
-  "notes":"STEPS RELEASE-CANDIDATE-V1; launch only after all production gates are independently closed. Runtime product operations create full independent RelayBranch contracts."
+  "notes":"STEPS LOCAL-REPAIR-V1; launch after independent local source review and official service approval. Deployment and live-use acceptance are verified afterward. Runtime product operations create full independent RelayBranch contracts."
 }
 ```
 
@@ -28,4 +28,6 @@ The current official `evm-contracts-launch` text and supplied protected floor pr
 
 Mechanical compatibility with the supplied policy floor is PASS. Final service acceptance is OPEN. If the later service treats every runtime child as a launch application and demands static arguments for it, that conflicts precisely with dynamic user goals, inherited witnesses and permissionless runtime creation. Do not hide the child, restore proxies or add a launch initialization transaction; resolve that policy conflict before launch.
 
-Actual final runtime/initcode sizes and transaction gas are in [measurements](validation/rc-v1/measurements.json). The unchanged compiler configuration uses solc 0.8.26, Cancun, optimizer 200, viaIR and `bytecode_hash = "none"`.
+The earlier [candidate measurements](validation/rc-v1/measurements.json) are historical and do not certify the repaired source. Current repair validation is recorded in [LOCAL-REPAIR-V1](validation/local-repair-v1/README.md). The unchanged compiler configuration uses solc 0.8.26, Cancun, optimizer 200, viaIR and `bytecode_hash = "none"`.
+
+Deployment acceptance and permission to enable paid product operations are separate gates. A successful local review permits preparation of the contracts-only IMD launch. Only actual official delivery, canonical receipts, source-matched runtime code and constructor bindings can establish deployment. The website is connected after that verification. Live compatibility remains `NOT_RUN` and paid UI remains disabled until separately authorized live checks pass; merely deploying the permissionless contracts does not prevent direct external calls.

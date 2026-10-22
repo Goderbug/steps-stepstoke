@@ -7,7 +7,8 @@ import { execFileSync } from 'node:child_process';
 import { sha256, keccak256 } from '../vendor/ethers/ethers.mjs';
 import { APPLICATIONS, abiHash, verifyHandoffAssets, validateHandoff } from '../sdk/handoff.mjs';
 import { verifyPublicDeployment } from '../sdk/deployment.mjs';
-export async function importDeployment({ handoffPath = '.imd/reads/deployment.json', networkPath = '.imd/reads/network.json', evidencePath, dist = 'dist', provider, release }) {
+import { PUBLIC_RPC_POLICY_ASSET, defaultPublicRpcPolicy, validatePublicRpcPolicy, createPublicReadProvider } from '../sdk/public-rpc.mjs';
+export async function importDeployment({ handoffPath = '.imd/reads/deployment.json', networkPath = '.imd/reads/network.json', evidencePath, dist = 'dist', provider, release, transportPolicy }) {
   // Read all inputs and verify onchain BEFORE writing any publishable manifest.
   await rm(resolve(dist,'imd-deployment.json'),{force:true});
   const h = JSON.parse(await readFile(handoffPath,'utf8'));
@@ -22,11 +23,14 @@ export async function importDeployment({ handoffPath = '.imd/reads/deployment.js
   }
   const result = {version:1,launchId:h.launchId,chainId:h.chainId,sourceCommit:h.sourceCommit,attestationHash:h.attestationHash,contracts,assets:[]};
   try { const n = JSON.parse(await readFile(networkPath,'utf8')); if (Object.hasOwn(n,'network')) result.network = n.network; if (Object.hasOwn(n,'walletAddChain')) result.walletAddChain=n.walletAddChain; } catch(e) { if(e.code!=='ENOENT') throw e; }
+  const primary = result.network?.rpcUrl ?? result.network?.rpcUrls?.default?.http?.[0] ?? result.network?.rpcUrls?.[0];
+  const readPolicy = transportPolicy ? validatePublicRpcPolicy(transportPolicy) : defaultPublicRpcPolicy(primary);
   const content = new Map();
   const walk = async dir => { for(const e of await readdir(dir,{withFileTypes:true})) { const p=resolve(dir,e.name); if((await lstat(p)).isSymbolicLink())throw new Error('Symlink in static export'); if(e.isDirectory())await walk(p);else if(e.isFile()&&relative(resolve(dist),p)!=='imd-deployment.json')content.set(relative(resolve(dist),p).replaceAll('\\','/'),await readFile(p)); } };
   await walk(resolve(dist));
   for (const c of contracts) content.set(c.abiPath,await readFile(`abi/${c.name}.json`));
   content.set('deployment-evidence.json',await readFile(evidencePath));
+  content.set(PUBLIC_RPC_POLICY_ASSET,Buffer.from(JSON.stringify(readPolicy,null,2)+'\n'));
   for (const [path,raw] of [...content.entries()].sort(([a],[b])=>a.localeCompare(b))) result.assets.push({path,sha256:sha256(raw).slice(2)});
   validateHandoff(result);
   await verifyHandoffAssets(result,p=>content.get(p));
@@ -39,16 +43,17 @@ export async function importDeployment({ handoffPath = '.imd/reads/deployment.js
   await mkdir(resolve(dist,'abi'),{recursive:true});
   for (const c of contracts) await writeFile(resolve(dist,c.abiPath),content.get(c.abiPath));
   await writeFile(resolve(dist,'deployment-evidence.json'),content.get('deployment-evidence.json'));
+  await writeFile(resolve(dist,PUBLIC_RPC_POLICY_ASSET),content.get(PUBLIC_RPC_POLICY_ASSET));
   await writeFile(resolve(dist,'imd-deployment.json'),JSON.stringify(result,null,2)+'\n');
   return result;
 }
 if (process.argv[1] && import.meta.url === pathToFileURL(resolve(process.argv[1])).href) {
-  const [evidencePath,rpc] = process.argv.slice(2);
+  const [evidencePath,rpc,transportPath] = process.argv.slice(2);
   try {
-    if(!rpc || new URL(rpc).protocol!=='https:' || new URL(rpc).username || new URL(rpc).password)throw new Error('Usage: node tools/import-deployment.mjs RECEIPT_EVIDENCE HTTPS_RPC (requires actual .imd/reads/deployment.json)');
-    const allowed = new Set(['eth_chainId','eth_getTransactionReceipt','eth_getBlockByNumber','eth_getCode','debug_traceTransaction']);let id=0;
-    const provider={async request({method,params=[]}){if(!allowed.has(method))throw new Error('Read only');const r=await fetch(rpc,{method:'POST',headers:{'content-type':'application/json'},body:JSON.stringify({jsonrpc:'2.0',id:++id,method,params}),signal:AbortSignal.timeout(30000)});const b=await r.json();if(!r.ok||b.error)throw new Error(b.error?.message??'RPC unavailable');return b.result;}};
+    if(!rpc)throw new Error('Usage: node tools/import-deployment.mjs RECEIPT_EVIDENCE HTTPS_RPC [PUBLIC_READ_TRANSPORT_JSON] (requires actual .imd/reads/deployment.json)');
+    const transportPolicy = transportPath ? validatePublicRpcPolicy(JSON.parse(await readFile(transportPath,'utf8'))) : defaultPublicRpcPolicy(rpc);
+    const provider = createPublicReadProvider({rpcUrls:transportPolicy.rpcUrls});
     const release=JSON.parse(await readFile('config/release.json','utf8'));
-    const result=await importDeployment({evidencePath,provider,release});console.log(JSON.stringify({ok:true,launchId:result.launchId,chainId:result.chainId,assets:result.assets.length,liveCompatibility:'NOT_RUN',productionReady:false}));
+    const result=await importDeployment({evidencePath,provider,release,transportPolicy});console.log(JSON.stringify({ok:true,launchId:result.launchId,chainId:result.chainId,assets:result.assets.length,liveCompatibility:'NOT_RUN',productionReady:false}));
   } catch(e) {console.error(e.message);process.exitCode=1;}
 }

@@ -2,7 +2,7 @@
 """Offline candidate integrity/size check. --write refreshes two delivered evidence reports."""
 import hashlib,json,pathlib,subprocess,sys,tarfile,collections,lzma
 root=pathlib.Path(__file__).resolve().parent.parent
-folder=root/'docs/validation/rc-v1'
+folder=root/'docs/validation/local-repair-v1'
 protected=['foundry.toml','foundry.lock','remappings.txt','.gitmodules','lib','package.json','package-lock.json','frontend/package.json','frontend/package-lock.json','.github','.env','node_modules']
 subprocess.run(['git','diff','--exit-code','--',*protected],cwd=root,check=True,stdout=subprocess.DEVNULL)
 raw=subprocess.check_output(['git','ls-files','-c','-o','--exclude-standard','-z'],cwd=root).decode().split('\0')
@@ -18,7 +18,7 @@ for value in [release,gate]:
 assert not (root/'dist/imd-deployment.json').exists(),'Undeployed candidate cannot invent a handoff'
 assert not (root/'dist/ethereum-config.json').exists(),'No independent public deployment configuration'
 assert json.loads((root/'frontend/public/local-config.json').read_text())==json.loads((root/'dist/local-config.json').read_text())
-for evidenceFolder in [folder,root/'docs/validation/integration-v1',root/'docs/validation/multi-file-revision',root/'docs/validation/boundary-revision']:
+for evidenceFolder in [root/'docs/validation'/name for name in ['rc-v1','integration-v1','multi-file-revision','boundary-revision','documentation-v1']]:
  indexPath=evidenceFolder/'archive-index.json'
  index=json.loads(indexPath.read_text() if indexPath.exists() else lzma.decompress((evidenceFolder/'archive-index.json.xz').read_bytes()))
  archive=evidenceFolder/index['archive']
@@ -36,7 +36,7 @@ for evidenceFolder in [folder,root/'docs/validation/integration-v1',root/'docs/v
    data=tar.extractfile(row['path']).read();assert len(data)==row['bytes'] and hashlib.sha256(data).hexdigest()==row['sha256'],row['path']
 manifestPath=folder/'source-manifest.json.xz'
 sourcePaths=[p for p in paths if not p.startswith(('docs/validation/','docs/history/'))]
-manifest={'baseline':'d29eedf8e7d6608ed109972c179b367ac07ce91f','algorithm':'SHA-256','scope':'All delivered source, tests, dependencies, ABI, config, tools and static export; evidence/history archives have separate indexes.','files':[{'path':p,'bytes':(root/p).stat().st_size,'sha256':hashlib.sha256((root/p).read_bytes()).hexdigest()} for p in sourcePaths]}
+manifest={'baseline':'b7747bf377e292f44b35fb0acc55c6ee1772cee4','algorithm':'SHA-256','scope':'All delivered source, tests, dependencies, ABI, config, tools and static export; evidence/history archives have separate indexes.','files':[{'path':p,'bytes':(root/p).stat().st_size,'sha256':hashlib.sha256((root/p).read_bytes()).hexdigest()} for p in sourcePaths]}
 if '--write' in sys.argv:manifestPath.write_bytes(lzma.compress((json.dumps(manifest,separators=(',',':'))+'\n').encode()))
 else:assert json.loads(lzma.decompress(manifestPath.read_bytes()))==manifest,'Source/export manifest drift'
 reportPath=folder/'delivery-size.json';reportRelative=str(reportPath.relative_to(root));manifestRelative=str(manifestPath.relative_to(root))
@@ -46,7 +46,7 @@ for p in paths:
 base=sum(groups.values());reportBytes=0
 for _ in range(10):
  measured=dict(groups);measured['docs']=measured.get('docs',0)+reportBytes
- report={'bytes':base+reportBytes,'limitBytes':8388608,'withinLimit':base+reportBytes<=8388608,'fileCount':len(paths),'byTopLevel':dict(sorted(measured.items())),'excludes':['.git/','.imd/ (provided inputs)','out/','cache/','test/scratch/','node_modules/'],'includesThisReport':True,'baselineTrackedBytes':20440428}
+ report={'bytes':base+reportBytes,'limitBytes':8388608,'withinLimit':base+reportBytes<=8388608,'fileCount':len(paths),'byTopLevel':dict(sorted(measured.items())),'excludes':['.git/','.imd/ (provided inputs)','out/','cache/','test/scratch/','node_modules/'],'includesThisReport':True,'baselineTrackedBytes':8382101}
  encoded=json.dumps(report,indent=2)+'\n'
  if len(encoded.encode())==reportBytes:break
  reportBytes=len(encoded.encode())

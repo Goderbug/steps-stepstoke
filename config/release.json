@@ -1,6 +1,6 @@
 {
   "name": "STEPS (Stepstoke)",
-  "version": "RELEASE-CANDIDATE-V1",
+  "version": "LOCAL-REPAIR-V1",
   "policyId": "0xda20682d095e562fad40017c7dec4f700f23864077e1faddbc75f342bf5a984a",
   "intendedChainId": 1,
   "intake": "0xa43e6f75ee006411f79ac1c84120606c2330de82",
@@ -13,7 +13,7 @@
   "ethers": "6.17.0",
   "productionDeployment": null,
   "liveCompatibility": "NOT_RUN",
-  "independentContributorReview": "NOT_RUN_FOR_RELEASE_CANDIDATE_V1",
+  "independentContributorReview": "NOT_RUN_FOR_LOCAL_REPAIR_V1",
   "productionReady": false,
   "publishing": false,
   "github": true,
@@ -81,23 +81,29 @@
       "initcodeBytes": 16219
     },
     "RelayEncoder": {
-      "creationCodeHash": "0x17851ae68096e2ce6ef106cb75cd75647dece459039e59d5e46bb5f266c3bbe8",
-      "runtimeBytesBeforeImmutablePatching": 12020,
-      "initcodeBytes": 12046
+      "creationCodeHash": "0x01e47a7ec9da2fcc772b5b863c8fb369eccb875527e872e034c9f48ed61e1bca",
+      "runtimeBytesBeforeImmutablePatching": 11498,
+      "initcodeBytes": 11524
     },
     "RelayVerifier": {
-      "creationCodeHash": "0x702683c558092f216679e946e9c238591527d9f7cf2306f832fbea17b7185b98",
-      "runtimeBytesBeforeImmutablePatching": 14719,
-      "initcodeBytes": 14745
+      "creationCodeHash": "0xb4e87e141eec8feb2ac22eaa0b610e013497b66b9443d456ab140dedfb7568c9",
+      "runtimeBytesBeforeImmutablePatching": 13999,
+      "initcodeBytes": 14025
     }
   },
-  "independentAgentReview": "NOT_RUN_FOR_RELEASE_CANDIDATE_V1",
-  "validationReport": "docs/validation/rc-v1/README.md",
+  "independentAgentReview": "IN_PROGRESS_FOR_LOCAL_REPAIR_V1",
+  "validationReport": "docs/validation/local-repair-v1/README.md",
   "sourceBaseline": {
-    "repository": "https://github.com/identity-md-launches/launch-2294-build-cto-relay-station",
-    "commit": "9b0294e7ab19060bd00c489fbe032cf248528e0d",
-    "scope": "Undeployed Ethereum contracts-only candidate; liveCompatibility NOT_RUN",
-    "importedCommit": "d29eedf8e7d6608ed109972c179b367ac07ce91f"
+    "repository": "https://github.com/identity-md-launches/launch-2393-prepare-steps-stepstoke-release-candidat",
+    "commit": "b7747bf377e292f44b35fb0acc55c6ee1772cee4",
+    "importedCommit": "b7747bf377e292f44b35fb0acc55c6ee1772cee4",
+    "scope": "Local repairs to an undeployed IMD candidate; no production deployment or live compatibility claim",
+    "originalProject": {
+      "repository": "https://github.com/identity-md-launches/launch-2294-build-cto-relay-station",
+      "commit": "9b0294e7ab19060bd00c489fbe032cf248528e0d",
+      "scope": "Undeployed Ethereum contracts-only candidate; liveCompatibility NOT_RUN",
+      "importedCommit": "d29eedf8e7d6608ed109972c179b367ac07ce91f"
+    }
   },
   "manifestParser": {
     "depth": 16,
@@ -223,14 +229,14 @@
       }
     },
     "RelayEncoder": {
-      "bytes": 12020,
-      "normalizedKeccak": "0xae8388a986e56b5f750aa15b291cbd9402166f1315c71ce9704dca7c7f28ddc6",
+      "bytes": 11498,
+      "normalizedKeccak": "0x245ee3b1a84cc9e989b5ef162f7b4904a800dac79f93afa547e4de25691d66a4",
       "immutableReferences": {},
       "immutableBindings": {}
     },
     "RelayVerifier": {
-      "bytes": 14719,
-      "normalizedKeccak": "0x908286df56d37ede05739b6c431e12a64cfa1dd7b5e95529accde57d85bf3e73",
+      "bytes": 13999,
+      "normalizedKeccak": "0xbe545220bec2287e01f8104adacdba4410a8c80ecc83f171fcbfe21174370407",
       "immutableReferences": {},
       "immutableBindings": {}
     }
@@ -268,14 +274,15 @@
       "src/RelayVerifier.sol": "0x49258c6e63280958d6a90b22336a8c04cfbce57bc756e8d449cb7269fe2dfc50",
       "src/interfaces/IIntake.sol": "0xae7547c0325aa99ed3bc2d0b9817a8ce4814af9a5d7ba1e66587dac1bc8c59e9",
       "src/libraries/Assets.sol": "0xa5eaddcd2d54cdbf672751d98999a3c3d0da55202ead4099900512ffad56a935",
-      "src/libraries/ManifestJSON.sol": "0x15c1a45542c9a830c5837e7aef20e5ded56e2953ba574285b0e95f2316faf5d1",
+      "src/libraries/ManifestJSON.sol": "0x1a627b2d921e8057dadd6fa0805ed0035d4f5106dd9c1483e0dfddff4063c34d",
       "src/libraries/Policy.sol": "0x5a4b054000ef66b70504c01270c7b341314c8cddfafbf2469353b6210fe61112",
       "src/libraries/StrictJSON.sol": "0x6e1ca9baea31c52bffa6653331ca483878e50b3b537ec58fb263438905a21df9",
       "src/libraries/Text.sol": "0x15d2f4e0370afc36f7ab6f14b2e4fb35d979f431fdd9a7ba6942516fa74e1e04",
       "test/CrossLanguage.t.sol": "0x20641b7c928a5a715b1a25e10fea189852dda3594e7efd46655d5a32d9d5a3e1",
       "test/IntakeCompatibility.t.sol": "0xc3545ade14a95ccd373baaabcefce42840dfa4c31302e52c5aff933226b30bbb",
       "test/LaunchCompatibility.t.sol": "0x565caef9bfc354ddd9b638647676e7b55e0360164613f26ba91d7c2ea7b933ce",
-      "test/ManifestEnvelopeRegression.t.sol": "0x41c42030df0a9ce3069d2841a23c44fa19a1beee6c2041bfabdc9777f9e4b8c6",
+      "test/ManifestEnvelopeRegression.t.sol": "0xf7d65bbccf8bd8dd69c4a12faba2b9ff36274a642adf41f644e8cc64f76121d0",
+      "test/ManifestStringRegression.t.sol": "0x59854da2089ad168669a2fd7a030f9983e03beb50669a951fc1e05ab4c6ee1ba",
       "test/MetadataScannerDifferential.t.sol": "0xcdd09af0bb4ce8ba0f8dfba77e79a29400ff97cb3b7ac29ba96850f7150f58bc",
       "test/MultiFileResults.t.sol": "0x4b5fab87dd9708b6f84a490130a26b390ff7c3e9576f62df9f49583be0989ff5",
       "test/PublicResults.t.sol": "0x2b062621f65d68c5c52d6c258da4927e244031e4789a4239b6c072c7f55f3d84",
@@ -327,30 +334,31 @@
         "19": "test/IntakeCompatibility.t.sol",
         "20": "test/LaunchCompatibility.t.sol",
         "21": "test/ManifestEnvelopeRegression.t.sol",
-        "22": "test/MetadataScannerDifferential.t.sol",
-        "23": "test/MultiFileResults.t.sol",
-        "24": "test/PublicResults.t.sol",
-        "25": "test/RelayHistory.t.sol",
-        "26": "test/RelayInvariant.t.sol",
-        "27": "test/RelayMappingRegression.t.sol",
-        "28": "test/RelayPayments.t.sol",
-        "29": "test/RelayProfiles.t.sol",
-        "30": "test/RelaySetup.sol",
-        "31": "test/StrictManifest.t.sol",
-        "32": "test/TestBase.sol",
-        "33": "test/adversarial/ContinuationSpec.t.sol",
-        "34": "test/adversarial/ManifestSpec.t.sol",
-        "35": "test/adversarial/PaymentSpec.t.sol",
-        "36": "test/adversarial/ProfileBoundarySpec.t.sol",
-        "37": "test/adversarial/SpecSupport.sol",
-        "38": "test/adversarial/StateMachineSpec.t.sol",
-        "39": "test/fixtures/FixtureData.sol",
-        "40": "test/fixtures/LiveResultFixture.sol",
-        "41": "test/fixtures/MultiFileResult.sol",
-        "42": "test/fixtures/PublicResults.sol",
-        "43": "test/fixtures/SdkGolden.sol",
-        "44": "test/mocks/MockIntake.sol",
-        "45": "test/mocks/MockToken.sol"
+        "22": "test/ManifestStringRegression.t.sol",
+        "23": "test/MetadataScannerDifferential.t.sol",
+        "24": "test/MultiFileResults.t.sol",
+        "25": "test/PublicResults.t.sol",
+        "26": "test/RelayHistory.t.sol",
+        "27": "test/RelayInvariant.t.sol",
+        "28": "test/RelayMappingRegression.t.sol",
+        "29": "test/RelayPayments.t.sol",
+        "30": "test/RelayProfiles.t.sol",
+        "31": "test/RelaySetup.sol",
+        "32": "test/StrictManifest.t.sol",
+        "33": "test/TestBase.sol",
+        "34": "test/adversarial/ContinuationSpec.t.sol",
+        "35": "test/adversarial/ManifestSpec.t.sol",
+        "36": "test/adversarial/PaymentSpec.t.sol",
+        "37": "test/adversarial/ProfileBoundarySpec.t.sol",
+        "38": "test/adversarial/SpecSupport.sol",
+        "39": "test/adversarial/StateMachineSpec.t.sol",
+        "40": "test/fixtures/FixtureData.sol",
+        "41": "test/fixtures/LiveResultFixture.sol",
+        "42": "test/fixtures/MultiFileResult.sol",
+        "43": "test/fixtures/PublicResults.sol",
+        "44": "test/fixtures/SdkGolden.sol",
+        "45": "test/mocks/MockIntake.sol",
+        "46": "test/mocks/MockToken.sol"
       }
     }
   }

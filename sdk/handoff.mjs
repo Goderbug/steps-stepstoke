@@ -1,6 +1,7 @@
 // Workflow handoff format. Shared by the offline importer and static browser runtime.
 // The handoff is data, never a source of executable policy or alternate addresses.
 import { getAddress, keccak256, sha256, toUtf8Bytes } from '../vendor/ethers/ethers.mjs';
+import { PUBLIC_RPC_POLICY_ASSET, defaultPublicRpcPolicy, validatePublicRpcPolicy } from './public-rpc.mjs';
 export const APPLICATIONS = Object.freeze(['RelayEncoder', 'RelayVerifier', 'RelayFactory']);
 export const canonicalJSON = value => JSON.stringify(sortJSON(value));
 function sortJSON(v) {
@@ -70,5 +71,11 @@ export async function loadPublicHandoff({ fetch: fetchImpl = globalThis.fetch, b
   const contracts = Object.fromEntries(h.contracts.map(c => [c.name.replace('Relay','').toLowerCase(), c.address]));
   const rpcURL = h.network?.rpcUrl ?? h.network?.rpcUrls?.default?.http?.[0] ?? h.network?.rpcUrls?.[0] ?? 'https://ethereum-rpc.publicnode.com';
   if (typeof rpcURL !== 'string') throw new Error('Supplied network has no supported public RPC URL');
-  return { kind: 'ETHEREUM_DEPLOYMENT', chainId: h.chainId, contracts, rpcURL, handoff: h, evidence, identity: deploymentIdentity(h), deploymentBlock: evidence.blockNumber, productionGate: evidence.productionGate };
+  // A separate, digest-checked transport asset can select public read providers. The
+  // official network/walletAddChain objects above remain byte-for-byte data copies.
+  const rpcPolicy = files.has(PUBLIC_RPC_POLICY_ASSET)
+    ? validatePublicRpcPolicy(JSON.parse(new TextDecoder('utf-8', { fatal: true }).decode(files.get(PUBLIC_RPC_POLICY_ASSET))))
+    : defaultPublicRpcPolicy(rpcURL);
+  return { kind: 'ETHEREUM_DEPLOYMENT', chainId: h.chainId, contracts, rpcURL: rpcPolicy.rpcUrls[0], rpcURLs: rpcPolicy.rpcUrls,
+    handoff: h, evidence, identity: deploymentIdentity(h), deploymentBlock: evidence.blockNumber, productionGate: evidence.productionGate };
 }

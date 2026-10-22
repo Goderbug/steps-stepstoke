@@ -1,4 +1,4 @@
-import { useEffect, useRef, useState } from "react";
+import { useEffect, useRef, useState, type KeyboardEvent } from "react";
 import type { RelayAdapter } from "../domain/adapter";
 import { imageDimensions, safeFileName, verifyFile, type VerifyResult } from "../domain/files";
 import type { AssetVersion, Capabilities } from "../domain/types";
@@ -12,6 +12,22 @@ type Load =
   | { phase: "loading" }
   | { phase: "error"; message: string }
   | { phase: "done"; bytes: Uint8Array; result: VerifyResult };
+
+/** Native keyboard scrolling of overflow regions differs across WebKit and Chromium. */
+function scrollMarkdownTable(event: KeyboardEvent<HTMLDivElement>) {
+  const region = event.target;
+  // Only handle keys on our focused table wrapper, never on a link inside the document.
+  if (!(region instanceof HTMLElement) || !region.matches('.table-scroll[role="region"]') ||
+      event.defaultPrevented || event.altKey || event.ctrlKey || event.metaKey || event.shiftKey ||
+      region.scrollWidth <= region.clientWidth) return;
+  const end = region.scrollWidth - region.clientWidth;
+  const next = event.key === "ArrowRight" ? region.scrollLeft + 40 :
+    event.key === "ArrowLeft" ? region.scrollLeft - 40 :
+    event.key === "Home" ? 0 : event.key === "End" ? end : null;
+  if (next === null) return;
+  event.preventDefault();
+  region.scrollLeft = Math.max(0, Math.min(end, next));
+}
 
 /** Fetches the actual bytes of one asset version, verifies them against the A1 descriptor and previews safely. */
 export function FilePreview({ asset, adapter, caps }: { asset: AssetVersion; adapter: RelayAdapter; caps: Capabilities }) {
@@ -91,7 +107,7 @@ function VerifiedPreview({ asset, adapter, caps }: { asset: AssetVersion; adapte
     {load.phase === "done" && !verified && <p className="alert alert-error" role="alert">Verification failed. Preview and download are unavailable. The producer must supply the correct file or binding.</p>}
     {verified && <div className="preview-state"><span className="badge badge-ok">Verified locally · SHA-256, length, media</span>{blobUrl && <a className="btn btn-secondary" href={blobUrl} download={safeFileName(d.path)}>Download verified file</a>}</div>}
     {verified && asset.kind === "html" && text !== null && <iframe className="frame" title={`${d.name} isolated preview`} sandbox="" referrerPolicy="no-referrer" srcDoc={isolatedSrcDoc(text)} />}
-    {verified && asset.kind === "document" && text !== null && <div className="md" dangerouslySetInnerHTML={{__html:renderMarkdown(text)}} />}
+    {verified && asset.kind === "document" && text !== null && <div className="md" onKeyDown={scrollMarkdownTable} dangerouslySetInnerHTML={{__html:renderMarkdown(text)}} />}
     {verified && asset.kind === "image" && blobUrl && <figure className="img-box"><img src={blobUrl} alt={`${asset.assetKey} from round ${asset.revision}`} /><figcaption>{imageDimensions(load.phase === "done" ? load.bytes : new Uint8Array())?.width} × {imageDimensions(load.phase === "done" ? load.bytes : new Uint8Array())?.height} pixels · natural aspect ratio</figcaption></figure>}
     <EvidenceDisclosure title="File verification details"><dl className="facts"><div><dt>File</dt><dd>{d.path} · {KIND_LABEL[asset.kind]} · {d.mediaType}</dd></div><div><dt>Descriptor length</dt><dd>{d.bytes} bytes</dd></div><div><dt>Descriptor SHA-256</dt><dd><CopyId value={d.sha256} label="file SHA-256" /></dd></div><div><dt>Producer job</dt><dd><CopyId value={asset.producerJobId} label="producer job" /></dd></div></dl>{load.phase === "done" && <ul className="checks">{load.result.checks.map(c => <li key={c.name} className={c.ok ? "check-ok" : "check-bad"}>{c.name}: {c.ok ? "Pass" : "Fail"} · {c.detail}</li>)}</ul>}<p className="hint">Exact descriptor and version keyed bytes. Verification is a local observation. HTML is isolated; Markdown is sanitized.</p></EvidenceDisclosure>
   </div>;

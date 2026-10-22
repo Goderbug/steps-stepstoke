@@ -1,11 +1,13 @@
 import { useEffect, useRef, type ReactNode } from "react";
 import { createPortal } from "react-dom";
 
-export function Sheet({ title, onClose, children }: { title: string; onClose: () => void; children: ReactNode }) {
+export function Sheet({ title, onClose, children, returnFocusTo }: { title: string; onClose: () => void; children: ReactNode; returnFocusTo?: HTMLElement | null }) {
   const ref = useRef<HTMLDivElement>(null);
   const close = useRef(onClose); close.current = onClose;
   useEffect(() => {
-    const opener = document.activeElement as HTMLElement | null;
+    // WebKit does not always focus a button activated by mouse or touch. Preserve the
+    // actual trigger supplied by its click handler, rather than an unrelated active element.
+    const opener = returnFocusTo ?? document.activeElement as HTMLElement | null;
     const root = document.getElementById("root");
     if (root) root.inert = true;
     const before = document.body.style.overflow; document.body.style.overflow = "hidden";

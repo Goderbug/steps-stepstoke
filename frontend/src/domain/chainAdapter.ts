@@ -68,6 +68,7 @@ export function assertChainConfig(c: LocalConfig) {
   if (c.kind !== "ETHEREUM_DEPLOYMENT" || c.chainId !== 1 || !Number.isSafeInteger(c.deploymentBlock) || c.deploymentBlock < 1) throw new Error("A confirmed Ethereum deployment and deployment block are required");
   const rpc = new URL(c.rpcURL);
   if (rpc.protocol !== "https:" || rpc.username || rpc.password || ["localhost", "127.0.0.1", "[::1]"].includes(rpc.hostname)) throw new Error("Public RPC must use credential-free HTTPS");
+  sdk.validatePublicRpcPolicy({ version: 1, chainId: 1, rpcUrls: c.rpcURLs ?? [c.rpcURL] });
 }
 
 /** Actual A1 contracts + browser SDK. Reads are public RPC; only the selected wallet signs. */
@@ -85,7 +86,7 @@ export class ChainAdapter implements RelayAdapter {
   readonly provider: Provider;
   private locked = false;
   private memory = new Map<string, Journal>();
-  constructor(readonly config: LocalConfig, private wallet: WalletGetter) { assertChainConfig(config); this.provider = httpProvider(config.rpcURL); this.logCache = new sdk.EventLogCache({ identity: this.identity, deploymentBlock: config.deploymentBlock ?? 0 }); }
+  constructor(readonly config: LocalConfig, private wallet: WalletGetter) { assertChainConfig(config); this.provider = config.chainId === 1 ? sdk.createPublicReadProvider({ rpcUrls: config.rpcURLs ?? [config.rpcURL] }) : httpProvider(config.rpcURL); this.logCache = new sdk.EventLogCache({ identity: this.identity, deploymentBlock: config.deploymentBlock ?? 0 }); }
   async verify() {
     // Share concurrent boundary checks, never reuse a completed verification as a read cache.
     if (!this.verifying) this.verifying = this.verifyNow().finally(() => { this.verifying = null; });

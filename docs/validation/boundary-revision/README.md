@@ -1,3 +1,5 @@
+> Historical report: its archive is now retained byte-for-byte at the pinned original candidate commit `b7747bf377e292f44b35fb0acc55c6ee1772cee4`. See `docs/history/integration-predecessor.json` for its original path, Git blob, length and SHA-256. Retrieve with `git show COMMIT:PATH` into a separate directory before using the historical extraction commands below. This report does not certify LOCAL-REPAIR-V1.
+
 # Public boundary and clean-build revision
 
 Worker-local evidence for the revision of `61c829259507587220062d62ef5120beb0781deb`. These checks are not independent security approval or production evidence. The candidate remains **productionDeployment: null**, **liveCompatibility: NOT_RUN**, **productionReady: false**. The Open Workshop design, six operations and all Solidity source/ABI signatures are preserved.

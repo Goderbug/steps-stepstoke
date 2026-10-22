@@ -18,7 +18,7 @@ After a separately authorized launch, provide the **actual** `.imd/reads/deploym
 
 ```sh
 node tools/check-release.mjs
-node tools/import-deployment.mjs RECEIPT_EVIDENCE HTTPS_READ_RPC
+node tools/import-deployment.mjs RECEIPT_EVIDENCE HTTPS_READ_RPC [PUBLIC_READ_TRANSPORT_JSON]
 node tools/observe-ethereum.mjs dist
 ```
 
@@ -28,7 +28,19 @@ The exported file has exactly `version`, `launchId`, `chainId`, `sourceCommit`, 
 
 The auxiliary `deployment-evidence.json` contains `sourceCommit`, `attestationHash`, `transactionHash`, `blockNumber`, `blockHash`, `build` (exact `config/release.json.frozenBuild`) and optionally `productionGate`. It supplies **no addresses** and cannot override the handoff. The production gate's deployment record independently names the same Factory/Encoder/Verifier, transaction, block, source and attestation; all must agree. Deployment validity and per-profile compatibility remain separate.
 
-Verification requires chain 1; a successful canonical receipt and matching block number/hash/transaction membership; historical empty code at all named addresses immediately before deployment; one successful CREATE/CREATE2 trace for each application in that transaction; exact frozen creation-code prefix and Factory constructor arguments; source bytes at the supplied Git commit matching every compiler input; exact compiler/settings/source metadata; and exact deployed/runtime code with the actual encoder/verifier/factory immutable address words, not merely masked slot hashes. Bytecode/policy IDs alone are insufficient. Unsupported archival or callTracer RPC methods fail closed and remain an availability limitation. No receipt or attestation is invented to compensate.
+### Public read transport
+
+The importer also writes and hashes `public-read-transport.json` as a separate static asset. Its exact shape is `{ "version": 1, "chainId": 1, "rpcUrls": ["https://ethereum-rpc.publicnode.com/", "https://eth.drpc.org/"] }`. It contains no application addresses, credentials or authority. The official `network` and `walletAddChain` values are copied unchanged. Optional `PUBLIC_READ_TRANSPORT_JSON` selects an operator-reviewed policy before export, never from a URL parameter, browser storage or an end-user form. The same final inventory authenticates this asset; an altered digest or unsafe URL rejects the handoff.
+
+The Node importer, read-only observer and public browser adapter share `sdk/public-rpc.mjs`. At most three credential-free HTTPS endpoints are attempted once per read, with a 12-second request timeout and an 8 MiB response limit. Query tokens, embedded credentials and private IP literals are refused. The default policy uses the supplied primary read RPC followed by PublicNode and dRPC, without duplicates. Legacy inventoried exports without the new policy use the same bounded defaults. A successful endpoint is preferred for that method on later reads; chain 1 is checked before each endpoint is first used and after an availability failure.
+
+Only read methods are accepted. A missing method, archive restriction, rate limit or network failure can select another listed RPC. A wrong chain, malformed response, reverted call, null receipt, empty code, mismatched trace or failed verification cannot select another endpoint in search of a passing answer. All unavailable endpoints produce an explicit unavailable error, never an empty project list or permission to spend. Wallet transactions remain on the separately selected wallet provider.
+
+This is a transport availability fix, not a new proof system. Each returned receipt, block, historical runtime, CREATE trace, creation code and constructor argument still passes the checks below, with a second receipt/block canonicality check after all deployment reads. Downloaded or cached trace JSON is not accepted as an alternative to a live RPC trace. The same provider trust assumptions apply as before; failover does not create an RPC quorum or cryptographic execution proof.
+
+Anonymous tracing is a current capability observation, **not a service guarantee**: [dRPC's method documentation](https://drpc.org/docs/ethereum-api/debugandtrace/debug_traceTransaction) labels debug tracing as paid-tier, despite also publishing an anonymous endpoint example. If access changes, the UI must fail closed. Before hosting, run the importer and observer against the **actual deployment transaction**, then verify that the final browser origin can read the same frozen deployment through its inventoried policy. A synthetic local success or earlier unrelated public transaction cannot satisfy this launch gate.
+
+Verification requires chain 1; a successful canonical receipt and matching block number/hash/transaction membership; historical empty code at all named addresses immediately before deployment; one successful CREATE/CREATE2 trace for each application in that transaction; exact frozen creation-code prefix and Factory constructor arguments; source bytes at the supplied Git commit matching every compiler input; exact compiler/settings/source metadata; and exact deployed/runtime code with the actual encoder/verifier/factory immutable address words, not merely masked slot hashes. Bytecode/policy IDs alone are insufficient. If no configured anonymous endpoint supplies archival or callTracer reads, verification fails closed. No receipt or attestation is invented to compensate.
 
 Every opened Branch is checked for registration, immutable Factory/Encoder/Verifier getters and the frozen direct RelayBranch runtime with all actual immutable words. This includes runtime-created roots and historical children. A matching masked runtime with a different dependency is rejected.
 

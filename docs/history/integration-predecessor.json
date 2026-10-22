@@ -48,6 +48,24 @@
       "sha256": "d20dc375f7eda92a65d2307411f537fcee1b32f0869960882c1471b13063e992",
       "gitBlob": "4072bf490aa98ef38e1a9300740d5f61916ff1df",
       "storage": "verified-immutable-predecessor"
+    },
+    {
+      "storage": "verified-immutable-predecessor",
+      "repository": "https://github.com/identity-md-launches/launch-2393-prepare-steps-stepstoke-release-candidat",
+      "commit": "b7747bf377e292f44b35fb0acc55c6ee1772cee4",
+      "path": "docs/validation/boundary-revision/evidence.tar.xz",
+      "gitBlob": "80f744103c25c24a580e6415427a3a9357303c57",
+      "bytes": 294044,
+      "sha256": "92363a0e39e6d150d2bc941289ab757b688df19ac538f9ebbb069c40076f4112"
+    },
+    {
+      "storage": "verified-immutable-predecessor",
+      "repository": "https://github.com/identity-md-launches/launch-2393-prepare-steps-stepstoke-release-candidat",
+      "commit": "b7747bf377e292f44b35fb0acc55c6ee1772cee4",
+      "path": "docs/validation/documentation-v1/checks.tar.xz",
+      "gitBlob": "4ce38e6e9d73b72c89a55aa517f7019bb7ed2bd6",
+      "bytes": 52028,
+      "sha256": "8706e8a53747a5d42da6fd93815df7056ca0b0e670b4bcc8eeea96893490d933"
     }
   ]
 }

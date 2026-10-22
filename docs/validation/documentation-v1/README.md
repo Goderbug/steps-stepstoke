@@ -1,3 +1,5 @@
+> Historical report: its archive is now retained byte-for-byte at the pinned original candidate commit `b7747bf377e292f44b35fb0acc55c6ee1772cee4`. See `docs/history/integration-predecessor.json` for its original path, Git blob, length and SHA-256. Retrieve with `git show COMMIT:PATH` into a separate directory before using the historical extraction commands below. This report does not certify LOCAL-REPAIR-V1.
+
 # Documentation revision: reproducibility and evidence
 
 This documentation-only assignment starts from checkout `f2b63705e355cf93046a5d8dfddc569ded5d4048` of the imported STEPS repository. It changes only `README.md` and `docs/`; no runtime, tests, ABI, configuration, dependencies or `dist/` bytes were changed. That checkout ID is an ancestry pin, **not** the final submission commit. Pin the actual accepted final commit as described in [handoff](../../HANDOFF.md). The candidate remains `productionDeployment:null`, `liveCompatibility:NOT_RUN`, `productionReady:false`; no mainnet signature, broadcast, deployment, IMD payment, hosting, new order or X post occurred.

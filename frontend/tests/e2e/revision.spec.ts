@@ -202,6 +202,14 @@ test("a verified single output updates the file stage; a wide Markdown table sta
   await expect(region).toBeFocused();
   await page.keyboard.press("ArrowRight");
   await expect.poll(() => region.evaluate((el) => el.scrollLeft)).toBeGreaterThan(0);
+  await page.keyboard.press("ArrowLeft");
+  await expect.poll(() => region.evaluate((el) => el.scrollLeft)).toBe(0);
+  await page.keyboard.press("End");
+  await expect.poll(() => region.evaluate((el) => Math.abs(el.scrollLeft - (el.scrollWidth - el.clientWidth)))).toBeLessThanOrEqual(1);
+  await page.keyboard.press("Home");
+  await expect.poll(() => region.evaluate((el) => el.scrollLeft)).toBe(0);
+  await page.keyboard.press("ArrowRight");
+  await expect.poll(() => region.evaluate((el) => el.scrollLeft)).toBeGreaterThan(0);
   await asset.screenshot({ type: "jpeg", quality: 45, scale: "css", path: `../test/scratch/regression-screenshots/${test.info().project.name}-wide-table.jpg` });
 
   const link = asset.getByRole("link", { name: "Download verified file" });

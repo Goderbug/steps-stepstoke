@@ -1,9 +1,10 @@
 // Refresh exact compiler outputs only; never deployment/readiness claims.
 import { readFile, writeFile } from 'node:fs/promises';
-import { keccak256, toUtf8Bytes } from '../vendor/ethers/ethers.mjs';
+import { keccak256 } from '../vendor/ethers/ethers.mjs';
 import { compilationContext } from './compilation-context.mjs';
 const root = new URL('../', import.meta.url);
 const release = JSON.parse(await readFile(new URL('config/release.json', root)));
+if (release.productionDeployment !== null) throw new Error('A deployed release cannot be silently re-frozen');
 release.contracts = {}; release.runtimeChecks = {};
 const frozen = { compiler: release.compiler, settings: null, sources: {} };
 for (const name of ['RelayFactory', 'RelayBranch', 'RelayEncoder', 'RelayVerifier']) {
@@ -25,14 +26,6 @@ const context = await compilationContext(root);
 frozen.sources = context.sources;
 frozen.compilation = context.compilation;
 release.frozenBuild = frozen;
-release.policyId = keccak256(toUtf8Bytes('STEPS/RELEASE-CANDIDATE-V1/fixed-profiles/artifacts/unpublished'));
-release.profiles.filter(p => p.mime === 'text/html').forEach(p => p.path = 'artifacts/index.html');
-release.profiles.forEach(p => { if (p.skill === 'build-document') p.skill = 'research-report'; if (p.skill === 'imagegen') p.skill = 'create-image'; });
-release.name = 'STEPS (Stepstoke)'; release.version = 'RELEASE-CANDIDATE-V1';
-release.officialX = 'https://x.com/stepstoke';
-release.validationReport = 'docs/validation/rc-v1/README.md';
-release.sourceBaseline = { ...release.sourceBaseline, importedCommit: 'd29eedf8e7d6608ed109972c179b367ac07ce91f', scope: 'Undeployed Ethereum contracts-only candidate; liveCompatibility NOT_RUN' };
-if (release.productionDeployment !== null) throw new Error('A deployed release cannot be silently re-frozen');
-release.independentContributorReview = 'NOT_RUN_FOR_RELEASE_CANDIDATE_V1';
-release.independentAgentReview = 'NOT_RUN_FOR_RELEASE_CANDIDATE_V1';
+// Version, policy, provenance and review status are explicit editorial decisions.
+// Rebuilding must never reset them to a historical candidate or grant acceptance.
 await writeFile(new URL('config/release.json', root), JSON.stringify(release, null, 2) + '\n');
