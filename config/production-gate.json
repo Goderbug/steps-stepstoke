@@ -8,15 +8,17 @@
       "status": "OPEN",
       "evidence": [
         "docs/validation/rc-v1/README.md",
-        "docs/REVIEW.md"
+        "docs/REVIEW.md",
+        "docs/validation/local-repair-v1/README.md"
       ],
-      "detail": "Final candidate independently reviewed security approval has not been obtained."
+      "detail": "Independent local parser, transport and UI review passed with recorded targeted evidence. Official final-source launch security approval has not been delivered."
     },
     "runtimeChildPolicy": {
       "status": "OPEN",
       "evidence": [
         "docs/validation/rc-v1/README.md",
-        "docs/REVIEW.md"
+        "docs/REVIEW.md",
+        "docs/validation/local-repair-v1/README.md"
       ],
       "detail": "Supplied launch floor, direct child code scan and three-name local batch pass; deployment-service runtime-child acceptance remains unconfirmed."
     },
@@ -24,7 +26,8 @@
       "status": "OPEN",
       "evidence": [
         "docs/validation/rc-v1/README.md",
-        "docs/REVIEW.md"
+        "docs/REVIEW.md",
+        "docs/validation/local-repair-v1/README.md"
       ],
       "detail": "Unique declared output among bounded extra files is supported and locally replayed against captured two-file bytes. Real HTML update, authenticated envelope bounds and all-profile live runtime execution remain unproved."
     },
@@ -32,15 +35,17 @@
       "status": "OPEN",
       "evidence": [
         "docs/validation/rc-v1/README.md",
-        "docs/REVIEW.md"
+        "docs/REVIEW.md",
+        "docs/validation/local-repair-v1/README.md"
       ],
-      "detail": "Candidate sizes and full local transactions measured; finite stress cases do not prove a global bound or the unpublished service ceilings."
+      "detail": "Fourteen complete local binding stress transactions, original C-GAS-01 replay and the three-contract local deployment batch pass below 16777216 gas. This finite set is not a universal bound or acceptance of unpublished service ceilings."
     },
     "liveExecution": {
       "status": "NOT_RUN",
       "evidence": [
         "docs/validation/rc-v1/README.md",
-        "docs/REVIEW.md"
+        "docs/REVIEW.md",
+        "docs/validation/local-repair-v1/README.md"
       ],
       "detail": "No paid mainnet operation was authorized or performed. Local mocks and free checks are not live compatibility."
     },
@@ -48,7 +53,8 @@
       "status": "NOT_RUN",
       "evidence": [
         "docs/validation/rc-v1/README.md",
-        "docs/REVIEW.md"
+        "docs/REVIEW.md",
+        "docs/validation/local-repair-v1/README.md"
       ],
       "detail": "No production deployment exists. Only a later confirmed handoff may provide public addresses and receipt evidence."
     }

@@ -18,7 +18,7 @@ for value in [release,gate]:
 assert not (root/'dist/imd-deployment.json').exists(),'Undeployed candidate cannot invent a handoff'
 assert not (root/'dist/ethereum-config.json').exists(),'No independent public deployment configuration'
 assert json.loads((root/'frontend/public/local-config.json').read_text())==json.loads((root/'dist/local-config.json').read_text())
-for evidenceFolder in [root/'docs/validation'/name for name in ['rc-v1','integration-v1','multi-file-revision','boundary-revision','documentation-v1']]:
+for evidenceFolder in [root/'docs/validation'/name for name in ['rc-v1','integration-v1','multi-file-revision','boundary-revision','documentation-v1','local-repair-v1']]:
  indexPath=evidenceFolder/'archive-index.json'
  index=json.loads(indexPath.read_text() if indexPath.exists() else lzma.decompress((evidenceFolder/'archive-index.json.xz').read_bytes()))
  archive=evidenceFolder/index['archive']

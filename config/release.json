@@ -91,7 +91,7 @@
       "initcodeBytes": 14025
     }
   },
-  "independentAgentReview": "IN_PROGRESS_FOR_LOCAL_REPAIR_V1",
+  "independentAgentReview": "LOCAL_SCOPED_REVIEW_PASS; OFFICIAL_DEPLOYMENT_REVIEW_NOT_RUN",
   "validationReport": "docs/validation/local-repair-v1/README.md",
   "sourceBaseline": {
     "repository": "https://github.com/identity-md-launches/launch-2393-prepare-steps-stepstoke-release-candidat",
