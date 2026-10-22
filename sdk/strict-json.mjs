@@ -24,7 +24,7 @@ export function utf8Length(value) {
 // work = raw bytes + 96 per value + 8 per decoded key byte + 4 per prior-key comparison
 // + segmentFlushWork per simple escape that ends a raw segment of a retained string or key
 // (the first of a run of consecutive simple escapes), exactly as ManifestJSON charges it.
-export const MANIFEST_LIMITS = Object.freeze({ rawBytes: 32768, depth: 16, objectMembers: 128, keyBytes: 256, retainedTokens: 256, retainedStringBytes: 1024, totalValues: 512, totalKeyBytes: 2048, work: 65536, segmentFlushWork: 8 });
+export const MANIFEST_LIMITS = Object.freeze({ rawBytes: 32768, depth: 16, objectMembers: 128, keyBytes: 256, retainedTokens: 1024, retainedStringBytes: 1024, totalValues: 512, totalKeyBytes: 2048, work: 65536, segmentFlushWork: 8 });
 export function strictJSON(raw, maxBytes = 8_192, maxString = 1024) {
   return parseJSON(raw, maxBytes, maxString, false);
 }
@@ -44,7 +44,7 @@ function parseJSON(raw, maxBytes, maxString, manifest) {
   let flushes = 0;
   const fail = () => { throw new Error('Invalid or excessive JSON'); };
   const space = () => { while (/[ \t\r\n]/u.test(text[pos] ?? '\uFFFF')) pos++; };
-  const token = () => { if (++tokens > 256) fail(); };
+  const token = () => { if (++tokens > MANIFEST_LIMITS.retainedTokens) fail(); };
   const work = () => { if (manifest && raw.length + 96 * values + 8 * keyBytes + 4 * comparisons + MANIFEST_LIMITS.segmentFlushWork * flushes > MANIFEST_LIMITS.work) fail(); };
   function string(limit = maxString, retained = true) {
     if (text[pos++] !== '"') fail();

@@ -12,10 +12,21 @@ The candidate retains 16 assets, 8 selected inputs and exactly 1 declared output
 | Callback URI | 1,024 bytes |
 | JSON depth / object members / key bytes | 16 / 128 / 256 |
 | Total JSON values / decoded key bytes | 512 / 2,048 |
-| Retained tokens / retained string bytes | 256 / 1,024 |
+| Retained tokens / retained string bytes | 1,024 / 1,024 |
 | Combined parser work | 65,536 |
 
-Combined work is `rawBytes + 96*totalValues + 8*totalDecodedKeyBytes + 4*priorKeyComparisons`. All metadata is syntactically validated, including duplicate escaped keys, invalid UTF-8/scalars and malformed numbers; only acceptance fields are retained. Unknown fields are not stripped from the bytes or hash. The combined budget can reject a document smaller than the raw byte cap. Metadata limits and unsupported deliveries remain explicit, finite release gates.
+Retained tokens are the result root, its `jobId`/`projectId`/`state`/`files` members, and for every entry of the `files` array the entry object and its `name`/`path`/`hash`/`mediaType`/`bytes`/`submissionHash` keys and values: 9 for the root and 13 per standard entry. Every retained token is a retained value or the key that introduces one, so the count never exceeds twice the total-value budget; the 1,024 cap is therefore structural and the value, key-byte and combined-work budgets are always reached first. Review finding 16331cb9 reproduced the earlier 256-token cap as the binding limit for an ordinary result listing 20 produced files (about 4.7 KB), which stranded a paid Branch. With the current budgets a completed result made of standard six-key entries binds up to **50 files** (about 11.6 KB, 659 retained tokens, 355 values); the 51st entry is refused by the combined work budget. Entries with fewer keys or shorter strings allow more; the SDK (`verifyManifest`) applies the identical budgets off chain so a refused shape is known before a bind transaction is sent.
+
+Combined work is `rawBytes + 96*totalValues + 8*totalDecodedKeyBytes + 4*priorKeyComparisons + 8*segmentFlushes`. All metadata is syntactically validated, including duplicate escaped keys, invalid UTF-8/scalars and malformed numbers; only acceptance fields are retained. Unknown fields are not stripped from the bytes or hash. The combined budget can reject a document smaller than the raw byte cap. Metadata limits and unsupported deliveries remain explicit, finite release gates.
+
+## Delivery conditions that leave a paid Branch without an exit
+
+The Branch has no refund, timeout, owner, forced unlock or alternate-proposal exit by design (the deployment order preserves one active request and no new authority). The following authenticated deliveries therefore end a Branch's continuation; the SDK and operators should treat them as terminal and verify them before paying where possible:
+
+- A success callback whose `resultHash` is zero: the phase is ResultRecorded, but no byte string hashes to zero, so no `bind` can succeed. The verified Intake permits a zero hash on a status-0 completion "when there is none".
+- A success callback whose URI exceeds the 1,024-byte bound reverts and is recorded undelivered by the Intake, which delivers once; the Branch stays Pending (the failure callback is not bounded the same way).
+- An Intake callback stipend (`callbackGas`, owner-settable on the verified Intake, 200,000 at review time) below the roughly 62,000 gas the callbacks need: the single delivery runs out of gas and the Branch stays Pending. The Branch pays before the stipend is known; check `callbackGas()` off chain before sponsoring.
+- A status-1 refusal admits only an identical paid retry of the refused body; any other failure status freezes the Branch. Because sponsoring is permissionless, one sponsor's refused or failed attempt ends every other proposal's chance on that Branch; continuation is only possible by forking an accepted checkpoint.
 
 HTML has one slot, including legacy `dist/index.html` versus new `artifacts/index.html`. Selected image Base64 overhead is charged against the HTML bound. Publishing and image editing remain off. SDK and contracts enforce matching limits; byte content checks additionally occur off chain and are never settlement authority.
 

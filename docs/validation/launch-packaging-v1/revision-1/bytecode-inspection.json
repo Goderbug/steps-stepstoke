@@ -1,0 +1,70 @@
+{
+  "rule": "supplied protected reachability scanner, including runtime child",
+  "externalLinkedLibraries": 0,
+  "contracts": {
+    "RelayEncoder": {
+      "creation": {
+        "bytes": 11524,
+        "keccak256": "0x01e47a7ec9da2fcc772b5b863c8fb369eccb875527e872e034c9f48ed61e1bca",
+        "forbidden": [],
+        "pushDataBytes": 4643,
+        "unreachableBytes": 31
+      },
+      "runtime": {
+        "bytes": 11498,
+        "keccak256": "0x245ee3b1a84cc9e989b5ef162f7b4904a800dac79f93afa547e4de25691d66a4",
+        "forbidden": [],
+        "pushDataBytes": 4636,
+        "unreachableBytes": 13
+      }
+    },
+    "RelayVerifier": {
+      "creation": {
+        "bytes": 14164,
+        "keccak256": "0x7d4194cb07fc4d86d5977c62eaeab48ba26b75d61e02c3d4822cf56fd2f4714c",
+        "forbidden": [],
+        "pushDataBytes": 4373,
+        "unreachableBytes": 31
+      },
+      "runtime": {
+        "bytes": 14138,
+        "keccak256": "0x575b5260078b17fa54de15bf4a77dd5938fb39d7a6553896e8e515ed369b1fe5",
+        "forbidden": [],
+        "pushDataBytes": 4366,
+        "unreachableBytes": 13
+      }
+    },
+    "RelayFactory": {
+      "creation": {
+        "bytes": 21475,
+        "keccak256": "0x41d0c6705f10ee3306fd4799b3374c2b820d75653bbc15690473465054ba47a1",
+        "forbidden": [],
+        "pushDataBytes": 7039,
+        "unreachableBytes": 220
+      },
+      "runtime": {
+        "bytes": 21195,
+        "keccak256": "0x1a12c8ec49e0e35f0b19ded8fffe5a1b2da799a4590a4c1e163a2e7743d8ae23",
+        "forbidden": [],
+        "pushDataBytes": 6960,
+        "unreachableBytes": 201
+      }
+    },
+    "RelayBranch": {
+      "creation": {
+        "bytes": 16219,
+        "keccak256": "0x90239deb23f571538b695329b676ba29ef5faaa9872f48e2eaef88ca5349edd6",
+        "forbidden": [],
+        "pushDataBytes": 5259,
+        "unreachableBytes": 140
+      },
+      "runtime": {
+        "bytes": 12876,
+        "keccak256": "0xa07776424b71fb742c6c87aa16cce83644d0d1463412f4d74ac729b1fadf2907",
+        "forbidden": [],
+        "pushDataBytes": 4258,
+        "unreachableBytes": 53
+      }
+    }
+  }
+}

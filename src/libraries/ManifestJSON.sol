@@ -23,7 +23,10 @@ library ManifestJSON {
     uint256 internal constant MAX_DEPTH = 16;
     uint256 internal constant MAX_OBJECT_MEMBERS = 128;
     uint256 internal constant MAX_KEY = 256;
-    uint256 internal constant MAX_RETAINED_TOKENS = 256;
+    // Every retained token is either a retained value or the key that introduces one, so the
+    // retained count never exceeds 2 * MAX_VALUES: the value, key-byte and work budgets bind
+    // first and this cap is a structural ceiling, not a limit a well-formed result can reach.
+    uint256 internal constant MAX_RETAINED_TOKENS = 2 * MAX_VALUES;
     uint256 internal constant MAX_RETAINED_STRING = 1024;
     uint256 internal constant MAX_VALUES = 512;
     uint256 internal constant MAX_TOTAL_KEY_BYTES = 2048;

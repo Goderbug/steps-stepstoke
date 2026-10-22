@@ -92,3 +92,22 @@ test('audit 28bdccb2: segment-ending simple escapes are charged eight work units
  let auditRaw=JSON.stringify(audit);auditRaw+=' '.repeat(32768-Buffer.byteLength(auditRaw));
  assert.throws(()=>relay.strictManifestJSON(Buffer.from(auditRaw)));
 });
+test('review 16331cb9: twenty standard file entries verify; the retained-token cap is twice the value budget',()=>{
+ const L=relay.MANIFEST_LIMITS;
+ assert.equal(L.retainedTokens,2*L.totalValues);
+ const hex=i=>i.toString(16).padStart(64,'0');
+ const result=extras=>{
+  const files=Array.from({length:extras},(_,i)=>({name:'f'+i,path:'src/f'+i+'.txt',hash:hex(i),mediaType:'text/plain',bytes:12,submissionHash:hex(i+1000)}));
+  files.push({name:'main',path:'artifacts/main.md',hash:hex(1),mediaType:'text/markdown',bytes:64,submissionHash:hex(2)});
+  return Buffer.from(JSON.stringify({jobId:'job-many-files',projectId:'project-a',state:'completed',files}));
+ };
+ // 9 root tokens + 20 * 13 = 269 retained tokens, under 5 KB: accepted, exactly as the verifier now accepts it.
+ const twenty=result(19);assert.ok(twenty.length<5000);
+ assert.equal(relay.strictManifestJSON(twenty).files.length,20);
+ // For standard entries the unchanged combined work budget is now the first limit reached.
+ let extras=19;const work=raw=>{const files=JSON.parse(raw).files.length;return raw.length+96*(5+7*files)+8*(24+40*files)+4*(6+15*files);};
+ while(work(result(extras+1))<=L.work)extras++;
+ assert.ok(extras+1>20&&9+13*(extras+2)<L.retainedTokens&&5+7*(extras+2)<L.totalValues);
+ assert.equal(relay.strictManifestJSON(result(extras)).files.length,extras+1);
+ assert.throws(()=>relay.strictManifestJSON(result(extras+1)));
+});
