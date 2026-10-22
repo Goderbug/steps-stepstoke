@@ -1,0 +1,117 @@
+{
+  "scope": "LOCAL_ANVIL_ONLY",
+  "chainId": 1,
+  "productionReady": false,
+  "liveProfileChecks": "NOT_RUN",
+  "officialLaunchId": null,
+  "publicDeploymentTransaction": null,
+  "rawSha256": "0x8768318db71105397ac89eef44af007752b94e966eb8adebd237a2b97c9de805",
+  "witnessKeccak256": "0x45bf29418f29ab58d2166ef45615e718d720d4653c73e8a4fa1b333f72389828",
+  "originalCalldataIdentical": true,
+  "transactionGasLimit": "16777216",
+  "buildSettings": {
+    "solc": "0.8.26+commit.8a97fa7a",
+    "evmVersion": "cancun",
+    "viaIR": true,
+    "optimizer": true,
+    "optimizerRuns": 200,
+    "bytecodeHash": "none",
+    "linkedLibraries": []
+  },
+  "bindGasUsed": "13427365",
+  "localBindTransaction": "0x676505980b96b3b0cb36b981dea9b9a4a198021b6b850c656da48d4a0b98134b",
+  "localBlock": 77,
+  "localBlockHash": "0xc83bdb2736d5f5aa140c299374372a04c0eaef9f4228d828a43687a8b340e2f6",
+  "batchGasUsed": "10266939",
+  "localBatchTransaction": "0x8eeaa8197daa022c19725f44091e7269ded8b6376f28c1b1570bfad149e016a4",
+  "localBatchSender": "0xf39Fd6e51aad88F6F4ce6aB8827279cffFb92266",
+  "localCreationCaller": "0xcbEAF3BDe82155F56486Fb5a1072cb8baAf547cc",
+  "runtimes": [
+    {
+      "name": "RelayEncoder",
+      "address": "0xb7B2326d9731F514bA036035f949c3c57a8C4309",
+      "bytes": 11498,
+      "keccak256": "0x245ee3b1a84cc9e989b5ef162f7b4904a800dac79f93afa547e4de25691d66a4",
+      "constructorArguments": [],
+      "constructorArgumentsAbi": "0x",
+      "abiSha256": "0x7f7cc7133fb159f4ae248c9c903855ea506cf154e8e6017680075e3c50d9153a",
+      "immutableBindings": []
+    },
+    {
+      "name": "RelayVerifier",
+      "address": "0x867A2a73E75e1F96653F17Bb09E52051396a861c",
+      "bytes": 14124,
+      "keccak256": "0x9fb8b15b2d1deed8b2ee64d234a7a487c56402aae760c8bf2b0c1b56a694c1e1",
+      "constructorArguments": [],
+      "constructorArgumentsAbi": "0x",
+      "abiSha256": "0x788539b92c802abeb9a461146b9e9b7585c5e91802e49640704532b3bea7f157",
+      "immutableBindings": []
+    },
+    {
+      "name": "RelayFactory",
+      "address": "0x45f105dABf7241c9164bA954Cb91d0789EA8a283",
+      "bytes": 21195,
+      "keccak256": "0x6f3b9205b7c2f50e1e163384370d8e6f63d03e56e9fb3ae9dc3f923459695da8",
+      "constructorArguments": [
+        "0xb7B2326d9731F514bA036035f949c3c57a8C4309",
+        "0x867A2a73E75e1F96653F17Bb09E52051396a861c"
+      ],
+      "constructorArgumentsAbi": "0x000000000000000000000000b7b2326d9731f514ba036035f949c3c57a8c4309000000000000000000000000867a2a73e75e1f96653f17bb09e52051396a861c",
+      "abiSha256": "0x57287ca9e538a407bbfbd14dabc237bb93e3d6750c232c9c04b575751d9bf5e3",
+      "immutableBindings": [
+        {
+          "id": "3050",
+          "word": "0x000000000000000000000000b7b2326d9731f514ba036035f949c3c57a8c4309",
+          "offsets": [
+            {
+              "start": 829,
+              "length": 32
+            },
+            {
+              "start": 2180,
+              "length": 32
+            },
+            {
+              "start": 3061,
+              "length": 32
+            },
+            {
+              "start": 3746,
+              "length": 32
+            },
+            {
+              "start": 4519,
+              "length": 32
+            }
+          ]
+        },
+        {
+          "id": "3053",
+          "word": "0x000000000000000000000000867a2a73e75e1f96653f17bb09e52051396a861c",
+          "offsets": [
+            {
+              "start": 1068,
+              "length": 32
+            },
+            {
+              "start": 2872,
+              "length": 32
+            },
+            {
+              "start": 3296,
+              "length": 32
+            },
+            {
+              "start": 4677,
+              "length": 32
+            },
+            {
+              "start": 4884,
+              "length": 32
+            }
+          ]
+        }
+      ]
+    }
+  ]
+}
