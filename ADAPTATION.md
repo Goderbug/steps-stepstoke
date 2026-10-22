@@ -1,3 +1,37 @@
+# STEPS (Stepstoke) — launch packaging v1 (contracts-only Ethereum launch)
+
+Imported commit: `c511aabb128d77336ff9dfe437b2c8a7e472e274`, the project owner's local repair v1 head on top of IMD candidate `b7747bf377e292f44b35fb0acc55c6ee1772cee4`. That authorship and provenance is kept as it is: the earlier sections of this file and `docs/validation/local-repair-v1` are the owner's record, not this packaging's. No future head was fetched. Still `productionDeployment:null`, `liveCompatibility:NOT_RUN`, `productionReady:false`; no key, broadcast, public RPC, paid job, website step, token, pool, hook, treasury, owner or admin, and no `launch.json` (the manifest stage writes it; the proposal in [CONTRACTS.md](docs/CONTRACTS.md) is unchanged).
+
+The three launch contracts already satisfied the launch rules at the imported commit: `RelayEncoder()` and `RelayVerifier()` have default nonpayable constructors, `RelayFactory(RelayEncoder, RelayVerifier)` stores two static addresses with nonzero/distinct checks and no external call, so the empty-chain constructor rehearsal passes and no constructor change was needed. Runtime `createProject`/`fork` keep creating complete independent `RelayBranch` contracts by CREATE (no template, proxy, DELEGATECALL, CALLCODE or SELFDESTRUCT). No packaging change to source was necessary for the launch itself; every change below comes from the reproduced audit finding.
+
+## Changes from the imported commit
+
+| File | Change | Why |
+| --- | --- | --- |
+| `src/libraries/ManifestJSON.sol` | `_stringInto`: the general loop starts where the ASCII pre-scan stopped, with the scanned prefix as its first raw segment (no byte is walked twice); each simple escape dispatched by the general loop (the first of a run) is charged `SEGMENT_FLUSH_WORK = 8` units of the unchanged `MAX_WORK` budget; comment on `MAX_WORK` documents the term | Audit finding 28bdccb2 (high) reproduced: the audit's 32,768-byte `"a\n"`-alternating result needed 16,802,041 gas (Foundry) / 16,751,470 (audit's Anvil) as a complete `Branch.bind`, above the 16,777,216 cap, and measurement found an escape-free shape (999 ASCII bytes then one raw scalar per retained string) at 17,284,676. The budget now bounds verifier gas; the transaction gas limit was not raised, no result is projected, no limit was lowered |
+| `sdk/strict-json.mjs` | `MANIFEST_LIMITS.segmentFlushWork = 8`; retained strings and keys count segment-ending simple escapes; budget checked at the end of every retained string | SDK parity with the verifier so `verifyManifest` refuses exactly what `bind` refuses |
+| `test/ManifestSegmentBudget.t.sol` (new) | 13 tests: prefix decoding equals the reference parser, retained limit and rejections unchanged, escaped-key duplicates, exact 8-unit boundary (accept at `MAX_WORK`, refuse one byte over), run-of-escapes charged once, `\u`/ignored strings not charged, audit shape refused with `Policy.Limit`, and complete sixteen-asset bind transactions measured from a fresh-memory contract against the 16,777,216 ceiling | Every change tested; the audit's reproduction and the new worst shape are kept as regressions |
+| `test-sdk/review-regressions.test.mjs` | one new parity test with the same exact boundaries and the audit's shape | SDK mirror tested |
+| `config/release.json` | fingerprints re-frozen by `tools/sync-release.mjs` after a forced clean build: Verifier creation/runtime hashes and 14,124-byte runtime, `ManifestJSON.sol` source hash, the new test in the compilation context | Frozen build must match the final source; editorial fields (version, policy, provenance, readiness) untouched |
+| `docs/validation/launch-packaging-v1/` (new) | final-source evidence: README, bytecode inspection, retained/metadata Anvil transactions, deployment rehearsal | Release evidence for independent post-deployment checking |
+
+Not changed: constructors, ABI (ABI SHA-256 identical), policy ID, `Policy` limits, `MAX_WORK` and every other parser bound, raw-byte Keccak binding, file SHA-256 verification, payments, Branch-as-payer, one active request, authenticated callbacks, checkpoints and forks, compiler and dependency settings, protected paths, website export.
+
+## Audit findings
+
+- **28bdccb2 (high) reproduced and fixed** as above. Final C-GAS-01 replay (exact SHA-256 `8768318d…` input, full 16-asset witness, declared limit 16,777,216, own Prague Anvil): **13,427,365 gas**, previously 13,361,083. All 6 retained-string and 8 metadata full transactions pass below the cap; see [launch packaging evidence](docs/validation/launch-packaging-v1/README.md). The eight-unit charge prices a dispatch (about 780 gas) at roughly half the per-unit rate of the accepted C-GAS-01 shape, so that accepted shape stays the practical maximum; the budget-maximal flush/scalar mix measures 14,520,257. Finite cases plus the per-unit calibration support but do not prove a universal bound; the gas gate stays OPEN for the service's own simulation.
+- **7e8de817 (low) reproduced as the documented design limit**, not fixed: `bind` is the only exit from `ResultRecorded` and `fork` refuses a zero `resultHash`, so a rejected first paid result strands that Branch. The brief forbids owner/admin recovery, timeouts, refunds and forced unlocks; the README, PROTOCOL-OVERVIEW and REVIEW already disclose it. Recorded here for the launch record and the website's risk text.
+
+## Final-source checks
+
+Forced clean build with the pinned configuration (Forge 1.8.3, solc 0.8.26, Cancun, optimizer 200, viaIR, `bytecode_hash = "none"`), `tools/check-release.mjs` PASS; `FOUNDRY_FUZZ_SEED=0x8e6f08b396342979a78a833b59d8fa94c3c4f688c79711dbcc983d17d9e957d3 forge test` **169/169**; `node --test test-sdk/*.test.mjs` **85/85**; SDK ABI check PASS; bytecode policy PASS (no forbidden opcode reachable, no link references, runtimes 11,498 / 14,124 / 21,195 / 12,876 bytes below EIP-170); retained and metadata Anvil transactions 14/14 below 16,777,216; deployment rehearsal PASS against source commit `33426e67117b99f41ed93a8e6c051fd10f50d2a4` (three-name CREATE2 batch 10,266,963 gas on an empty local chain 1, importer verified receipts, traces, frozen code and immutables). The frontend export was not rebuilt (no website step in this order); its committed `dist/` and `local-config.json` describe the owner's earlier disposable session and remain undeployed.
+
+## Launch handoff fields
+
+Official launch ID, deployment transaction hash, canonical receipt and block, deployed addresses, actual sender and contract-creation caller, verified source links and the official handoff are produced by IMD's deployer after acceptance and are **not available in this tree**; none is invented here. Constructor arguments are exactly: `RelayEncoder()`, `RelayVerifier()`, `RelayFactory(address RelayEncoder, address RelayVerifier)` with the two earlier launch addresses. Expected runtime hashes, immutable bindings and ABI hashes for post-deployment checking are in `config/release.json` (`contracts`, `runtimeChecks`, `frozenBuild`) and `abi/`.
+
+---
+
 # STEPS (Stepstoke) — RELEASE-CANDIDATE-V1 adaptation
 
 Development only. Original adaptation baseline: `d29eedf8e7d6608ed109972c179b367ac07ce91f`. No future project head was imported. `productionDeployment:null`, `liveCompatibility:NOT_RUN`, `productionReady:false`. No public-chain signing, broadcasts, deployment, spending, hosting, paid IMD requests or new orders occurred. Official X: https://x.com/stepstoke (not contacted for posting).

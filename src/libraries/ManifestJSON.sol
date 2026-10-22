@@ -28,8 +28,11 @@ library ManifestJSON {
     uint256 internal constant MAX_VALUES = 512;
     uint256 internal constant MAX_TOTAL_KEY_BYTES = 2048;
     // Combined envelope: raw bytes + 96 per JSON value + 8 per decoded key byte
-    // + 4 per prior-key comparison (0+1+...+members-1 separately for every object).
+    // + 4 per prior-key comparison (0+1+...+members-1 separately for every object)
+    // + 8 per simple escape that ends a raw segment of a retained string or key
+    // (the first of a run of consecutive simple escapes; the rest are charged as raw bytes).
     uint256 internal constant MAX_WORK = 65_536;
+    uint256 internal constant SEGMENT_FLUSH_WORK = 8;
 
     // Modes: 0=validated metadata, 1=result root, 2=files array, 3=file, 4=retained scalar.
     function parse(bytes memory raw) internal pure returns (J.Token[] memory tokens) {
@@ -235,8 +238,11 @@ library ManifestJSON {
             p.pos = end + 1;
             return string(out);
         }
-        uint256 pos = begin;
+        // The scanned prefix is plain ASCII without quote or escape: it is the first raw
+        // segment and is never walked a second time by the general loop below.
+        uint256 pos = end;
         uint256 status;
+        uint256 flushes;
         // Decode and validate each scalar once. In particular, retained raw UTF-8 must not
         // incur Solidity byte-array checks followed by a second full Text.utf8 replay.
         // All reads which affect acceptance and every output write are bounded explicitly.
@@ -336,7 +342,7 @@ library ManifestJSON {
             let length := mload(raw)
             let dst := add(out, 32)
             let n := 0
-            let segment := pos
+            let segment := begin
             for {} lt(pos, length) {} {
                 let start := pos
                 let c := byte(0, mload(add(data, pos)))
@@ -407,6 +413,9 @@ library ManifestJSON {
                     default {
                         c := simpleEscape(e)
                         if iszero(c) { break }
+                        // Each general-loop dispatch of a simple escape flushed a raw segment and
+                        // re-enters this loop; its cost is charged to the work budget below.
+                        flushes := add(flushes, 1)
                     }
                     if eq(n, max) {
                         status := 2
@@ -443,6 +452,7 @@ library ManifestJSON {
         }
         if (status == 2) revert Policy.Limit();
         if (status != 1) revert Policy.Invalid();
+        _charge(p, flushes * SEGMENT_FLUSH_WORK);
         p.pos = pos;
         return string(out);
     }

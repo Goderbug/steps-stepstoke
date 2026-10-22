@@ -86,9 +86,9 @@
       "initcodeBytes": 11524
     },
     "RelayVerifier": {
-      "creationCodeHash": "0xb4e87e141eec8feb2ac22eaa0b610e013497b66b9443d456ab140dedfb7568c9",
-      "runtimeBytesBeforeImmutablePatching": 13999,
-      "initcodeBytes": 14025
+      "creationCodeHash": "0x2c9527fccef476eda9b17dba0e649415d64c8972bec61c65050b3318ec446f9a",
+      "runtimeBytesBeforeImmutablePatching": 14124,
+      "initcodeBytes": 14150
     }
   },
   "independentAgentReview": "LOCAL_SCOPED_REVIEW_PASS; OFFICIAL_DEPLOYMENT_REVIEW_NOT_RUN",
@@ -235,8 +235,8 @@
       "immutableBindings": {}
     },
     "RelayVerifier": {
-      "bytes": 13999,
-      "normalizedKeccak": "0xbe545220bec2287e01f8104adacdba4410a8c80ecc83f171fcbfe21174370407",
+      "bytes": 14124,
+      "normalizedKeccak": "0x9fb8b15b2d1deed8b2ee64d234a7a487c56402aae760c8bf2b0c1b56a694c1e1",
       "immutableReferences": {},
       "immutableBindings": {}
     }
@@ -274,7 +274,7 @@
       "src/RelayVerifier.sol": "0x49258c6e63280958d6a90b22336a8c04cfbce57bc756e8d449cb7269fe2dfc50",
       "src/interfaces/IIntake.sol": "0xae7547c0325aa99ed3bc2d0b9817a8ce4814af9a5d7ba1e66587dac1bc8c59e9",
       "src/libraries/Assets.sol": "0xa5eaddcd2d54cdbf672751d98999a3c3d0da55202ead4099900512ffad56a935",
-      "src/libraries/ManifestJSON.sol": "0x1a627b2d921e8057dadd6fa0805ed0035d4f5106dd9c1483e0dfddff4063c34d",
+      "src/libraries/ManifestJSON.sol": "0x77c9c1edd5c2544f0e3da77c61910affcc16d725309cafcdae4f33005076b567",
       "src/libraries/Policy.sol": "0x5a4b054000ef66b70504c01270c7b341314c8cddfafbf2469353b6210fe61112",
       "src/libraries/StrictJSON.sol": "0x6e1ca9baea31c52bffa6653331ca483878e50b3b537ec58fb263438905a21df9",
       "src/libraries/Text.sol": "0x15d2f4e0370afc36f7ab6f14b2e4fb35d979f431fdd9a7ba6942516fa74e1e04",
@@ -282,6 +282,7 @@
       "test/IntakeCompatibility.t.sol": "0xc3545ade14a95ccd373baaabcefce42840dfa4c31302e52c5aff933226b30bbb",
       "test/LaunchCompatibility.t.sol": "0x565caef9bfc354ddd9b638647676e7b55e0360164613f26ba91d7c2ea7b933ce",
       "test/ManifestEnvelopeRegression.t.sol": "0xf7d65bbccf8bd8dd69c4a12faba2b9ff36274a642adf41f644e8cc64f76121d0",
+      "test/ManifestSegmentBudget.t.sol": "0xb194d385dbfdcb91a7f0a9c0f46fd6dc21ab93da4218f68e405969ebf7f34d09",
       "test/ManifestStringRegression.t.sol": "0x59854da2089ad168669a2fd7a030f9983e03beb50669a951fc1e05ab4c6ee1ba",
       "test/MetadataScannerDifferential.t.sol": "0xcdd09af0bb4ce8ba0f8dfba77e79a29400ff97cb3b7ac29ba96850f7150f58bc",
       "test/MultiFileResults.t.sol": "0x4b5fab87dd9708b6f84a490130a26b390ff7c3e9576f62df9f49583be0989ff5",
@@ -334,31 +335,32 @@
         "19": "test/IntakeCompatibility.t.sol",
         "20": "test/LaunchCompatibility.t.sol",
         "21": "test/ManifestEnvelopeRegression.t.sol",
-        "22": "test/ManifestStringRegression.t.sol",
-        "23": "test/MetadataScannerDifferential.t.sol",
-        "24": "test/MultiFileResults.t.sol",
-        "25": "test/PublicResults.t.sol",
-        "26": "test/RelayHistory.t.sol",
-        "27": "test/RelayInvariant.t.sol",
-        "28": "test/RelayMappingRegression.t.sol",
-        "29": "test/RelayPayments.t.sol",
-        "30": "test/RelayProfiles.t.sol",
-        "31": "test/RelaySetup.sol",
-        "32": "test/StrictManifest.t.sol",
-        "33": "test/TestBase.sol",
-        "34": "test/adversarial/ContinuationSpec.t.sol",
-        "35": "test/adversarial/ManifestSpec.t.sol",
-        "36": "test/adversarial/PaymentSpec.t.sol",
-        "37": "test/adversarial/ProfileBoundarySpec.t.sol",
-        "38": "test/adversarial/SpecSupport.sol",
-        "39": "test/adversarial/StateMachineSpec.t.sol",
-        "40": "test/fixtures/FixtureData.sol",
-        "41": "test/fixtures/LiveResultFixture.sol",
-        "42": "test/fixtures/MultiFileResult.sol",
-        "43": "test/fixtures/PublicResults.sol",
-        "44": "test/fixtures/SdkGolden.sol",
-        "45": "test/mocks/MockIntake.sol",
-        "46": "test/mocks/MockToken.sol"
+        "22": "test/ManifestSegmentBudget.t.sol",
+        "23": "test/ManifestStringRegression.t.sol",
+        "24": "test/MetadataScannerDifferential.t.sol",
+        "25": "test/MultiFileResults.t.sol",
+        "26": "test/PublicResults.t.sol",
+        "27": "test/RelayHistory.t.sol",
+        "28": "test/RelayInvariant.t.sol",
+        "29": "test/RelayMappingRegression.t.sol",
+        "30": "test/RelayPayments.t.sol",
+        "31": "test/RelayProfiles.t.sol",
+        "32": "test/RelaySetup.sol",
+        "33": "test/StrictManifest.t.sol",
+        "34": "test/TestBase.sol",
+        "35": "test/adversarial/ContinuationSpec.t.sol",
+        "36": "test/adversarial/ManifestSpec.t.sol",
+        "37": "test/adversarial/PaymentSpec.t.sol",
+        "38": "test/adversarial/ProfileBoundarySpec.t.sol",
+        "39": "test/adversarial/SpecSupport.sol",
+        "40": "test/adversarial/StateMachineSpec.t.sol",
+        "41": "test/fixtures/FixtureData.sol",
+        "42": "test/fixtures/LiveResultFixture.sol",
+        "43": "test/fixtures/MultiFileResult.sol",
+        "44": "test/fixtures/PublicResults.sol",
+        "45": "test/fixtures/SdkGolden.sol",
+        "46": "test/mocks/MockIntake.sol",
+        "47": "test/mocks/MockToken.sol"
       }
     }
   }

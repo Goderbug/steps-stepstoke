@@ -65,3 +65,30 @@ test('review: combined manifest work budget accepts the boundary and rejects one
  assert.deepEqual(Object.keys(relay.strictManifestJSON(exact)),[]);
  envelope.p+='a';assert.throws(()=>relay.strictManifestJSON(bytes(envelope)));
 });
+test('audit 28bdccb2: segment-ending simple escapes are charged eight work units, exactly as the contract',()=>{
+ const L=relay.MANIFEST_LIMITS;
+ // Close an open root object (members keys costing values/keyBytes/comparisons/flushes) with a
+ // numeric pad array and spaces so the document costs exactly the work budget.
+ const exact=(open,members,values,keyBytes,comparisons,flushes)=>{
+  const fixed=Buffer.byteLength(open)+9+96*(values+1)+8*(keyBytes+3)+4*(comparisons+members)+L.segmentFlushWork*flushes;
+  const numbers=Math.min(Math.floor((L.work-fixed)/98),L.totalValues-values-1);assert.ok(numbers>=1);
+  const raw=Buffer.from(open+',"pad":['+Array(numbers).fill('0').join(',')+']}'+' '.repeat(L.work-fixed-98*numbers));
+  assert.ok(raw.length<=L.rawBytes);return raw;
+ };
+ const check=(raw,field,expected)=>{assert.equal(relay.strictManifestJSON(raw)[field].length,expected);assert.throws(()=>relay.strictManifestJSON(Buffer.concat([raw,Buffer.from(' ')])));};
+ // Five retained name/path pairs of ("a\n" x 512): every escape ends a one-byte segment.
+ const text='a\n'.repeat(512);
+ const files=JSON.stringify(Array.from({length:5},()=>({name:text,path:text})));
+ check(exact('{"state":"completed","files":'+files,2,3+15,10+40,1+5,2*5*512),'files',5);
+ // A run of consecutive simple escapes is one flush; a plain byte inside the run makes two.
+ check(exact('{"state":"'+'\\n'.repeat(1000)+'"',1,2,5,0,1),'state',1000);
+ check(exact('{"state":"'+'\\n'.repeat(500)+'a'+'\\n'.repeat(500)+'"',1,2,5,0,2),'state',1001);
+ // \u escapes and ignored metadata strings are not charged; a simple escape after \u is.
+ check(exact('{"state":"'+'a\\u0041'.repeat(170)+'"',1,2,5,0,0),'state',340);
+ check(exact('{"state":"ok","meta":"'+'a\\n'.repeat(4000)+'"',2,3,9,1,0),'state',2);
+ check(exact('{"state":"'+'\\u0041\\n'.repeat(100)+'"',1,2,5,0,100),'state',200);
+ // The audit's full 32,768-byte alternating shape is refused by the budget, as on chain.
+ const audit={jobId:'metadata-limits-job',projectId:'metadata-project',state:'completed',source:[],files:Array.from({length:10},(_,i)=>({name:'a\n'.repeat(500)+i,path:'a\n'.repeat(500)+i}))};
+ let auditRaw=JSON.stringify(audit);auditRaw+=' '.repeat(32768-Buffer.byteLength(auditRaw));
+ assert.throws(()=>relay.strictManifestJSON(Buffer.from(auditRaw)));
+});

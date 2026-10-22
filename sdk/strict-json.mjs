@@ -21,7 +21,10 @@ export function utf8Length(value) {
   }
   return length;
 }
-export const MANIFEST_LIMITS = Object.freeze({ rawBytes: 32768, depth: 16, objectMembers: 128, keyBytes: 256, retainedTokens: 256, retainedStringBytes: 1024, totalValues: 512, totalKeyBytes: 2048, work: 65536 });
+// work = raw bytes + 96 per value + 8 per decoded key byte + 4 per prior-key comparison
+// + segmentFlushWork per simple escape that ends a raw segment of a retained string or key
+// (the first of a run of consecutive simple escapes), exactly as ManifestJSON charges it.
+export const MANIFEST_LIMITS = Object.freeze({ rawBytes: 32768, depth: 16, objectMembers: 128, keyBytes: 256, retainedTokens: 256, retainedStringBytes: 1024, totalValues: 512, totalKeyBytes: 2048, work: 65536, segmentFlushWork: 8 });
 export function strictJSON(raw, maxBytes = 8_192, maxString = 1024) {
   return parseJSON(raw, maxBytes, maxString, false);
 }
@@ -38,13 +41,15 @@ function parseJSON(raw, maxBytes, maxString, manifest) {
   let values = 0;
   let keyBytes = 0;
   let comparisons = 0;
+  let flushes = 0;
   const fail = () => { throw new Error('Invalid or excessive JSON'); };
   const space = () => { while (/[ \t\r\n]/u.test(text[pos] ?? '\uFFFF')) pos++; };
   const token = () => { if (++tokens > 256) fail(); };
-  const work = () => { if (manifest && raw.length + 96 * values + 8 * keyBytes + 4 * comparisons > MANIFEST_LIMITS.work) fail(); };
-  function string(limit = maxString) {
+  const work = () => { if (manifest && raw.length + 96 * values + 8 * keyBytes + 4 * comparisons + MANIFEST_LIMITS.segmentFlushWork * flushes > MANIFEST_LIMITS.work) fail(); };
+  function string(limit = maxString, retained = true) {
     if (text[pos++] !== '"') fail();
     const start = pos - 1;
+    let previousSimple = false;
     while (pos < text.length) {
       const c = text[pos++];
       if (c.charCodeAt(0) < 32) fail();
@@ -54,6 +59,12 @@ function parseJSON(raw, maxBytes, maxString, manifest) {
         if (escape === 'u') {
           if (!/^[0-9a-fA-F]{4}$/u.test(text.slice(pos, pos + 4))) fail();
           pos += 4;
+          previousSimple = false;
+        } else {
+          // Retained strings and keys: a simple escape that does not directly follow another
+          // simple escape ends a raw segment and is charged to the manifest work budget.
+          if (manifest && retained && !previousSimple) flushes++;
+          previousSimple = true;
         }
       } else if (c === '"') {
         const value = JSON.parse(text.slice(start, pos));
@@ -62,8 +73,9 @@ function parseJSON(raw, maxBytes, maxString, manifest) {
           if ((cp >= 0xD800 && cp <= 0xDFFF) || (cp >= 0xFDD0 && cp <= 0xFDEF) || (cp & 0xFFFF) >= 0xFFFE) fail();
         }
         if (utf8Length(value) > limit) fail();
+        work();
         return value;
-      }
+      } else previousSimple = false;
     }
     fail();
   }
@@ -74,7 +86,7 @@ function parseJSON(raw, maxBytes, maxString, manifest) {
     const keep = mode !== 0;
     if (keep) token();
     space();
-    if (text[pos] === '"') return string(keep ? maxString : maxBytes);
+    if (text[pos] === '"') return string(keep ? maxString : maxBytes, keep);
     if (text[pos] === '{') {
       pos++;
       const object = Object.create(null);
