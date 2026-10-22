@@ -3,7 +3,7 @@
   "private": true,
   "version": "0.1.0",
   "type": "module",
-  "description": "CTO Relay Station: W1 Chinese interface integrated with the A1 browser SDK and actual local contracts; public deployment closed.",
+  "description": "STEPS (Stepstoke): English public project relay interface. Real transactions remain gated by verified deployment and live compatibility.",
   "scripts": {
     "dev": "vite",
     "build": "tsc --noEmit -p tsconfig.json && vite build",

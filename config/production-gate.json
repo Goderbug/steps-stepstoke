@@ -9,25 +9,28 @@
       "evidence": [
         "docs/validation/rc-v1/README.md",
         "docs/REVIEW.md",
-        "docs/validation/local-repair-v1/README.md"
+        "docs/validation/local-repair-v1/README.md",
+        "docs/validation/release-correction-v1/README.md"
       ],
-      "detail": "Independent local parser, transport and UI review passed with recorded targeted evidence. Official final-source launch security approval has not been delivered."
+      "detail": "Official launch 2455 passed seven admission checks, including independent review, at audited source 751f3901d4453e1477828e4f7ef0d6af8bc03485. Local SDK/config corrections are reviewed separately. Known liveness limits remain disclosed; this is not public deployment or live-profile acceptance."
     },
     "runtimeChildPolicy": {
       "status": "OPEN",
       "evidence": [
         "docs/validation/rc-v1/README.md",
         "docs/REVIEW.md",
-        "docs/validation/local-repair-v1/README.md"
+        "docs/validation/local-repair-v1/README.md",
+        "docs/validation/release-correction-v1/README.md"
       ],
-      "detail": "Supplied launch floor, direct child code scan and three-name local batch pass; deployment-service runtime-child acceptance remains unconfirmed."
+      "detail": "The official launch passed manifest and protected-invariant admission checks. The three named contracts and full runtime-child creation pass locally; actual service deployment is still pending."
     },
     "manifestCompatibility": {
       "status": "OPEN",
       "evidence": [
         "docs/validation/rc-v1/README.md",
         "docs/REVIEW.md",
-        "docs/validation/local-repair-v1/README.md"
+        "docs/validation/local-repair-v1/README.md",
+        "docs/validation/release-correction-v1/README.md"
       ],
       "detail": "Unique declared output among bounded extra files is supported and locally replayed against captured two-file bytes. Real HTML update, authenticated envelope bounds and all-profile live runtime execution remain unproved."
     },
@@ -36,16 +39,18 @@
       "evidence": [
         "docs/validation/rc-v1/README.md",
         "docs/REVIEW.md",
-        "docs/validation/local-repair-v1/README.md"
+        "docs/validation/local-repair-v1/README.md",
+        "docs/validation/release-correction-v1/README.md"
       ],
-      "detail": "Fourteen complete local binding stress transactions, original C-GAS-01 replay and the three-contract local deployment batch pass below 16777216 gas. This finite set is not a universal bound or acceptance of unpublished service ceilings."
+      "detail": "The delivered segment-work charge is retained as an explicit compatibility restriction. Original 32768-byte result and exact 16-asset witness replay succeeds locally at 13687379 gas under a 16777216 declared limit. Finite measurements do not prove a universal bound; service deployment remains pending."
     },
     "liveExecution": {
       "status": "NOT_RUN",
       "evidence": [
         "docs/validation/rc-v1/README.md",
         "docs/REVIEW.md",
-        "docs/validation/local-repair-v1/README.md"
+        "docs/validation/local-repair-v1/README.md",
+        "docs/validation/release-correction-v1/README.md"
       ],
       "detail": "No paid mainnet operation was authorized or performed. Local mocks and free checks are not live compatibility."
     },
@@ -54,9 +59,10 @@
       "evidence": [
         "docs/validation/rc-v1/README.md",
         "docs/REVIEW.md",
-        "docs/validation/local-repair-v1/README.md"
+        "docs/validation/local-repair-v1/README.md",
+        "docs/validation/release-correction-v1/README.md"
       ],
-      "detail": "No production deployment exists. Only a later confirmed handoff may provide public addresses and receipt evidence."
+      "detail": "Official launch cad0c789-2611-4392-bec0-456cb8e57d2c is admitted with zero deployment artifacts at the last observation. No verified production addresses or deployment receipt exist in this release."
     }
   },
   "profiles": {

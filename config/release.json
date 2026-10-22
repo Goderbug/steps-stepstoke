@@ -1,6 +1,6 @@
 {
   "name": "STEPS (Stepstoke)",
-  "version": "LOCAL-REPAIR-V1",
+  "version": "RELEASE-CORRECTION-V1",
   "policyId": "0xda20682d095e562fad40017c7dec4f700f23864077e1faddbc75f342bf5a984a",
   "intendedChainId": 1,
   "intake": "0xa43e6f75ee006411f79ac1c84120606c2330de82",
@@ -91,8 +91,8 @@
       "initcodeBytes": 14164
     }
   },
-  "independentAgentReview": "LOCAL_SCOPED_REVIEW_PASS; OFFICIAL_DEPLOYMENT_REVIEW_NOT_RUN",
-  "validationReport": "docs/validation/local-repair-v1/README.md",
+  "independentAgentReview": "IMD_INDEPENDENT_AUDIT_ADMITTED; LOCAL_SELF_REVIEW_PASS; DEPLOYMENT_NOT_VERIFIED",
+  "validationReport": "docs/validation/release-correction-v1/README.md",
   "sourceBaseline": {
     "repository": "https://github.com/identity-md-launches/launch-2393-prepare-steps-stepstoke-release-candidat",
     "commit": "b7747bf377e292f44b35fb0acc55c6ee1772cee4",
@@ -115,9 +115,12 @@
     "totalKeyBytes": 2048,
     "combinedWork": {
       "maximum": 65536,
-      "formula": "rawBytes + 96 * totalValues + 8 * totalDecodedKeyBytes + 4 * priorKeyComparisons",
-      "comparisonCount": "sum(0+1+...+(memberCount-1)) for each object, including skipped metadata"
-    }
+      "formula": "rawBytes + 96 * totalValues + 8 * totalDecodedKeyBytes + 4 * priorKeyComparisons + 8 * segmentFlushes",
+      "comparisonCount": "sum(0+1+...+(memberCount-1)) for each object, including skipped metadata",
+      "segmentFlushWork": 8,
+      "segmentFlushCount": "First simple escape in each consecutive run in a retained string or any key; ignored metadata string values and Unicode escapes are not charged."
+    },
+    "compatibility": "Bounded v1 policy: the audited segment charge intentionally rejects some shapes accepted by the pre-audit local candidate. Raw byte size alone does not imply acceptance."
   },
   "remainingReviewRisk": "Authenticated results outside the finite manifest envelope may remain unbindable; actual IMD compatibility remains unverified.",
   "runtimeChecks": {
@@ -308,7 +311,9 @@
       "test/fixtures/PublicResults.sol": "0x856df621b03d8c2d7da8989d473a92a8dddcc2e2dc5b2190ae41d0817c2a1f56",
       "test/fixtures/SdkGolden.sol": "0xb97ec6751262f606548079de2776c53f0392a891c041c3fe1f25f62af804b5b5",
       "test/mocks/MockIntake.sol": "0x9fe281eadeaebf52c53151196638b5731cf72f90208072a7a33fefff5b78d01e",
-      "test/mocks/MockToken.sol": "0x26e6310f07571d7981dc5fb1897f09d6fb20061dfe34a67ee3073e8c0ccc9a8d"
+      "test/mocks/MockToken.sol": "0x26e6310f07571d7981dc5fb1897f09d6fb20061dfe34a67ee3073e8c0ccc9a8d",
+      "test/release/ExactGasRegression.t.sol": "0x84379c347bde4a4ffef46312149083c4f88612cbb3456243d5037c3d5196b9bd",
+      "test/release/PurchaseAtomicityInvariant.t.sol": "0x532c5b622a20bb585fee47e2f5d8ec1b2d6d0bc7dee40780dbc154e51d25a8ea"
     },
     "compilation": {
       "command": "forge build --offline --force",
@@ -362,8 +367,17 @@
         "45": "test/fixtures/PublicResults.sol",
         "46": "test/fixtures/SdkGolden.sol",
         "47": "test/mocks/MockIntake.sol",
-        "48": "test/mocks/MockToken.sol"
+        "48": "test/mocks/MockToken.sol",
+        "49": "test/release/ExactGasRegression.t.sol",
+        "50": "test/release/PurchaseAtomicityInvariant.t.sol"
       }
     }
+  },
+  "deliveredSource": {
+    "repository": "https://github.com/identity-md-launches/launch-2455-relayencoder-relayverifier-relayfactory",
+    "commit": "751f3901d4453e1477828e4f7ef0d6af8bc03485",
+    "jobId": "09baba31-7451-4891-9562-4c27d9111a09",
+    "launchId": "cad0c789-2611-4392-bec0-456cb8e57d2c",
+    "scope": "Official audited contract source. Local corrections preserve every Solidity input, ABI and compiled contract bytecode. Deployment and paid live compatibility require separate evidence."
   }
 }

@@ -1,0 +1,54 @@
+{
+  "version": "RELEASE-CORRECTION-V1",
+  "reviewedAt": "2026-10-22T08:38:10.973799+00:00",
+  "decision": "LOCAL_CORRECTIONS_PASS_DEPLOYMENT_PENDING",
+  "reviewType": "Root self-review and independent reproduction of the IMD delivery; no separate new review agent claimed",
+  "baseCommit": "751f3901d4453e1477828e4f7ef0d6af8bc03485",
+  "checks": {
+    "cleanBuild": "PASS: 50 sources, Forge 1.8.3, solc 0.8.26, viaIR, optimizer 200, Cancun, bytecode_hash none",
+    "strictReleaseInventory": "PASS",
+    "contractTests": {
+      "passed": 180,
+      "failed": 0,
+      "skipped": 0
+    },
+    "sdkTests": {
+      "passed": 89,
+      "failed": 0,
+      "skipped": 0
+    },
+    "frontendUnitTests": {
+      "passed": 100,
+      "failed": 0
+    },
+    "frontendBuild": "PASS",
+    "genericParserDifferential": "PASS: 256 accepted, 257 rejected in compiled Solidity and both SDKs",
+    "originalGasRegression": {
+      "passed": true,
+      "gasUsed": 13687379,
+      "declaredGasLimit": 16777216,
+      "rawBytes": 32768,
+      "witnessAssets": 16,
+      "originalCalldataIdentical": true
+    },
+    "publicBrowser": {
+      "recordedChecks": 11,
+      "distinctChecks": 8,
+      "pageErrors": 0,
+      "scope": "ACTUAL_LOCAL_CHAIN_1; HTTPS ROUTES ARE LOCAL TEST TRANSPORT"
+    },
+    "deploymentHandoffRehearsal": "PASS: disposable local receipts, CREATE2 traces, compiler/source checks, immutables and final asset inventory",
+    "bytecodeEquivalence": "PASS: all four contracts exactly match admitted delivery"
+  },
+  "findings": {
+    "DELIVERY-GATE-01": "FIXED: inventory now includes both delivered release test sources (50 total)",
+    "DELIVERY-SCOPE-02": "EXPLICIT_POLICY_DECISION: retain segment charge to prevent the reproduced gas-exhaustion shape; document narrowed compatibility. Not restoration of the old parser domain or a claim of packaging-only changes.",
+    "DELIVERY-DOC-03": "FIXED: metadata formula now includes 8 * segmentFlushes and its counting rule",
+    "DELIVERY-SDK-04": "FIXED: generic parser 256 tokens; manifest parser independently retains 1024 tokens"
+  },
+  "publicDeployment": "NOT_VERIFIED",
+  "publicSite": "NOT_PUBLISHED",
+  "paidLiveProfiles": "NOT_RUN",
+  "productionReady": false,
+  "next": "Verify the existing official launch deployment, then continue the same project through IMD for website connection and hosting. No duplicate launch."
+}
