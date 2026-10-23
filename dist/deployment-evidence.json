@@ -1,0 +1,237 @@
+{
+  "sourceCommit": "751f3901d4453e1477828e4f7ef0d6af8bc03485",
+  "attestationHash": "e1bfa2900f7b58e29f97514ac45694a4869136e95821dc31ca8a8375437315ce",
+  "transactionHash": "0x6377bb6862896730e68c455685bd057d87ddeafca57633370df20c196479bad6",
+  "blockNumber": 26248821,
+  "blockHash": "0x700af02aa56a2917a53049a31db6c392d85ae856973d02fb3eb9999f5c293540",
+  "build": {
+    "compiler": "0.8.26+commit.8a97fa7a",
+    "settings": {
+      "remappings": [
+        "@openzeppelin/contracts/=lib/openzeppelin-contracts/contracts/",
+        "openzeppelin-contracts/=lib/openzeppelin-contracts/contracts/"
+      ],
+      "optimizer": {
+        "enabled": true,
+        "runs": 200
+      },
+      "metadata": {
+        "bytecodeHash": "none"
+      },
+      "evmVersion": "cancun",
+      "libraries": {},
+      "viaIR": true
+    },
+    "sources": {
+      "lib/openzeppelin-contracts/contracts/interfaces/IERC1363.sol": "0x438ecf10fa429e1000baa015d96b79087a3b3ce9fbe7ee8a90bba6435ce134f6",
+      "lib/openzeppelin-contracts/contracts/interfaces/IERC165.sol": "0x0afcb7e740d1537b252cb2676f600465ce6938398569f09ba1b9ca240dde2dfc",
+      "lib/openzeppelin-contracts/contracts/interfaces/IERC20.sol": "0x1a6221315ce0307746c2c4827c125d821ee796c74a676787762f4778671d4f44",
+      "lib/openzeppelin-contracts/contracts/token/ERC20/IERC20.sol": "0x74ed01eb66b923d0d0cfe3be84604ac04b76482a55f9dd655e1ef4d367f95bc2",
+      "lib/openzeppelin-contracts/contracts/token/ERC20/utils/SafeERC20.sol": "0xd56c65c54b2bcc02f258d85e8d7723a1a633aaf43e7060e340860566381c206f",
+      "lib/openzeppelin-contracts/contracts/utils/introspection/IERC165.sol": "0x8891738ffe910f0cf2da09566928589bf5d63f4524dd734fd9cedbac3274dd5c",
+      "src/RelayBranch.sol": "0x8bfd0429192a6782308ad663731e8eaf8e11be367ee074531f3496a9d613ba10",
+      "src/RelayEncoder.sol": "0x615e596b2a43e2ff0d868c2c914aa3873a668b7b3c0d7c7b277d5d2d8e6642dc",
+      "src/RelayFactory.sol": "0x501bb34d4013d38531d637e6d164233734e7b459225e91b046e5b9bdb1b5be34",
+      "src/RelayTypes.sol": "0x21f621c2914cbebe9de78232a250da7e65df975664f2db9f05a88530973b699f",
+      "src/RelayVerifier.sol": "0x49258c6e63280958d6a90b22336a8c04cfbce57bc756e8d449cb7269fe2dfc50",
+      "src/interfaces/IIntake.sol": "0xae7547c0325aa99ed3bc2d0b9817a8ce4814af9a5d7ba1e66587dac1bc8c59e9",
+      "src/libraries/Assets.sol": "0xa5eaddcd2d54cdbf672751d98999a3c3d0da55202ead4099900512ffad56a935",
+      "src/libraries/ManifestJSON.sol": "0xce470973a1dae5d5ec05b26e460b70383bf75d965bad6cd2a8ccb22093719f9b",
+      "src/libraries/Policy.sol": "0x5a4b054000ef66b70504c01270c7b341314c8cddfafbf2469353b6210fe61112",
+      "src/libraries/StrictJSON.sol": "0x6e1ca9baea31c52bffa6653331ca483878e50b3b537ec58fb263438905a21df9",
+      "src/libraries/Text.sol": "0x15d2f4e0370afc36f7ab6f14b2e4fb35d979f431fdd9a7ba6942516fa74e1e04",
+      "test/CrossLanguage.t.sol": "0x20641b7c928a5a715b1a25e10fea189852dda3594e7efd46655d5a32d9d5a3e1",
+      "test/IntakeCompatibility.t.sol": "0xc3545ade14a95ccd373baaabcefce42840dfa4c31302e52c5aff933226b30bbb",
+      "test/LaunchCompatibility.t.sol": "0x565caef9bfc354ddd9b638647676e7b55e0360164613f26ba91d7c2ea7b933ce",
+      "test/ManifestEnvelopeRegression.t.sol": "0xf7d65bbccf8bd8dd69c4a12faba2b9ff36274a642adf41f644e8cc64f76121d0",
+      "test/ManifestRetainedTokens.t.sol": "0xef93e94006c9c6d98904ce3182b065249963fb4a9ef5eac52c099c44a311e350",
+      "test/ManifestSegmentBudget.t.sol": "0xb194d385dbfdcb91a7f0a9c0f46fd6dc21ab93da4218f68e405969ebf7f34d09",
+      "test/ManifestStringRegression.t.sol": "0x59854da2089ad168669a2fd7a030f9983e03beb50669a951fc1e05ab4c6ee1ba",
+      "test/MetadataScannerDifferential.t.sol": "0xcdd09af0bb4ce8ba0f8dfba77e79a29400ff97cb3b7ac29ba96850f7150f58bc",
+      "test/MultiFileResults.t.sol": "0x4b5fab87dd9708b6f84a490130a26b390ff7c3e9576f62df9f49583be0989ff5",
+      "test/PublicResults.t.sol": "0x2b062621f65d68c5c52d6c258da4927e244031e4789a4239b6c072c7f55f3d84",
+      "test/RelayHistory.t.sol": "0x8d26cd4fd654c5d728bba97eab6d2de9712e74d98e96b3de05c1a913cc9deb82",
+      "test/RelayInvariant.t.sol": "0x73a2e5b17c3a69d9d7ba7cd1b934e2455c865742e49050bb960e0c26b0bacdbf",
+      "test/RelayMappingRegression.t.sol": "0x0a97a5cbea67a48dd17f6622359c87c63a3611a29e1693f94d23152c0c18fc07",
+      "test/RelayPayments.t.sol": "0x2e86b6cbde0900b60c59ceb004b42117b8e95b8f5fcfc31448cc9a79a0ef58a2",
+      "test/RelayProfiles.t.sol": "0x5db3700478e20a57134b13e84223cf9b233fa74992e55d26994ef5b3b78c5bb8",
+      "test/RelaySetup.sol": "0xf8878e43ec659ac148659d545ab40fa4eceb28a9b5e392c49fa76defec1de475",
+      "test/StrictManifest.t.sol": "0x3eed523e1fa5002e8adc273f88f54a4a919ba8a0fd33cec7969cd241ba5d330c",
+      "test/TestBase.sol": "0x1acb6e6ed27fcb062afd7e8742f03ea433c713d1f7d5670d9dc4ff1cb3baae05",
+      "test/adversarial/ContinuationSpec.t.sol": "0x1ea9c79fb6a3b2639db9fed4bb66bb96e7a31eb8fad64318d2f037ca05604279",
+      "test/adversarial/ManifestSpec.t.sol": "0x14b2b47ed0c6896eeeb34546677afcce8c41538549f8b1c35face0572eec4f6a",
+      "test/adversarial/PaymentSpec.t.sol": "0xef3cb5088fc1a3634fe6762af84ea8986df1463a06249b90c60232b2f3483e34",
+      "test/adversarial/ProfileBoundarySpec.t.sol": "0xe7cc2b48d205263a3a267ce18b442118e8d7236858eb350f4a3035b638fe99e6",
+      "test/adversarial/SpecSupport.sol": "0x026580a857566f097ab80bd2210d919615be76a6292c373e3b20540d01d45839",
+      "test/adversarial/StateMachineSpec.t.sol": "0xcb928393867b49d05ccf0edbeebe5ff6d5722bf5034c69030ff00da05a3f45f5",
+      "test/fixtures/FixtureData.sol": "0x419e95967606e003c433a4e884474df30cd75f5363d08572861ba1877e7c7db2",
+      "test/fixtures/LiveResultFixture.sol": "0xea213b43114957cd2a08936aae2f54d01bc18821929c01d3e96c6c97f652c1d2",
+      "test/fixtures/MultiFileResult.sol": "0x92684eadf75eacaae1fa316eaeef15979f3516ce80ad5b9d6214ae5f83af1a91",
+      "test/fixtures/PublicResults.sol": "0x856df621b03d8c2d7da8989d473a92a8dddcc2e2dc5b2190ae41d0817c2a1f56",
+      "test/fixtures/SdkGolden.sol": "0xb97ec6751262f606548079de2776c53f0392a891c041c3fe1f25f62af804b5b5",
+      "test/mocks/MockIntake.sol": "0x9fe281eadeaebf52c53151196638b5731cf72f90208072a7a33fefff5b78d01e",
+      "test/mocks/MockToken.sol": "0x26e6310f07571d7981dc5fb1897f09d6fb20061dfe34a67ee3073e8c0ccc9a8d",
+      "test/release/ExactGasRegression.t.sol": "0x84379c347bde4a4ffef46312149083c4f88612cbb3456243d5037c3d5196b9bd",
+      "test/release/PurchaseAtomicityInvariant.t.sol": "0x532c5b622a20bb585fee47e2f5d8ec1b2d6d0bc7dee40780dbc154e51d25a8ea"
+    },
+    "compilation": {
+      "command": "forge build --offline --force",
+      "forge": "forge Version: 1.8.3\nCommit SHA: cae51ad458f6abb64852b7709eb784352429825d",
+      "sourceIdToPath": {
+        "0": "foundry-pp/DeployHelper15.sol",
+        "1": "lib/openzeppelin-contracts/contracts/interfaces/IERC1363.sol",
+        "2": "lib/openzeppelin-contracts/contracts/interfaces/IERC165.sol",
+        "3": "lib/openzeppelin-contracts/contracts/interfaces/IERC20.sol",
+        "4": "lib/openzeppelin-contracts/contracts/token/ERC20/IERC20.sol",
+        "5": "lib/openzeppelin-contracts/contracts/token/ERC20/utils/SafeERC20.sol",
+        "6": "lib/openzeppelin-contracts/contracts/utils/introspection/IERC165.sol",
+        "7": "src/RelayBranch.sol",
+        "8": "src/RelayEncoder.sol",
+        "9": "src/RelayFactory.sol",
+        "10": "src/RelayTypes.sol",
+        "11": "src/RelayVerifier.sol",
+        "12": "src/interfaces/IIntake.sol",
+        "13": "src/libraries/Assets.sol",
+        "14": "src/libraries/ManifestJSON.sol",
+        "15": "src/libraries/Policy.sol",
+        "16": "src/libraries/StrictJSON.sol",
+        "17": "src/libraries/Text.sol",
+        "18": "test/CrossLanguage.t.sol",
+        "19": "test/IntakeCompatibility.t.sol",
+        "20": "test/LaunchCompatibility.t.sol",
+        "21": "test/ManifestEnvelopeRegression.t.sol",
+        "22": "test/ManifestRetainedTokens.t.sol",
+        "23": "test/ManifestSegmentBudget.t.sol",
+        "24": "test/ManifestStringRegression.t.sol",
+        "25": "test/MetadataScannerDifferential.t.sol",
+        "26": "test/MultiFileResults.t.sol",
+        "27": "test/PublicResults.t.sol",
+        "28": "test/RelayHistory.t.sol",
+        "29": "test/RelayInvariant.t.sol",
+        "30": "test/RelayMappingRegression.t.sol",
+        "31": "test/RelayPayments.t.sol",
+        "32": "test/RelayProfiles.t.sol",
+        "33": "test/RelaySetup.sol",
+        "34": "test/StrictManifest.t.sol",
+        "35": "test/TestBase.sol",
+        "36": "test/adversarial/ContinuationSpec.t.sol",
+        "37": "test/adversarial/ManifestSpec.t.sol",
+        "38": "test/adversarial/PaymentSpec.t.sol",
+        "39": "test/adversarial/ProfileBoundarySpec.t.sol",
+        "40": "test/adversarial/SpecSupport.sol",
+        "41": "test/adversarial/StateMachineSpec.t.sol",
+        "42": "test/fixtures/FixtureData.sol",
+        "43": "test/fixtures/LiveResultFixture.sol",
+        "44": "test/fixtures/MultiFileResult.sol",
+        "45": "test/fixtures/PublicResults.sol",
+        "46": "test/fixtures/SdkGolden.sol",
+        "47": "test/mocks/MockIntake.sol",
+        "48": "test/mocks/MockToken.sol",
+        "49": "test/release/ExactGasRegression.t.sol",
+        "50": "test/release/PurchaseAtomicityInvariant.t.sol"
+      }
+    }
+  },
+  "productionGate": {
+    "chainId": 1,
+    "productionDeployment": {
+      "encoder": "0xae9a9624e6354bbd029fefa762bafd43fb9f6886",
+      "verifier": "0x52a459aaf8044c5bc7f5a8198ef7305367e98ec4",
+      "factory": "0xff1519c0b9ae4053d1505bc0e5226178109e0abc",
+      "transactionHash": "0x6377bb6862896730e68c455685bd057d87ddeafca57633370df20c196479bad6",
+      "blockNumber": 26248821,
+      "blockHash": "0x700af02aa56a2917a53049a31db6c392d85ae856973d02fb3eb9999f5c293540",
+      "sourceCommit": "751f3901d4453e1477828e4f7ef0d6af8bc03485",
+      "attestationHash": "e1bfa2900f7b58e29f97514ac45694a4869136e95821dc31ca8a8375437315ce"
+    },
+    "liveCompatibility": "NOT_RUN",
+    "productionReady": false,
+    "gates": {
+      "securityReview": {
+        "status": "OPEN",
+        "evidence": [
+          "docs/validation/rc-v1/README.md",
+          "docs/REVIEW.md",
+          "docs/validation/local-repair-v1/README.md",
+          "docs/validation/release-correction-v1/README.md"
+        ],
+        "detail": "Official source 751f3901d4453e1477828e4f7ef0d6af8bc03485 passed IMD admission including independent source review. The exact local SDK/config correction and website integration are separate authorship. Deployment verification does not close the remaining production review or live-profile gates."
+      },
+      "runtimeChildPolicy": {
+        "status": "OPEN",
+        "evidence": [
+          "docs/validation/rc-v1/README.md",
+          "docs/REVIEW.md",
+          "docs/validation/local-repair-v1/README.md",
+          "docs/validation/release-correction-v1/README.md"
+        ],
+        "detail": "The three named applications are deployed and independently verified. Runtime-child creation remains locally tested only; product execution and runtime-child service acceptance are still open."
+      },
+      "manifestCompatibility": {
+        "status": "OPEN",
+        "evidence": [
+          "docs/validation/rc-v1/README.md",
+          "docs/REVIEW.md",
+          "docs/validation/local-repair-v1/README.md",
+          "docs/validation/release-correction-v1/README.md"
+        ],
+        "detail": "Unique declared output among bounded extra files is supported and locally replayed against captured two-file bytes. Real HTML update, authenticated envelope bounds and all-profile live runtime execution remain unproved."
+      },
+      "gasCeilings": {
+        "status": "OPEN",
+        "evidence": [
+          "docs/validation/rc-v1/README.md",
+          "docs/REVIEW.md",
+          "docs/validation/local-repair-v1/README.md",
+          "docs/validation/release-correction-v1/README.md"
+        ],
+        "detail": "The audited 8*segmentFlushes charge and narrower manifest compatibility are retained. The exact 32768-byte/16-asset witness previously replayed locally at 13687379 gas under a 16777216 declared limit. Deployment is now verified; these finite local measurements do not establish universal or live-profile gas bounds."
+      },
+      "liveExecution": {
+        "status": "NOT_RUN",
+        "evidence": [
+          "docs/validation/rc-v1/README.md",
+          "docs/REVIEW.md",
+          "docs/validation/local-repair-v1/README.md",
+          "docs/validation/release-correction-v1/README.md"
+        ],
+        "detail": "No paid mainnet operation was authorized or performed. Local mocks and free checks are not live compatibility."
+      },
+      "deploymentVerification": {
+        "status": "PASS",
+        "evidence": [
+          "docs/validation/live-connection-v1/chain-report.json",
+          "docs/validation/live-connection-v1/deployment-evidence.json"
+        ],
+        "detail": "Actual live handoff independently verified on Ethereum: canonical successful receipt/block on two public operators, live creation trace, exact 50-source inventory, unchanged ABIs, creation/runtime code and constructor/immutable bindings. This permits reads only; paid live profiles remain NOT_RUN."
+      }
+    },
+    "profiles": {
+      "0": {
+        "status": "NOT_RUN",
+        "evidence": [],
+        "detail": "No authorized live job executed for this profile."
+      },
+      "1": {
+        "status": "NOT_RUN",
+        "evidence": [],
+        "detail": "No authorized live job executed for this profile."
+      },
+      "2": {
+        "status": "NOT_RUN",
+        "evidence": [],
+        "detail": "No authorized live job executed for this profile."
+      },
+      "3": {
+        "status": "NOT_RUN",
+        "evidence": [],
+        "detail": "No authorized live job executed for this profile."
+      },
+      "4": {
+        "status": "NOT_RUN",
+        "evidence": [],
+        "detail": "No authorized live job executed for this profile."
+      }
+    }
+  }
+}

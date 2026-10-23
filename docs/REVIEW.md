@@ -1,6 +1,6 @@
 # Release review and open risks
 
-This is the worker's local source review and evidence record, not independent production approval. `productionDeployment:null`, `liveCompatibility:NOT_RUN`, `productionReady:false`. The imported source already contained reviewed parser/payment/mapping repairs; those tests and all historical failures are retained by archive/index. Current changes and reproductions are enumerated in [ADAPTATION.md](../ADAPTATION.md).
+This is the worker's local source review and evidence record, not independent production approval. The actual Ethereum deployment is now verified and recorded; `liveCompatibility:NOT_RUN`, `productionReady:false`. Current connection checks are in [live-connection-v1](validation/live-connection-v1/README.md). The imported source already contained reviewed parser/payment/mapping repairs; those tests and all historical failures are retained by archive/index. Current changes and reproductions are enumerated in [ADAPTATION.md](../ADAPTATION.md).
 
 | Gate | Current result | Required before launch |
 | --- | --- | --- |

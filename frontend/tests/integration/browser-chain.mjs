@@ -45,7 +45,7 @@ const record = async (name, fn) => {
   catch (e) { evidence.matrix.push({ name, status: 'FAIL', error: e.stack }); await saveProgress(); console.error('FAIL', name, e.message); throw e; }
 };
 const local = await startLocal();
-await copyFile(resolve(root, 'frontend/public/local-config.json'), resolve(root, 'dist/local-config.json'));
+await writeFile(resolve(root, 'dist/local-config.json'), JSON.stringify(local.config, null, 2) + '\n');
 const preview = spawn(process.execPath, ['node_modules/vite/bin/vite.js', 'preview', '--port', '4174', '--host', '127.0.0.1', '--strictPort'], { cwd: resolve(root, 'frontend'), stdio: 'ignore' });
 let browser, page;
 const read = async (branch, method, args = []) => (await sdk.queryState(local.provider, sdk.readState(branch, method, args)))[0];

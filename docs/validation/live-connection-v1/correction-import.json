@@ -1,0 +1,73 @@
+{
+  "repository": "https://github.com/Goderbug/steps-stepstoke",
+  "commit": "a523c571e874a783967e212b303e4b81f5c9876f",
+  "authorship": "Local requester correction; distinct from IMD/Swarm official contract delivery. All allowed files were already applied exactly on entry. Subsequent README/release/gate edits only connect the verified live deployment.",
+  "files": [
+    {
+      "path": "README.md",
+      "gitBlob": "f547e4e3c3e4a83f8cdbdec98c3f9b594a48c90a",
+      "sha256": "e76b0584e91da0016d22f94160119142b65eb2be84f0df77d52ef3074352e5a9",
+      "inheritedBytes": "EXACT_MATCH_BEFORE_LIVE_INTEGRATION"
+    },
+    {
+      "path": "config/production-gate.json",
+      "gitBlob": "b930c6e4349a79080b81b34a360d48c13ae59881",
+      "sha256": "91fe19a7d078b6da700fbb8164eda464c76b410120511ec8541cdcc42b7a41d8",
+      "inheritedBytes": "EXACT_MATCH_BEFORE_LIVE_INTEGRATION"
+    },
+    {
+      "path": "config/release.json",
+      "gitBlob": "bb69363ca4cafd2148be69a8b68772bda32d1a6c",
+      "sha256": "9a595d32c1a4a523e63b303abbfd2a86e77c588bd8ec9f5ecd6862908547779f",
+      "inheritedBytes": "EXACT_MATCH_BEFORE_LIVE_INTEGRATION"
+    },
+    {
+      "path": "docs/validation/release-correction-v1/README.md",
+      "gitBlob": "44c07a10f8efcdee34e270c902deed16303d4622",
+      "sha256": "f43f0714a22899952ee23f6ca06b0906b156489ca612cdd8f9acfa3ffce61c86",
+      "inheritedBytes": "EXACT_MATCH_BEFORE_LIVE_INTEGRATION"
+    },
+    {
+      "path": "docs/validation/release-correction-v1/evidence-index.json",
+      "gitBlob": "369b36c25ce2980d7d61995fd160e69557222b4f",
+      "sha256": "059d8ea9d69d4ea626c1d87257624cdf9fcb80672a64a9028a1fb11818b56a01",
+      "inheritedBytes": "EXACT_MATCH_BEFORE_LIVE_INTEGRATION"
+    },
+    {
+      "path": "docs/validation/release-correction-v1/evidence.tar.xz",
+      "gitBlob": "90b5af842ffac4992dd2ecb661a807e153a2c191",
+      "sha256": "a7543dacb6051b88f9610b074001fb7578e01863d17dac0f80680582b8371b4f",
+      "inheritedBytes": "EXACT_MATCH_BEFORE_LIVE_INTEGRATION"
+    },
+    {
+      "path": "docs/validation/release-correction-v1/review.json",
+      "gitBlob": "c0bee1700ead1650fa6b0b5e5ebed243373b3dcc",
+      "sha256": "034d229215f370253b899c8fb73389067bd60502fc2f09b04c831d86aea5ede4",
+      "inheritedBytes": "EXACT_MATCH_BEFORE_LIVE_INTEGRATION"
+    },
+    {
+      "path": "frontend/package.json",
+      "gitBlob": "82ec648078a9c9e8803f1c071f3ed6b472418e33",
+      "sha256": "9e04ead1c2b61a55da15169693a12d891f5b7603cc8ab4461ae07ef05e25cd07",
+      "inheritedBytes": "EXACT_MATCH_BEFORE_LIVE_INTEGRATION"
+    },
+    {
+      "path": "sdk/strict-json.mjs",
+      "gitBlob": "af8c74a632704b0ef20b37132a8e41397241496f",
+      "sha256": "e68ff93c4fd95a3a1e45cbc86993a6dfaf34038a30955fda36c41e7622969b2e",
+      "inheritedBytes": "EXACT_MATCH_BEFORE_LIVE_INTEGRATION"
+    },
+    {
+      "path": "test-sdk/release-correction.test.mjs",
+      "gitBlob": "369c533cc2f62059b8e030cc7501b11b9d88527b",
+      "sha256": "fd2ddbeb9f7dda86aff1d6cd65345ddd10779b26ac426341275476784b6e4031",
+      "inheritedBytes": "EXACT_MATCH_BEFORE_LIVE_INTEGRATION"
+    },
+    {
+      "path": "test/release/check-generic-json.mjs",
+      "gitBlob": "2bccabdaf125a90b1343d498295a1c7d7fc29793",
+      "sha256": "b42976e7520d30ad20557a5cfe960a4b36d160c0080c1310cca780ad100b55ad",
+      "inheritedBytes": "EXACT_MATCH_BEFORE_LIVE_INTEGRATION"
+    }
+  ]
+}

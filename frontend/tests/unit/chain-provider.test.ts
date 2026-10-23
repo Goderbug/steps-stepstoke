@@ -1,6 +1,6 @@
 import { describe, it, expect, vi } from "vitest";
 import { ChainAdapter, type LocalConfig, type Provider } from "../../src/domain/chainAdapter";
-import config from "../../public/local-config.json";
+import config from "../fixtures/local-config.json";
 import { draftProblems } from "../../src/ui/ProposeForm";
 import type { Checkpoint } from "../../src/domain/types";
 import { DEMO_ACCOUNTS } from "../../src/domain/fixtureAdapter";

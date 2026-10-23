@@ -41,7 +41,7 @@ test.beforeEach(async ({ page }) => {
 });
 
 test("EIP-6963 named browser wallet connects on desktop and phone, switches chain and observes account changes", async ({ page }) => {
-  await page.goto("./");
+  await page.goto("./#/configuration");
   await page.getByRole("button", { name: "Connect wallet", exact: true }).click();
   const sheet = page.getByRole("dialog", { name: "Connect wallet" });
   await expect(sheet.getByRole("button", { name: "W1 temporary test wallet" })).toBeVisible();
@@ -58,7 +58,7 @@ test("EIP-6963 named browser wallet connects on desktop and phone, switches chai
   await expect(page.getByText("0x2222222222222222222222222222222222222222", { exact: true })).toBeVisible();
   await page.getByRole("button", { name: "Switch to Ethereum" }).click();
   await expect(page.getByRole("button", { name: "Switch to Ethereum" })).toHaveCount(0);
-  await expect(page.getByRole("button", { name: "Create project", exact: true })).toBeDisabled();
+  await expect(page.getByText("productionReady: false", { exact: false })).toBeVisible();
   const calls = await page.evaluate(() => (window as unknown as { __testWalletCalls: string[] }).__testWalletCalls);
   expect(calls).toContain("wallet_switchEthereumChain");
   expect(calls.filter((x) => /sendTransaction|sign/i.test(x))).toEqual([]);
@@ -67,7 +67,7 @@ test("EIP-6963 named browser wallet connects on desktop and phone, switches chai
 });
 
 test("wallet rejection leaves reads available; dialog wraps focus and restores it", async ({ page }) => {
-  await page.goto("./");
+  await page.goto("./#/configuration");
   await page.evaluate(() => dispatchEvent(new CustomEvent("w1:test-wallet", { detail: { reject: true } })));
   const connect = page.getByRole("button", { name: "Connect wallet", exact: true });
   await connect.focus();

@@ -1,5 +1,5 @@
 // Public-mode entry state for the landing page. It only reads the confirmed deployment handoff
-// that a later platform stage places beside the export (imd-deployment.json) through the SDK's
+// beside the export (imd-deployment.json) through the SDK's
 // digest-checked loader. On-chain verification (chain, receipt, trace, runtime code) happens when
 // the #/ethereum route builds its ChainAdapter; this probe never invents or accepts an address.
 import { sdk, release } from "./sdk";
@@ -37,7 +37,7 @@ export const PUBLIC_FACTS = {
   imd: release.imd as string,
   intake: release.intake as string,
   actions: Object.keys(release.actions).map(a => `job.${a}`),
-  productionDeployment: release.productionDeployment as null,
+  productionDeployment: release.productionDeployment,
   liveCompatibility: release.liveCompatibility as string,
   productionReady: release.productionReady as boolean,
   officialX: release.officialX as string,

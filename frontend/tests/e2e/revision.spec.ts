@@ -220,8 +220,8 @@ test("a verified single output updates the file stage; a wide Markdown table sta
     return !!hit && el.contains(hit);
   });
   expect(clickable).toBe(true);
-  await mkdir("../docs/validation/platform-ux-v1/final/fixtures/raw", {recursive:true});
-  await writeFile(`../docs/validation/platform-ux-v1/final/fixtures/raw/${test.info().project.name}-table-measurements.json`, JSON.stringify({ ...m, clickable, scrollLeft: await region.evaluate((el) => el.scrollLeft) }, null, 2));
+  await mkdir("../test/scratch/platform-browser-evidence/raw", {recursive:true});
+  await writeFile(`../test/scratch/platform-browser-evidence/raw/${test.info().project.name}-table-measurements.json`, JSON.stringify({ ...m, clickable, scrollLeft: await region.evaluate((el) => el.scrollLeft) }, null, 2));
 
   const downloaded = page.waitForEvent("download");
   await link.click();

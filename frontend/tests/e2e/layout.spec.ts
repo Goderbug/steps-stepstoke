@@ -1,5 +1,4 @@
 import { disclose, selectFile } from "./actions";
-import { readFile } from "node:fs/promises";
 import { test, expect } from "./harness";
 
 test("long identifiers, prose, Markdown code and failed verification reflow at the configured width", async ({ page }, info) => {
@@ -38,28 +37,17 @@ test("long identifiers, prose, Markdown code and failed verification reflow at t
 });
 
 test("static export works beneath a gateway subpath with local metadata and assets", async ({ page, baseURL }) => {
-  const origin = new URL(baseURL!).origin;
-  // Serve the actual dist bytes unchanged under /gateway/. There is no app server or rewrite.
-  // Playwright's route is only a static file transport so this test also runs against vite preview.
-  await page.route(`${origin}/gateway/**`, async (route) => {
-    const pathname = new URL(route.request().url()).pathname;
-    const relative = pathname.slice("/gateway/".length) || "index.html";
-    if (relative.includes("..")) return route.abort();
-    const body = await readFile(`../dist/${relative}`);
-    const ext = relative.split(".").pop();
-    const type = ext === "js" ? "text/javascript" : ext === "css" ? "text/css" : ext === "svg" ? "image/svg+xml" : ext === "png" ? "image/png" : "text/html";
-    return route.fulfill({ status: 200, body, contentType: type });
-  });
-  await page.goto(`${origin}/gateway/index.html`);
+  // The real static preview serves unchanged dist bytes under /preview/.
+  await page.goto(`${baseURL}#/configuration`);
   await expect(page.getByRole("heading", { name: "Public projects", exact: true })).toBeVisible();
   await disclose(page, /^Deployment status/);
-  await expect(page.getByText("A1_INTEGRATION_PENDING", { exact: true })).toBeVisible();
+  await expect(page.getByText("HANDOFF_PRESENT_UNVERIFIED", { exact: true })).toBeVisible();
   await expect(page).toHaveTitle("STEPS · Stepstoke · Open Workshop");
   const metadata = await page.locator("meta[property='og:image']").getAttribute("content");
   expect(metadata).toBe("./og.png");
   expect(await page.locator(".brand img").evaluate((e) => (e as HTMLImageElement).naturalWidth)).toBeGreaterThan(0);
   const paths = await page.evaluate(() => performance.getEntriesByType("resource").map((entry) => new URL(entry.name).pathname));
-  expect(paths.filter((path) => /\.(js|css|svg)$/.test(path)).every((path) => path.startsWith("/gateway/"))).toBe(true);
+  expect(paths.filter((path) => /\.(js|css|svg)$/.test(path)).every((path) => path.startsWith("/preview/"))).toBe(true);
   await page.getByRole("link", { name: "Demo", exact: true }).click();
   await expect(page.getByRole("link", { name: "Relay introduction", exact: true })).toBeVisible();
 });

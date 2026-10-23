@@ -1,6 +1,15 @@
 {
   "chainId": 1,
-  "productionDeployment": null,
+  "productionDeployment": {
+    "encoder": "0xae9a9624e6354bbd029fefa762bafd43fb9f6886",
+    "verifier": "0x52a459aaf8044c5bc7f5a8198ef7305367e98ec4",
+    "factory": "0xff1519c0b9ae4053d1505bc0e5226178109e0abc",
+    "transactionHash": "0x6377bb6862896730e68c455685bd057d87ddeafca57633370df20c196479bad6",
+    "blockNumber": 26248821,
+    "blockHash": "0x700af02aa56a2917a53049a31db6c392d85ae856973d02fb3eb9999f5c293540",
+    "sourceCommit": "751f3901d4453e1477828e4f7ef0d6af8bc03485",
+    "attestationHash": "e1bfa2900f7b58e29f97514ac45694a4869136e95821dc31ca8a8375437315ce"
+  },
   "liveCompatibility": "NOT_RUN",
   "productionReady": false,
   "gates": {
@@ -12,7 +21,7 @@
         "docs/validation/local-repair-v1/README.md",
         "docs/validation/release-correction-v1/README.md"
       ],
-      "detail": "Official launch 2455 passed seven admission checks, including independent review, at audited source 751f3901d4453e1477828e4f7ef0d6af8bc03485. Local SDK/config corrections are reviewed separately. Known liveness limits remain disclosed; this is not public deployment or live-profile acceptance."
+      "detail": "Official source 751f3901d4453e1477828e4f7ef0d6af8bc03485 passed IMD admission including independent source review. The exact local SDK/config correction and website integration are separate authorship. Deployment verification does not close the remaining production review or live-profile gates."
     },
     "runtimeChildPolicy": {
       "status": "OPEN",
@@ -22,7 +31,7 @@
         "docs/validation/local-repair-v1/README.md",
         "docs/validation/release-correction-v1/README.md"
       ],
-      "detail": "The official launch passed manifest and protected-invariant admission checks. The three named contracts and full runtime-child creation pass locally; actual service deployment is still pending."
+      "detail": "The three named applications are deployed and independently verified. Runtime-child creation remains locally tested only; product execution and runtime-child service acceptance are still open."
     },
     "manifestCompatibility": {
       "status": "OPEN",
@@ -42,7 +51,7 @@
         "docs/validation/local-repair-v1/README.md",
         "docs/validation/release-correction-v1/README.md"
       ],
-      "detail": "The delivered segment-work charge is retained as an explicit compatibility restriction. Original 32768-byte result and exact 16-asset witness replay succeeds locally at 13687379 gas under a 16777216 declared limit. Finite measurements do not prove a universal bound; service deployment remains pending."
+      "detail": "The audited 8*segmentFlushes charge and narrower manifest compatibility are retained. The exact 32768-byte/16-asset witness previously replayed locally at 13687379 gas under a 16777216 declared limit. Deployment is now verified; these finite local measurements do not establish universal or live-profile gas bounds."
     },
     "liveExecution": {
       "status": "NOT_RUN",
@@ -55,14 +64,12 @@
       "detail": "No paid mainnet operation was authorized or performed. Local mocks and free checks are not live compatibility."
     },
     "deploymentVerification": {
-      "status": "NOT_RUN",
+      "status": "PASS",
       "evidence": [
-        "docs/validation/rc-v1/README.md",
-        "docs/REVIEW.md",
-        "docs/validation/local-repair-v1/README.md",
-        "docs/validation/release-correction-v1/README.md"
+        "docs/validation/live-connection-v1/chain-report.json",
+        "docs/validation/live-connection-v1/deployment-evidence.json"
       ],
-      "detail": "Official launch cad0c789-2611-4392-bec0-456cb8e57d2c is admitted with zero deployment artifacts at the last observation. No verified production addresses or deployment receipt exist in this release."
+      "detail": "Actual live handoff independently verified on Ethereum: canonical successful receipt/block on two public operators, live creation trace, exact 50-source inventory, unchanged ABIs, creation/runtime code and constructor/immutable bindings. This permits reads only; paid live profiles remain NOT_RUN."
     }
   },
   "profiles": {

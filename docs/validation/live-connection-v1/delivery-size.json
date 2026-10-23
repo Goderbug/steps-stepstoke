@@ -1,0 +1,22 @@
+{
+  "status": "PASS",
+  "fileCount": 367,
+  "rawBytes": 13515889,
+  "completeSourceSnapshotGitBundleBytes": 6800229,
+  "reserveForMeasurementReportBytes": 65536,
+  "limitBytes": 8388608,
+  "method": "Complete current deliverable file set from git ls-files cached/others/exclude-standard, copied to a fresh temporary repository; verified single-snapshot Git bundle. Required offline SDK archives and all inherited evidence are preserved.",
+  "originalRepositoryHistory": "UNCHANGED; not truncated, replaced or measured as a complete historical clone",
+  "generatedDirectories": "EXCLUDED at every nesting level",
+  "requiredOfflineDependencyArchives": "PRESERVED: the unchanged root package-lock and SDK regressions require vendor/npm/*.tgz",
+  "frontendDependencyArchives": "NONE",
+  "excludedInputsAndScratch": [
+    ".imd/",
+    "test/scratch/",
+    "ignored build/cache/node_modules directories"
+  ],
+  "publicExport": {
+    "bytes": 968457,
+    "manifestSha256": "993c6ed2c93f2d6062843e511de8f38875889b25eaf5819563e75648ea284f96"
+  }
+}

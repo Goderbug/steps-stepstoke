@@ -6,7 +6,7 @@ import { test, expect } from "./harness";
 import { PNG_AMBER_B64 } from "../../src/domain/fixtures";
 
 async function demo(page: Page, hash = "#/demo") {
-  await page.goto("./");
+  await page.goto("./#/demo");
   await page.evaluate(() => localStorage.clear());
   await page.goto(`./${hash}`);
   await page.reload();
@@ -69,7 +69,7 @@ test("two accounts execute all six functions with downloaded HTML-image-HTML ret
   await expect(page.getByRole("heading", { name: "Round 1 output", exact: true })).toBeVisible();
 
   const evidence: object[] = [];
-  await mkdir("../docs/validation/platform-ux-v1/final/fixtures/files", { recursive: true });
+  await mkdir("../test/scratch/platform-browser-evidence/files", { recursive: true });
   const download = async (key: string, revision: number, ext: string) => {
     const row = page.locator("#assets");
     await selectFile(page, key);
@@ -77,7 +77,7 @@ test("two accounts execute all six functions with downloaded HTML-image-HTML ret
     const pending = page.waitForEvent("download");
     await row.getByRole("link", { name: "Download verified file" }).click();
     const d = await pending;
-    const path = `../docs/validation/platform-ux-v1/final/fixtures/files/${info.project.name}-${key}-r${revision}.${ext}`;
+    const path = `../test/scratch/platform-browser-evidence/files/${info.project.name}-${key}-r${revision}.${ext}`;
     await d.saveAs(path);
     const bytes = await readFile(path);
     const sha256 = `0x${createHash("sha256").update(bytes).digest("hex")}`;
@@ -152,7 +152,7 @@ test("two accounts execute all six functions with downloaded HTML-image-HTML ret
   await disclose(page, /^Exact proposal/);
   await expect(funding(page)).toContainText("job.open / None; first execution");
   expect(await page.evaluate(() => (window as unknown as { __walletCalls: string[] }).__walletCalls)).toEqual([]);
-  await writeFile(`../docs/validation/platform-ux-v1/final/fixtures/files/${info.project.name}-journey.json`, JSON.stringify({ mode: "fixture-only", realWalletRequests: [], checks: "Six flows; four executed rounds; exact retained HTML/PNG; historical R1 fork; independent Node SHA-256 checks", files: evidence }, null, 2));
+  await writeFile(`../test/scratch/platform-browser-evidence/files/${info.project.name}-journey.json`, JSON.stringify({ mode: "fixture-only", realWalletRequests: [], checks: "Six flows; four executed rounds; exact retained HTML/PNG; historical R1 fork; independent Node SHA-256 checks", files: evidence }, null, 2));
   await page.screenshot({ scale: "css", path: `../test/scratch/regression-screenshots/${info.project.name}-historical-fork.jpg`, type: "jpeg", quality: 50 });
 });
 

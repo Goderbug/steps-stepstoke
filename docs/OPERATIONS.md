@@ -1,6 +1,6 @@
 # STEPS operator runbook
 
-Release candidate only: `productionDeployment:null`, `liveCompatibility:NOT_RUN`, `productionReady:false`. Ethereum chain 1 is the sole public target. No mainnet transaction is authorized by this document. Sepolia cannot execute the required Intake job actions. Local chain 31337 is a disposable test mode, never a substitute for live evidence.
+Connected verified Ethereum deployment: `productionDeployment` records the actual handoff; `liveCompatibility:NOT_RUN`, `productionReady:false`. Ethereum chain 1 is the sole public target. No mainnet transaction is authorized by this document. Sepolia cannot execute the required Intake job actions. Local chain 31337 is a disposable test mode, never a substitute for live evidence.
 
 ## The six operations
 
@@ -34,7 +34,7 @@ Artifact downloads use the accepted descriptor SHA-256, byte length and MIME; pu
 
 ## Public configuration and wallet behavior
 
-A later actual `.imd/reads/deployment.json` supplies the complete named contract set, source commit and attestation identity. Build the static export, then run the importer described in [HANDOFF.md](HANDOFF.md). The only public address/configuration input at runtime is `dist/imd-deployment.json`; there is no independent `ethereum-config.json`. Auxiliary inventoried evidence supplies receipt coordinates and gate records, never addresses. `node tools/observe-ethereum.mjs dist` verifies the same bytes and Ethereum deployment without signing. Local configuration remains a separate chain-31337/loopback-only test path.
+The actual live-project `.imd/reads/deployment.json` supplies the complete named contract set, source commit and attestation identity. Build the static export, then run the importer described in [HANDOFF.md](HANDOFF.md). The only public address/configuration input at runtime is `dist/imd-deployment.json`; there is no independent `ethereum-config.json`. Auxiliary inventoried evidence supplies receipt coordinates and gate records, never addresses. `node tools/observe-ethereum.mjs dist` verifies the same bytes and Ethereum deployment without signing. Local configuration remains a separate chain-31337/loopback-only test path.
 
 The adapter verifies the chain, product code, immutable dependencies, registration, policy and checkpoint witnesses. Writes require all six evidence gates, live evidence for each of the five profiles and the matching source/attestation/deployment. Verified code alone enables public reads, not signing. Connect supports discovered EIP-6963 browser wallets, Coinbase Wallet/Smart Wallet and mobile wallet-browser links. A wrong network requires the user to choose the visible switch control; reads and signing preparation never switch implicitly. Every signing step rechecks the selected account/network/provider and proposal state.
 
@@ -46,4 +46,4 @@ Current official Markdown and PNG artifact URLs return HTTP 200 and exact bytes 
 
 ## Before a later launch
 
-Review [REVIEW.md](REVIEW.md) and the production-gate schema/data. Obtain final independent security review, explicit runtime-child policy acceptance, service simulation limits, real result-envelope evidence for every profile and properly authorized live checks. Refresh official deployment/action/price/code evidence. Replay the final three-name batch and include full calldata in the service simulation. Keep no material security/size/gas/policy blocker open. Only the later manifest assignment creates `launch.json`; only an independently authorized launch process may sign/broadcast. Platform publication later is separate from per-round site publishing, which remains disabled.
+Review [REVIEW.md](REVIEW.md) and the production-gate schema/data. Obtain final independent security review, explicit runtime-child policy acceptance, service simulation limits, real result-envelope evidence for every profile and properly authorized live checks. Refresh official deployment/action/price/code evidence. Replay the final three-name batch and include full calldata in the service simulation. Keep no material security/size/gas/policy blocker open. Only the later manifest assignment creates `launch.json`; only an independently authorized launch process may sign/broadcast. IMD site publication is separate from per-round site publishing, which remains disabled.

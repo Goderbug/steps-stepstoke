@@ -1,0 +1,94 @@
+{
+  "checkedAt": "2026-10-23T01:13:24.318Z",
+  "status": "PASS",
+  "exportFiles": 13,
+  "totalExportBytes": 968457,
+  "inventory": [
+    {
+      "path": "abi/RelayEncoder.json",
+      "bytes": 7927,
+      "sha256": "7f7cc7133fb159f4ae248c9c903855ea506cf154e8e6017680075e3c50d9153a"
+    },
+    {
+      "path": "abi/RelayFactory.json",
+      "bytes": 6017,
+      "sha256": "57287ca9e538a407bbfbd14dabc237bb93e3d6750c232c9c04b575751d9bf5e3"
+    },
+    {
+      "path": "abi/RelayVerifier.json",
+      "bytes": 5582,
+      "sha256": "788539b92c802abeb9a461146b9e9b7585c5e91802e49640704532b3bea7f157"
+    },
+    {
+      "path": "assets/dist-CBo28-gF.js",
+      "bytes": 102692,
+      "sha256": "009be027824e69c082eb0f82f7db5d50025023ab36c5ea51abf00adf5e805fd4"
+    },
+    {
+      "path": "assets/index-4UpPiOax.css",
+      "bytes": 18774,
+      "sha256": "495955c0bf1f98305d4536decee51018fccbb3a4ea63b61fcab2179edff5ff0c"
+    },
+    {
+      "path": "assets/index-C_5xI0CH.js",
+      "bytes": 756982,
+      "sha256": "a3de1aaddece5edcd1ef46428eafe14f261271e521f0df0d93936ff36ab34b6b"
+    },
+    {
+      "path": "deployment-evidence.json",
+      "bytes": 13946,
+      "sha256": "06fccb88497b58f9dbc53835695d289ac2a0bfba625e4299e07ee19f22a4f6a4"
+    },
+    {
+      "path": "favicon.svg",
+      "bytes": 267,
+      "sha256": "759fec54d3994b36ac2f504a699d7cac8bf5febc16a14f8b9a890d7fa46aff24"
+    },
+    {
+      "path": "imd-deployment.json",
+      "bytes": 4043,
+      "sha256": "993c6ed2c93f2d6062843e511de8f38875889b25eaf5819563e75648ea284f96"
+    },
+    {
+      "path": "index.html",
+      "bytes": 1023,
+      "sha256": "ec480aa6233a05da8e7c69cc5f52b06ee76c59ba1758683ba21f7690c0f2b2c7"
+    },
+    {
+      "path": "og.png",
+      "bytes": 50098,
+      "sha256": "5679126801c83042c4b3e74e19e1e6d7e0f7048d0319f1cc6edcc0a6f737f8e5"
+    },
+    {
+      "path": "og.svg",
+      "bytes": 979,
+      "sha256": "ae8e3af19715ba91d948cc1a028f3d38e20fb6f57508103fae4068ffd650fe5f"
+    },
+    {
+      "path": "public-read-transport.json",
+      "bytes": 127,
+      "sha256": "8c64b7f1ad54f3aa7362b993ef7ef580af430892d7d6d12dd35c2f1bf57b8b4b"
+    }
+  ],
+  "capabilities": {
+    "read": true,
+    "createBranch": false,
+    "propose": false,
+    "sponsor": false,
+    "fork": false,
+    "bindingRetry": false,
+    "realWalletSigning": false
+  },
+  "protectedBuildDependenciesContractsABIsManifest": "UNCHANGED",
+  "networkAndWalletParameters": "MATCH_AUTHENTIC_HANDOFF",
+  "contractSourceCommit": "751f3901d4453e1477828e4f7ef0d6af8bc03485",
+  "websiteSourceCommit": "ASSIGNED_BY_IMD_AFTER_REVIEW; not the inherited HEAD or contract source",
+  "publication": {
+    "websiteCommit": null,
+    "url": null,
+    "cid": null,
+    "status": "NO_SERVICE_PUBLICATION_OUTPUT_AVAILABLE_TO_WORKER"
+  },
+  "liveCompatibility": "NOT_RUN",
+  "productionReady": false
+}

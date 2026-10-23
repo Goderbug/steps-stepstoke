@@ -1,0 +1,166 @@
+{
+  "checkedAt": "2026-10-23T01:07:24.909Z",
+  "interceptedRoutes": 0,
+  "walletSigning": 0,
+  "paidCalls": 0,
+  "results": [
+    {
+      "width": 390,
+      "height": 844,
+      "primary": "LIVE_ETHEREUM",
+      "projects": "EMPTY_CHAIN_STATE_VERIFIED",
+      "payments": "DISABLED",
+      "mainActionVisible": true,
+      "horizontalOverflow": 0,
+      "walletSheet": "OPEN_ESCAPE_FOCUS_RETURN_PASS",
+      "configuration": "DIGEST_CHECKED_HANDOFF_PASS",
+      "pageErrors": [],
+      "requestFailures": [
+        {
+          "url": "http://127.0.0.1:4175/preview/assets/dist-CBo28-gF.js",
+          "error": "net::ERR_ABORTED"
+        },
+        {
+          "url": "http://127.0.0.1:4175/preview/assets/index-4UpPiOax.css",
+          "error": "net::ERR_ABORTED"
+        },
+        {
+          "url": "http://127.0.0.1:4175/preview/favicon.svg",
+          "error": "net::ERR_ABORTED"
+        },
+        {
+          "url": "http://127.0.0.1:4175/preview/og.svg",
+          "error": "net::ERR_ABORTED"
+        },
+        {
+          "url": "http://127.0.0.1:4175/preview/assets/dist-CBo28-gF.js",
+          "error": "net::ERR_ABORTED"
+        },
+        {
+          "url": "http://127.0.0.1:4175/preview/assets/index-4UpPiOax.css",
+          "error": "net::ERR_ABORTED"
+        },
+        {
+          "url": "http://127.0.0.1:4175/preview/assets/index-C_5xI0CH.js",
+          "error": "net::ERR_ABORTED"
+        },
+        {
+          "url": "http://127.0.0.1:4175/preview/deployment-evidence.json",
+          "error": "net::ERR_ABORTED"
+        },
+        {
+          "url": "http://127.0.0.1:4175/preview/og.png",
+          "error": "net::ERR_ABORTED"
+        }
+      ]
+    },
+    {
+      "width": 320,
+      "height": 844,
+      "primary": "LIVE_ETHEREUM",
+      "projects": "EMPTY_CHAIN_STATE_VERIFIED",
+      "payments": "DISABLED",
+      "mainActionVisible": true,
+      "horizontalOverflow": 0,
+      "walletSheet": "OPEN_ESCAPE_FOCUS_RETURN_PASS",
+      "configuration": "DIGEST_CHECKED_HANDOFF_PASS",
+      "pageErrors": [],
+      "requestFailures": [
+        {
+          "url": "http://127.0.0.1:4175/preview/abi/RelayVerifier.json",
+          "error": "net::ERR_ABORTED"
+        },
+        {
+          "url": "http://127.0.0.1:4175/preview/assets/dist-CBo28-gF.js",
+          "error": "net::ERR_ABORTED"
+        },
+        {
+          "url": "http://127.0.0.1:4175/preview/assets/index-C_5xI0CH.js",
+          "error": "net::ERR_ABORTED"
+        },
+        {
+          "url": "http://127.0.0.1:4175/preview/favicon.svg",
+          "error": "net::ERR_ABORTED"
+        },
+        {
+          "url": "http://127.0.0.1:4175/preview/index.html",
+          "error": "net::ERR_ABORTED"
+        },
+        {
+          "url": "http://127.0.0.1:4175/preview/og.png",
+          "error": "net::ERR_ABORTED"
+        },
+        {
+          "url": "http://127.0.0.1:4175/preview/og.svg",
+          "error": "net::ERR_ABORTED"
+        },
+        {
+          "url": "http://127.0.0.1:4175/preview/public-read-transport.json",
+          "error": "net::ERR_ABORTED"
+        },
+        {
+          "url": "http://127.0.0.1:4175/preview/abi/RelayEncoder.json",
+          "error": "net::ERR_ABORTED"
+        },
+        {
+          "url": "http://127.0.0.1:4175/preview/abi/RelayFactory.json",
+          "error": "net::ERR_ABORTED"
+        },
+        {
+          "url": "http://127.0.0.1:4175/preview/assets/dist-CBo28-gF.js",
+          "error": "net::ERR_ABORTED"
+        },
+        {
+          "url": "http://127.0.0.1:4175/preview/assets/index-4UpPiOax.css",
+          "error": "net::ERR_ABORTED"
+        }
+      ]
+    },
+    {
+      "width": 1440,
+      "height": 900,
+      "primary": "LIVE_ETHEREUM",
+      "projects": "EMPTY_CHAIN_STATE_VERIFIED",
+      "payments": "DISABLED",
+      "mainActionVisible": true,
+      "horizontalOverflow": 0,
+      "walletSheet": "OPEN_ESCAPE_FOCUS_RETURN_PASS",
+      "configuration": "DIGEST_CHECKED_HANDOFF_PASS",
+      "pageErrors": [],
+      "requestFailures": [
+        {
+          "url": "http://127.0.0.1:4175/preview/assets/dist-CBo28-gF.js",
+          "error": "net::ERR_ABORTED"
+        },
+        {
+          "url": "http://127.0.0.1:4175/preview/assets/index-4UpPiOax.css",
+          "error": "net::ERR_ABORTED"
+        },
+        {
+          "url": "http://127.0.0.1:4175/preview/og.png",
+          "error": "net::ERR_ABORTED"
+        },
+        {
+          "url": "http://127.0.0.1:4175/preview/public-read-transport.json",
+          "error": "net::ERR_ABORTED"
+        },
+        {
+          "url": "http://127.0.0.1:4175/preview/assets/index-4UpPiOax.css",
+          "error": "net::ERR_ABORTED"
+        },
+        {
+          "url": "http://127.0.0.1:4175/preview/deployment-evidence.json",
+          "error": "net::ERR_ABORTED"
+        },
+        {
+          "url": "http://127.0.0.1:4175/preview/og.svg",
+          "error": "net::ERR_ABORTED"
+        },
+        {
+          "url": "http://127.0.0.1:4175/preview/public-read-transport.json",
+          "error": "net::ERR_ABORTED"
+        }
+      ]
+    }
+  ]
+}

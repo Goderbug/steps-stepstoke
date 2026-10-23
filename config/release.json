@@ -11,7 +11,16 @@
   },
   "compiler": "0.8.26",
   "ethers": "6.17.0",
-  "productionDeployment": null,
+  "productionDeployment": {
+    "encoder": "0xae9a9624e6354bbd029fefa762bafd43fb9f6886",
+    "verifier": "0x52a459aaf8044c5bc7f5a8198ef7305367e98ec4",
+    "factory": "0xff1519c0b9ae4053d1505bc0e5226178109e0abc",
+    "transactionHash": "0x6377bb6862896730e68c455685bd057d87ddeafca57633370df20c196479bad6",
+    "blockNumber": 26248821,
+    "blockHash": "0x700af02aa56a2917a53049a31db6c392d85ae856973d02fb3eb9999f5c293540",
+    "sourceCommit": "751f3901d4453e1477828e4f7ef0d6af8bc03485",
+    "attestationHash": "e1bfa2900f7b58e29f97514ac45694a4869136e95821dc31ca8a8375437315ce"
+  },
   "liveCompatibility": "NOT_RUN",
   "independentContributorReview": "NOT_RUN_FOR_LOCAL_REPAIR_V1",
   "productionReady": false,
@@ -91,7 +100,7 @@
       "initcodeBytes": 14164
     }
   },
-  "independentAgentReview": "IMD_INDEPENDENT_AUDIT_ADMITTED; LOCAL_SELF_REVIEW_PASS; DEPLOYMENT_NOT_VERIFIED",
+  "independentAgentReview": "IMD_INDEPENDENT_SOURCE_AUDIT_ADMITTED; LIVE_DEPLOYMENT_VERIFIED; LIVE_PROFILES_NOT_RUN",
   "validationReport": "docs/validation/release-correction-v1/README.md",
   "sourceBaseline": {
     "repository": "https://github.com/identity-md-launches/launch-2393-prepare-steps-stepstoke-release-candidat",

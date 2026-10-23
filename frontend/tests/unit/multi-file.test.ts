@@ -2,7 +2,7 @@
 import { afterEach, beforeEach, describe, expect, it, vi } from "vitest";
 import { hexlify, keccak256 } from "ethers";
 import { ChainAdapter, type LocalConfig } from "../../src/domain/chainAdapter";
-import config from "../../public/local-config.json";
+import config from "../fixtures/local-config.json";
 
 const branch = "0x" + "11".repeat(20);
 const digest = "0x" + "22".repeat(32);

@@ -1,0 +1,395 @@
+{
+  "baselineWorkspaceCommit": "2a22f79aa9e722368b22d13857c56bfcce1eb2e0",
+  "officialContractSourceCommit": "751f3901d4453e1477828e4f7ef0d6af8bc03485",
+  "websiteCommit": null,
+  "websiteCommitReason": "Assigned by IMD after this working tree is accepted; no history/staging/commit mutation performed by worker.",
+  "patch": "complete-diff.patch.xz",
+  "patchSha256": "9b3f7fd32e51663a7c3364d0a96bcc8f7b14a516afa63b57a41745bc2ecb9d0b",
+  "uncompressedPatchBytes": 2348381,
+  "scope": "All deliverable changes against inherited HEAD except this self-index, its patch archive and the separately regenerated size report. Git diff includes binary data and added files.",
+  "excludedSelfAccountingFiles": [
+    "docs/validation/live-connection-v1/changes.json",
+    "docs/validation/live-connection-v1/complete-diff.patch.xz",
+    "docs/validation/live-connection-v1/delivery-size.json"
+  ],
+  "changes": [
+    {
+      "path": "DESIGN.md",
+      "change": "modified",
+      "bytes": 18019,
+      "sha256": "ac1ae04d320e9221260723c165653943b875a3ffdeed6ae5b5165c5992277d58"
+    },
+    {
+      "path": "README.md",
+      "change": "modified",
+      "bytes": 8235,
+      "sha256": "cde80ce616806926df89583b7ecae26974e0e3ebe3798dfc145cb2bb4daabbce"
+    },
+    {
+      "path": "config/production-gate.json",
+      "change": "modified",
+      "bytes": 4471,
+      "sha256": "9a1a72d9ab90d4555268d8cfb5ea4a2f064bdf9a667bd8fa6c65b78fa485d307"
+    },
+    {
+      "path": "config/release.json",
+      "change": "modified",
+      "bytes": 17224,
+      "sha256": "45d1cb8dd792bee45b1c30e9150395616c2af69ecbd3edd033933f94cc4d8607"
+    },
+    {
+      "path": "dist/abi/RelayEncoder.json",
+      "change": "added",
+      "bytes": 7927,
+      "sha256": "7f7cc7133fb159f4ae248c9c903855ea506cf154e8e6017680075e3c50d9153a"
+    },
+    {
+      "path": "dist/abi/RelayFactory.json",
+      "change": "added",
+      "bytes": 6017,
+      "sha256": "57287ca9e538a407bbfbd14dabc237bb93e3d6750c232c9c04b575751d9bf5e3"
+    },
+    {
+      "path": "dist/abi/RelayVerifier.json",
+      "change": "added",
+      "bytes": 5582,
+      "sha256": "788539b92c802abeb9a461146b9e9b7585c5e91802e49640704532b3bea7f157"
+    },
+    {
+      "path": "dist/assets/dist-CBo28-gF.js",
+      "change": "added",
+      "bytes": 102692,
+      "sha256": "009be027824e69c082eb0f82f7db5d50025023ab36c5ea51abf00adf5e805fd4"
+    },
+    {
+      "path": "dist/assets/dist-V2jKd6xN.js",
+      "change": "deleted",
+      "bytes": null,
+      "sha256": null
+    },
+    {
+      "path": "dist/assets/index-CNVEwO4S.js",
+      "change": "deleted",
+      "bytes": null,
+      "sha256": null
+    },
+    {
+      "path": "dist/assets/index-C_5xI0CH.js",
+      "change": "added",
+      "bytes": 756982,
+      "sha256": "a3de1aaddece5edcd1ef46428eafe14f261271e521f0df0d93936ff36ab34b6b"
+    },
+    {
+      "path": "dist/deployment-evidence.json",
+      "change": "added",
+      "bytes": 13946,
+      "sha256": "06fccb88497b58f9dbc53835695d289ac2a0bfba625e4299e07ee19f22a4f6a4"
+    },
+    {
+      "path": "dist/imd-deployment.json",
+      "change": "added",
+      "bytes": 4043,
+      "sha256": "993c6ed2c93f2d6062843e511de8f38875889b25eaf5819563e75648ea284f96"
+    },
+    {
+      "path": "dist/index.html",
+      "change": "modified",
+      "bytes": 1023,
+      "sha256": "ec480aa6233a05da8e7c69cc5f52b06ee76c59ba1758683ba21f7690c0f2b2c7"
+    },
+    {
+      "path": "dist/local-config.json",
+      "change": "deleted",
+      "bytes": null,
+      "sha256": null
+    },
+    {
+      "path": "dist/public-read-transport.json",
+      "change": "added",
+      "bytes": 127,
+      "sha256": "8c64b7f1ad54f3aa7362b993ef7ef580af430892d7d6d12dd35c2f1bf57b8b4b"
+    },
+    {
+      "path": "docs/BUILD.md",
+      "change": "modified",
+      "bytes": 5110,
+      "sha256": "2a7e95306a58a1527c57a9b4f86d9ce18db446880ab6660b4cd92738150d7f3f"
+    },
+    {
+      "path": "docs/HANDOFF.md",
+      "change": "modified",
+      "bytes": 9044,
+      "sha256": "dae70f19bac9a478e154cdeea186355f0fd00dd5d43879f7d0208be5e8f7846b"
+    },
+    {
+      "path": "docs/OPERATIONS.md",
+      "change": "modified",
+      "bytes": 9977,
+      "sha256": "fa79a30024df63c43185e447615ea5d6de89d9644a928ebd75c7454171fc5cd5"
+    },
+    {
+      "path": "docs/REVIEW.md",
+      "change": "modified",
+      "bytes": 5774,
+      "sha256": "71207b5b438d6685d159e3d00929e345fd5cc2b033d22276261232c453ef4b6b"
+    },
+    {
+      "path": "docs/validation/live-connection-v1/README.md",
+      "change": "added",
+      "bytes": 16224,
+      "sha256": "f5ecf41659961dc9bc909e5e0b4d467cad2048dc03d5510b5bd29f0393d2cf19"
+    },
+    {
+      "path": "docs/validation/live-connection-v1/browser-public-reads.json",
+      "change": "added",
+      "bytes": 16670,
+      "sha256": "f9acfbcaf3b83564edc56e39882c666a5c8eb181226f6274bd50012bf1fb67fd"
+    },
+    {
+      "path": "docs/validation/live-connection-v1/chain-report.json",
+      "change": "added",
+      "bytes": 17098,
+      "sha256": "9fac16c9e78c1b0acc8cea17781e8e2a3daf03708a668805c3c7e28f1764282d"
+    },
+    {
+      "path": "docs/validation/live-connection-v1/checks-index.json",
+      "change": "added",
+      "bytes": 2689,
+      "sha256": "3a8fd5a29095a4d0a0f8963d8bef7c5034bb5d70998a0474185f8521f031fbc1"
+    },
+    {
+      "path": "docs/validation/live-connection-v1/checks.tar.xz",
+      "change": "added",
+      "bytes": 23808,
+      "sha256": "d097ebbe9c533c05459fe4455027877b2dc6f9f10f25966af76e90f9f1f310b0"
+    },
+    {
+      "path": "docs/validation/live-connection-v1/correction-import.json",
+      "change": "added",
+      "bytes": 3365,
+      "sha256": "97eda3b013e6d8c729d51ed05dc701ce12c0bfe4142b744fdd515b7be9e5bdbb"
+    },
+    {
+      "path": "docs/validation/live-connection-v1/deployment-evidence.json",
+      "change": "added",
+      "bytes": 13946,
+      "sha256": "06fccb88497b58f9dbc53835695d289ac2a0bfba625e4299e07ee19f22a4f6a4"
+    },
+    {
+      "path": "docs/validation/live-connection-v1/final-assets.json",
+      "change": "added",
+      "bytes": 2834,
+      "sha256": "c700cf5a9897b2ca885e50b2fe2eda3d9053915e79e1515e5219273a55391082"
+    },
+    {
+      "path": "docs/validation/live-connection-v1/live-browser.json",
+      "change": "added",
+      "bytes": 5056,
+      "sha256": "05ce50549f16a533ae842cb6093b5ca3eae8dc311803ebf38ff0c7f967aee318"
+    },
+    {
+      "path": "docs/validation/live-connection-v1/public-read-transport.json",
+      "change": "added",
+      "bytes": 127,
+      "sha256": "8c64b7f1ad54f3aa7362b993ef7ef580af430892d7d6d12dd35c2f1bf57b8b4b"
+    },
+    {
+      "path": "docs/validation/live-connection-v1/screenshots/live-1440.png",
+      "change": "added",
+      "bytes": 62921,
+      "sha256": "62fd9a981244d581d4ee5415b59b4bee02b8d774f122cb6ae00072a81caac461"
+    },
+    {
+      "path": "docs/validation/live-connection-v1/screenshots/live-320.png",
+      "change": "added",
+      "bytes": 55188,
+      "sha256": "6a6878a6b7922e624fda34b70c95aa9a87eb996c822db879b02b1d27e2974b3b"
+    },
+    {
+      "path": "docs/validation/live-connection-v1/screenshots/live-390.png",
+      "change": "added",
+      "bytes": 56333,
+      "sha256": "34869763cd70c26538bdfa2e8c69b37d8527c70152f20df57edaea62a681827f"
+    },
+    {
+      "path": "docs/validation/live-connection-v1/screenshots/loading-390.png",
+      "change": "added",
+      "bytes": 97612,
+      "sha256": "3341990b162a3de29d4bc360fe0ba693322f5619968d87a27b8e13906da5bbfd"
+    },
+    {
+      "path": "docs/validation/live-connection-v1/taste.json",
+      "change": "added",
+      "bytes": 25472,
+      "sha256": "da47141cb6922bae23b1b7c0b221982785eb4b9c177aa2a20316a46cbeff2414"
+    },
+    {
+      "path": "frontend/README.md",
+      "change": "modified",
+      "bytes": 1140,
+      "sha256": "74aded370b26033e359e737b7063395c76775f24b7f2fafa4ac5ac4b60c3ab36"
+    },
+    {
+      "path": "frontend/public/local-config.json",
+      "change": "deleted",
+      "bytes": null,
+      "sha256": null
+    },
+    {
+      "path": "frontend/scripts/local-setup.mjs",
+      "change": "modified",
+      "bytes": 7670,
+      "sha256": "65cee247b8a02fef70cbfc27a99d996a3f4eb3a5635acc03a01a12b2ad5c370c"
+    },
+    {
+      "path": "frontend/src/App.tsx",
+      "change": "modified",
+      "bytes": 8485,
+      "sha256": "8a55fd000616aa59f9573d4362ad136d54e5db378b188c6f80bde7faeba94f33"
+    },
+    {
+      "path": "frontend/src/config.ts",
+      "change": "modified",
+      "bytes": 1163,
+      "sha256": "45460b0dc4bbbe93e7bd35e26548ef9f754cd20b38f87bad7f30d6b711bab868"
+    },
+    {
+      "path": "frontend/src/domain/liveAdapter.ts",
+      "change": "modified",
+      "bytes": 2179,
+      "sha256": "9c658456e5c6f90c3300e4f900eea85c753802265d846dd6d16f3737ab9c7974"
+    },
+    {
+      "path": "frontend/src/domain/publicMode.ts",
+      "change": "modified",
+      "bytes": 2579,
+      "sha256": "749beed5eb6a5d58075c7f3bbac3f84dbe6d73a5f205ca801ea4df32d660396b"
+    },
+    {
+      "path": "frontend/src/ui/LocalApp.tsx",
+      "change": "modified",
+      "bytes": 5703,
+      "sha256": "b5327b0de9761d7564a02042e6ed00f44d1b3fb8720fcaf9509ac9616b0ec63f"
+    },
+    {
+      "path": "frontend/src/ui/ProjectList.tsx",
+      "change": "modified",
+      "bytes": 7326,
+      "sha256": "77383da66b48172462ba00a939c312e585fc53244e15684d94ffb834adcdcd3c"
+    },
+    {
+      "path": "frontend/tests/e2e/harness.ts",
+      "change": "modified",
+      "bytes": 2864,
+      "sha256": "94cbe01f00688ddd150a56b0dfecd8578276a375666c2c4b3de0ce8198739ded"
+    },
+    {
+      "path": "frontend/tests/e2e/journey.spec.ts",
+      "change": "modified",
+      "bytes": 15341,
+      "sha256": "9b5bf3138c1129688d718d5d34a47e41bea917734620e7f7158ba523f7c14802"
+    },
+    {
+      "path": "frontend/tests/e2e/layout.spec.ts",
+      "change": "modified",
+      "bytes": 3890,
+      "sha256": "5100ae8e61b75fcdc49857a2edf5cf978edd52675c5b5d4a47f97ea09f1b4a97"
+    },
+    {
+      "path": "frontend/tests/e2e/platform.spec.ts",
+      "change": "modified",
+      "bytes": 16005,
+      "sha256": "7d1267028e41887e4b49a3b1faa5d8109e41a2b6d2ca45a2c70523dd0915e5c8"
+    },
+    {
+      "path": "frontend/tests/e2e/revision.spec.ts",
+      "change": "modified",
+      "bytes": 16290,
+      "sha256": "b8bec818346425a884dfdfe86765e7f9173f867e3deb1bbebb0eb794a0a6bfe2"
+    },
+    {
+      "path": "frontend/tests/e2e/w1.spec.ts",
+      "change": "modified",
+      "bytes": 19166,
+      "sha256": "7a4513aedf52c3bb6f51270b26e60718b2a583fe0418625cec82c70969316614"
+    },
+    {
+      "path": "frontend/tests/e2e/wallet.spec.ts",
+      "change": "modified",
+      "bytes": 5854,
+      "sha256": "c555c29f7fd1c4567d0b78ec5aa37a3288d5ad4216c0beec3f9121097e62d10a"
+    },
+    {
+      "path": "frontend/tests/fixtures/local-config.json",
+      "change": "added",
+      "bytes": 3473,
+      "sha256": "00c905d093964110122fbe1c1b1359c3580cb42a5285f7d7d8283b87eae442a5"
+    },
+    {
+      "path": "frontend/tests/integration/browser-chain.mjs",
+      "change": "modified",
+      "bytes": 59802,
+      "sha256": "5b0639aedcab48d64fac54b1299dcae5a63f2852385ddbb242a660ea60f7f662"
+    },
+    {
+      "path": "frontend/tests/unit/chain-provider.test.ts",
+      "change": "modified",
+      "bytes": 4758,
+      "sha256": "c2e81b1f884e9670bf1e7bbbcd9c178cf0b546e9f46ee12814a75c183fb75d55"
+    },
+    {
+      "path": "frontend/tests/unit/multi-file.test.ts",
+      "change": "modified",
+      "bytes": 3122,
+      "sha256": "84ea5afbeec98d5dfb0e32f26fcef08ee3e1afdc9b224fb661c8f2d10e129873"
+    },
+    {
+      "path": "frontend/tests/unit/platform.test.tsx",
+      "change": "modified",
+      "bytes": 8769,
+      "sha256": "0da3d99790499946effe30795ec15a7bdba98f657d5aa2acf48eed0d7c83334d"
+    },
+    {
+      "path": "frontend/tests/unit/public-transport.test.ts",
+      "change": "modified",
+      "bytes": 23493,
+      "sha256": "a4481583985b04937861a52cddceae541e2dde01a2ba4b476e99263c0f9cf5ef"
+    },
+    {
+      "path": "frontend/tests/unit/reopened.test.ts",
+      "change": "modified",
+      "bytes": 10343,
+      "sha256": "5aefa073e6155209bf2f7911d60be4a197343f1875289944eefff74b18614dd5"
+    },
+    {
+      "path": "test-sdk/browser-sdk.test.mjs",
+      "change": "modified",
+      "bytes": 12527,
+      "sha256": "b1a4ba8cc7f036e5f1d763218db435c5f9162f2a693da593517fff72445db078"
+    },
+    {
+      "path": "tools/check-connected-export.mjs",
+      "change": "added",
+      "bytes": 4363,
+      "sha256": "3393fb486bb20ee454178810b70d2711d50909344f8e6679442a5abde8269d4b"
+    },
+    {
+      "path": "tools/check-public-browser.mjs",
+      "change": "added",
+      "bytes": 7235,
+      "sha256": "0702878004f9a77ea3c9f984140f4a9361cb38b86bbc51f28dd8aa17ab1b09ee"
+    },
+    {
+      "path": "tools/measure-connected-delivery.mjs",
+      "change": "added",
+      "bytes": 3442,
+      "sha256": "6e628fc9816f0fdb25c4592cdda1a539613984b2f67bc00c49e8b118ce537ad8"
+    },
+    {
+      "path": "tools/verify-live-connection.mjs",
+      "change": "added",
+      "bytes": 8876,
+      "sha256": "fdcc6906a94ffcc6620b9b01005883331b60eae7d0c560e38fe23b1dc051cf7f"
+    }
+  ]
+}

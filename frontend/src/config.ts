@@ -1,11 +1,11 @@
 // The site's single configuration file: metadata, A1 source pin and wallet chain.
-// A1 source is delivered; no verified product deployment is supplied (A1_INTEGRATION_PENDING).
+// Historical A1 ancestry below is retained separately from the live handoff/source pin.
 import { foundry, mainnet } from "viem/chains";
 
 export const SITE_NAME = "STEPS · Stepstoke";
 export const SITE_DESCRIPTION = "Browse public projects, propose work, fund execution and continue from accepted checkpoints.";
 
-/** What W1 observed about A1 at build time. Updated by hand at each integration step. */
+/** Historical W1 observation. Actual live addresses/source come only from imd-deployment.json. */
 export const A1_SOURCE = {
   jobId: "d5530989-b886-4f9d-80dd-44d26d85ffd2",
   submittedBodySha256: "3683b19c9c39d67b5c679641e4755e7914f471fe41329d1a3b2dfb1a34a58c77",

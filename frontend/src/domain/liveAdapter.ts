@@ -4,9 +4,8 @@ import { IntegrationPendingError } from "./types";
 import { A1_SOURCE } from "../config";
 
 /**
- * A1 source/Node SDK is delivered, but its release has no product deployment and is not
- * production-ready. The tested local browser bridge lives in ChainAdapter. Public operations
- * fail closed until a verified public deployment is supplied; no address is synthesized here.
+ * Public operations use ChainAdapter only with a verified handoff configuration.
+ * A caller without configuration gets no authority; no address is synthesized here.
  */
 const pending = (what: string) => () => Promise.reject(new IntegrationPendingError(what));
 
@@ -17,7 +16,7 @@ export function createLiveAdapter(config?: LocalConfig, wallet?: WalletGetter): 
   }
   const status: IntegrationStatus = {
     state: "A1_INTEGRATION_PENDING",
-    summary: "STEPS RELEASE-CANDIDATE-V1 has no public deployment. Ethereum operations require a confirmed deployment and cleared release gates.",
+    summary: "No verified runtime configuration was supplied. Open the Ethereum project view to verify its handoff; transactions also require cleared production gates.",
     missing: [
       "Verified chain ID, Factory address and public RPC",
       

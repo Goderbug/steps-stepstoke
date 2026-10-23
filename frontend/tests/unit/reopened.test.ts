@@ -1,7 +1,7 @@
 import { afterEach, describe, expect, it, vi } from "vitest";
 import { ChainAdapter, FINALLY_FAILED, type Journal, type LocalConfig } from "../../src/domain/chainAdapter";
 import { deployment, sdk } from "../../src/domain/sdk";
-import config from "../../public/local-config.json";
+import config from "../fixtures/local-config.json";
 import { isLatestAttempt } from "../../src/ui/recovery";
 const hash = (n: number) => `0x${n.toString(16).padStart(64, "0")}` as `0x${string}`;
 const account = `0x${"11".repeat(20)}` as `0x${string}`, branch = `0x${"44".repeat(20)}` as `0x${string}`;

@@ -1,24 +1,24 @@
-# Official deployment handoff — later stage only
+# Verified Ethereum deployment handoff
 
-This candidate has no production deployment or official handoff. `productionDeployment:null`, `liveCompatibility:NOT_RUN`, `productionReady:false`. No `launch.json` or `dist/imd-deployment.json` is manufactured. No paid job or public transaction was performed.
+The actual live project handoff is imported after the final website build. Launch cad0c789-2611-4392-bec0-456cb8e57d2c, source 751f3901d4453e1477828e4f7ef0d6af8bc03485, receipt 0x6377bb6862896730e68c455685bd057d87ddeafca57633370df20c196479bad6 in block 26248821 are independently cross-checked. The existing launch manifest is unchanged. `liveCompatibility:NOT_RUN`, `productionReady:false`; no paid product job or worker transaction was performed. Current evidence: [live-connection-v1](validation/live-connection-v1/README.md).
 
-## Candidate pin and profile transitions
+## Source identity and readiness transitions
 
-The imported ancestry is `https://github.com/identity-md-launches/launch-2294-build-cto-relay-station` at source commit `9b0294e7ab19060bd00c489fbe032cf248528e0d`, imported as `d29eedf8e7d6608ed109972c179b367ac07ce91f` in `config/release.json.sourceBaseline`; the current tree is a later candidate with reviewed changes. A later requester must pin the **final submitted repository URL and full commit ID** after this documentation commit is accepted. Record `git rev-parse HEAD` and a clean `git status --porcelain` from that immutable checkout, verify the [source/export hash inventory](validation/documentation-v1/README.md), and give that exact commit to independent review and the later `workflow.open` `evm_contracts` launch. Do not treat the imported baseline, a branch name, an unpinned head, or a local fixture as the final source identity. Any runtime byte change requires affected tests, a new frozen build, export/evidence manifests and another review before handoff.
+Contract-source commit **751f3901d4453e1477828e4f7ef0d6af8bc03485** is the official accepted deployment source. The later website-source commit is assigned by IMD when it commits this integration; it is not substituted for the contract-source commit. Earlier `sourceBaseline` entries describe ancestry only. The 50 Solidity inputs, ABI arrays, compiler settings and manifest remain unchanged. The final website asset inventory is separate from historical candidate inventories.
 
-| Profile | Evidence needed | Effect |
+| State | Evidence | Effect |
 | --- | --- | --- |
-| Undeployed candidate (now) | Frozen source, static export, local checks; no chain-1 deployment. | No public project reads or paid controls. `liveCompatibility:NOT_RUN`. |
-| Verified public pilot (later) | Actual three-contract handoff plus canonical receipt/trace/runtime/ABI/source verification and a separately authorized two-job pilot with different sponsors, the same Branch payer, authenticated callbacks and binding. | Bounded pilot evidence only; it does not mark five profiles or the whole release live validated. Stop on any core failure. |
-| Live-validated (later) | Independent security/runtime-child/service acceptance and seven total authenticated jobs across five profiles, including the two pilot jobs and historical child lifecycle, plus gas and closed production gates. | An explicit review may consider readiness; it never places the next order automatically. |
+| Verified public reads (current) | Actual three-contract handoff, canonical successful receipt/block, live trace, source/ABI/creation/runtime/immutable verification, anonymous browser RPC checks. | Public reads enabled after verification in each session. All signing and paid controls disabled. |
+| Live profile validation (NOT_RUN) | Separately authorized actual authenticated product executions, binding and output checks for this deployment. | Deployment verification cannot supply this evidence; no product execution is authorized here. |
+| Production ready (false) | All five profile records PASS with matching evidence and every production gate closed for this deployment. | Only a separate evidence review can consider enabling transactions. No automatic purchase, retry or order. |
 
-For the later launch, the three named entries and backward constructor references are in [CONTRACTS.md](CONTRACTS.md). The official platform manifest stage alone writes `launch.json` after accepting the pinned build. That manifest is a separate handoff artifact, not a file to create in this candidate. Launch payment, chain-1 deployment, IMD job spending and platform hosting each require their own authorization. The `workflow.open` source pin must match the final candidate commit and the importer must later verify the source bytes it claims. Platform publication after launch is distinct from per-round site publication, which remains disabled.
+The accepted `launch.json` is retained unchanged. No contract deployment, replacement, token, pool, hook, proxy or owner is added by this integration. IMD's later GitHub/site handoff is the source for the exact website commit, URL and CID. Per-round site publication remains disabled.
 
-After a separately authorized launch, provide the **actual** `.imd/reads/deployment.json` and optional `.imd/reads/network.json`, the deployed source commit already present in the local object set, the frozen compiler artifacts and an operator-reviewed receipt-evidence file. Do not edit a local fixture into a production handoff. Run from the repository root, after the final frontend build:
+Reproduction requires the **actual** `.imd/reads/deployment.json` and optional `.imd/reads/network.json`, the deployed source commit already present in the local object set, the frozen compiler artifacts and an operator-reviewed receipt-evidence file. Do not edit a local fixture into a production handoff. Run from the repository root, after the final frontend build:
 
 ```sh
-node tools/check-release.mjs
 node tools/import-deployment.mjs RECEIPT_EVIDENCE HTTPS_READ_RPC [PUBLIC_READ_TRANSPORT_JSON]
+node tools/check-release.mjs
 node tools/observe-ethereum.mjs dist
 ```
 
@@ -44,4 +44,4 @@ Verification requires chain 1; a successful canonical receipt and matching block
 
 Every opened Branch is checked for registration, immutable Factory/Encoder/Verifier getters and the frozen direct RelayBranch runtime with all actual immutable words. This includes runtime-created roots and historical children. A matching masked runtime with a different dependency is rejected.
 
-The static UI reads **this same** inventoried `imd-deployment.json`, verifies its assets/ABIs and receipt/code evidence, and derives only compiled Intake/IMD dependencies from the verified Factory. It never takes addresses from the evidence file or a second public config. Missing future handoff displays unavailable; local and fixture modes remain visibly separate. The workflow-provided handoff is an externally authenticated input: this candidate does not invent a signature scheme or claim that matching hash strings establish the issuer's identity.
+The static UI reads **this same** inventoried `imd-deployment.json`, verifies its assets/ABIs and receipt/code evidence, and derives only compiled Intake/IMD dependencies from the verified Factory. It never takes addresses from the evidence file or a second public config. A missing or invalid handoff displays unavailable; local and fixture modes remain visibly separate. The workflow-provided handoff is an externally authenticated input: this candidate does not invent a signature scheme or claim that matching hash strings establish the issuer's identity.

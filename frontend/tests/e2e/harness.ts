@@ -16,7 +16,7 @@ export const test = base.extend<{ audit: void }>({
     await use();
     const overflow = await page.evaluate(() => document.documentElement.scrollWidth - document.documentElement.clientWidth).catch(() => null);
     const id = `${info.project.name}-${info.title.replace(/[^a-z0-9]+/gi, "-").slice(0, 110)}`;
-    await mkdir("../docs/validation/platform-ux-v1/final/fixtures/browser", { recursive: true });
+    await mkdir("../test/scratch/platform-browser-evidence/fixtures", { recursive: true });
     // The explicit cross-origin isolation probe causes WebKit to report its successful sandbox
     // denials. Preserve them as evidence; only that exact diagnostic in that test is expected.
     const expectedBlock = (m: { type: string; text: string }) => info.project.name.startsWith("webkit")
@@ -24,7 +24,7 @@ export const test = base.extend<{ audit: void }>({
       && m.text === "Blocked script execution in 'about:srcdoc' because the document's frame is sandboxed and the 'allow-scripts' permission is not set.";
     const consoleErrors = consoleLog.filter((m) => m.type === "error" && !expectedBlock(m));
     const expectedSecurityBlocks = consoleLog.filter(expectedBlock);
-    await writeFile(`../docs/validation/platform-ux-v1/final/fixtures/browser/${id}.json`, JSON.stringify({ test: info.title, engine: info.project.name, viewport: page.viewportSize(), status: errors.length || external.length || resources.length || consoleErrors.length || (overflow ?? 0) > 0 ? "failed" : info.status, horizontalOverflow: overflow, pageErrors: errors, externalAttempts: external, httpErrors: resources, unexpectedConsoleErrors: consoleErrors, expectedSecurityBlocks, console: consoleLog }, null, 2));
+    await writeFile(`../test/scratch/platform-browser-evidence/fixtures/${id}.json`, JSON.stringify({ test: info.title, engine: info.project.name, viewport: page.viewportSize(), status: errors.length || external.length || resources.length || consoleErrors.length || (overflow ?? 0) > 0 ? "failed" : info.status, horizontalOverflow: overflow, pageErrors: errors, externalAttempts: external, httpErrors: resources, unexpectedConsoleErrors: consoleErrors, expectedSecurityBlocks, console: consoleLog }, null, 2));
     expect(errors, "uncaught page errors").toEqual([]);
     expect(external, "unexpected network attempts (previews must stay offline)").toEqual([]);
     expect(resources, "failed HTTP resources").toEqual([]);

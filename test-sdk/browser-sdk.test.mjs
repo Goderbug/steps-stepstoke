@@ -172,7 +172,8 @@ test('wallet request carries only the prepared unsigned transaction', () => {
 
 test('config generation stays closed without a public deployment and refuses non-local chains', async () => {
   const release = JSON.parse(await readFile(new URL('config/release.json', root), 'utf8'));
-  assert.equal(publicConfigStatus(release).status, 'CLOSED');
+  assert.equal(publicConfigStatus({ ...release, productionDeployment: null }).status, 'CLOSED');
+  assert.equal(publicConfigStatus(release).status, release.productionDeployment ? 'UNVERIFIED' : 'CLOSED');
   const provider = { request: async ({ method }) => { if (method === 'eth_chainId') return '0x1'; throw new Error('unexpected'); } };
   await assert.rejects(observeLocalDeployment(provider, { release, factory: BRANCH }), /not a local development chain/u);
 });

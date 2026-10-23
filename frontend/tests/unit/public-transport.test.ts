@@ -8,7 +8,7 @@ import { ChainAdapter, FINALLY_FAILED, loadJournal, mergeJournal, type Journal, 
 import { probePublicDeployment, PUBLIC_FACTS } from "../../src/domain/publicMode";
 import { isLatestAttempt } from "../../src/ui/recovery";
 import { sdk, deployment, release } from "../../src/domain/sdk";
-import config from "../../public/local-config.json";
+import config from "../fixtures/local-config.json";
 import { DEMO_ACCOUNTS } from "../../src/domain/fixtureAdapter";
 import { STAGES, type Sponsorship } from "../../src/domain/types";
 
@@ -42,9 +42,10 @@ const serve = (files: Map<string, Uint8Array>, patch: (path: string, r: Response
   });
 
 describe("public deployment handoff transport", () => {
-  it("reports an undeployed candidate honestly when no handoff is exported", async () => {
+  it("refuses an absent handoff even when this build records the live deployment", async () => {
     expect(await probePublicDeployment(serve(new Map()) as unknown as typeof fetch)).toEqual({ state: "undeployed", reason: "Confirmed deployment handoff unavailable" });
-    expect(PUBLIC_FACTS).toMatchObject({ chainId: 1, paymentToken: "IMD", productionDeployment: null, liveCompatibility: "NOT_RUN", productionReady: false });
+    expect(PUBLIC_FACTS).toMatchObject({ chainId: 1, paymentToken: "IMD", productionDeployment: release.productionDeployment, liveCompatibility: "NOT_RUN", productionReady: false });
+    expect(PUBLIC_FACTS.productionDeployment).not.toBeNull();
     expect(PUBLIC_FACTS.imd).toBe(release.imd);
   });
   it("treats a CORS/network failure as unavailable and a redirect as refused, never as a deployment", async () => {

@@ -1,0 +1,368 @@
+{
+  "checkedAt": "2026-10-23T01:08:38.021Z",
+  "validity": "VERIFIED_DEPLOYMENT",
+  "chainId": 1,
+  "contracts": {
+    "encoder": "0xae9a9624e6354bbd029fefa762bafd43fb9f6886",
+    "verifier": "0x52a459aaf8044c5bc7f5a8198ef7305367e98ec4",
+    "factory": "0xff1519c0b9ae4053d1505bc0e5226178109e0abc"
+  },
+  "deploymentBlock": 26248821,
+  "blockHash": "0x700af02aa56a2917a53049a31db6c392d85ae856973d02fb3eb9999f5c293540",
+  "transactionHash": "0x6377bb6862896730e68c455685bd057d87ddeafca57633370df20c196479bad6",
+  "liveCompatibility": "NOT_RUN",
+  "productionReady": false,
+  "launchId": "cad0c789-2611-4392-bec0-456cb8e57d2c",
+  "attestationHash": "e1bfa2900f7b58e29f97514ac45694a4869136e95821dc31ca8a8375437315ce",
+  "sourceCommit": "751f3901d4453e1477828e4f7ef0d6af8bc03485",
+  "outerSender": "0xcecc29b037f5064fcdf45a5c318f132ef76aa551",
+  "outerRecipient": "0xff03410d0fe5fa8f7f59f743de35e333d9857120",
+  "transactionIndex": "0x8b",
+  "trace": "LIVE_CALLTRACER; no cached or downloaded trace accepted",
+  "getters": {
+    "encoder": "0xae9a9624e6354bbd029fefa762bafd43fb9f6886",
+    "verifier": "0x52a459aaf8044c5bc7f5a8198ef7305367e98ec4"
+  },
+  "applications": [
+    {
+      "name": "RelayEncoder",
+      "address": "0xae9a9624e6354bbd029fefa762bafd43fb9f6886",
+      "creationCaller": "0xff03410d0fe5fa8f7f59f743de35e333d9857120",
+      "creationType": "CREATE2",
+      "initBytesWithArguments": 11524,
+      "initKeccakWithArguments": "0x01e47a7ec9da2fcc772b5b863c8fb369eccb875527e872e034c9f48ed61e1bca",
+      "creationCodeHash": "0x01e47a7ec9da2fcc772b5b863c8fb369eccb875527e872e034c9f48ed61e1bca",
+      "runtimeBytes": 11498,
+      "runtimeKeccak": "0x245ee3b1a84cc9e989b5ef162f7b4904a800dac79f93afa547e4de25691d66a4",
+      "normalizedRuntimeKeccak": "0x245ee3b1a84cc9e989b5ef162f7b4904a800dac79f93afa547e4de25691d66a4",
+      "constructorAndImmutables": "MATCH",
+      "historicalAndLatestRuntime": "MATCH"
+    },
+    {
+      "name": "RelayVerifier",
+      "address": "0x52a459aaf8044c5bc7f5a8198ef7305367e98ec4",
+      "creationCaller": "0xff03410d0fe5fa8f7f59f743de35e333d9857120",
+      "creationType": "CREATE2",
+      "initBytesWithArguments": 14164,
+      "initKeccakWithArguments": "0x7d4194cb07fc4d86d5977c62eaeab48ba26b75d61e02c3d4822cf56fd2f4714c",
+      "creationCodeHash": "0x7d4194cb07fc4d86d5977c62eaeab48ba26b75d61e02c3d4822cf56fd2f4714c",
+      "runtimeBytes": 14138,
+      "runtimeKeccak": "0x575b5260078b17fa54de15bf4a77dd5938fb39d7a6553896e8e515ed369b1fe5",
+      "normalizedRuntimeKeccak": "0x575b5260078b17fa54de15bf4a77dd5938fb39d7a6553896e8e515ed369b1fe5",
+      "constructorAndImmutables": "MATCH",
+      "historicalAndLatestRuntime": "MATCH"
+    },
+    {
+      "name": "RelayFactory",
+      "address": "0xff1519c0b9ae4053d1505bc0e5226178109e0abc",
+      "creationCaller": "0xff03410d0fe5fa8f7f59f743de35e333d9857120",
+      "creationType": "CREATE2",
+      "initBytesWithArguments": 21539,
+      "initKeccakWithArguments": "0x7eed25f040c9d860c5a0b23a37b9a98e1225c8e5d6fbe0bbe5a12178a8bace16",
+      "creationCodeHash": "0x41d0c6705f10ee3306fd4799b3374c2b820d75653bbc15690473465054ba47a1",
+      "runtimeBytes": 21195,
+      "runtimeKeccak": "0xf569803de45b78a6befa33eb0e209fb8f71e99e79a8c7d3d4c34b684446b2e9b",
+      "normalizedRuntimeKeccak": "0x1a12c8ec49e0e35f0b19ded8fffe5a1b2da799a4590a4c1e163a2e7743d8ae23",
+      "constructorAndImmutables": "MATCH",
+      "historicalAndLatestRuntime": "MATCH"
+    }
+  ],
+  "sources": [
+    {
+      "path": "lib/openzeppelin-contracts/contracts/interfaces/IERC1363.sol",
+      "keccak256": "0x438ecf10fa429e1000baa015d96b79087a3b3ce9fbe7ee8a90bba6435ce134f6",
+      "sha256": "ad1852364ca835625e3e75ee244405695f62e10a797147854098c016c8e3a80a"
+    },
+    {
+      "path": "lib/openzeppelin-contracts/contracts/interfaces/IERC165.sol",
+      "keccak256": "0x0afcb7e740d1537b252cb2676f600465ce6938398569f09ba1b9ca240dde2dfc",
+      "sha256": "dfb3f56fa928a7c6cae41a7ce2c86b9210fa18d33fa26389099d66a0fa790368"
+    },
+    {
+      "path": "lib/openzeppelin-contracts/contracts/interfaces/IERC20.sol",
+      "keccak256": "0x1a6221315ce0307746c2c4827c125d821ee796c74a676787762f4778671d4f44",
+      "sha256": "0158e2d3e0e28bedd99eec13dcf1a8aa3a70a5b7e4bb2ad709609c95fcc740d1"
+    },
+    {
+      "path": "lib/openzeppelin-contracts/contracts/token/ERC20/IERC20.sol",
+      "keccak256": "0x74ed01eb66b923d0d0cfe3be84604ac04b76482a55f9dd655e1ef4d367f95bc2",
+      "sha256": "01b6f5c4fa45fd38822b286ecef6daf983d27306dd6362496fa71b3e4600b72c"
+    },
+    {
+      "path": "lib/openzeppelin-contracts/contracts/token/ERC20/utils/SafeERC20.sol",
+      "keccak256": "0xd56c65c54b2bcc02f258d85e8d7723a1a633aaf43e7060e340860566381c206f",
+      "sha256": "da646f23b6d7dd8dc4feb4c78a2826ae26f1dc4c48f5aadc99379d85f149621d"
+    },
+    {
+      "path": "lib/openzeppelin-contracts/contracts/utils/introspection/IERC165.sol",
+      "keccak256": "0x8891738ffe910f0cf2da09566928589bf5d63f4524dd734fd9cedbac3274dd5c",
+      "sha256": "9055c2994b37dea1a41b7b7926dcb510f05dbe2540b0aafc5fbee9558fffd0ca"
+    },
+    {
+      "path": "src/RelayBranch.sol",
+      "keccak256": "0x8bfd0429192a6782308ad663731e8eaf8e11be367ee074531f3496a9d613ba10",
+      "sha256": "31a12163de3c019764b9d44c21af77a695b20f5eb37f8cb41b6d5de161baa91c"
+    },
+    {
+      "path": "src/RelayEncoder.sol",
+      "keccak256": "0x615e596b2a43e2ff0d868c2c914aa3873a668b7b3c0d7c7b277d5d2d8e6642dc",
+      "sha256": "161e7380e95cbbd58a5acbd3a7a6686e3eb112d2875562c048645740f7e8adb6"
+    },
+    {
+      "path": "src/RelayFactory.sol",
+      "keccak256": "0x501bb34d4013d38531d637e6d164233734e7b459225e91b046e5b9bdb1b5be34",
+      "sha256": "e8db0cde0a9815efbe70377dfb3c45ed16cd2cd9d114a68609ab66b13b89558f"
+    },
+    {
+      "path": "src/RelayTypes.sol",
+      "keccak256": "0x21f621c2914cbebe9de78232a250da7e65df975664f2db9f05a88530973b699f",
+      "sha256": "8e893dd9afa0f03387a0dda7905407205577b3c9eadea930745a0e92345addd5"
+    },
+    {
+      "path": "src/RelayVerifier.sol",
+      "keccak256": "0x49258c6e63280958d6a90b22336a8c04cfbce57bc756e8d449cb7269fe2dfc50",
+      "sha256": "e28bfa208897e9e5fee31e01a90cfcb18af35367bad3e125749f924795856e58"
+    },
+    {
+      "path": "src/interfaces/IIntake.sol",
+      "keccak256": "0xae7547c0325aa99ed3bc2d0b9817a8ce4814af9a5d7ba1e66587dac1bc8c59e9",
+      "sha256": "fbc241a3030aa6cc26e355705d4540fd34561d426e5a7ca4672bb9c684f12438"
+    },
+    {
+      "path": "src/libraries/Assets.sol",
+      "keccak256": "0xa5eaddcd2d54cdbf672751d98999a3c3d0da55202ead4099900512ffad56a935",
+      "sha256": "76044ee567aaae11f03f9ccd5817b8b401fdcd4082b83f8782f93c381dea4484"
+    },
+    {
+      "path": "src/libraries/ManifestJSON.sol",
+      "keccak256": "0xce470973a1dae5d5ec05b26e460b70383bf75d965bad6cd2a8ccb22093719f9b",
+      "sha256": "611a0dcc5aa13b501d2f60ee0507cc45e741ee2c19ff4203692cead96cf94646"
+    },
+    {
+      "path": "src/libraries/Policy.sol",
+      "keccak256": "0x5a4b054000ef66b70504c01270c7b341314c8cddfafbf2469353b6210fe61112",
+      "sha256": "74123897f4b5fbeab3b8bfd75cc2f5133e1e2d83647cc704ffa97d672f0cd1a4"
+    },
+    {
+      "path": "src/libraries/StrictJSON.sol",
+      "keccak256": "0x6e1ca9baea31c52bffa6653331ca483878e50b3b537ec58fb263438905a21df9",
+      "sha256": "d53708085e493c056d26c78902e62dce0b9c9ab30a91b92c2946ea99abdc1398"
+    },
+    {
+      "path": "src/libraries/Text.sol",
+      "keccak256": "0x15d2f4e0370afc36f7ab6f14b2e4fb35d979f431fdd9a7ba6942516fa74e1e04",
+      "sha256": "21201a60986e75e5d34288ac91ef290e1ebcd5505bee5eb45c6179d58b45ad81"
+    },
+    {
+      "path": "test/CrossLanguage.t.sol",
+      "keccak256": "0x20641b7c928a5a715b1a25e10fea189852dda3594e7efd46655d5a32d9d5a3e1",
+      "sha256": "d5c3ccd371fcf75b3c41ad7aaf09efd9a478ff8d1274d3d7d595bba2548683da"
+    },
+    {
+      "path": "test/IntakeCompatibility.t.sol",
+      "keccak256": "0xc3545ade14a95ccd373baaabcefce42840dfa4c31302e52c5aff933226b30bbb",
+      "sha256": "55245cc3283c613280d6fec8271e148a8bdb12634e15120c62535580a3f42237"
+    },
+    {
+      "path": "test/LaunchCompatibility.t.sol",
+      "keccak256": "0x565caef9bfc354ddd9b638647676e7b55e0360164613f26ba91d7c2ea7b933ce",
+      "sha256": "390af1422aa06ff593acb193fe0757f8c5f4fcbfdb64c2f2567181396b9275e3"
+    },
+    {
+      "path": "test/ManifestEnvelopeRegression.t.sol",
+      "keccak256": "0xf7d65bbccf8bd8dd69c4a12faba2b9ff36274a642adf41f644e8cc64f76121d0",
+      "sha256": "f678ae3772321b3153a5c49683e9d0332f1d05e243a285afa2d622901ae3c3ea"
+    },
+    {
+      "path": "test/ManifestRetainedTokens.t.sol",
+      "keccak256": "0xef93e94006c9c6d98904ce3182b065249963fb4a9ef5eac52c099c44a311e350",
+      "sha256": "2f04a402511cca91209d1e9e99c5dea98c27ebd3346dba5563a31bcbe1ec85fe"
+    },
+    {
+      "path": "test/ManifestSegmentBudget.t.sol",
+      "keccak256": "0xb194d385dbfdcb91a7f0a9c0f46fd6dc21ab93da4218f68e405969ebf7f34d09",
+      "sha256": "3c4aa7b8933ad7301edd29dd7d9c0d2c95f26102dfaefad98a9fc7ac71debce2"
+    },
+    {
+      "path": "test/ManifestStringRegression.t.sol",
+      "keccak256": "0x59854da2089ad168669a2fd7a030f9983e03beb50669a951fc1e05ab4c6ee1ba",
+      "sha256": "da865affcd53d0deb8dd104a2c5960065c60ab39acc158e634f7a6e0c6ee3455"
+    },
+    {
+      "path": "test/MetadataScannerDifferential.t.sol",
+      "keccak256": "0xcdd09af0bb4ce8ba0f8dfba77e79a29400ff97cb3b7ac29ba96850f7150f58bc",
+      "sha256": "e8957cf570438bb7b001053f84659ddfccc224879e0ee929fb196eae47ef2e28"
+    },
+    {
+      "path": "test/MultiFileResults.t.sol",
+      "keccak256": "0x4b5fab87dd9708b6f84a490130a26b390ff7c3e9576f62df9f49583be0989ff5",
+      "sha256": "9b568cbfb353e9e7ab43e9eba659d7707f936c2569b3157caf0211700771b719"
+    },
+    {
+      "path": "test/PublicResults.t.sol",
+      "keccak256": "0x2b062621f65d68c5c52d6c258da4927e244031e4789a4239b6c072c7f55f3d84",
+      "sha256": "04d8cb79c5a1e6e98a5fa8c9d8ba901b01aedb362f8e2a685ef012007d59c52f"
+    },
+    {
+      "path": "test/RelayHistory.t.sol",
+      "keccak256": "0x8d26cd4fd654c5d728bba97eab6d2de9712e74d98e96b3de05c1a913cc9deb82",
+      "sha256": "27ff31d812d15e96ca562454a5c9847f1bb8f6213e51e49cf3ecf5194061c142"
+    },
+    {
+      "path": "test/RelayInvariant.t.sol",
+      "keccak256": "0x73a2e5b17c3a69d9d7ba7cd1b934e2455c865742e49050bb960e0c26b0bacdbf",
+      "sha256": "fa101910e5fb356181a06c49c857757c9321ea0c8f93dfe09d5dfa8e3be276ad"
+    },
+    {
+      "path": "test/RelayMappingRegression.t.sol",
+      "keccak256": "0x0a97a5cbea67a48dd17f6622359c87c63a3611a29e1693f94d23152c0c18fc07",
+      "sha256": "280b0ef7b0678710be73d056d53d494d196519d888164cd7d42f7807d1448f79"
+    },
+    {
+      "path": "test/RelayPayments.t.sol",
+      "keccak256": "0x2e86b6cbde0900b60c59ceb004b42117b8e95b8f5fcfc31448cc9a79a0ef58a2",
+      "sha256": "fd84e289db052b5695f923fa0fbbc16ed2bda731795d6fdf8765b1e730fd47c9"
+    },
+    {
+      "path": "test/RelayProfiles.t.sol",
+      "keccak256": "0x5db3700478e20a57134b13e84223cf9b233fa74992e55d26994ef5b3b78c5bb8",
+      "sha256": "c775eedde148e59e181c49fa5a01ac78a086b53bacae7baeec2e25a1f66e85ce"
+    },
+    {
+      "path": "test/RelaySetup.sol",
+      "keccak256": "0xf8878e43ec659ac148659d545ab40fa4eceb28a9b5e392c49fa76defec1de475",
+      "sha256": "04f9ab13cc2afb38a9e02d17ff59c68005ee8686dac89524c8f412452460c903"
+    },
+    {
+      "path": "test/StrictManifest.t.sol",
+      "keccak256": "0x3eed523e1fa5002e8adc273f88f54a4a919ba8a0fd33cec7969cd241ba5d330c",
+      "sha256": "3f77749d7cbceb7521695137a2ae26697002234006c38849a1e6edea802f3457"
+    },
+    {
+      "path": "test/TestBase.sol",
+      "keccak256": "0x1acb6e6ed27fcb062afd7e8742f03ea433c713d1f7d5670d9dc4ff1cb3baae05",
+      "sha256": "374520510e1f870882b58502db048e835a3771479fb318011c7abb829c7e6569"
+    },
+    {
+      "path": "test/adversarial/ContinuationSpec.t.sol",
+      "keccak256": "0x1ea9c79fb6a3b2639db9fed4bb66bb96e7a31eb8fad64318d2f037ca05604279",
+      "sha256": "a65b96c4f244cf03c2e3a0bf323279f1f54f19ad5c88a8f84d2839b2b60666e5"
+    },
+    {
+      "path": "test/adversarial/ManifestSpec.t.sol",
+      "keccak256": "0x14b2b47ed0c6896eeeb34546677afcce8c41538549f8b1c35face0572eec4f6a",
+      "sha256": "da2986b51c113f6377357c46849d0eda6711f42da8c664590eefb5eaabea9afe"
+    },
+    {
+      "path": "test/adversarial/PaymentSpec.t.sol",
+      "keccak256": "0xef3cb5088fc1a3634fe6762af84ea8986df1463a06249b90c60232b2f3483e34",
+      "sha256": "110f4e201efa61ad873ab3beff99fea2c66b0da01da2f75a94503f63a59c02bc"
+    },
+    {
+      "path": "test/adversarial/ProfileBoundarySpec.t.sol",
+      "keccak256": "0xe7cc2b48d205263a3a267ce18b442118e8d7236858eb350f4a3035b638fe99e6",
+      "sha256": "ea9b83364f1164267f524abe3ea33942ec4a1cc5369c0194d53b06dce3496d0f"
+    },
+    {
+      "path": "test/adversarial/SpecSupport.sol",
+      "keccak256": "0x026580a857566f097ab80bd2210d919615be76a6292c373e3b20540d01d45839",
+      "sha256": "dc163576e31a2c5767aa989fa06473c7e179b1be4e7f1560b190e18d4f94ac70"
+    },
+    {
+      "path": "test/adversarial/StateMachineSpec.t.sol",
+      "keccak256": "0xcb928393867b49d05ccf0edbeebe5ff6d5722bf5034c69030ff00da05a3f45f5",
+      "sha256": "46c86bcc3b5b4574a62dcd696f83eb6c0ed995831bf0c86657eaeed722c30a27"
+    },
+    {
+      "path": "test/fixtures/FixtureData.sol",
+      "keccak256": "0x419e95967606e003c433a4e884474df30cd75f5363d08572861ba1877e7c7db2",
+      "sha256": "47bebbf8f38387f2565e0393296bbeb6bd2293dff2a072e77d1badf76234c05f"
+    },
+    {
+      "path": "test/fixtures/LiveResultFixture.sol",
+      "keccak256": "0xea213b43114957cd2a08936aae2f54d01bc18821929c01d3e96c6c97f652c1d2",
+      "sha256": "a5e6b2517a9fe92d4af8372476442a7481e8dbb761e788695a75ff5ceb746a18"
+    },
+    {
+      "path": "test/fixtures/MultiFileResult.sol",
+      "keccak256": "0x92684eadf75eacaae1fa316eaeef15979f3516ce80ad5b9d6214ae5f83af1a91",
+      "sha256": "997658837633b2f7384f39c0c2a454aa0bbb138b275b7201f5c1fdb6caeaeb12"
+    },
+    {
+      "path": "test/fixtures/PublicResults.sol",
+      "keccak256": "0x856df621b03d8c2d7da8989d473a92a8dddcc2e2dc5b2190ae41d0817c2a1f56",
+      "sha256": "3d962bbffdaf000d96d3ebd7e6c922abe413e0ba6a8ee1d89b7a70b1bd7342d9"
+    },
+    {
+      "path": "test/fixtures/SdkGolden.sol",
+      "keccak256": "0xb97ec6751262f606548079de2776c53f0392a891c041c3fe1f25f62af804b5b5",
+      "sha256": "bbf1a2d1a4addf2f46cee9074928253bf0622feb5970c5d7ba6c47f9bc8ed864"
+    },
+    {
+      "path": "test/mocks/MockIntake.sol",
+      "keccak256": "0x9fe281eadeaebf52c53151196638b5731cf72f90208072a7a33fefff5b78d01e",
+      "sha256": "5aafd436404f257a443c1f64ba12dd7ba820baf93b4e07b9e0274f995b5aa7d4"
+    },
+    {
+      "path": "test/mocks/MockToken.sol",
+      "keccak256": "0x26e6310f07571d7981dc5fb1897f09d6fb20061dfe34a67ee3073e8c0ccc9a8d",
+      "sha256": "476ee34e9a9ad30f13255789ce1c84c439727058ca55c568604417df01a0c33c"
+    },
+    {
+      "path": "test/release/ExactGasRegression.t.sol",
+      "keccak256": "0x84379c347bde4a4ffef46312149083c4f88612cbb3456243d5037c3d5196b9bd",
+      "sha256": "6b33c39befd33069c6b9aee56971c779c209b96d11890e6b3e93ddf0a333108b"
+    },
+    {
+      "path": "test/release/PurchaseAtomicityInvariant.t.sol",
+      "keccak256": "0x532c5b622a20bb585fee47e2f5d8ec1b2d6d0bc7dee40780dbc154e51d25a8ea",
+      "sha256": "675fd8d6d22c04383e574611fc2af1576500c5e10f6d2bdadbe3357418e62a98"
+    }
+  ],
+  "abis": [
+    {
+      "name": "RelayEncoder",
+      "path": "abi/RelayEncoder.json",
+      "canonicalKeccak": "02c30c6ad6d36acd8865ab1d75d8f07ff03eba4d74a281907d50096d26983c92",
+      "sha256": "7f7cc7133fb159f4ae248c9c903855ea506cf154e8e6017680075e3c50d9153a",
+      "officialBytes": "MATCH"
+    },
+    {
+      "name": "RelayVerifier",
+      "path": "abi/RelayVerifier.json",
+      "canonicalKeccak": "233a63e340726de08ffb3f118a0f7fa89f217d0129bcbe7470d69bc35eb3e558",
+      "sha256": "788539b92c802abeb9a461146b9e9b7585c5e91802e49640704532b3bea7f157",
+      "officialBytes": "MATCH"
+    },
+    {
+      "name": "RelayFactory",
+      "path": "abi/RelayFactory.json",
+      "canonicalKeccak": "174129f8a3eccf158d78bb7ce9ba22639766ba72112ba41af0d8c206b4b602d8",
+      "sha256": "57287ca9e538a407bbfbd14dabc237bb93e3d6750c232c9c04b575751d9bf5e3",
+      "officialBytes": "MATCH"
+    },
+    {
+      "name": "RelayBranch",
+      "path": "abi/RelayBranch.json",
+      "canonicalKeccak": "a2f7d5958757ab1a29c620cb5ec99ea30747973d1c75ef27424082b85f05ef31",
+      "sha256": "625a38a5b197044f1b70415e0a4752abb43f1d7d7a8791d7ff51da028d8bba74",
+      "officialBytes": "MATCH"
+    },
+    {
+      "name": "IIntake",
+      "path": "abi/IIntake.json",
+      "canonicalKeccak": "354229268ddf8f760e97566f01096c3e3db2e17cd1db0b9348480d4cebc291f1",
+      "sha256": "5b229bcd1a0e3cbcaf2f5a692b1b9bc899fa89ac67724ea4009580c5a694e5d6",
+      "officialBytes": "MATCH"
+    }
+  ],
+  "publicRPCs": [
+    "https://ethereum-rpc.publicnode.com/",
+    "https://eth.drpc.org/"
+  ],
+  "handoffInputSha256": "bddc64f871fce900952b75ef5aca26c908123953e8f88f69324f525ca9f81dc1",
+  "networkInputSha256": "a58e371203abcb49a0eb81677413f833f5315a1451aca1e1521b5580746d5b81",
+  "independentCanonicality": "MATCH on two operators",
+  "liveProfiles": "NOT_RUN",
+  "walletAuthority": false
+}

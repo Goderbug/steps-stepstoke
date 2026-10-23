@@ -1,0 +1,88 @@
+{
+  "archive": "checks.tar.xz",
+  "bytes": 23808,
+  "sha256": "d097ebbe9c533c05459fe4455027877b2dc6f9f10f25966af76e90f9f1f310b0",
+  "entries": [
+    {
+      "path": "clean-build.log",
+      "bytes": 53443,
+      "sha256": "ba3d764e2db6bfca32ff7b9c2b448520029f39dafd651654b1e8e351f9ec0564"
+    },
+    {
+      "path": "forge-tests.log",
+      "bytes": 22153,
+      "sha256": "5995c3bf61f879d0c428a6a1325ac52c9e497f784d3056a1a4c0332772655917"
+    },
+    {
+      "path": "forge-format.log",
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "path": "generic-json.log",
+      "bytes": 216,
+      "sha256": "762ea55ec4e3befe1a3630013e3dc94b6a34e151fd3bed5a8f68f29be5efa332"
+    },
+    {
+      "path": "sdk-tests.log",
+      "bytes": 20474,
+      "sha256": "4c633bbb2e333a892e974d7acb9fcbceba081e2802c08f03cf96aae4f2a90a1a"
+    },
+    {
+      "path": "typecheck.log",
+      "bytes": 281,
+      "sha256": "78a8492c4d84f35e4dcf799ea0cc46684189d703b1b7cdb92ccbaa47ee3bf52a"
+    },
+    {
+      "path": "frontend-unit.log",
+      "bytes": 852,
+      "sha256": "1491f41651ebc469ad70a5f2980c6aa613e6bd30751fb5dce53652d96f28dbcd"
+    },
+    {
+      "path": "frontend-build.log",
+      "bytes": 931,
+      "sha256": "b748fcecf376f5144e4e8201f3fee3b2bab8aa8dc32de159c91741b74fb290e5"
+    },
+    {
+      "path": "import.log",
+      "bytes": 140,
+      "sha256": "01dbb360482f9a1cf9d3a913d7f49eb30cdaf5ab02dac9e9b118bce7b68d7484"
+    },
+    {
+      "path": "strict-release.log",
+      "bytes": 995,
+      "sha256": "5a061b85830a4d017ea5700a547cee8b359a65d7070bc9776fc0f18ec7bc769b"
+    },
+    {
+      "path": "observer.log",
+      "bytes": 605,
+      "sha256": "7573269c146a833c56768c46b8850e821ce340f4feb9146b153dfa99aa8b5661"
+    },
+    {
+      "path": "connected-export.log",
+      "bytes": 84,
+      "sha256": "4225dd34a88bf9d188d2935651d14ae721e34457b6204a2d6d3462ea3979be36"
+    },
+    {
+      "path": "final-chain-verification.log",
+      "bytes": 298,
+      "sha256": "a5782748da66b3da3201d7c6d961279194ce9fdfb01630f613a4a14586b98b45"
+    },
+    {
+      "path": "public-browser.log",
+      "bytes": 76,
+      "sha256": "cf7679080c3cbacfb10c6af47e535c5599eb546416ad4a0cd0db4099bbb9dc44"
+    },
+    {
+      "path": "e2e.log",
+      "bytes": 18419,
+      "sha256": "548f603df97975f27c4ae213b042a9386d94053d6fc225a2331371869fcdbbb7"
+    },
+    {
+      "path": "e2e-report.json",
+      "bytes": 131827,
+      "sha256": "7f0f537f1247bdeb44973d5fc3a4ef42c094cb04f580e6c970620e036de7b887"
+    }
+  ],
+  "scope": "Actual local worker check output. Fixture results and disposable local checks do not establish live product compatibility."
+}

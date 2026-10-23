@@ -1,0 +1,702 @@
+{
+  "checkedAt": "2026-10-23T01:10:06.317Z",
+  "browser": "Chromium 154.0.8037.0",
+  "origin": "http://127.0.0.1:4175",
+  "actualHostedOrigin": "NOT_AVAILABLE_BEFORE_IMD_PUBLICATION",
+  "interceptedRoutes": 0,
+  "credentials": "omit",
+  "wallet": "NONE",
+  "supportedReadMethodsCovered": [
+    "eth_chainId",
+    "eth_getTransactionReceipt",
+    "eth_getBlockByNumber",
+    "debug_traceTransaction",
+    "eth_getCode",
+    "eth_call",
+    "eth_blockNumber",
+    "eth_getTransactionByHash",
+    "eth_getTransactionCount",
+    "eth_getLogs"
+  ],
+  "results": [
+    {
+      "name": "chain",
+      "method": "eth_chainId",
+      "status": "PASS",
+      "attempts": [
+        {
+          "url": "https://ethereum-rpc.publicnode.com/",
+          "httpStatus": 200,
+          "error": null
+        }
+      ]
+    },
+    {
+      "name": "receipt",
+      "method": "eth_getTransactionReceipt",
+      "status": "PASS",
+      "attempts": [
+        {
+          "url": "https://ethereum-rpc.publicnode.com/",
+          "httpStatus": 200,
+          "error": null
+        }
+      ]
+    },
+    {
+      "name": "block",
+      "method": "eth_getBlockByNumber",
+      "status": "PASS",
+      "attempts": [
+        {
+          "url": "https://ethereum-rpc.publicnode.com/",
+          "httpStatus": 200,
+          "error": null
+        }
+      ]
+    },
+    {
+      "name": "trace",
+      "method": "debug_traceTransaction",
+      "status": "PASS",
+      "attempts": [
+        {
+          "url": "https://ethereum-rpc.publicnode.com/",
+          "httpStatus": 200,
+          "error": {
+            "code": -32601,
+            "message": "the method debug_traceTransaction does not exist/is not available"
+          }
+        },
+        {
+          "url": "https://eth.drpc.org/",
+          "httpStatus": 200,
+          "error": null
+        }
+      ]
+    },
+    {
+      "name": "RelayEncoder:before",
+      "method": "eth_getCode",
+      "status": "PASS",
+      "attempts": [
+        {
+          "url": "https://ethereum-rpc.publicnode.com/",
+          "httpStatus": 403,
+          "error": {
+            "code": -32602,
+            "message": "Archive requests require a personal token. Get one at: https://www.allnodes.com/publicnode"
+          }
+        },
+        {
+          "url": "https://eth.drpc.org/",
+          "httpStatus": 200,
+          "error": null
+        }
+      ]
+    },
+    {
+      "name": "RelayEncoder:deployment",
+      "method": "eth_getCode",
+      "status": "PASS",
+      "attempts": [
+        {
+          "url": "https://ethereum-rpc.publicnode.com/",
+          "httpStatus": 403,
+          "error": {
+            "code": -32602,
+            "message": "Archive requests require a personal token. Get one at: https://www.allnodes.com/publicnode"
+          }
+        },
+        {
+          "url": "https://eth.drpc.org/",
+          "httpStatus": 200,
+          "error": null
+        }
+      ]
+    },
+    {
+      "name": "RelayEncoder:latest",
+      "method": "eth_getCode",
+      "status": "PASS",
+      "attempts": [
+        {
+          "url": "https://ethereum-rpc.publicnode.com/",
+          "httpStatus": 200,
+          "error": null
+        }
+      ]
+    },
+    {
+      "name": "RelayVerifier:before",
+      "method": "eth_getCode",
+      "status": "PASS",
+      "attempts": [
+        {
+          "url": "https://ethereum-rpc.publicnode.com/",
+          "httpStatus": 403,
+          "error": {
+            "code": -32602,
+            "message": "Archive requests require a personal token. Get one at: https://www.allnodes.com/publicnode"
+          }
+        },
+        {
+          "url": "https://eth.drpc.org/",
+          "httpStatus": 200,
+          "error": null
+        }
+      ]
+    },
+    {
+      "name": "RelayVerifier:deployment",
+      "method": "eth_getCode",
+      "status": "PASS",
+      "attempts": [
+        {
+          "url": "https://ethereum-rpc.publicnode.com/",
+          "httpStatus": 403,
+          "error": {
+            "code": -32602,
+            "message": "Archive requests require a personal token. Get one at: https://www.allnodes.com/publicnode"
+          }
+        },
+        {
+          "url": "https://eth.drpc.org/",
+          "httpStatus": 200,
+          "error": null
+        }
+      ]
+    },
+    {
+      "name": "RelayVerifier:latest",
+      "method": "eth_getCode",
+      "status": "PASS",
+      "attempts": [
+        {
+          "url": "https://ethereum-rpc.publicnode.com/",
+          "httpStatus": 200,
+          "error": null
+        }
+      ]
+    },
+    {
+      "name": "RelayFactory:before",
+      "method": "eth_getCode",
+      "status": "PASS",
+      "attempts": [
+        {
+          "url": "https://ethereum-rpc.publicnode.com/",
+          "httpStatus": 403,
+          "error": {
+            "code": -32602,
+            "message": "Archive requests require a personal token. Get one at: https://www.allnodes.com/publicnode"
+          }
+        },
+        {
+          "url": "https://eth.drpc.org/",
+          "httpStatus": 200,
+          "error": null
+        }
+      ]
+    },
+    {
+      "name": "RelayFactory:deployment",
+      "method": "eth_getCode",
+      "status": "PASS",
+      "attempts": [
+        {
+          "url": "https://ethereum-rpc.publicnode.com/",
+          "httpStatus": 403,
+          "error": {
+            "code": -32602,
+            "message": "Archive requests require a personal token. Get one at: https://www.allnodes.com/publicnode"
+          }
+        },
+        {
+          "url": "https://eth.drpc.org/",
+          "httpStatus": 200,
+          "error": null
+        }
+      ]
+    },
+    {
+      "name": "RelayFactory:latest",
+      "method": "eth_getCode",
+      "status": "PASS",
+      "attempts": [
+        {
+          "url": "https://ethereum-rpc.publicnode.com/",
+          "httpStatus": 200,
+          "error": null
+        }
+      ]
+    },
+    {
+      "name": "getter:encoder",
+      "method": "eth_call",
+      "status": "PASS",
+      "attempts": [
+        {
+          "url": "https://ethereum-rpc.publicnode.com/",
+          "httpStatus": 200,
+          "error": null
+        }
+      ]
+    },
+    {
+      "name": "getter:verifier",
+      "method": "eth_call",
+      "status": "PASS",
+      "attempts": [
+        {
+          "url": "https://ethereum-rpc.publicnode.com/",
+          "httpStatus": 200,
+          "error": null
+        }
+      ]
+    },
+    {
+      "name": "head",
+      "method": "eth_blockNumber",
+      "status": "PASS",
+      "attempts": [
+        {
+          "url": "https://ethereum-rpc.publicnode.com/",
+          "httpStatus": 200,
+          "error": null
+        }
+      ]
+    },
+    {
+      "name": "transaction",
+      "method": "eth_getTransactionByHash",
+      "status": "PASS",
+      "attempts": [
+        {
+          "url": "https://ethereum-rpc.publicnode.com/",
+          "httpStatus": 200,
+          "error": null
+        }
+      ]
+    },
+    {
+      "name": "nonce",
+      "method": "eth_getTransactionCount",
+      "status": "PASS",
+      "attempts": [
+        {
+          "url": "https://ethereum-rpc.publicnode.com/",
+          "httpStatus": 200,
+          "error": null
+        }
+      ]
+    },
+    {
+      "name": "logs",
+      "method": "eth_getLogs",
+      "status": "PASS",
+      "attempts": [
+        {
+          "url": "https://ethereum-rpc.publicnode.com/",
+          "httpStatus": 200,
+          "error": null
+        }
+      ]
+    }
+  ],
+  "responseHeaders": [
+    {
+      "url": "https://ethereum-rpc.publicnode.com/",
+      "status": 200,
+      "allowOrigin": "*",
+      "allowMethods": null,
+      "allowHeaders": null
+    },
+    {
+      "url": "https://ethereum-rpc.publicnode.com/",
+      "status": 200,
+      "allowOrigin": "*",
+      "allowMethods": null,
+      "allowHeaders": null
+    },
+    {
+      "url": "https://ethereum-rpc.publicnode.com/",
+      "status": 200,
+      "allowOrigin": "*",
+      "allowMethods": null,
+      "allowHeaders": null
+    },
+    {
+      "url": "https://ethereum-rpc.publicnode.com/",
+      "status": 200,
+      "allowOrigin": "*",
+      "allowMethods": null,
+      "allowHeaders": null
+    },
+    {
+      "url": "https://ethereum-rpc.publicnode.com/",
+      "status": 200,
+      "allowOrigin": "*",
+      "allowMethods": null,
+      "allowHeaders": null
+    },
+    {
+      "url": "https://ethereum-rpc.publicnode.com/",
+      "status": 200,
+      "allowOrigin": "*",
+      "allowMethods": null,
+      "allowHeaders": null
+    },
+    {
+      "url": "https://ethereum-rpc.publicnode.com/",
+      "status": 200,
+      "allowOrigin": "*",
+      "allowMethods": null,
+      "allowHeaders": null
+    },
+    {
+      "url": "https://eth.drpc.org/",
+      "status": 200,
+      "allowOrigin": "*",
+      "allowMethods": null,
+      "allowHeaders": null
+    },
+    {
+      "url": "https://ethereum-rpc.publicnode.com/",
+      "status": 200,
+      "allowOrigin": "*",
+      "allowMethods": null,
+      "allowHeaders": null
+    },
+    {
+      "url": "https://eth.drpc.org/",
+      "status": 200,
+      "allowOrigin": "*",
+      "allowMethods": null,
+      "allowHeaders": null
+    },
+    {
+      "url": "https://ethereum-rpc.publicnode.com/",
+      "status": 200,
+      "allowOrigin": "*",
+      "allowMethods": null,
+      "allowHeaders": null
+    },
+    {
+      "url": "https://eth.drpc.org/",
+      "status": 200,
+      "allowOrigin": "*",
+      "allowMethods": null,
+      "allowHeaders": null
+    },
+    {
+      "url": "https://ethereum-rpc.publicnode.com/",
+      "status": 403,
+      "allowOrigin": "*",
+      "allowMethods": null,
+      "allowHeaders": null
+    },
+    {
+      "url": "https://ethereum-rpc.publicnode.com/",
+      "status": 403,
+      "allowOrigin": "*",
+      "allowMethods": null,
+      "allowHeaders": null
+    },
+    {
+      "url": "https://eth.drpc.org/",
+      "status": 200,
+      "allowOrigin": "*",
+      "allowMethods": null,
+      "allowHeaders": null
+    },
+    {
+      "url": "https://ethereum-rpc.publicnode.com/",
+      "status": 403,
+      "allowOrigin": "*",
+      "allowMethods": null,
+      "allowHeaders": null
+    },
+    {
+      "url": "https://eth.drpc.org/",
+      "status": 200,
+      "allowOrigin": "*",
+      "allowMethods": null,
+      "allowHeaders": null
+    },
+    {
+      "url": "https://eth.drpc.org/",
+      "status": 200,
+      "allowOrigin": "*",
+      "allowMethods": null,
+      "allowHeaders": null
+    },
+    {
+      "url": "https://ethereum-rpc.publicnode.com/",
+      "status": 200,
+      "allowOrigin": "*",
+      "allowMethods": null,
+      "allowHeaders": null
+    },
+    {
+      "url": "https://eth.drpc.org/",
+      "status": 200,
+      "allowOrigin": "*",
+      "allowMethods": null,
+      "allowHeaders": null
+    },
+    {
+      "url": "https://eth.drpc.org/",
+      "status": 200,
+      "allowOrigin": "*",
+      "allowMethods": null,
+      "allowHeaders": null
+    },
+    {
+      "url": "https://ethereum-rpc.publicnode.com/",
+      "status": 403,
+      "allowOrigin": "*",
+      "allowMethods": null,
+      "allowHeaders": null
+    },
+    {
+      "url": "https://eth.drpc.org/",
+      "status": 200,
+      "allowOrigin": "*",
+      "allowMethods": null,
+      "allowHeaders": null
+    },
+    {
+      "url": "https://eth.drpc.org/",
+      "status": 200,
+      "allowOrigin": "*",
+      "allowMethods": null,
+      "allowHeaders": null
+    },
+    {
+      "url": "https://eth.drpc.org/",
+      "status": 200,
+      "allowOrigin": "*",
+      "allowMethods": null,
+      "allowHeaders": null
+    },
+    {
+      "url": "https://ethereum-rpc.publicnode.com/",
+      "status": 403,
+      "allowOrigin": "*",
+      "allowMethods": null,
+      "allowHeaders": null
+    },
+    {
+      "url": "https://eth.drpc.org/",
+      "status": 200,
+      "allowOrigin": "*",
+      "allowMethods": null,
+      "allowHeaders": null
+    },
+    {
+      "url": "https://eth.drpc.org/",
+      "status": 200,
+      "allowOrigin": "*",
+      "allowMethods": null,
+      "allowHeaders": null
+    },
+    {
+      "url": "https://eth.drpc.org/",
+      "status": 200,
+      "allowOrigin": "*",
+      "allowMethods": null,
+      "allowHeaders": null
+    },
+    {
+      "url": "https://eth.drpc.org/",
+      "status": 200,
+      "allowOrigin": "*",
+      "allowMethods": null,
+      "allowHeaders": null
+    },
+    {
+      "url": "https://eth.drpc.org/",
+      "status": 200,
+      "allowOrigin": "*",
+      "allowMethods": null,
+      "allowHeaders": null
+    },
+    {
+      "url": "https://ethereum-rpc.publicnode.com/",
+      "status": 200,
+      "allowOrigin": "*",
+      "allowMethods": null,
+      "allowHeaders": null
+    },
+    {
+      "url": "https://ethereum-rpc.publicnode.com/",
+      "status": 200,
+      "allowOrigin": "*",
+      "allowMethods": null,
+      "allowHeaders": null
+    },
+    {
+      "url": "https://ethereum-rpc.publicnode.com/",
+      "status": 403,
+      "allowOrigin": "*",
+      "allowMethods": null,
+      "allowHeaders": null
+    },
+    {
+      "url": "https://ethereum-rpc.publicnode.com/",
+      "status": 200,
+      "allowOrigin": "*",
+      "allowMethods": null,
+      "allowHeaders": null
+    },
+    {
+      "url": "https://eth.drpc.org/",
+      "status": 200,
+      "allowOrigin": "*",
+      "allowMethods": null,
+      "allowHeaders": null
+    },
+    {
+      "url": "https://ethereum-rpc.publicnode.com/",
+      "status": 403,
+      "allowOrigin": "*",
+      "allowMethods": null,
+      "allowHeaders": null
+    },
+    {
+      "url": "https://ethereum-rpc.publicnode.com/",
+      "status": 200,
+      "allowOrigin": "*",
+      "allowMethods": null,
+      "allowHeaders": null
+    },
+    {
+      "url": "https://eth.drpc.org/",
+      "status": 200,
+      "allowOrigin": "*",
+      "allowMethods": null,
+      "allowHeaders": null
+    },
+    {
+      "url": "https://ethereum-rpc.publicnode.com/",
+      "status": 200,
+      "allowOrigin": "*",
+      "allowMethods": null,
+      "allowHeaders": null
+    },
+    {
+      "url": "https://eth.drpc.org/",
+      "status": 200,
+      "allowOrigin": "*",
+      "allowMethods": null,
+      "allowHeaders": null
+    },
+    {
+      "url": "https://ethereum-rpc.publicnode.com/",
+      "status": 200,
+      "allowOrigin": "*",
+      "allowMethods": null,
+      "allowHeaders": null
+    },
+    {
+      "url": "https://ethereum-rpc.publicnode.com/",
+      "status": 200,
+      "allowOrigin": "*",
+      "allowMethods": null,
+      "allowHeaders": null
+    },
+    {
+      "url": "https://ethereum-rpc.publicnode.com/",
+      "status": 200,
+      "allowOrigin": "*",
+      "allowMethods": null,
+      "allowHeaders": null
+    },
+    {
+      "url": "https://ethereum-rpc.publicnode.com/",
+      "status": 200,
+      "allowOrigin": "*",
+      "allowMethods": null,
+      "allowHeaders": null
+    },
+    {
+      "url": "https://ethereum-rpc.publicnode.com/",
+      "status": 200,
+      "allowOrigin": "*",
+      "allowMethods": null,
+      "allowHeaders": null
+    },
+    {
+      "url": "https://ethereum-rpc.publicnode.com/",
+      "status": 200,
+      "allowOrigin": "*",
+      "allowMethods": null,
+      "allowHeaders": null
+    },
+    {
+      "url": "https://ethereum-rpc.publicnode.com/",
+      "status": 200,
+      "allowOrigin": "*",
+      "allowMethods": null,
+      "allowHeaders": null
+    },
+    {
+      "url": "https://ethereum-rpc.publicnode.com/",
+      "status": 200,
+      "allowOrigin": "*",
+      "allowMethods": null,
+      "allowHeaders": null
+    },
+    {
+      "url": "https://ethereum-rpc.publicnode.com/",
+      "status": 200,
+      "allowOrigin": "*",
+      "allowMethods": null,
+      "allowHeaders": null
+    },
+    {
+      "url": "https://ethereum-rpc.publicnode.com/",
+      "status": 200,
+      "allowOrigin": "*",
+      "allowMethods": null,
+      "allowHeaders": null
+    },
+    {
+      "url": "https://eth.drpc.org/",
+      "status": 200,
+      "allowOrigin": "*",
+      "allowMethods": null,
+      "allowHeaders": null
+    },
+    {
+      "url": "https://ethereum-rpc.publicnode.com/",
+      "status": 200,
+      "allowOrigin": "*",
+      "allowMethods": null,
+      "allowHeaders": null
+    },
+    {
+      "url": "https://ethereum-rpc.publicnode.com/",
+      "status": 200,
+      "allowOrigin": "*",
+      "allowMethods": null,
+      "allowHeaders": null
+    },
+    {
+      "url": "https://eth.drpc.org/",
+      "status": 200,
+      "allowOrigin": "*",
+      "allowMethods": null,
+      "allowHeaders": null
+    },
+    {
+      "url": "https://ethereum-rpc.publicnode.com/",
+      "status": 200,
+      "allowOrigin": "*",
+      "allowMethods": null,
+      "allowHeaders": null
+    }
+  ],
+  "limitation": "Anonymous endpoint availability and CORS are observations at this time, not service guarantees. The final hosted URL must be checked after IMD returns it."
+}

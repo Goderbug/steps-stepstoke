@@ -11,7 +11,7 @@ import { fileURLToPath } from 'node:url';
 import { Interface } from '../../vendor/ethers/ethers.mjs';
 const exec = promisify(execFile);
 const root = resolve(dirname(fileURLToPath(import.meta.url)), '../..');
-export async function startLocal({ rpcPort = 8545, artifactPort = 8546, configOut = resolve(root, 'frontend/public/local-config.json') } = {}) {
+export async function startLocal({ rpcPort = 8545, artifactPort = 8546, configOut = resolve(root, 'test/scratch/local-config.json') } = {}) {
   for (const port of [rpcPort, artifactPort]) await new Promise((ok, fail) => { const probe = netServer(); probe.once('error', () => fail(new Error(`Local port ${port} is occupied; no existing chain will be modified`))); probe.listen(port, '127.0.0.1', () => probe.close(ok)); });
   const release = JSON.parse(await readFile(resolve(root, 'config/release.json')));
   const rpcURL = `http://127.0.0.1:${rpcPort}`;
@@ -80,10 +80,10 @@ if (process.argv[1] === fileURLToPath(import.meta.url)) {
   try {
     const local = await startLocal();
     await writeFile(resolve(root, 'test/scratch/local-session.json'), JSON.stringify({ config: local.config, accounts: local.accounts, writer: local.writer, treasury: local.treasury }, null, 2));
-    try { await writeFile(resolve(root, 'dist/local-config.json'), JSON.stringify(local.config, null, 2) + '\n'); } catch { /* build later copies public configuration */ }
+    try { await writeFile(resolve(root, 'dist/local-config.json'), JSON.stringify(local.config, null, 2) + '\n'); } catch { /* build the static export before starting a local session */ }
     console.log('LOCAL ONLY: Anvil 31337 at http://127.0.0.1:8545. Config generated from actual deployed code.');
     console.log('Two temporary unlocked accounts:', local.accounts.join(', '));
-    console.log('Run npm run build --prefix frontend, then npm run preview --prefix frontend; open #/local.');
+    console.log('Preview the already-built dist on loopback and open #/local. Rebuilding removes the session config; restart setup afterwards.');
     for (const signal of ['SIGINT', 'SIGTERM']) process.on(signal, async () => { await local.close(); process.exit(0); });
   } catch (e) { console.error(e.message); process.exitCode = 1; }
 }

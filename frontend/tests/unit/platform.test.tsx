@@ -9,7 +9,7 @@ import { FixtureAdapter, DEMO_ACCOUNTS } from "../../src/domain/fixtureAdapter";
 import { safeFileName } from "../../src/domain/files";
 import { Workspace } from "../../src/ui/Workspace";
 import { readWorkspaceSnapshot } from "../../src/ui/snapshot";
-import config from "../../public/local-config.json";
+import config from "../fixtures/local-config.json";
 
 beforeEach(()=>localStorage.clear());
 afterEach(()=>{cleanup();vi.restoreAllMocks();});

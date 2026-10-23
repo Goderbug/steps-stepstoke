@@ -12,12 +12,12 @@ async function openDemo(page: Page, hash = "#/demo") {
   if (hash.includes("/b/")) { await failureControls(page); await disclose(page, /^Complete asset table|^Branch, network|^Proposal details/); }
 }
 
-test("live mode fails closed with explicit A1_INTEGRATION_PENDING, no fixtures, no connect wall", async ({ page }) => {
-  await page.goto("./");
+test("configuration checks actual handoff without fixtures or a connect wall", async ({ page }) => {
+  await page.goto("./#/configuration");
   await expect(page.getByRole("heading", { name: "Public projects" })).toBeVisible();
   await disclose(page, /^Deployment status/);
-  await expect(page.getByText("A1_INTEGRATION_PENDING")).toBeVisible();
-  await expect(page.getByRole("button", { name: "Create project" })).toBeDisabled();
+  await expect(page.getByText("HANDOFF_PRESENT_UNVERIFIED", { exact: true })).toBeVisible();
+  await expect(page.getByText("productionReady: false", { exact: false })).toBeVisible();
   await expect(page.getByRole("button", { name: "Connect wallet" })).toBeVisible();
   await expect(page.getByText("Relay introduction")).toHaveCount(0);
   await expect(page.locator(".demo-bar, .pill-demo")).toHaveCount(0);
@@ -284,7 +284,7 @@ test("malicious files stay isolated and broken files never get a verified badge"
 });
 
 test("keyboard: skip link, focus ring, connect sheet traps and restores focus", async ({ page }) => {
-  await page.goto("./");
+  await page.goto("./#/configuration");
   const skip = page.getByRole("link", { name: "Skip to main content" });
   await expect(skip).toHaveCount(1);
   await page.keyboard.press("Tab");
