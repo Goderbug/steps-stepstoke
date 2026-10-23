@@ -2,6 +2,8 @@
 // Both validate the whole raw document; only the binding projection discards metadata.
 // Environment-neutral: shared verbatim by the Node and browser entrypoints (no Buffer).
 const numericToken = Symbol('strict JSON numeric token');
+// StrictJSON.sol retains all values and keys; its generic parser still has a 256-token cap.
+const STRICT_JSON_TOKENS = 256;
 // UTF-8 byte length of a JS string, counting an unpaired surrogate as its 3-byte U+FFFD
 // replacement exactly as Node's Buffer.byteLength and TextEncoder do.
 // Fatal UTF-8 decoding with one error message in every runtime (engines word theirs differently).
@@ -44,7 +46,7 @@ function parseJSON(raw, maxBytes, maxString, manifest) {
   let flushes = 0;
   const fail = () => { throw new Error('Invalid or excessive JSON'); };
   const space = () => { while (/[ \t\r\n]/u.test(text[pos] ?? '\uFFFF')) pos++; };
-  const token = () => { if (++tokens > MANIFEST_LIMITS.retainedTokens) fail(); };
+  const token = () => { if (++tokens > (manifest ? MANIFEST_LIMITS.retainedTokens : STRICT_JSON_TOKENS)) fail(); };
   const work = () => { if (manifest && raw.length + 96 * values + 8 * keyBytes + 4 * comparisons + MANIFEST_LIMITS.segmentFlushWork * flushes > MANIFEST_LIMITS.work) fail(); };
   function string(limit = maxString, retained = true) {
     if (text[pos++] !== '"') fail();
