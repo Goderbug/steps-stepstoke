@@ -38,36 +38,48 @@
       "sha256": "788539b92c802abeb9a461146b9e9b7585c5e91802e49640704532b3bea7f157"
     },
     {
-      "path": "assets/dist-DmRYlDdL.js",
-      "sha256": "19ba72de1f1e17477b2cec280926c0fbe190230a1ffd28340fb7c8e1fbd2f24c"
+      "path": "apple-touch-icon.png",
+      "sha256": "a00d8ff12f6f41d59314b036258b868569c4bc630fe3a505429798a31074dd16"
     },
     {
-      "path": "assets/index-5GTJZv5g.js",
-      "sha256": "bb42e2637b452519db9470d80065379fef5448379780f3d9adaecf38d5eb5e81"
+      "path": "assets/dist-DlA67QBI.js",
+      "sha256": "59e1d8d9f6977b473e5833f448e149f186070e00579a70ee507c0c62eb17d160"
     },
     {
-      "path": "assets/index-D8V3iLcu.css",
-      "sha256": "a71d6dd9c447c4edfd34edc56759610668e41bd8171ac82d429e410d238a6259"
+      "path": "assets/index-DQT9J7ta.css",
+      "sha256": "0c2aee55b481308ae9298d5303b46bb8fed4d90bbb5d8239e49324e02c2a0faf"
+    },
+    {
+      "path": "assets/index-KXClE2Qb.js",
+      "sha256": "f106b99f8e8f83f56272545b749aa0bec72beaf8c0ae49647bef51c12dc2d7eb"
     },
     {
       "path": "deployment-evidence.json",
       "sha256": "06fccb88497b58f9dbc53835695d289ac2a0bfba625e4299e07ee19f22a4f6a4"
     },
     {
+      "path": "favicon-16.png",
+      "sha256": "8b41d111b8e0d5da2a4c6da8986c3d3d83699b915e5e1a9de3e870b0177a44a2"
+    },
+    {
+      "path": "favicon-32.png",
+      "sha256": "9cae5baf49272002f99f76088b4c89dca8ab5187b05d5188b100df0ab19e719e"
+    },
+    {
       "path": "favicon.svg",
-      "sha256": "759fec54d3994b36ac2f504a699d7cac8bf5febc16a14f8b9a890d7fa46aff24"
+      "sha256": "272911dfd664759ba5b4119bab027ee2b58de89f239f51fc57a67a052d65be3a"
     },
     {
       "path": "index.html",
-      "sha256": "5f5112e2bfb3f99b97730775b346981df612095a898b037d54894d2c7d3b0581"
+      "sha256": "9f4b4421053ab35533dc66295be7aec576249f79fdbf0146766fedc08272ec00"
     },
     {
       "path": "og.png",
-      "sha256": "5679126801c83042c4b3e74e19e1e6d7e0f7048d0319f1cc6edcc0a6f737f8e5"
+      "sha256": "59d35760d7f491988d818a211520ed745d76e960f3f6983ff5bfb5829a5ec0df"
     },
     {
       "path": "og.svg",
-      "sha256": "ae8e3af19715ba91d948cc1a028f3d38e20fb6f57508103fae4068ffd650fe5f"
+      "sha256": "c23e32977150299a1176831b2142fcd7ae7e042ea8c27e5a9ce4bfda68a515b0"
     },
     {
       "path": "public-read-transport.json",

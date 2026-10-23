@@ -1,0 +1,52 @@
+{
+  "checkedAt": "2026-10-23T02:41:59.236376+00:00",
+  "status": "LOCAL_PRODUCTION_UI_VALIDATED",
+  "published": false,
+  "previewUrl": "http://127.0.0.1:4186/preview/#/",
+  "brandAssetEquality": {
+    "frontend/public/favicon.svg": "272911dfd664759ba5b4119bab027ee2b58de89f239f51fc57a67a052d65be3a",
+    "frontend/public/favicon-16.png": "8b41d111b8e0d5da2a4c6da8986c3d3d83699b915e5e1a9de3e870b0177a44a2",
+    "frontend/public/favicon-32.png": "9cae5baf49272002f99f76088b4c89dca8ab5187b05d5188b100df0ab19e719e",
+    "frontend/public/apple-touch-icon.png": "a00d8ff12f6f41d59314b036258b868569c4bc630fe3a505429798a31074dd16",
+    "frontend/public/og.svg": "c23e32977150299a1176831b2142fcd7ae7e042ea8c27e5a9ce4bfda68a515b0",
+    "frontend/public/og.png": "59d35760d7f491988d818a211520ed745d76e960f3f6983ff5bfb5829a5ec0df",
+    "frontend/src/brand/geometry.json": "bd0b27b1a870130891eaba0407a25fcdc26edd5df1a1b9c6c26a6bee86785dd0",
+    "frontend/src/brand/Logo.tsx": "eeab2de6bdb402aa0db4bf984fa5929c6df1c9a1443da0846f7a2a349e407b93"
+  },
+  "checks": {
+    "frontendTypecheck": "PASS",
+    "productionBuild": "PASS",
+    "frontendUnitTests": {
+      "passed": 100,
+      "failed": 0
+    },
+    "chromiumBrowserTests": {
+      "passed": 6,
+      "failed": 0,
+      "viewports": [
+        1440,
+        390,
+        320
+      ],
+      "scope": "Production navigation, removed route redirects, logo/entry layout and authenticated handoff with disabled payment gates",
+      "report": "production-browser.json"
+    },
+    "exportAndProtectedSource": "PASS; see export.json"
+  },
+  "limits": [
+    "No new live paid profile test; productionReady remains false and liveCompatibility remains NOT_RUN.",
+    "The correction is local, not deployed to the existing IMD-hosted site.",
+    "No public-host or X unfurl test was performed.",
+    "The documentation reports direct member-site publishing closed; same-name IMD hosting update is documented via job.continue."
+  ],
+  "hostingReference": "https://imd.fun/docs/",
+  "additionalImdSpent": "0",
+  "additionalEthSpent": "0",
+  "removedPublicRoutes": [
+    "#/demo",
+    "#/demo/b/*",
+    "#/showcase"
+  ],
+  "retiredRouteBehavior": "Redirect to home without loading fixtures",
+  "productionBundleFixtureScan": "PASS: no seeded demo projects or demo-control markers"
+}

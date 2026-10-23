@@ -1,0 +1,23 @@
+
+> cto-relay-station-w1@0.1.0 test:e2e
+> playwright test --project=chromium-desktop --project=chromium-mobile --project=chromium-narrow
+
+[WebServer] (node:14683) Warning: The 'NO_COLOR' env is ignored due to the 'FORCE_COLOR' env being set.
+[WebServer] (Use `node --trace-warnings ...` to show where the warning was created)
+
+Running 6 tests using 2 workers
+
+(node:14685) Warning: The 'NO_COLOR' env is ignored due to the 'FORCE_COLOR' env being set.
+(Use `node --trace-warnings ...` to show where the warning was created)
+(node:14684) Warning: The 'NO_COLOR' env is ignored due to the 'FORCE_COLOR' env being set.
+(Use `node --trace-warnings ...` to show where the warning was created)
+  ✓  2 [chromium-desktop] › tests/e2e/brand-entry.spec.ts:4:1 › production entry is branded and points only to real project browsing (316ms)
+  ✓  1 [chromium-mobile] › tests/e2e/brand-entry.spec.ts:4:1 › production entry is branded and points only to real project browsing (370ms)
+  ✓  4 [chromium-mobile] › tests/e2e/brand-entry.spec.ts:28:1 › deployment details preserve the authenticated handoff and closed payment gates (358ms)
+  ✓  3 [chromium-desktop] › tests/e2e/brand-entry.spec.ts:28:1 › deployment details preserve the authenticated handoff and closed payment gates (412ms)
+(node:14699) Warning: The 'NO_COLOR' env is ignored due to the 'FORCE_COLOR' env being set.
+(Use `node --trace-warnings ...` to show where the warning was created)
+  ✓  5 [chromium-narrow] › tests/e2e/brand-entry.spec.ts:4:1 › production entry is branded and points only to real project browsing (212ms)
+  ✓  6 [chromium-narrow] › tests/e2e/brand-entry.spec.ts:28:1 › deployment details preserve the authenticated handoff and closed payment gates (372ms)
+
+  6 passed (2.6s)

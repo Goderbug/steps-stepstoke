@@ -1,0 +1,102 @@
+{
+  "checkedAt": "2026-10-23T02:40:47.598Z",
+  "status": "PASS",
+  "scope": "Offline source preservation, exact original asset validation, refreshed export hashes and payment gates; not a new live-chain or public-host acceptance",
+  "baselineCommit": "ea16957ccbd15763a6cb0861023637ff8054c8dc",
+  "unchangedProtectedFiles": 40,
+  "contractSourceCommit": "751f3901d4453e1477828e4f7ef0d6af8bc03485",
+  "launchId": "cad0c789-2611-4392-bec0-456cb8e57d2c",
+  "capabilities": {
+    "read": true,
+    "createBranch": false,
+    "propose": false,
+    "sponsor": false,
+    "fork": false,
+    "bindingRetry": false,
+    "realWalletSigning": false
+  },
+  "liveCompatibility": "NOT_RUN",
+  "productionReady": false,
+  "inventory": [
+    {
+      "path": "abi/RelayEncoder.json",
+      "sha256": "7f7cc7133fb159f4ae248c9c903855ea506cf154e8e6017680075e3c50d9153a",
+      "bytes": 7927
+    },
+    {
+      "path": "abi/RelayFactory.json",
+      "sha256": "57287ca9e538a407bbfbd14dabc237bb93e3d6750c232c9c04b575751d9bf5e3",
+      "bytes": 6017
+    },
+    {
+      "path": "abi/RelayVerifier.json",
+      "sha256": "788539b92c802abeb9a461146b9e9b7585c5e91802e49640704532b3bea7f157",
+      "bytes": 5582
+    },
+    {
+      "path": "apple-touch-icon.png",
+      "sha256": "a00d8ff12f6f41d59314b036258b868569c4bc630fe3a505429798a31074dd16",
+      "bytes": 2842
+    },
+    {
+      "path": "assets/dist-DlA67QBI.js",
+      "sha256": "59e1d8d9f6977b473e5833f448e149f186070e00579a70ee507c0c62eb17d160",
+      "bytes": 102692
+    },
+    {
+      "path": "assets/index-DQT9J7ta.css",
+      "sha256": "0c2aee55b481308ae9298d5303b46bb8fed4d90bbb5d8239e49324e02c2a0faf",
+      "bytes": 19199
+    },
+    {
+      "path": "assets/index-KXClE2Qb.js",
+      "sha256": "f106b99f8e8f83f56272545b749aa0bec72beaf8c0ae49647bef51c12dc2d7eb",
+      "bytes": 732643
+    },
+    {
+      "path": "deployment-evidence.json",
+      "sha256": "06fccb88497b58f9dbc53835695d289ac2a0bfba625e4299e07ee19f22a4f6a4",
+      "bytes": 13946
+    },
+    {
+      "path": "favicon-16.png",
+      "sha256": "8b41d111b8e0d5da2a4c6da8986c3d3d83699b915e5e1a9de3e870b0177a44a2",
+      "bytes": 293
+    },
+    {
+      "path": "favicon-32.png",
+      "sha256": "9cae5baf49272002f99f76088b4c89dca8ab5187b05d5188b100df0ab19e719e",
+      "bytes": 495
+    },
+    {
+      "path": "favicon.svg",
+      "sha256": "272911dfd664759ba5b4119bab027ee2b58de89f239f51fc57a67a052d65be3a",
+      "bytes": 374
+    },
+    {
+      "path": "imd-deployment.json",
+      "sha256": "b18eb781937048267b7963895448ea19292456d0a24277049138ea790ace15b3",
+      "bytes": 4433
+    },
+    {
+      "path": "index.html",
+      "sha256": "9f4b4421053ab35533dc66295be7aec576249f79fdbf0146766fedc08272ec00",
+      "bytes": 1630
+    },
+    {
+      "path": "og.png",
+      "sha256": "59d35760d7f491988d818a211520ed745d76e960f3f6983ff5bfb5829a5ec0df",
+      "bytes": 18537
+    },
+    {
+      "path": "og.svg",
+      "sha256": "c23e32977150299a1176831b2142fcd7ae7e042ea8c27e5a9ce4bfda68a515b0",
+      "bytes": 48154
+    },
+    {
+      "path": "public-read-transport.json",
+      "sha256": "8c64b7f1ad54f3aa7362b993ef7ef580af430892d7d6d12dd35c2f1bf57b8b4b",
+      "bytes": 127
+    }
+  ]
+}

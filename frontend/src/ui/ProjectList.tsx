@@ -5,7 +5,6 @@ import { useRef, useState } from "react";
 import { useQuery, useQueryClient } from "@tanstack/react-query";
 import { branchRoute, type RelayAdapter } from "../domain/adapter";
 import type { DisplayAccount as Account } from "../domain/types";
-import { FIXTURE_CHAIN_ID } from "../domain/fixtureAdapter";
 import { utf8Length } from "../domain/files";
 import { CopyId, formatTime, short } from "./format";
 
@@ -55,7 +54,7 @@ function CreateBranchForm({ adapter, account, onDone }: { adapter: RelayAdapter;
   const lock = useRef(false);
   const assertActive = useActionScope(`${account.address}:${account.chainId}:${review}:${title}:${goal}`);
   const caps = useQuery({ queryKey: ["caps", adapter.identity ?? adapter.kind], queryFn: () => adapter.getCapabilities() });
-  const wrongNet = !account.address || account.chainId !== (caps.data?.chainId ?? FIXTURE_CHAIN_ID);
+  const wrongNet = !account.address || !caps.data || account.chainId !== caps.data.chainId;
   const titleErr = review && !title.trim() ? "Enter a project title" : null;
   const goalErr = review && !goal.trim() ? "Enter a fixed goal" : null;
 

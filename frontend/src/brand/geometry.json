@@ -1,0 +1,25 @@
+{
+  "name": "STEPS",
+  "expanded": "Stepstoke",
+  "slogan": "Build on every step.",
+  "x": { "handle": "@stepstoke", "url": "https://x.com/stepstoke" },
+  "colors": { "ink": "#22231F", "action": "#C1452A", "paper": "#F6F5F1", "surface": "#FFFFFF", "border": "#DDDCD4", "secondary": "#666961" },
+  "symbol": {
+    "note": "Joined Steps. Three L-shaped treads on a 32-unit grid join into a stepped S; the newest tread is vermillion.",
+    "viewBox": "0 0 32 32",
+    "earlier": ["M27 4H11A6 6 0 0 0 5 10V19H11V10H27Z", "M13 13H27V22A6 6 0 0 1 21 28V19H13Z"],
+    "latest": "M5 22H19V28H5Z"
+  },
+  "favicon": {
+    "note": "Small-size redraw on a 16-unit grid: 3-unit treads, 1-unit joints, paper tile. Crisp at 16 and 32 px.",
+    "viewBox": "0 0 16 16",
+    "tile": "M3 0H13A3 3 0 0 1 16 3V13A3 3 0 0 1 13 16H3A3 3 0 0 1 0 13V3A3 3 0 0 1 3 0Z",
+    "earlier": ["M14 2H5A3 3 0 0 0 2 5V10H5V5H14Z", "M6 7H14V12A3 3 0 0 1 11 15V10H6Z"],
+    "latest": "M2 12H10V15H2Z"
+  },
+  "wordmark": {
+    "note": "Custom squared capitals drawn on a 24-unit cap height with 5-unit stems; S terminals round like the symbol. No font is used.",
+    "viewBox": "0 0 106 24",
+    "path": "M5 0H18V5H5V9.5H18V19A5 5 0 0 1 13 24H0V19H13V14.5H0V5A5 5 0 0 1 5 0Z M22.5 0H40.5V5H34V24H29V5H22.5Z M45 0H61V5H50V9.5H59V14.5H50V19H61V24H45Z M65.5 0H78.5A5 5 0 0 1 83.5 5V9.5A5 5 0 0 1 78.5 14.5H70.5V24H65.5Z M70.5 5V9.5H78.5V5Z M93 0H106V5H93V9.5H106V19A5 5 0 0 1 101 24H88V19H101V14.5H88V5A5 5 0 0 1 93 0Z"
+  }
+}

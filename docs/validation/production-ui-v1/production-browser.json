@@ -1,0 +1,483 @@
+{
+  "config": {
+    "argv": [
+      "/Users/jc/.cache/codex-runtimes/codex-primary-runtime/dependencies/node/bin/node",
+      "/Users/jc/Documents/ChatGPT/Rice/research/lineage-gate/release-preparation/steps-ui-brand-correction-v1/source/frontend/node_modules/.bin/playwright",
+      "test",
+      "--project=chromium-desktop",
+      "--project=chromium-mobile",
+      "--project=chromium-narrow"
+    ],
+    "configFile": "/Users/jc/Documents/ChatGPT/Rice/research/lineage-gate/release-preparation/steps-ui-brand-correction-v1/source/frontend/playwright.config.ts",
+    "rootDir": "/Users/jc/Documents/ChatGPT/Rice/research/lineage-gate/release-preparation/steps-ui-brand-correction-v1/source/frontend/tests/e2e",
+    "failOnFlakyTests": false,
+    "forbidOnly": false,
+    "fullyParallel": false,
+    "globalSetup": null,
+    "globalTeardown": null,
+    "globalTimeout": 0,
+    "grep": {},
+    "grepInvert": null,
+    "maxFailures": 0,
+    "metadata": {
+      "actualWorkers": 2
+    },
+    "preserveOutput": "always",
+    "projects": [
+      {
+        "outputDir": "/Users/jc/Documents/ChatGPT/Rice/research/lineage-gate/release-preparation/steps-ui-brand-correction-v1/source/test/scratch/platform-browser",
+        "repeatEach": 1,
+        "retries": 0,
+        "metadata": {
+          "actualWorkers": 2
+        },
+        "id": "chromium-desktop",
+        "name": "chromium-desktop",
+        "testDir": "/Users/jc/Documents/ChatGPT/Rice/research/lineage-gate/release-preparation/steps-ui-brand-correction-v1/source/frontend/tests/e2e",
+        "testIgnore": [],
+        "testMatch": [
+          "*.spec.ts"
+        ],
+        "timeout": 45000
+      },
+      {
+        "outputDir": "/Users/jc/Documents/ChatGPT/Rice/research/lineage-gate/release-preparation/steps-ui-brand-correction-v1/source/test/scratch/platform-browser",
+        "repeatEach": 1,
+        "retries": 0,
+        "metadata": {
+          "actualWorkers": 2
+        },
+        "id": "chromium-mobile",
+        "name": "chromium-mobile",
+        "testDir": "/Users/jc/Documents/ChatGPT/Rice/research/lineage-gate/release-preparation/steps-ui-brand-correction-v1/source/frontend/tests/e2e",
+        "testIgnore": [],
+        "testMatch": [
+          "*.spec.ts"
+        ],
+        "timeout": 45000
+      },
+      {
+        "outputDir": "/Users/jc/Documents/ChatGPT/Rice/research/lineage-gate/release-preparation/steps-ui-brand-correction-v1/source/test/scratch/platform-browser",
+        "repeatEach": 1,
+        "retries": 0,
+        "metadata": {
+          "actualWorkers": 2
+        },
+        "id": "chromium-narrow",
+        "name": "chromium-narrow",
+        "testDir": "/Users/jc/Documents/ChatGPT/Rice/research/lineage-gate/release-preparation/steps-ui-brand-correction-v1/source/frontend/tests/e2e",
+        "testIgnore": [],
+        "testMatch": [
+          "*.spec.ts"
+        ],
+        "timeout": 45000
+      },
+      {
+        "outputDir": "/Users/jc/Documents/ChatGPT/Rice/research/lineage-gate/release-preparation/steps-ui-brand-correction-v1/source/test/scratch/platform-browser",
+        "repeatEach": 1,
+        "retries": 0,
+        "metadata": {
+          "actualWorkers": 2
+        },
+        "id": "webkit-desktop",
+        "name": "webkit-desktop",
+        "testDir": "/Users/jc/Documents/ChatGPT/Rice/research/lineage-gate/release-preparation/steps-ui-brand-correction-v1/source/frontend/tests/e2e",
+        "testIgnore": [],
+        "testMatch": [
+          "*.spec.ts"
+        ],
+        "timeout": 45000
+      },
+      {
+        "outputDir": "/Users/jc/Documents/ChatGPT/Rice/research/lineage-gate/release-preparation/steps-ui-brand-correction-v1/source/test/scratch/platform-browser",
+        "repeatEach": 1,
+        "retries": 0,
+        "metadata": {
+          "actualWorkers": 2
+        },
+        "id": "webkit-mobile",
+        "name": "webkit-mobile",
+        "testDir": "/Users/jc/Documents/ChatGPT/Rice/research/lineage-gate/release-preparation/steps-ui-brand-correction-v1/source/frontend/tests/e2e",
+        "testIgnore": [],
+        "testMatch": [
+          "*.spec.ts"
+        ],
+        "timeout": 45000
+      }
+    ],
+    "filteredProjects": [
+      {
+        "grep": {},
+        "grepInvert": null,
+        "outputDir": "/Users/jc/Documents/ChatGPT/Rice/research/lineage-gate/release-preparation/steps-ui-brand-correction-v1/source/test/scratch/platform-browser",
+        "repeatEach": 1,
+        "retries": 0,
+        "metadata": {
+          "actualWorkers": 2
+        },
+        "name": "chromium-desktop",
+        "testDir": "/Users/jc/Documents/ChatGPT/Rice/research/lineage-gate/release-preparation/steps-ui-brand-correction-v1/source/frontend/tests/e2e",
+        "snapshotDir": "/Users/jc/Documents/ChatGPT/Rice/research/lineage-gate/release-preparation/steps-ui-brand-correction-v1/source/frontend/tests/e2e",
+        "testIgnore": [],
+        "testMatch": "*.spec.ts",
+        "timeout": 45000,
+        "use": {
+          "baseURL": "http://127.0.0.1:4187/preview/",
+          "trace": "off",
+          "screenshot": "off",
+          "userAgent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/156.0.8078.4 Safari/537.36",
+          "viewport": {
+            "width": 1440,
+            "height": 900
+          },
+          "screen": {
+            "width": 1920,
+            "height": 1080
+          },
+          "deviceScaleFactor": 1,
+          "isMobile": false,
+          "hasTouch": false,
+          "defaultBrowserType": "chromium",
+          "launchOptions": {
+            "executablePath": "/Users/jc/Documents/ChatGPT/Rice/research/lineage-gate/release-preparation/overnight-release-v1/evidence/candidate-20261021T224531Z/frontend-review/browsers/chromium_headless_shell-1248/chrome-headless-shell-mac-arm64/chrome-headless-shell"
+          }
+        },
+        "dependencies": [],
+        "ignoreSnapshots": false,
+        "__projectId": "chromium-desktop"
+      },
+      {
+        "grep": {},
+        "grepInvert": null,
+        "outputDir": "/Users/jc/Documents/ChatGPT/Rice/research/lineage-gate/release-preparation/steps-ui-brand-correction-v1/source/test/scratch/platform-browser",
+        "repeatEach": 1,
+        "retries": 0,
+        "metadata": {
+          "actualWorkers": 2
+        },
+        "name": "chromium-mobile",
+        "testDir": "/Users/jc/Documents/ChatGPT/Rice/research/lineage-gate/release-preparation/steps-ui-brand-correction-v1/source/frontend/tests/e2e",
+        "snapshotDir": "/Users/jc/Documents/ChatGPT/Rice/research/lineage-gate/release-preparation/steps-ui-brand-correction-v1/source/frontend/tests/e2e",
+        "testIgnore": [],
+        "testMatch": "*.spec.ts",
+        "timeout": 45000,
+        "use": {
+          "baseURL": "http://127.0.0.1:4187/preview/",
+          "trace": "off",
+          "screenshot": "off",
+          "userAgent": "Mozilla/5.0 (Linux; Android 14; Pixel 7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/156.0.8078.4 Mobile Safari/537.36",
+          "viewport": {
+            "width": 390,
+            "height": 844
+          },
+          "screen": {
+            "width": 412,
+            "height": 915
+          },
+          "deviceScaleFactor": 2.625,
+          "isMobile": true,
+          "hasTouch": true,
+          "defaultBrowserType": "chromium",
+          "launchOptions": {
+            "executablePath": "/Users/jc/Documents/ChatGPT/Rice/research/lineage-gate/release-preparation/overnight-release-v1/evidence/candidate-20261021T224531Z/frontend-review/browsers/chromium_headless_shell-1248/chrome-headless-shell-mac-arm64/chrome-headless-shell"
+          }
+        },
+        "dependencies": [],
+        "ignoreSnapshots": false,
+        "__projectId": "chromium-mobile"
+      },
+      {
+        "grep": {},
+        "grepInvert": null,
+        "outputDir": "/Users/jc/Documents/ChatGPT/Rice/research/lineage-gate/release-preparation/steps-ui-brand-correction-v1/source/test/scratch/platform-browser",
+        "repeatEach": 1,
+        "retries": 0,
+        "metadata": {
+          "actualWorkers": 2
+        },
+        "name": "chromium-narrow",
+        "testDir": "/Users/jc/Documents/ChatGPT/Rice/research/lineage-gate/release-preparation/steps-ui-brand-correction-v1/source/frontend/tests/e2e",
+        "snapshotDir": "/Users/jc/Documents/ChatGPT/Rice/research/lineage-gate/release-preparation/steps-ui-brand-correction-v1/source/frontend/tests/e2e",
+        "testIgnore": [],
+        "testMatch": "*.spec.ts",
+        "timeout": 45000,
+        "use": {
+          "baseURL": "http://127.0.0.1:4187/preview/",
+          "trace": "off",
+          "screenshot": "off",
+          "userAgent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/156.0.8078.4 Safari/537.36",
+          "viewport": {
+            "width": 320,
+            "height": 844
+          },
+          "screen": {
+            "width": 1920,
+            "height": 1080
+          },
+          "deviceScaleFactor": 1,
+          "isMobile": false,
+          "hasTouch": false,
+          "defaultBrowserType": "chromium",
+          "launchOptions": {
+            "executablePath": "/Users/jc/Documents/ChatGPT/Rice/research/lineage-gate/release-preparation/overnight-release-v1/evidence/candidate-20261021T224531Z/frontend-review/browsers/chromium_headless_shell-1248/chrome-headless-shell-mac-arm64/chrome-headless-shell"
+          }
+        },
+        "dependencies": [],
+        "ignoreSnapshots": false,
+        "__projectId": "chromium-narrow"
+      }
+    ],
+    "quiet": false,
+    "reporter": [
+      [
+        "list",
+        null
+      ],
+      [
+        "json",
+        {
+          "outputFile": "../../validation/production-browser.json"
+        }
+      ]
+    ],
+    "reportSlowTests": {
+      "max": 5,
+      "threshold": 300000
+    },
+    "shard": null,
+    "tags": [],
+    "updateSnapshots": "default",
+    "updateSourceMethod": "patch",
+    "version": "1.64.1",
+    "workers": 2,
+    "webServer": {
+      "command": "node scripts/static-preview.mjs",
+      "url": "http://127.0.0.1:4187/preview/",
+      "reuseExistingServer": false,
+      "timeout": 60000
+    }
+  },
+  "suites": [
+    {
+      "title": "brand-entry.spec.ts",
+      "file": "brand-entry.spec.ts",
+      "column": 0,
+      "line": 0,
+      "specs": [
+        {
+          "title": "production entry is branded and points only to real project browsing",
+          "ok": true,
+          "tags": [],
+          "tests": [
+            {
+              "timeout": 45000,
+              "annotations": [],
+              "expectedStatus": "passed",
+              "projectId": "chromium-desktop",
+              "projectName": "chromium-desktop",
+              "results": [
+                {
+                  "workerIndex": 0,
+                  "parallelIndex": 0,
+                  "status": "passed",
+                  "duration": 316,
+                  "errors": [],
+                  "stdout": [],
+                  "stderr": [],
+                  "retry": 0,
+                  "startTime": "2026-10-23T02:41:03.319Z",
+                  "annotations": [],
+                  "attachments": []
+                }
+              ],
+              "status": "expected"
+            }
+          ],
+          "id": "1221545e99f408bc0ced-69299d0981ba73fcd2a6",
+          "file": "brand-entry.spec.ts",
+          "line": 4,
+          "column": 1
+        },
+        {
+          "title": "deployment details preserve the authenticated handoff and closed payment gates",
+          "ok": true,
+          "tags": [],
+          "tests": [
+            {
+              "timeout": 45000,
+              "annotations": [],
+              "expectedStatus": "passed",
+              "projectId": "chromium-desktop",
+              "projectName": "chromium-desktop",
+              "results": [
+                {
+                  "workerIndex": 0,
+                  "parallelIndex": 0,
+                  "status": "passed",
+                  "duration": 412,
+                  "errors": [],
+                  "stdout": [],
+                  "stderr": [],
+                  "retry": 0,
+                  "startTime": "2026-10-23T02:41:03.897Z",
+                  "annotations": [],
+                  "attachments": []
+                }
+              ],
+              "status": "expected"
+            }
+          ],
+          "id": "1221545e99f408bc0ced-db7c3f2b8306797f60ae",
+          "file": "brand-entry.spec.ts",
+          "line": 28,
+          "column": 1
+        },
+        {
+          "title": "production entry is branded and points only to real project browsing",
+          "ok": true,
+          "tags": [],
+          "tests": [
+            {
+              "timeout": 45000,
+              "annotations": [],
+              "expectedStatus": "passed",
+              "projectId": "chromium-mobile",
+              "projectName": "chromium-mobile",
+              "results": [
+                {
+                  "workerIndex": 1,
+                  "parallelIndex": 1,
+                  "status": "passed",
+                  "duration": 370,
+                  "errors": [],
+                  "stdout": [],
+                  "stderr": [],
+                  "retry": 0,
+                  "startTime": "2026-10-23T02:41:03.318Z",
+                  "annotations": [],
+                  "attachments": []
+                }
+              ],
+              "status": "expected"
+            }
+          ],
+          "id": "1221545e99f408bc0ced-313336cd21a5bd1db97c",
+          "file": "brand-entry.spec.ts",
+          "line": 4,
+          "column": 1
+        },
+        {
+          "title": "deployment details preserve the authenticated handoff and closed payment gates",
+          "ok": true,
+          "tags": [],
+          "tests": [
+            {
+              "timeout": 45000,
+              "annotations": [],
+              "expectedStatus": "passed",
+              "projectId": "chromium-mobile",
+              "projectName": "chromium-mobile",
+              "results": [
+                {
+                  "workerIndex": 1,
+                  "parallelIndex": 1,
+                  "status": "passed",
+                  "duration": 358,
+                  "errors": [],
+                  "stdout": [],
+                  "stderr": [],
+                  "retry": 0,
+                  "startTime": "2026-10-23T02:41:03.951Z",
+                  "annotations": [],
+                  "attachments": []
+                }
+              ],
+              "status": "expected"
+            }
+          ],
+          "id": "1221545e99f408bc0ced-29c7aec1fdbac5f0d8f0",
+          "file": "brand-entry.spec.ts",
+          "line": 28,
+          "column": 1
+        },
+        {
+          "title": "production entry is branded and points only to real project browsing",
+          "ok": true,
+          "tags": [],
+          "tests": [
+            {
+              "timeout": 45000,
+              "annotations": [],
+              "expectedStatus": "passed",
+              "projectId": "chromium-narrow",
+              "projectName": "chromium-narrow",
+              "results": [
+                {
+                  "workerIndex": 2,
+                  "parallelIndex": 1,
+                  "status": "passed",
+                  "duration": 212,
+                  "errors": [],
+                  "stdout": [],
+                  "stderr": [],
+                  "retry": 0,
+                  "startTime": "2026-10-23T02:41:04.603Z",
+                  "annotations": [],
+                  "attachments": []
+                }
+              ],
+              "status": "expected"
+            }
+          ],
+          "id": "1221545e99f408bc0ced-051febc672fb7367a7f9",
+          "file": "brand-entry.spec.ts",
+          "line": 4,
+          "column": 1
+        },
+        {
+          "title": "deployment details preserve the authenticated handoff and closed payment gates",
+          "ok": true,
+          "tags": [],
+          "tests": [
+            {
+              "timeout": 45000,
+              "annotations": [],
+              "expectedStatus": "passed",
+              "projectId": "chromium-narrow",
+              "projectName": "chromium-narrow",
+              "results": [
+                {
+                  "workerIndex": 2,
+                  "parallelIndex": 1,
+                  "status": "passed",
+                  "duration": 372,
+                  "errors": [],
+                  "stdout": [],
+                  "stderr": [],
+                  "retry": 0,
+                  "startTime": "2026-10-23T02:41:05.002Z",
+                  "annotations": [],
+                  "attachments": []
+                }
+              ],
+              "status": "expected"
+            }
+          ],
+          "id": "1221545e99f408bc0ced-93cbbf89afd099f61b90",
+          "file": "brand-entry.spec.ts",
+          "line": 28,
+          "column": 1
+        }
+      ]
+    }
+  ],
+  "errors": [],
+  "stats": {
+    "startTime": "2026-10-23T02:41:02.856Z",
+    "duration": 2564.787,
+    "expected": 6,
+    "skipped": 0,
+    "unexpected": 0,
+    "flaky": 0
+  }
+}

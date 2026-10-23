@@ -26,7 +26,7 @@ async function workspace(page:any){await page.goto("./#/demo/b/fx-branch-1");awa
 async function openFunding(page:any){await workspace(page);await page.getByRole("button",{name:"Review funding",exact:true}).first().click();const sheet=page.getByRole("dialog",{name:"Fund a contribution"});await expect(sheet.getByRole("button",{name:"1. Approve exact amount"})).toBeEnabled();return sheet;}
 
 test("configuration identifies the product and gateway metadata",async({page},info)=>{
-  await page.goto("./#/configuration");await expect(page).toHaveTitle("STEPS · Stepstoke · Open Workshop");const action=page.getByRole("link",{name:/Explore demo project/});await expect(page.getByRole("link",{name:"Verify and open projects",exact:true})).toBeInViewport();await expect(page.locator('html')).toHaveAttribute("lang","en");for(const name of ["description","og:title","og:image"]){expect(await page.locator(`meta[${name.startsWith("og")?"property":"name"}="${name}"]`).getAttribute("content")).toBeTruthy();}
+  await page.goto("./#/configuration");await expect(page).toHaveTitle("STEPS · Stepstoke — Build on every step.");const action=page.getByRole("link",{name:/Explore demo project/});await expect(page.getByRole("link",{name:"Verify and open projects",exact:true})).toBeInViewport();await expect(page.locator('html')).toHaveAttribute("lang","en");for(const name of ["description","og:title","og:image"]){expect(await page.locator(`meta[${name.startsWith("og")?"property":"name"}="${name}"]`).getAttribute("content")).toBeTruthy();}
   await shot(page,info,"home");await action.click();await expect(page.getByRole("heading",{name:"Round 3 output"})).toBeVisible();
 });
 test("project list and separate gas-only project creation",async({page})=>{

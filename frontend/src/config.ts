@@ -3,6 +3,9 @@
 import { foundry, mainnet } from "viem/chains";
 
 export const SITE_NAME = "STEPS · Stepstoke";
+export const SITE_EXPANDED_NAME = "Stepstoke";
+export const SITE_SLOGAN = "Build on every step.";
+export const SITE_X_URL = "https://x.com/stepstoke";
 export const SITE_DESCRIPTION = "Browse public projects, propose work, fund execution and continue from accepted checkpoints.";
 
 /** Historical W1 observation. Actual live addresses/source come only from imd-deployment.json. */

@@ -11,7 +11,7 @@ const queryClient = new QueryClient({ defaultOptions: { queries: { retry: false,
 
 createRoot(document.getElementById("root")!).render(
   <StrictMode>
-    {/* Public reads and the demo must not initialize wallet SDKs before a user selects one.
+    {/* Public reads must not initialize wallet SDKs before a user selects one.
         Reload recovery reads adapter state; it never depends on an automatic wallet reconnect. */}
     <WagmiProvider config={wagmiConfig} reconnectOnMount={false}>
       <QueryClientProvider client={queryClient}>
