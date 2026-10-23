@@ -90,10 +90,24 @@ Observed findings and fixes:
 
 - `frontend/src/App.tsx:26`: the former primary landing emphasized the demo and said no deployment existed. It now opens the real Ethereum view and labels the demo separately; footer and current docs describe verified deployment with payments disabled.
 - `frontend/src/ui/LocalApp.tsx:55`: the initial rendered phone screen contained only a verification message. The loading state now keeps the Projects title and disabled Create project control above the fold while preserving fail-closed verification.
-- `frontend/src/ui/ProjectList.tsx:24`: the empty view formerly invited creation regardless of readiness. It now explains disabled actions and labels the observed empty read window without simulated projects.
+- `frontend/src/ui/ProjectList.tsx:24`: the empty view formerly invited creation regardless of readiness. The hint above it explains the disabled actions; the live empty state now reads "No projects have been created on Ethereum yet." (see the review revision below).
 - The inherited rehearsal JSON was moved from public assets to `frontend/tests/fixtures/local-config.json`; local setup generates its own session file after building. No rehearsal address/config is in the final public handoff or static JSON export.
 
 No unresolved first-screen or repeated probe failure was observed in this bounded review. Two inline links are below the comfortable 44px size but meet the probe's spacing/24px rule. Final screenshots are in [screenshots/](screenshots/). The probe primarily captured the initial loading screen; actual fully verified screenshots and the separate live browser report cover the settled state.
+
+## Review revision (2026-10-23)
+
+An independent review reopened this delivery with one high and four advisory findings. Each one was reproduced from the source before it was changed:
+
+- `docs/AGENT-GUIDE.md:1-5`: still described an "undeployed development candidate" and forbade hosting. It now states the Ethereum mainnet deployment (chain 1, block 26248821, source 751f3901d4453e1477828e4f7ef0d6af8bc03485), the hosted site with payments disabled, NOT_RUN profile checks and productionReady false. The same stale `productionDeployment:null` / "no hosting" header in `docs/PLATFORM-AUTHORING.md`, `docs/ACCEPTANCE.md`, `docs/DESIGN.md`, `docs/FRONTEND.md`, `docs/SDK-BROWSER.md`, `docs/frontend-README.md` and one sentence in `docs/PROTOCOL-OVERVIEW.md` were corrected the same way.
+- `frontend/src/ui/ProjectList.tsx:25`: the live empty state said "No projects observed in this read window", although `listBranches` reads the Factory's full `branchCount`. It now reads "No projects have been created on Ethereum yet." The banner, hint and footer are unchanged.
+- `frontend/src/App.tsx:37`: "Open local contracts" now renders only on loopback hosts (localhost, 127.0.0.1, [::1], the list `chainAdapter.ts` enforces). The local integration test still uses it on 127.0.0.1.
+- `frontend/src/styles.css:61`: `.site-footer` gains `align-items:center`. The reviewer said the phone column was unaffected, but `center` would also have centred the stacked phone column, so the 640px rule (line 245) now sets `align-items:stretch` explicitly to keep the earlier phone layout.
+- `frontend/src/App.tsx:26`: the Projects tab no longer carries `aria-current="page"` on `#/configuration`.
+
+Checks after the change, run in order: `npm run typecheck` PASS; `npm run test:unit` 100/100; `node --test test-sdk/*.test.mjs` 89/89; `node tools/verify-live-connection.mjs` ok (50 sources, 3 applications, live chain); `npm run build`; `node tools/import-deployment.mjs …` AFTER the build, ok (12 assets plus handoff); `node tools/build-release.mjs` then `node tools/check-release.mjs` ok (ABI MATCH, releaseContracts MATCH); `node tools/observe-ethereum.mjs dist` VERIFIED_DEPLOYMENT, NOT_RUN, productionReady false; `node tools/check-connected-export.mjs` ok (13 files, signing false). The Chromium fixture suite at 1440/390/320 passed 111/111 (WebKit projects not run in this revision). The pinned taste@1 probe passed 16/16 at 320/390/1440.
+
+A Chromium script served `dist/` under the non-loopback host name `steps.test` (mapped to 127.0.0.1) and under 127.0.0.1. On `steps.test` at `#/configuration` there was no "Open local contracts" link, no nav item had `aria-current`, and the text of all three footer items started at the same y (672) at 1440. On 127.0.0.1 the link was present. At 390 on `steps.test`, the primary route finished its live public reads with no page errors and showed "No projects have been created on Ethereum yet." The page was 390px wide with no horizontal overflow, and the footer items were stacked at full width. This used real public RPC transport from this machine, not the hosted origin.
 
 ## Delivery and remaining limits
 

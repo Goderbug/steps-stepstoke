@@ -1,8 +1,8 @@
 {
   "status": "PASS",
   "fileCount": 367,
-  "rawBytes": 13515889,
-  "completeSourceSnapshotGitBundleBytes": 6800229,
+  "rawBytes": 13521031,
+  "completeSourceSnapshotGitBundleBytes": 6803581,
   "reserveForMeasurementReportBytes": 65536,
   "limitBytes": 8388608,
   "method": "Complete current deliverable file set from git ls-files cached/others/exclude-standard, copied to a fresh temporary repository; verified single-snapshot Git bundle. Required offline SDK archives and all inherited evidence are preserved.",
@@ -16,7 +16,7 @@
     "ignored build/cache/node_modules directories"
   ],
   "publicExport": {
-    "bytes": 968457,
-    "manifestSha256": "993c6ed2c93f2d6062843e511de8f38875889b25eaf5819563e75648ea284f96"
+    "bytes": 968596,
+    "manifestSha256": "8927f407b57e1593d2cacd32c53061c588072832672bf5bc5c32c04b215de6c0"
   }
 }

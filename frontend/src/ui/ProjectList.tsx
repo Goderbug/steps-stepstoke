@@ -22,7 +22,7 @@ export function ProjectList({ adapter, account }: { adapter: RelayAdapter; accou
         {q.isPending && <p className="state-line">Reading projects…</p>}
         {q.isError && <p className="alert alert-error" role="alert">Read failed: {(q.error as Error).message} <button className="btn btn-link" onClick={() => q.refetch()}>Retry</button></p>}
         {adapter.kind === "live" && !adapter.capabilities.createBranch && <p className="hint" role="status">Verified public reads are available. Creating, proposing, funding and forking stay disabled while production gates remain open. Live profile checks: NOT_RUN.</p>}
-        {q.data && q.data.length === 0 && <p className="empty">{adapter.capabilities.createBranch ? "No projects yet. Create a project with a fixed public goal." : "No projects observed in this read window. Payments and project creation remain disabled."}</p>}
+        {q.data && q.data.length === 0 && <p className="empty">{adapter.capabilities.createBranch ? "No projects yet. Create a project with a fixed public goal." : adapter.kind === "live" ? "No projects have been created on Ethereum yet." : "No projects yet."}</p>}
         {q.data && q.data.length > 0 && (
           <ul className="list">
             {q.data.map((b) => (

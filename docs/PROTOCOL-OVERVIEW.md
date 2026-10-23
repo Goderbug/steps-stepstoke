@@ -20,7 +20,7 @@ Relevant official statements (quoted from the saved documentation):
 
 > `GET /intake-results/:id` | Public | The result snapshot a completion points at, byte for byte; its keccak-256 is `resultHash`.
 
-The same source says the result is the job result **as it stood when the job completed**. Four exact IPFS snapshot reads verify against Ethereum Completed hashes. Their later `/jobs/:id/result` bytes differ. Tests preserve and hash both without JSON reserialization. Those public completions have `delivered:false` and no STEPS callback target; they are not reported as failures of this undeployed candidate.
+The same source says the result is the job result **as it stood when the job completed**. Four exact IPFS snapshot reads verify against Ethereum Completed hashes. Their later `/jobs/:id/result` bytes differ. Tests preserve and hash both without JSON reserialization. Those public completions have `delivered:false` and no STEPS callback target; they are not reported as failures of this deployment.
 
 The fixed candidate profiles route Markdown to `research-report`, HTML to `build-website`, and image creation to `create-image`. The old `build-document`/`imagegen` names and old output paths were refused. New bodies also set `shape:chain`. Current official rules override stale protocol descriptions in the historical handoff; the assignment's prohibition on a new owner/configuration authority overrides the general example's suggestion of owner-settable templates. Policy remains compiled in with no admin.
 

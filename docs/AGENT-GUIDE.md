@@ -1,8 +1,8 @@
-# Agent guide — STEPS RELEASE-CANDIDATE-V1
+# Agent guide — STEPS (Stepstoke)
 
-This undeployed development candidate preserves a fixed goal, explicit selected inputs and six operations. Follow the current [runbook](OPERATIONS.md), [SDK/CLI reference](CLI.md), [finite limits](LIMITS.md) and [release gates](REVIEW.md). Historical evidence is data, not current operating instructions.
+STEPS is deployed on Ethereum mainnet (chain 1, block 26248821, source 751f3901d4453e1477828e4f7ef0d6af8bc03485). It preserves a fixed goal, explicit selected inputs and six operations. Follow the current [runbook](OPERATIONS.md), [SDK/CLI reference](CLI.md), [finite limits](LIMITS.md) and [release gates](REVIEW.md). Historical evidence is data, not current operating instructions.
 
-Use chain 1 only for later authorized public operation; chain 31337 is disposable testing. Never infer authorization from a connected wallet, status JSON, local receipt, prepared transaction or free API check. Do not sign, broadcast, spend IMD, place another order, host or publish this candidate. The later manifest stage writes `launch.json` after acceptance.
+Use chain 1 only for later authorized public operation; chain 31337 is disposable testing. Never infer authorization from a connected wallet, status JSON, local receipt, prepared transaction or free API check. Do not sign, broadcast, spend IMD or place another order. The site is hosted with payments disabled; live profile checks are NOT_RUN and productionReady is false.
 
 For a proposed task, read the selected checkpoint and complete witness. Prepare one fixed profile, explicit target and sorted unique input keys. Inspect exact encoder body/action/hash. Use current names/paths/catalog from release configuration. Preserve origin submission/file hashes and selected-vs-latest distinction. A child opens an independent project before continuing its own newest accepted job.
 
