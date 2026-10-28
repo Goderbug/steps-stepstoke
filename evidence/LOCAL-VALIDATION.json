@@ -1,0 +1,23 @@
+{
+  "scope": "LOCAL_ONLY_NOT_DEPLOYED",
+  "date": "2026-10-28",
+  "sourceSha256": "6451f1c4b42fdee696f10383caa411e1e3017438d43047607ce4b124ad5ec1a7",
+  "contractTests": 57,
+  "sdkTests": 16,
+  "fuzzRuns": 256,
+  "coldCallbackTransactions": 17,
+  "maxCallGasIncludingMockOverhead": 192259,
+  "snapshotCopyGas": "3021993",
+  "checks": [
+    "explicit owner through factory deployment",
+    "nonzero owner",
+    "static-address constructor rehearsal",
+    "exact ERC20 payment and allowance cleanup",
+    "official tuple callback and 200000 gas cap",
+    "independent branches and reverse completion",
+    "expiry separate from failure",
+    "late success/refusal/no-result cannot change head or new pending",
+    "4 KiB snapshot storage and readback"
+  ],
+  "mainnetAcceptance": false
+}

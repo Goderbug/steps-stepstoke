@@ -1,0 +1,15 @@
+{
+  "kind": "evm_contracts",
+  "contracts": [
+    {
+      "contract": "StepsBranch",
+      "constructorArgs": [
+        "0xa43e6f75ee006411f79ac1c84120606c2330de82",
+        "0xd34a99bc0f67ae1bbd63c660e6d0b0dd03e263b7",
+        "500000000000000000",
+        "$owner"
+      ]
+    }
+  ],
+  "notes": "Ethereum mainnet chainId 1 only. Exactly one new StepsBranch ledger. Explicit initialOwner is the job owner; do not assign the deployment factory. No token, pool, hook, proxy, upgrade, website, paid product round, or post-deployment initialization. MockToken and all test contracts are test-only and must not be deployed. Preserve independent logical branches, Expired state, immutable late receipts, exact payment, 200000-gas callbacks, reference forks and authenticated 4 KiB snapshots."
+}

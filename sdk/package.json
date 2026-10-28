@@ -1,0 +1,12 @@
+{
+  "name": "steps-branch-v2-sdk",
+  "version": "0.3.0",
+  "private": true,
+  "type": "module",
+  "scripts": {
+    "test": "node --test steps-branch-v2.test.mjs"
+  },
+  "dependencies": {
+    "viem": "2.57.7"
+  }
+}
